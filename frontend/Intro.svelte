@@ -1,17 +1,23 @@
 <script lang="ts">
   import logo from "./assets/logo-dark.svg"
   import { onMount } from "svelte"
-  import { counter } from "canisters/counter"
+  import { markets } from "canisters/markets"
 
-  let count: number = 0
+  let count: any = 0
 
   const refreshCounter = async () => {
-    const res: any = await counter.getValue()
+    const market: any = {
+      id: 0,
+      title: "First market",
+      description: "First market Description",
+      outcomes: [],
+    }
+    const res: any = await markets.create(market)
     count = res.toString()
   }
 
   const increment = async () => {
-    await counter.increment()
+    // await markets.increment()
     refreshCounter()
   }
 
