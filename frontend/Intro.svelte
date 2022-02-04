@@ -4,38 +4,46 @@
   import { markets } from "canisters/markets"
 
   let count: any = 0
+  let ms: any = []
+  let newMarket: any = ""
 
-  const refreshCounter = async () => {
+  const refreshMarkets = async () => {
+    ms = await markets.readAll()
+  }
+
+  const increment = async () => {
     const market: any = {
       id: 0,
-      title: "First market",
+      title: newMarket,
       description: "First market Description",
       outcomes: [],
     }
     const res: any = await markets.create(market)
     count = res.toString()
+    refreshMarkets()
   }
 
-  const increment = async () => {
-    // await markets.increment()
-    refreshCounter()
-  }
-
-  onMount(refreshCounter)
+  onMount(refreshMarkets)
 </script>
 
 <header class="App-header">
   <p style="font-size: 2em; margin-bottom: 0.5em">Pythia</p>
+  <div>
+    <code>Prediction Markets</code>
+  </div>
   <div
     style="display: flex; font-size: 0.7em; text-align: left; padding: 2em; border-radius: 30px; flex-direction: column; background: rgb(220 218 224 / 25%);"
   >
-    <div>
-      <code>Prediction Markets</code>
-    </div>
-    <button class="demo-button" on:click={increment}>
-      Markets: {count}
-    </button>
+    <h3>Markets</h3>
+    <ol>
+      {#each ms as market}
+        <li>{market.title}</li>
+      {/each}
+    </ol>
   </div>
+
+  <input bind:value={newMarket} />
+  <button class="demo-button" on:click={increment}> Create Market </button>
 </header>
 
 <style global>

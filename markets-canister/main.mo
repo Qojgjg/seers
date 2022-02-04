@@ -54,6 +54,12 @@ actor {
         return result;        
     };
 
+    // Read all markets.
+    public query func readAll(): async [Market] {
+        let result = Trie.toArray(markets, getTitle);
+        return result;
+    };
+
     // Update a market.
     public func update(marketId: MarketId, market: Market): async Bool {
         let result = Trie.find(markets, key(marketId), Nat32.equal);
@@ -91,5 +97,9 @@ actor {
     // Create a trie key from a market identifier.
     private func key(x: MarketId) : Trie.Key<MarketId> {
         return { hash = x; key = x };
+    };
+
+    private func getTitle(k: MarketId, v: Market): Market {
+        return v;
     };
 };
