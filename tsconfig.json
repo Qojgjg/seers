@@ -31,8 +31,8 @@
       "vite/client"
     ],
     "paths": {
-      "canisters/counter": [
-        ".dfx/local/canisters/counter"
+      "canisters/markets": [
+        ".dfx/local/canisters/markets"
       ]
     }
   },

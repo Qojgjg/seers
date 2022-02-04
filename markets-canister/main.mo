@@ -35,14 +35,20 @@ actor {
     
     // Create a market.
     public func create(market: Market): async MarketId {
-        let marketId = nextMarketId;
+        let marketId: MarketId = nextMarketId;
+        let newMarket: Market = {
+            id = marketId;
+            title = market.title;
+            description = market.description;
+            outcomes = market.outcomes;
+        };
         nextMarketId += 1;
 
         markets := Trie.replace(
             markets,
-            key(nextMarketId),
+            key(marketId),
             Nat32.equal,
-            ?market,
+            ?newMarket,
         ).0;
 
         return marketId;

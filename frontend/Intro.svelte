@@ -3,9 +3,9 @@
   import { onMount } from "svelte"
   import { markets } from "canisters/markets"
 
-  let count: any = 0
   let ms: any = []
-  let newMarket: any = ""
+  let newMarketTitle: any = ""
+  let newMarketDesc: any = ""
 
   const refreshMarkets = async () => {
     ms = await markets.readAll()
@@ -14,12 +14,12 @@
   const increment = async () => {
     const market: any = {
       id: 0,
-      title: newMarket,
-      description: "First market Description",
+      title: newMarketTitle,
+      description: newMarketDesc,
       outcomes: [],
     }
     const res: any = await markets.create(market)
-    count = res.toString()
+    const _ = res.toString()
     refreshMarkets()
   }
 
@@ -27,22 +27,26 @@
 </script>
 
 <header class="App-header">
-  <p style="font-size: 2em; margin-bottom: 0.5em">Pythia</p>
+  <p style="font-size: 2em; margin-bottom: 0.5em">Seer</p>
   <div>
     <code>Prediction Markets</code>
   </div>
-  <div
-    style="display: flex; font-size: 0.7em; text-align: left; padding: 2em; border-radius: 30px; flex-direction: column; background: rgb(220 218 224 / 25%);"
-  >
-    <h3>Markets</h3>
-    <ol>
-      {#each ms as market}
-        <li>{market.title}</li>
-      {/each}
-    </ol>
+  <div style="display: flex; flex-wrap: wrap; padding: 0 4px;">
+    {#each ms as market}
+      <div
+        style="max-width: 30%;  font-size: 0.7em;  padding: 2em; margin: 2em; border-radius: 30px;  background: rgb(220 218 224 / 25%);"
+      >
+        <div><img src="https://picsum.photos/100" alt="random" /></div>
+        <div>
+          #{market.id}
+          <h3>{market.title}</h3>
+        </div>
+        <div>{market.description}</div>
+      </div>
+    {/each}
   </div>
-
-  <input bind:value={newMarket} />
+  <input bind:value={newMarketTitle} />
+  <input bind:value={newMarketDesc} />
   <button class="demo-button" on:click={increment}> Create Market </button>
 </header>
 
