@@ -5,8 +5,9 @@ import List "mo:base/List";
 import Option "mo:base/Option";
 import Trie "mo:base/Trie";
 import Time "mo:base/Time";
+import Principal "mo:base/Principal";
 
-actor {
+shared(msg) actor class Market() {
     /* Types */
 
     public type MarketId = Nat32;
@@ -14,6 +15,7 @@ actor {
     public type Description = Text;
     public type Probability = Nat32;
     public type Liquidity = Nat32;
+    public type Author = Text;
 
     public type Market = {
         id: MarketId;    
@@ -24,6 +26,7 @@ actor {
         liquidity: Liquidity;
         startDate: Time.Time;
         endDate: Time.Time;
+        author: Author;
     };  
 
     /* State */
@@ -34,8 +37,10 @@ actor {
     /* API */
     
     // Create a market.
-    public func create(market: Market): async MarketId {
+    public shared(msg) func create(market: Market): async MarketId {
         let marketId: MarketId = nextMarketId;
+        let author: Author = Principal.toText(msg.caller);
+
         let newMarket: Market = {
             id = marketId;
             title = market.title;
@@ -45,7 +50,9 @@ actor {
             liquidity = market.liquidity;
             startDate = Time.now();
             endDate = market.endDate;
+            author = author;
         };
+
         nextMarketId += 1;
 
         markets := Trie.replace(

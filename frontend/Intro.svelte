@@ -37,6 +37,7 @@
       liquidity: BigInt(totalDeposit),
       startDate: 0,
       endDate: endDate,
+      author: "ui",
     }
 
     newMarketDesc = ""
@@ -76,11 +77,12 @@
           ).toDateString()}
         </div>
         <div>End date: {new Date(Number(market.endDate)).toDateString()}</div>
+        <div>Author: {market.author}</div>
       </div>
     {/each}
   </div>
   <div
-    style="display:flex; float:left; flex-direction: column; margin: 2em; background-color: pink"
+    style="display:flex; float:left; flex-direction: column; margin: 2em; background-color: pink; border-radius: 30px; padding: 1em;"
   >
     <div style="padding: 0.1em;"><h4 style="">Create new market</h4></div>
     <div style="padding: 1em; text-align:left; font-size: 0.8em">
