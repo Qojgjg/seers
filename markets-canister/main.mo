@@ -12,19 +12,16 @@ actor {
     public type Title = Text;
     public type Description = Text;
     public type Probability = Nat32;
-
-    public type Outcome = {
-        id: MarketId;
-        title: Title;
-        probability: Probability; // from 0 to 100.
-    };
+    public type Liquidity = Nat32;
 
     public type Market = {
         id: MarketId;    
         title: Title;
         description: Description;
-        outcomes: List.List<Outcome>;
-    };
+        yesProb: Probability;
+        noProb: Probability;
+        liquidity: Liquidity;
+    };  
 
     /* State */
     
@@ -40,7 +37,9 @@ actor {
             id = marketId;
             title = market.title;
             description = market.description;
-            outcomes = market.outcomes;
+            yesProb = market.yesProb;
+            noProb = market.noProb;
+            liquidity = market.liquidity;
         };
         nextMarketId += 1;
 
@@ -62,7 +61,7 @@ actor {
 
     // Read all markets.
     public query func readAll(): async [Market] {
-        let result = Trie.toArray(markets, getTitle);
+        let result = Trie.toArray(markets, getMarket);
         return result;
     };
 
@@ -96,6 +95,12 @@ actor {
         return exists;
     };
 
+    // Delete all market.
+    public func deleteAll(): async () {
+        nextMarketId := 0;
+        markets := Trie.empty();
+    };
+
     /**
     * Utilities
     */
@@ -105,7 +110,7 @@ actor {
         return { hash = x; key = x };
     };
 
-    private func getTitle(k: MarketId, v: Market): Market {
+    private func getMarket(k: MarketId, v: Market): Market {
         return v;
     };
 };

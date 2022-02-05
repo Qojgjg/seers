@@ -6,20 +6,33 @@
   let ms: any = []
   let newMarketTitle: any = ""
   let newMarketDesc: any = ""
+  let probYes: any = ""
+  let probNo: any = ""
+  let liquidity: any = ""
 
   const refreshMarkets = async () => {
     ms = await markets.readAll()
   }
 
-  const increment = async () => {
+  const deleteMarkets = async () => {
+    await markets.deleteAll()
+  }
+
+  const createMarket = async () => {
     const market: any = {
       id: 0,
       title: newMarketTitle,
       description: newMarketDesc,
-      outcomes: [],
+      yesProb: BigInt(probYes),
+      noProb: BigInt(probNo),
+      liquidity: BigInt(liquidity),
     }
-    const res: any = await markets.create(market)
-    const _ = res.toString()
+    newMarketDesc = ""
+    newMarketTitle = ""
+    probYes = ""
+    probNo = ""
+    liquidity = ""
+    await markets.create(market)
     refreshMarkets()
   }
 
@@ -34,20 +47,43 @@
   <div style="display: flex; flex-wrap: wrap; padding: 0 4px;">
     {#each ms as market}
       <div
-        style="max-width: 30%;  font-size: 0.7em;  padding: 2em; margin: 2em; border-radius: 30px;  background: rgb(220 218 224 / 25%);"
+        style="min-width: 30%;  font-size: 0.7em;  padding: 2em; margin: 2em; border-radius: 30px;  background: rgb(220 218 224 / 25%);"
       >
         <div><img src="https://picsum.photos/100" alt="random" /></div>
         <div>
           #{market.id}
           <h3>{market.title}</h3>
         </div>
-        <div>{market.description}</div>
+        <div style="padding: 2em;">{market.description}</div>
+        <div>Yes probability: {market.yesProb / 100}</div>
+        <div>No probability: {market.noProb / 100}</div>
+        <div>Liquidity: {market.liquidity}</div>
       </div>
     {/each}
   </div>
-  <input bind:value={newMarketTitle} />
-  <input bind:value={newMarketDesc} />
-  <button class="demo-button" on:click={increment}> Create Market </button>
+  <div
+    style="display:flex; float:left; flex-direction: column; margin: 2em; background-color: pink"
+  >
+    <div style="padding: 0.1em;"><h4 style="">Create new market</h4></div>
+    <div style="padding: 1em; text-align:left">
+      Title: <input bind:value={newMarketTitle} />
+    </div>
+    <div style="padding: 1em; text-align:left">
+      Description: <input bind:value={newMarketDesc} />
+    </div>
+    <div style="padding: 1em; text-align:left">
+      Probability Yes: <input bind:value={probYes} />
+    </div>
+    <div style="padding: 1em; text-align:left">
+      Probability No: <input bind:value={probNo} />
+    </div>
+    <div style="padding: 1em; text-align:left">
+      Liquidity: <input bind:value={liquidity} />
+    </div>
+
+    <button class="demo-button" on:click={createMarket}> Create Market </button>
+  </div>
+  <button class="demo-button" on:click={deleteMarkets}> Delete Markets </button>
 </header>
 
 <style global>
