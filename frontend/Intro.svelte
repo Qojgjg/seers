@@ -1,7 +1,8 @@
 <script lang="ts">
   import logo from "./assets/logo-dark.svg"
   import { onMount } from "svelte"
-  import { markets } from "canisters/markets"
+
+  export let auth
 
   let ms: any = []
   let newMarketTitle: any = ""
@@ -11,11 +12,11 @@
   let endDate: any = ""
 
   const refreshMarkets = async () => {
-    ms = await markets.readAll()
+    ms = await $auth.actor.readAll()
   }
 
   const deleteMarkets = async () => {
-    await markets.deleteAll()
+    await $auth.actor.deleteAll()
   }
 
   const createMarket = async () => {
@@ -46,7 +47,7 @@
     noDeposit = ""
     endDate = ""
 
-    await markets.create(market)
+    await $auth.actor.create(market)
     refreshMarkets()
   }
 
@@ -57,6 +58,7 @@
   <p style="font-size: 2em; margin-bottom: 0.5em">Seer</p>
   <div>
     <code>Prediction Markets</code>
+    <p>Canister ID: {process.env.MARKETS_CANISTER_ID}</p>
   </div>
   <div style="display: flex; flex-wrap: wrap; padding: 0 4px;">
     {#each ms as market}

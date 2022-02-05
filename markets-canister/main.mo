@@ -38,6 +38,8 @@ shared(msg) actor class Market() {
     
     // Create a market.
     public shared(msg) func create(market: Market): async MarketId {
+        if (Principal.toText(msg.caller) == "2vxsx-fae") return 0;
+
         let marketId: MarketId = nextMarketId;
         let author: Author = Principal.toText(msg.caller);
 
