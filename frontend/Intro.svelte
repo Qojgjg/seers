@@ -6,9 +6,8 @@
   let ms: any = []
   let newMarketTitle: any = ""
   let newMarketDesc: any = ""
-  let probYes: any = ""
-  let probNo: any = ""
-  let liquidity: any = ""
+  let yesDeposit: any = ""
+  let noDeposit: any = ""
 
   const refreshMarkets = async () => {
     ms = await markets.readAll()
@@ -19,19 +18,26 @@
   }
 
   const createMarket = async () => {
+    yesDeposit = parseInt(yesDeposit, 10)
+    noDeposit = parseInt(noDeposit, 10)
+
+    const totalDeposit = yesDeposit + noDeposit
+    const yesProb = (yesDeposit / totalDeposit) * 100.0
+    const noProb = (noDeposit / totalDeposit) * 100.0
+
     const market: any = {
       id: 0,
       title: newMarketTitle,
       description: newMarketDesc,
-      yesProb: BigInt(probYes),
-      noProb: BigInt(probNo),
-      liquidity: BigInt(liquidity),
+      yesProb: BigInt(Math.floor(yesProb + 0.5)),
+      noProb: BigInt(Math.floor(noProb + 0.5)),
+      liquidity: BigInt(totalDeposit),
     }
+
     newMarketDesc = ""
     newMarketTitle = ""
-    probYes = ""
-    probNo = ""
-    liquidity = ""
+    yesDeposit = ""
+    noDeposit = ""
     await markets.create(market)
     refreshMarkets()
   }
@@ -55,9 +61,8 @@
           <h3>{market.title}</h3>
         </div>
         <div style="padding: 2em;">{market.description}</div>
-        <div>Yes probability: {market.yesProb / 100}</div>
-        <div>No probability: {market.noProb / 100}</div>
-        <div>Liquidity: {market.liquidity}</div>
+        <div>Yes: {market.yesProb}%</div>
+        <div>No: {market.noProb}%</div>
       </div>
     {/each}
   </div>
@@ -65,20 +70,17 @@
     style="display:flex; float:left; flex-direction: column; margin: 2em; background-color: pink"
   >
     <div style="padding: 0.1em;"><h4 style="">Create new market</h4></div>
-    <div style="padding: 1em; text-align:left">
+    <div style="padding: 1em; text-align:left; font-size: 0.8em">
       Title: <input bind:value={newMarketTitle} />
     </div>
-    <div style="padding: 1em; text-align:left">
+    <div style="padding: 1em; text-align:left; font-size: 0.8em">
       Description: <input bind:value={newMarketDesc} />
     </div>
-    <div style="padding: 1em; text-align:left">
-      Probability Yes: <input bind:value={probYes} />
+    <div style="padding: 1em; text-align:left; font-size: 0.8em">
+      Yes deposit: <input bind:value={yesDeposit} />
     </div>
-    <div style="padding: 1em; text-align:left">
-      Probability No: <input bind:value={probNo} />
-    </div>
-    <div style="padding: 1em; text-align:left">
-      Liquidity: <input bind:value={liquidity} />
+    <div style="padding: 1em; text-align:left; font-size: 0.8em">
+      No deposit: <input bind:value={noDeposit} />
     </div>
 
     <button class="demo-button" on:click={createMarket}> Create Market </button>
