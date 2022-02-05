@@ -8,6 +8,7 @@
   let newMarketDesc: any = ""
   let yesDeposit: any = ""
   let noDeposit: any = ""
+  let endDate: any = ""
 
   const refreshMarkets = async () => {
     ms = await markets.readAll()
@@ -25,6 +26,8 @@
     const yesProb = (yesDeposit / totalDeposit) * 100.0
     const noProb = (noDeposit / totalDeposit) * 100.0
 
+    endDate = Date.parse(endDate)
+
     const market: any = {
       id: 0,
       title: newMarketTitle,
@@ -32,12 +35,16 @@
       yesProb: BigInt(Math.floor(yesProb + 0.5)),
       noProb: BigInt(Math.floor(noProb + 0.5)),
       liquidity: BigInt(totalDeposit),
+      startDate: 0,
+      endDate: endDate,
     }
 
     newMarketDesc = ""
     newMarketTitle = ""
     yesDeposit = ""
     noDeposit = ""
+    endDate = ""
+
     await markets.create(market)
     refreshMarkets()
   }
@@ -63,6 +70,12 @@
         <div style="padding: 2em;">{market.description}</div>
         <div>Yes: {market.yesProb}%</div>
         <div>No: {market.noProb}%</div>
+        <div>
+          Created: {new Date(
+            Math.trunc(Number(market.startDate) / 1_000_000),
+          ).toDateString()}
+        </div>
+        <div>End date: {new Date(Number(market.endDate)).toDateString()}</div>
       </div>
     {/each}
   </div>
@@ -81,6 +94,9 @@
     </div>
     <div style="padding: 1em; text-align:left; font-size: 0.8em">
       No deposit: <input bind:value={noDeposit} />
+    </div>
+    <div style="padding: 1em; text-align:left; font-size: 0.8em">
+      End date: <input bind:value={endDate} />
     </div>
 
     <button class="demo-button" on:click={createMarket}> Create Market </button>

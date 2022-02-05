@@ -4,6 +4,7 @@ import Nat32 "mo:base/Nat32";
 import List "mo:base/List";
 import Option "mo:base/Option";
 import Trie "mo:base/Trie";
+import Time "mo:base/Time";
 
 actor {
     /* Types */
@@ -21,6 +22,8 @@ actor {
         yesProb: Probability;
         noProb: Probability;
         liquidity: Liquidity;
+        startDate: Time.Time;
+        endDate: Time.Time;
     };  
 
     /* State */
@@ -40,6 +43,8 @@ actor {
             yesProb = market.yesProb;
             noProb = market.noProb;
             liquidity = market.liquidity;
+            startDate = Time.now();
+            endDate = market.endDate;
         };
         nextMarketId += 1;
 
