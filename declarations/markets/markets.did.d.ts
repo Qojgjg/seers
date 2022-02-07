@@ -3,33 +3,33 @@ export type Author = string;
 export type Description = string;
 export interface Market {
   'createMarket' : (arg_0: MarketInitData) => Promise<number>,
-  'delete' : (arg_0: number) => Promise<boolean>,
-  'deleteAll' : () => Promise<undefined>,
+  'deleteAllMarkets' : () => Promise<undefined>,
+  'deleteMarket' : (arg_0: number) => Promise<boolean>,
   'getUser' : () => Promise<[] | [User]>,
-  'read' : (arg_0: number) => Promise<[] | [Market__1]>,
-  'readAll' : () => Promise<Array<Market__1>>,
-  'update' : (arg_0: number, arg_1: Market__1) => Promise<boolean>,
+  'readAllMarkets' : () => Promise<Array<Market__1>>,
+  'readMarket' : (arg_0: number) => Promise<[] | [Market__1]>,
+  'updateMarket' : (arg_0: number, arg_1: Market__1) => Promise<boolean>,
 }
 export interface MarketInitData {
   'title' : Title,
-  'noProb' : number,
+  'noProb' : bigint,
   'endDate' : Time,
-  'liquidity' : number,
+  'liquidity' : bigint,
   'description' : Description,
-  'yesProb' : number,
+  'yesProb' : bigint,
 }
 export interface Market__1 {
   'id' : number,
   'title' : Title,
-  'noProb' : number,
+  'noProb' : bigint,
   'endDate' : Time,
-  'liquidity' : number,
+  'liquidity' : bigint,
   'description' : Description,
   'author' : Author,
-  'yesProb' : number,
-  'reserveNo' : number,
-  'reserveYes' : number,
-  'kLast' : number,
+  'yesProb' : bigint,
+  'reserveNo' : bigint,
+  'reserveYes' : bigint,
+  'kLast' : bigint,
   'blockTimestampLast' : Time,
   'startDate' : Time,
 }
@@ -37,8 +37,8 @@ export type Time = bigint;
 export type Title = string;
 export interface User {
   'id' : string,
-  'seerBalance' : number,
-  'marketTokens' : Array<[number, number, number]>,
-  'liquidityProviderFor' : Array<[number, number]>,
+  'seerBalance' : bigint,
+  'marketTokens' : Array<[bigint, bigint, bigint]>,
+  'liquidityProviderFor' : Array<[bigint, bigint]>,
 }
 export interface _SERVICE extends Market {}

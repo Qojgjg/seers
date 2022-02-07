@@ -4,42 +4,42 @@ export const idlFactory = ({ IDL }) => {
   const Description = IDL.Text;
   const MarketInitData = IDL.Record({
     'title' : Title,
-    'noProb' : IDL.Nat32,
+    'noProb' : IDL.Nat64,
     'endDate' : Time,
-    'liquidity' : IDL.Nat32,
+    'liquidity' : IDL.Nat64,
     'description' : Description,
-    'yesProb' : IDL.Nat32,
+    'yesProb' : IDL.Nat64,
   });
   const User = IDL.Record({
     'id' : IDL.Text,
-    'seerBalance' : IDL.Nat32,
-    'marketTokens' : IDL.Vec(IDL.Tuple(IDL.Nat32, IDL.Nat32, IDL.Nat32)),
-    'liquidityProviderFor' : IDL.Vec(IDL.Tuple(IDL.Nat32, IDL.Nat32)),
+    'seerBalance' : IDL.Nat64,
+    'marketTokens' : IDL.Vec(IDL.Tuple(IDL.Nat64, IDL.Nat64, IDL.Nat64)),
+    'liquidityProviderFor' : IDL.Vec(IDL.Tuple(IDL.Nat64, IDL.Nat64)),
   });
   const Author = IDL.Text;
   const Market__1 = IDL.Record({
     'id' : IDL.Nat32,
     'title' : Title,
-    'noProb' : IDL.Nat32,
+    'noProb' : IDL.Nat64,
     'endDate' : Time,
-    'liquidity' : IDL.Nat32,
+    'liquidity' : IDL.Nat64,
     'description' : Description,
     'author' : Author,
-    'yesProb' : IDL.Nat32,
-    'reserveNo' : IDL.Nat32,
-    'reserveYes' : IDL.Nat32,
-    'kLast' : IDL.Nat32,
+    'yesProb' : IDL.Nat64,
+    'reserveNo' : IDL.Nat64,
+    'reserveYes' : IDL.Nat64,
+    'kLast' : IDL.Nat64,
     'blockTimestampLast' : Time,
     'startDate' : Time,
   });
   const Market = IDL.Service({
     'createMarket' : IDL.Func([MarketInitData], [IDL.Nat32], []),
-    'delete' : IDL.Func([IDL.Nat32], [IDL.Bool], []),
-    'deleteAll' : IDL.Func([], [], []),
+    'deleteAllMarkets' : IDL.Func([], [], []),
+    'deleteMarket' : IDL.Func([IDL.Nat32], [IDL.Bool], []),
     'getUser' : IDL.Func([], [IDL.Opt(User)], []),
-    'read' : IDL.Func([IDL.Nat32], [IDL.Opt(Market__1)], ['query']),
-    'readAll' : IDL.Func([], [IDL.Vec(Market__1)], ['query']),
-    'update' : IDL.Func([IDL.Nat32, Market__1], [IDL.Bool], []),
+    'readAllMarkets' : IDL.Func([], [IDL.Vec(Market__1)], ['query']),
+    'readMarket' : IDL.Func([IDL.Nat32], [IDL.Opt(Market__1)], ['query']),
+    'updateMarket' : IDL.Func([IDL.Nat32, Market__1], [IDL.Bool], []),
   });
   return Market;
 };

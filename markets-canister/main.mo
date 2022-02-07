@@ -1,6 +1,9 @@
 import Map "mo:base/HashMap";
 import Text "mo:base/Text";
 import Nat32 "mo:base/Nat32";
+import Nat64 "mo:base/Nat64";
+import Int64 "mo:base/Int64";
+import Float "mo:base/Float";
 import List "mo:base/List";
 import Option "mo:base/Option";
 import Trie "mo:base/Trie";
@@ -16,17 +19,17 @@ shared(msg) actor class Market() {
 
     public type User = {
         id: Text; // Principal text.
-        seerBalance: Nat32;
-        liquidityProviderFor: [(Nat32, Nat32)]; // [(MarketId, Shares)].
-        marketTokens: [(Nat32, Nat32, Nat32)]; // [(MarketId, YesTokenBalance, NoTokenBalance)].
+        seerBalance: Nat64;
+        liquidityProviderFor: [(Nat64, Nat64)]; // [(MarketId, Shares)].
+        marketTokens: [(Nat64, Nat64, Nat64)]; // [(MarketId, YesTokenBalance, NoTokenBalance)].
     };
 
     public type MarketInitData = {
         title: Title;
         description: Description;
-        yesProb: Nat32;
-        noProb: Nat32;
-        liquidity: Nat32;
+        yesProb: Nat64;
+        noProb: Nat64;
+        liquidity: Nat64;
         endDate: Time.Time;
     };
 
@@ -34,16 +37,16 @@ shared(msg) actor class Market() {
         id: Nat32;    
         title: Title;
         description: Description;
-        yesProb: Nat32;
-        noProb: Nat32;
-        liquidity: Nat32;
+        yesProb: Nat64;
+        noProb: Nat64;
+        liquidity: Nat64;
         startDate: Time.Time;
         endDate: Time.Time;
         author: Author;
         blockTimestampLast: Time.Time;
-        reserveYes: Nat32;
-        reserveNo: Nat32;
-        kLast: Nat32; // sqrt(reserve0 * reserve1)
+        reserveYes: Nat64;
+        reserveNo: Nat64;
+        kLast: Nat64; // sqrt(reserve0 * reserve1)
     };  
 
     /* State */
@@ -80,12 +83,20 @@ shared(msg) actor class Market() {
     public shared(msg) func createMarket(marketInitData: MarketInitData): async Nat32 {
         assert(Principal.toText(msg.caller) != anon);
         assert(marketInitData.yesProb + marketInitData.noProb == 100);
-        assert(marketInitData.liquidity > 0);
+        assert(marketInitData.liquidity >= 1000);
+        assert(marketInitData.title != "");
+        assert(marketInitData.description != "");
+        assert(marketInitData.endDate > Time.now());
 
         let marketId: Nat32 = nextMarketId;
         let author: Author = Principal.toText(msg.caller);
         let reserveYes = (marketInitData.liquidity * 50) / marketInitData.noProb;
         let reserveNo = (marketInitData.liquidity * 50) / marketInitData.yesProb;
+
+        // TODO: this wraps on overflow.
+        let shares = Float.toInt64(Float.sqrt(
+            Float.fromInt64(Int64.fromNat64(reserveNo))
+            * Float.fromInt64(Int64.fromNat64(reserveYes))));
 
         let newMarket: Market = {
             id = marketId;
@@ -100,7 +111,7 @@ shared(msg) actor class Market() {
             blockTimestampLast = Time.now();
             reserveYes = reserveYes; 
             reserveNo = reserveNo;
-            kLast = reserveNo * reserveYes;
+            kLast = reserveYes * reserveNo;
         };
 
         nextMarketId += 1;
@@ -116,19 +127,19 @@ shared(msg) actor class Market() {
     };
 
     // Read a market.
-    public query func read(marketId: Nat32): async ?Market {
+    public query func readMarket(marketId: Nat32): async ?Market {
         let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
         return result;        
     };
 
     // Read all markets.
-    public query func readAll(): async [Market] {
+    public query func readAllMarkets(): async [Market] {
         let result = Trie.toArray(markets, getMarket);
         return result;
     };
 
     // Update a market.
-    public func update(marketId: Nat32, market: Market): async Bool {
+    public func updateMarket(marketId: Nat32, market: Market): async Bool {
         let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
         let exists = Option.isSome(result);
         if (exists) {
@@ -143,7 +154,7 @@ shared(msg) actor class Market() {
     };
 
     // Delete a market.
-    public func delete(marketId: Nat32): async Bool {
+    public func deleteMarket(marketId: Nat32): async Bool {
         let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
         let exists = Option.isSome(result);
         if (exists) {
@@ -158,7 +169,7 @@ shared(msg) actor class Market() {
     };
 
     // Delete all market.
-    public func deleteAll(): async () {
+    public func deleteAllMarkets(): async () {
         nextMarketId := 0;
         markets := Trie.empty();
     };

@@ -2,15 +2,15 @@ type User =
  record {
    id: text;
    liquidityProviderFor: vec record {
-                               nat32;
-                               nat32;
+                               nat64;
+                               nat64;
                              };
    marketTokens: vec record {
-                       nat32;
-                       nat32;
-                       nat32;
+                       nat64;
+                       nat64;
+                       nat64;
                      };
-   seerBalance: nat32;
+   seerBalance: nat64;
  };
 type Title = text;
 type Time = int;
@@ -21,33 +21,33 @@ type Market__1 =
    description: Description;
    endDate: Time;
    id: nat32;
-   kLast: nat32;
-   liquidity: nat32;
-   noProb: nat32;
-   reserveNo: nat32;
-   reserveYes: nat32;
+   kLast: nat64;
+   liquidity: nat64;
+   noProb: nat64;
+   reserveNo: nat64;
+   reserveYes: nat64;
    startDate: Time;
    title: Title;
-   yesProb: nat32;
+   yesProb: nat64;
  };
 type MarketInitData = 
  record {
    description: Description;
    endDate: Time;
-   liquidity: nat32;
-   noProb: nat32;
+   liquidity: nat64;
+   noProb: nat64;
    title: Title;
-   yesProb: nat32;
+   yesProb: nat64;
  };
 type Market = 
  service {
    createMarket: (MarketInitData) -> (nat32);
-   delete: (nat32) -> (bool);
-   deleteAll: () -> ();
+   deleteAllMarkets: () -> ();
+   deleteMarket: (nat32) -> (bool);
    getUser: () -> (opt User);
-   read: (nat32) -> (opt Market__1) query;
-   readAll: () -> (vec Market__1) query;
-   update: (nat32, Market__1) -> (bool);
+   readAllMarkets: () -> (vec Market__1) query;
+   readMarket: (nat32) -> (opt Market__1) query;
+   updateMarket: (nat32, Market__1) -> (bool);
  };
 type Description = text;
 type Author = text;
