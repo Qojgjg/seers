@@ -17,7 +17,8 @@ shared(msg) actor class Market() {
     public type User = {
         id: Text; // Principal text.
         seerBalance: Nat32;
-        liquidityProviderFor: [(Nat32, Nat32)]; // MarketId, Shares.
+        liquidityProviderFor: [(Nat32, Nat32)]; // [(MarketId, Shares)].
+        marketTokens: [(Nat32, Nat32, Nat32)]; // [(MarketId, YesTokenBalance, NoTokenBalance)].
     };
 
     public type MarketInitData = {
@@ -42,9 +43,7 @@ shared(msg) actor class Market() {
         blockTimestampLast: Time.Time;
         reserveYes: Nat32;
         reserveNo: Nat32;
-        priceYesCumulativeLast: Nat32;
-        priceNoCumulativeLast: Nat32;
-        kLast: Nat32; // reserve0 * reserve1
+        kLast: Nat32; // sqrt(reserve0 * reserve1)
     };  
 
     /* State */
@@ -57,19 +56,20 @@ shared(msg) actor class Market() {
 
     /* API */
 
-    // Create new user.
+    // Get or create new user.
     public shared(msg) func getUser(): async ?User {
         let userId = Principal.toText(msg.caller);
-        if (userId == anon) return null;
+        if (userId == anon) return null; // User needs to login.
 
         var result = Trie.find(users, userKey(userId), Text.equal);
         
         if (result != null) {
-            // Create user.
+            // Create user because it does not exist.
             result := ?{
                 id = userId;
                 seerBalance = 1000; // Airdrop
                 liquidityProviderFor = [];
+                marketTokens = [];
             };
         };
 
@@ -78,10 +78,14 @@ shared(msg) actor class Market() {
 
     // Create a market.
     public shared(msg) func createMarket(marketInitData: MarketInitData): async Nat32 {
-        if (Principal.toText(msg.caller) == anon) return 0;
+        assert(Principal.toText(msg.caller) != anon);
+        assert(marketInitData.yesProb + marketInitData.noProb == 100);
+        assert(marketInitData.liquidity > 0);
 
         let marketId: Nat32 = nextMarketId;
         let author: Author = Principal.toText(msg.caller);
+        let reserveYes = (marketInitData.liquidity * 50) / marketInitData.noProb;
+        let reserveNo = (marketInitData.liquidity * 50) / marketInitData.yesProb;
 
         let newMarket: Market = {
             id = marketId;
@@ -94,11 +98,9 @@ shared(msg) actor class Market() {
             endDate = marketInitData.endDate;
             author = author;
             blockTimestampLast = Time.now();
-            reserveYes = 0;
-            reserveNo = 0;
-            priceYesCumulativeLast = 0;
-            priceNoCumulativeLast = 0;
-            kLast = 0;
+            reserveYes = reserveYes; 
+            reserveNo = reserveNo;
+            kLast = reserveNo * reserveYes;
         };
 
         nextMarketId += 1;

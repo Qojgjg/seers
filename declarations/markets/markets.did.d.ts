@@ -28,9 +28,7 @@ export interface Market__1 {
   'author' : Author,
   'yesProb' : number,
   'reserveNo' : number,
-  'priceYesCumulativeLast' : number,
   'reserveYes' : number,
-  'priceNoCumulativeLast' : number,
   'kLast' : number,
   'blockTimestampLast' : Time,
   'startDate' : Time,
@@ -40,6 +38,7 @@ export type Title = string;
 export interface User {
   'id' : string,
   'seerBalance' : number,
+  'marketTokens' : Array<[number, number, number]>,
   'liquidityProviderFor' : Array<[number, number]>,
 }
 export interface _SERVICE extends Market {}

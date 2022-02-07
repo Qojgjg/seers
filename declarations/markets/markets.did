@@ -5,6 +5,11 @@ type User =
                                nat32;
                                nat32;
                              };
+   marketTokens: vec record {
+                       nat32;
+                       nat32;
+                       nat32;
+                     };
    seerBalance: nat32;
  };
 type Title = text;
@@ -19,8 +24,6 @@ type Market__1 =
    kLast: nat32;
    liquidity: nat32;
    noProb: nat32;
-   priceNoCumulativeLast: nat32;
-   priceYesCumulativeLast: nat32;
    reserveNo: nat32;
    reserveYes: nat32;
    startDate: Time;

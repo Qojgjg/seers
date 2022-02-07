@@ -13,6 +13,7 @@ export const idlFactory = ({ IDL }) => {
   const User = IDL.Record({
     'id' : IDL.Text,
     'seerBalance' : IDL.Nat32,
+    'marketTokens' : IDL.Vec(IDL.Tuple(IDL.Nat32, IDL.Nat32, IDL.Nat32)),
     'liquidityProviderFor' : IDL.Vec(IDL.Tuple(IDL.Nat32, IDL.Nat32)),
   });
   const Author = IDL.Text;
@@ -26,9 +27,7 @@ export const idlFactory = ({ IDL }) => {
     'author' : Author,
     'yesProb' : IDL.Nat32,
     'reserveNo' : IDL.Nat32,
-    'priceYesCumulativeLast' : IDL.Nat32,
     'reserveYes' : IDL.Nat32,
-    'priceNoCumulativeLast' : IDL.Nat32,
     'kLast' : IDL.Nat32,
     'blockTimestampLast' : Time,
     'startDate' : Time,
