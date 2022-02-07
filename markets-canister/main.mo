@@ -88,12 +88,12 @@ shared(msg) actor class Market() {
         assert(marketInitData.description != "");
         assert(marketInitData.endDate > Time.now());
 
-        let marketId: Nat32 = nextMarketId;
-        let author: Author = Principal.toText(msg.caller);
+        let marketId = nextMarketId;
+        let author = Principal.toText(msg.caller);
         let reserveYes = (marketInitData.liquidity * 50) / marketInitData.noProb;
         let reserveNo = (marketInitData.liquidity * 50) / marketInitData.yesProb;
 
-        // TODO: this wraps on overflow.
+        // TODO: this wraps on overflow. Should I use Int64 directly?
         let shares = Float.toInt64(Float.sqrt(
             Float.fromInt64(Int64.fromNat64(reserveNo))
             * Float.fromInt64(Int64.fromNat64(reserveYes))));
