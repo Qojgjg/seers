@@ -10,56 +10,102 @@ import Principal "mo:base/Principal";
 shared(msg) actor class Market() {
     /* Types */
 
-    public type MarketId = Nat32;
     public type Title = Text;
     public type Description = Text;
-    public type Probability = Nat32;
-    public type Liquidity = Nat32;
     public type Author = Text;
 
-    public type Market = {
-        id: MarketId;    
+    public type User = {
+        id: Text; // Principal text.
+        seerBalance: Nat32;
+        liquidityProviderFor: [(Nat32, Nat32)]; // MarketId, Shares.
+    };
+
+    public type MarketInitData = {
         title: Title;
         description: Description;
-        yesProb: Probability;
-        noProb: Probability;
-        liquidity: Liquidity;
+        yesProb: Nat32;
+        noProb: Nat32;
+        liquidity: Nat32;
+        endDate: Time.Time;
+    };
+
+    public type Market = {
+        id: Nat32;    
+        title: Title;
+        description: Description;
+        yesProb: Nat32;
+        noProb: Nat32;
+        liquidity: Nat32;
         startDate: Time.Time;
         endDate: Time.Time;
         author: Author;
+        blockTimestampLast: Time.Time;
+        reserveYes: Nat32;
+        reserveNo: Nat32;
+        priceYesCumulativeLast: Nat32;
+        priceNoCumulativeLast: Nat32;
+        kLast: Nat32; // reserve0 * reserve1
     };  
 
     /* State */
     
-    private stable var nextMarketId: MarketId = 0;
-    private stable var markets: Trie.Trie<MarketId, Market> = Trie.empty();
+    private stable var nextMarketId: Nat32 = 0;
+    private stable var anon: Text = "2vxsx-fae";
+   
+    private stable var markets: Trie.Trie<Nat32, Market> = Trie.empty();
+    private stable var users: Trie.Trie<Text, User> = Trie.empty();
 
     /* API */
-    
-    // Create a market.
-    public shared(msg) func create(market: Market): async MarketId {
-        if (Principal.toText(msg.caller) == "2vxsx-fae") return 0;
 
-        let marketId: MarketId = nextMarketId;
+    // Create new user.
+    public shared(msg) func getUser(): async ?User {
+        let userId = Principal.toText(msg.caller);
+        if (userId == anon) return null;
+
+        var result = Trie.find(users, userKey(userId), Text.equal);
+        
+        if (result != null) {
+            // Create user.
+            result := ?{
+                id = userId;
+                seerBalance = 1000; // Airdrop
+                liquidityProviderFor = [];
+            };
+        };
+
+        return result;
+    };
+
+    // Create a market.
+    public shared(msg) func createMarket(marketInitData: MarketInitData): async Nat32 {
+        if (Principal.toText(msg.caller) == anon) return 0;
+
+        let marketId: Nat32 = nextMarketId;
         let author: Author = Principal.toText(msg.caller);
 
         let newMarket: Market = {
             id = marketId;
-            title = market.title;
-            description = market.description;
-            yesProb = market.yesProb;
-            noProb = market.noProb;
-            liquidity = market.liquidity;
+            title = marketInitData.title;
+            description = marketInitData.description;
+            yesProb = marketInitData.yesProb;
+            noProb = marketInitData.noProb;
+            liquidity = marketInitData.liquidity;
             startDate = Time.now();
-            endDate = market.endDate;
+            endDate = marketInitData.endDate;
             author = author;
+            blockTimestampLast = Time.now();
+            reserveYes = 0;
+            reserveNo = 0;
+            priceYesCumulativeLast = 0;
+            priceNoCumulativeLast = 0;
+            kLast = 0;
         };
 
         nextMarketId += 1;
 
         markets := Trie.replace(
             markets,
-            key(marketId),
+            marketKey(marketId),
             Nat32.equal,
             ?newMarket,
         ).0;
@@ -68,8 +114,8 @@ shared(msg) actor class Market() {
     };
 
     // Read a market.
-    public query func read(marketId: MarketId): async ?Market {
-        let result = Trie.find(markets, key(marketId), Nat32.equal);
+    public query func read(marketId: Nat32): async ?Market {
+        let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
         return result;        
     };
 
@@ -80,13 +126,13 @@ shared(msg) actor class Market() {
     };
 
     // Update a market.
-    public func update(marketId: MarketId, market: Market): async Bool {
-        let result = Trie.find(markets, key(marketId), Nat32.equal);
+    public func update(marketId: Nat32, market: Market): async Bool {
+        let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
         let exists = Option.isSome(result);
         if (exists) {
             markets := Trie.replace(
                 markets,
-                key(marketId),
+                marketKey(marketId),
                 Nat32.equal,
                 ?market,
             ).0;
@@ -95,13 +141,13 @@ shared(msg) actor class Market() {
     };
 
     // Delete a market.
-    public func delete(marketId: MarketId): async Bool {
-        let result = Trie.find(markets, key(marketId), Nat32.equal);
+    public func delete(marketId: Nat32): async Bool {
+        let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
         let exists = Option.isSome(result);
         if (exists) {
             markets := Trie.replace(
                 markets,
-                key(marketId),
+                marketKey(marketId),
                 Nat32.equal,
                 null,
             ).0;
@@ -119,12 +165,15 @@ shared(msg) actor class Market() {
     * Utilities
     */
 
-    // Create a trie key from a market identifier.
-    private func key(x: MarketId) : Trie.Key<MarketId> {
+    private func userKey(x: Text) : Trie.Key<Text> {
+        return { hash = Text.hash(x); key = x };
+    };
+
+    private func marketKey(x: Nat32) : Trie.Key<Nat32> {
         return { hash = x; key = x };
     };
 
-    private func getMarket(k: MarketId, v: Market): Market {
+    private func getMarket(k: Nat32, v: Market): Market {
         return v;
     };
 };
