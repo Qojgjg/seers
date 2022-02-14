@@ -12,11 +12,11 @@
   let endDate: any = ""
 
   const refreshMarkets = async () => {
-    ms = await $auth.actor.readAll()
+    ms = await $auth.actor.readAllMarkets()
   }
 
   const deleteMarkets = async () => {
-    await $auth.actor.deleteAll()
+    await $auth.actor.deleteAllMarkets()
   }
 
   const createMarket = async () => {
@@ -27,7 +27,7 @@
     const yesProb = (yesDeposit / totalDeposit) * 100.0
     const noProb = (noDeposit / totalDeposit) * 100.0
 
-    endDate = Date.parse(endDate)
+    endDate = Date.parse(endDate) * 1_000_000
 
     const market: any = {
       id: 0,
@@ -47,7 +47,7 @@
     noDeposit = ""
     endDate = ""
 
-    await $auth.actor.create(market)
+    await $auth.actor.createMarket(market)
     refreshMarkets()
   }
 
@@ -78,7 +78,11 @@
             Math.trunc(Number(market.startDate) / 1_000_000),
           ).toDateString()}
         </div>
-        <div>End date: {new Date(Number(market.endDate)).toDateString()}</div>
+        <div>
+          End date: {new Date(
+            Number(market.endDate) / 1_000_000,
+          ).toDateString()}
+        </div>
         <div>Author: {market.author}</div>
       </div>
     {/each}
