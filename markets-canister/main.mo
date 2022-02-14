@@ -9,6 +9,7 @@ import Option "mo:base/Option";
 import Trie "mo:base/Trie";
 import Time "mo:base/Time";
 import Principal "mo:base/Principal";
+import Debug "mo:base/Debug";
 
 shared(msg) actor class Market() {
     /* Types */
@@ -47,6 +48,8 @@ shared(msg) actor class Market() {
         reserveYes: Nat64;
         reserveNo: Nat64;
         kLast: Nat64; // sqrt(reserve0 * reserve1)
+        totalShares: Nat64;
+        providers: [Text]; // list of principals
     };  
 
     /* State */
@@ -81,7 +84,9 @@ shared(msg) actor class Market() {
 
     // Create a market.
     public shared(msg) func createMarket(marketInitData: MarketInitData): async Nat32 {
-        assert(Principal.toText(msg.caller) != anon);
+        let author = Principal.toText(msg.caller);
+
+        assert(author != anon);
         assert(marketInitData.yesProb + marketInitData.noProb == 100);
         assert(marketInitData.liquidity >= 1000);
         assert(marketInitData.title != "");
@@ -89,14 +94,13 @@ shared(msg) actor class Market() {
         assert(marketInitData.endDate > Time.now());
 
         let marketId = nextMarketId;
-        let author = Principal.toText(msg.caller);
-        let reserveYes = (marketInitData.liquidity * 50) / marketInitData.noProb;
-        let reserveNo = (marketInitData.liquidity * 50) / marketInitData.yesProb;
+        let reserveYes = (marketInitData.liquidity * 50) / marketInitData.yesProb;
+        let reserveNo = (marketInitData.liquidity * 50) / marketInitData.noProb;
 
         // TODO: this wraps on overflow. Should I use Int64 directly?
-        let shares = Float.toInt64(Float.sqrt(
+        let shares = Int64.toNat64(Float.toInt64(Float.sqrt(
             Float.fromInt64(Int64.fromNat64(reserveNo))
-            * Float.fromInt64(Int64.fromNat64(reserveYes))));
+            * Float.fromInt64(Int64.fromNat64(reserveYes)))));
 
         let newMarket: Market = {
             id = marketId;
@@ -112,6 +116,8 @@ shared(msg) actor class Market() {
             reserveYes = reserveYes; 
             reserveNo = reserveNo;
             kLast = reserveYes * reserveNo;
+            totalShares = shares;
+            providers = [author];
         };
 
         nextMarketId += 1;

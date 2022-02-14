@@ -24,10 +24,12 @@ type Market__1 =
    kLast: nat64;
    liquidity: nat64;
    noProb: nat64;
+   providers: vec text;
    reserveNo: nat64;
    reserveYes: nat64;
    startDate: Time;
    title: Title;
+   totalShares: nat64;
    yesProb: nat64;
  };
 type MarketInitData = 

@@ -27,8 +27,10 @@ export const idlFactory = ({ IDL }) => {
     'author' : Author,
     'yesProb' : IDL.Nat64,
     'reserveNo' : IDL.Nat64,
+    'providers' : IDL.Vec(IDL.Text),
     'reserveYes' : IDL.Nat64,
     'kLast' : IDL.Nat64,
+    'totalShares' : IDL.Nat64,
     'blockTimestampLast' : Time,
     'startDate' : Time,
   });

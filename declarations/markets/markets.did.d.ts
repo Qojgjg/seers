@@ -28,8 +28,10 @@ export interface Market__1 {
   'author' : Author,
   'yesProb' : bigint,
   'reserveNo' : bigint,
+  'providers' : Array<string>,
   'reserveYes' : bigint,
   'kLast' : bigint,
+  'totalShares' : bigint,
   'blockTimestampLast' : Time,
   'startDate' : Time,
 }

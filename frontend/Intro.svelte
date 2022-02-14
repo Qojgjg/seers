@@ -73,6 +73,11 @@
         <div style="padding: 2em;">{market.description}</div>
         <div>Yes: {market.yesProb}%</div>
         <div>No: {market.noProb}%</div>
+        <div>Liquidity: {market.liquidity}</div>
+        <div>Reserve Yes: {market.reserveYes}</div>
+        <div>Reserve No: {market.reserveNo}</div>
+        <div>K Last: {market.kLast}</div>
+        <div>Total shares: {market.totalShares}</div>
         <div>
           Created: {new Date(
             Math.trunc(Number(market.startDate) / 1_000_000),
