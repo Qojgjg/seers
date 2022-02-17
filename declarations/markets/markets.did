@@ -53,6 +53,7 @@ type Market =
  service {
    createMarket: (MarketInitData) -> (nat32);
    deleteAllMarkets: () -> ();
+   deleteAllUsers: () -> ();
    deleteMarket: (MarketId) -> (bool);
    getOrCreateUser: () -> (opt UserResult);
    readAllMarkets: () -> (vec Market__1) query;

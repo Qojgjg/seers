@@ -81,7 +81,6 @@ shared(msg) actor class Market() {
     
     private stable var nextMarketId: MarketId = 0;
     private stable var anon: Text = "2vxsx-fae";
-   
     private stable var markets: Trie.Trie<MarketId, Market> = Trie.empty();
     private stable var users: Trie.Trie<UserId, User> = Trie.empty();
 
@@ -120,6 +119,11 @@ shared(msg) actor class Market() {
     public query func readAllUsers(): async [UserResult] {
         let result = Trie.toArray(users, getUserResult);
         return result;
+    };
+
+    // Delete all users.
+    public func deleteAllUsers(): async () {
+        users := Trie.empty();
     };
 
     // Create a market.

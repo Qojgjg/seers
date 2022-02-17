@@ -5,6 +5,7 @@ export type Description = string;
 export interface Market {
   'createMarket' : (arg_0: MarketInitData) => Promise<number>,
   'deleteAllMarkets' : () => Promise<undefined>,
+  'deleteAllUsers' : () => Promise<undefined>,
   'deleteMarket' : (arg_0: MarketId) => Promise<boolean>,
   'getOrCreateUser' : () => Promise<[] | [UserResult]>,
   'readAllMarkets' : () => Promise<Array<Market__1>>,
