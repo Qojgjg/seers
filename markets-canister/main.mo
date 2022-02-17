@@ -72,7 +72,7 @@ shared(msg) actor class Market() {
     /* API */
 
     // Get or create new user.
-    public shared(msg) func getUser(): async ?UserResult {
+    public shared(msg) func getOrCreateUser(): async ?UserResult {
         let userId = Principal.toText(msg.caller);
         if (userId == anon) return null; // User needs to login.
 
@@ -92,13 +92,7 @@ shared(msg) actor class Market() {
             };
             case (?user) {
                 // Copy user as static type.
-                let userResult: ?UserResult = ?{
-                    id = user.id;
-                    seerBalance = user.seerBalance;
-                    liquidityProviderFor = user.liquidityProviderFor;
-                    marketTokens = user.marketTokens;
-                };
-
+                let userResult: ?UserResult = ?userToUserResult(user);
                 return userResult;
             };
         };
@@ -106,11 +100,17 @@ shared(msg) actor class Market() {
         return null;
     };
 
+    // Read all users.
+    public query func readAllUsers(): async [UserResult] {
+        let result = Trie.toArray(users, getUserResult);
+        return result;
+    };
+
     // Create a market.
     public shared(msg) func createMarket(marketInitData: MarketInitData): async Nat32 {
         let author = Principal.toText(msg.caller);
 
-        Debug.print("Executing createMarket");
+        // Debug.print("Executing createMarket");
 
         assert(author != anon);
         assert(marketInitData.yesProb + marketInitData.noProb == 100);
@@ -118,8 +118,6 @@ shared(msg) actor class Market() {
         assert(marketInitData.title != "");
         assert(marketInitData.description != "");
         assert(marketInitData.endDate > Time.now());
-
-        Debug.print("Executing createMarket: asserts passed");
 
         let marketId = nextMarketId;
         let reserveYes = (marketInitData.liquidity * 50) / marketInitData.yesProb;
@@ -129,8 +127,6 @@ shared(msg) actor class Market() {
         let shares = Int64.toNat64(Float.toInt64(Float.sqrt(
             Float.fromInt64(Int64.fromNat64(reserveNo))
             * Float.fromInt64(Int64.fromNat64(reserveYes)))));
-
-        Debug.print("After shares");
 
         let newMarket: Market = {
             id = marketId;
@@ -153,22 +149,15 @@ shared(msg) actor class Market() {
         // Update provider.
         let result = Trie.find(users, userKey(author), Text.equal);
 
-        Debug.print("After result");
-
         switch (result) {
             case null {
-                let r = await getUser();
+                let r = await getOrCreateUser();
                 switch (r) {
                     case null {
                         return 0;
                     };
                     case (?u) {
-                        var user: User =  {
-                            var id = u.id;
-                            var seerBalance = u.seerBalance;
-                            var liquidityProviderFor = u.liquidityProviderFor;
-                            var marketTokens = u.marketTokens;
-                        };
+                        var user: User =  userResultToUser(u);
                         user.liquidityProviderFor := 
                             Array.append(user.liquidityProviderFor, [(marketId, shares)]);
                         users := Trie.replace(
@@ -192,8 +181,6 @@ shared(msg) actor class Market() {
             };
         };
 
-        Debug.print("after replace");
-
         nextMarketId += 1;
 
         markets := Trie.replace(
@@ -202,8 +189,6 @@ shared(msg) actor class Market() {
             Nat32.equal,
             ?newMarket,
         ).0;
-
-        Debug.print("after replace");
 
         return marketId;
     };
@@ -270,5 +255,29 @@ shared(msg) actor class Market() {
 
     private func getMarket(k: Nat32, v: Market): Market {
         return v;
+    };
+
+    private func userResultToUser(u: UserResult): User {
+        let user = {
+            var id = u.id;
+            var seerBalance = u.seerBalance;
+            var liquidityProviderFor = u.liquidityProviderFor;
+            var marketTokens = u.marketTokens;
+        };
+        return user;
+    };
+
+    private func userToUserResult(u: User): UserResult {
+        let userResult = {
+            id = u.id;
+            seerBalance = u.seerBalance;
+            liquidityProviderFor = u.liquidityProviderFor;
+            marketTokens = u.marketTokens;
+        };
+        return userResult;
+    };
+
+    private func getUserResult(k: Text, v: User): UserResult {
+        return userToUserResult(v);
     };
 };

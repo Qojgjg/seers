@@ -5,8 +5,9 @@ export interface Market {
   'createMarket' : (arg_0: MarketInitData) => Promise<number>,
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteMarket' : (arg_0: number) => Promise<boolean>,
-  'getUser' : () => Promise<[] | [UserResult]>,
+  'getOrCreateUser' : () => Promise<[] | [UserResult]>,
   'readAllMarkets' : () => Promise<Array<Market__1>>,
+  'readAllUsers' : () => Promise<Array<UserResult>>,
   'readMarket' : (arg_0: number) => Promise<[] | [Market__1]>,
   'updateMarket' : (arg_0: number, arg_1: Market__1) => Promise<boolean>,
 }

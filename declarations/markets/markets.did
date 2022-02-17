@@ -46,8 +46,9 @@ type Market =
    createMarket: (MarketInitData) -> (nat32);
    deleteAllMarkets: () -> ();
    deleteMarket: (nat32) -> (bool);
-   getUser: () -> (opt UserResult);
+   getOrCreateUser: () -> (opt UserResult);
    readAllMarkets: () -> (vec Market__1) query;
+   readAllUsers: () -> (vec UserResult) query;
    readMarket: (nat32) -> (opt Market__1) query;
    updateMarket: (nat32, Market__1) -> (bool);
  };

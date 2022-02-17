@@ -38,8 +38,9 @@ export const idlFactory = ({ IDL }) => {
     'createMarket' : IDL.Func([MarketInitData], [IDL.Nat32], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteMarket' : IDL.Func([IDL.Nat32], [IDL.Bool], []),
-    'getUser' : IDL.Func([], [IDL.Opt(UserResult)], []),
+    'getOrCreateUser' : IDL.Func([], [IDL.Opt(UserResult)], []),
     'readAllMarkets' : IDL.Func([], [IDL.Vec(Market__1)], ['query']),
+    'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
     'readMarket' : IDL.Func([IDL.Nat32], [IDL.Opt(Market__1)], ['query']),
     'updateMarket' : IDL.Func([IDL.Nat32, Market__1], [IDL.Bool], []),
   });
