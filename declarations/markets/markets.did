@@ -1,8 +1,8 @@
-type User = 
+type UserResult = 
  record {
    id: text;
    liquidityProviderFor: vec record {
-                               nat64;
+                               nat32;
                                nat64;
                              };
    marketTokens: vec record {
@@ -46,7 +46,7 @@ type Market =
    createMarket: (MarketInitData) -> (nat32);
    deleteAllMarkets: () -> ();
    deleteMarket: (nat32) -> (bool);
-   getUser: () -> (opt User);
+   getUser: () -> (opt UserResult);
    readAllMarkets: () -> (vec Market__1) query;
    readMarket: (nat32) -> (opt Market__1) query;
    updateMarket: (nat32, Market__1) -> (bool);

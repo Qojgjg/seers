@@ -5,11 +5,13 @@ import Nat64 "mo:base/Nat64";
 import Int64 "mo:base/Int64";
 import Float "mo:base/Float";
 import List "mo:base/List";
-import Option "mo:base/Option";
 import Trie "mo:base/Trie";
 import Time "mo:base/Time";
 import Principal "mo:base/Principal";
 import Debug "mo:base/Debug";
+import Buffer "mo:base/Buffer";
+import Option "mo:base/Option";
+import Array "mo:base/Array";
 
 shared(msg) actor class Market() {
     /* Types */
@@ -19,9 +21,16 @@ shared(msg) actor class Market() {
     public type Author = Text;
 
     public type User = {
+        var id: Text; // Principal text.
+        var seerBalance: Nat64;
+        var liquidityProviderFor: [(Nat32, Nat64)]; // [(MarketId, Shares)].
+        var marketTokens: [(Nat64, Nat64, Nat64)]; // [(MarketId, YesTokenBalance, NoTokenBalance)].
+    };
+
+    public type UserResult = {
         id: Text; // Principal text.
         seerBalance: Nat64;
-        liquidityProviderFor: [(Nat64, Nat64)]; // [(MarketId, Shares)].
+        liquidityProviderFor: [(Nat32, Nat64)]; // [(MarketId, Shares)].
         marketTokens: [(Nat64, Nat64, Nat64)]; // [(MarketId, YesTokenBalance, NoTokenBalance)].
     };
 
@@ -63,28 +72,45 @@ shared(msg) actor class Market() {
     /* API */
 
     // Get or create new user.
-    public shared(msg) func getUser(): async ?User {
+    public shared(msg) func getUser(): async ?UserResult {
         let userId = Principal.toText(msg.caller);
         if (userId == anon) return null; // User needs to login.
 
-        var result = Trie.find(users, userKey(userId), Text.equal);
-        
-        if (result != null) {
-            // Create user because it does not exist.
-            result := ?{
-                id = userId;
-                seerBalance = 1000; // Airdrop
-                liquidityProviderFor = [];
-                marketTokens = [];
+        var result: ?User = Trie.find(users, userKey(userId), Text.equal);
+
+        switch (result) {
+            case null {
+                // Create user because it does not exist.
+                let userResult: ?UserResult = ?{
+                    id = userId;
+                    seerBalance = 1000; // Airdrop
+                    liquidityProviderFor = [];
+                    marketTokens = [];
+                };
+
+                return userResult;
+            };
+            case (?user) {
+                // Copy user as static type.
+                let userResult: ?UserResult = ?{
+                    id = user.id;
+                    seerBalance = user.seerBalance;
+                    liquidityProviderFor = user.liquidityProviderFor;
+                    marketTokens = user.marketTokens;
+                };
+
+                return userResult;
             };
         };
 
-        return result;
+        return null;
     };
 
     // Create a market.
     public shared(msg) func createMarket(marketInitData: MarketInitData): async Nat32 {
         let author = Principal.toText(msg.caller);
+
+        Debug.print("Executing createMarket");
 
         assert(author != anon);
         assert(marketInitData.yesProb + marketInitData.noProb == 100);
@@ -92,6 +118,8 @@ shared(msg) actor class Market() {
         assert(marketInitData.title != "");
         assert(marketInitData.description != "");
         assert(marketInitData.endDate > Time.now());
+
+        Debug.print("Executing createMarket: asserts passed");
 
         let marketId = nextMarketId;
         let reserveYes = (marketInitData.liquidity * 50) / marketInitData.yesProb;
@@ -101,6 +129,8 @@ shared(msg) actor class Market() {
         let shares = Int64.toNat64(Float.toInt64(Float.sqrt(
             Float.fromInt64(Int64.fromNat64(reserveNo))
             * Float.fromInt64(Int64.fromNat64(reserveYes)))));
+
+        Debug.print("After shares");
 
         let newMarket: Market = {
             id = marketId;
@@ -120,6 +150,50 @@ shared(msg) actor class Market() {
             providers = [author];
         };
 
+        // Update provider.
+        let result = Trie.find(users, userKey(author), Text.equal);
+
+        Debug.print("After result");
+
+        switch (result) {
+            case null {
+                let r = await getUser();
+                switch (r) {
+                    case null {
+                        return 0;
+                    };
+                    case (?u) {
+                        var user: User =  {
+                            var id = u.id;
+                            var seerBalance = u.seerBalance;
+                            var liquidityProviderFor = u.liquidityProviderFor;
+                            var marketTokens = u.marketTokens;
+                        };
+                        user.liquidityProviderFor := 
+                            Array.append(user.liquidityProviderFor, [(marketId, shares)]);
+                        users := Trie.replace(
+                            users,
+                            userKey(user.id),
+                            Text.equal,
+                            ?user,
+                        ).0;
+                    };
+                };
+            };
+            case (?user) {
+                user.liquidityProviderFor := 
+                    Array.append(user.liquidityProviderFor, [(marketId, shares)]);
+                users := Trie.replace(
+                    users,
+                    userKey(author),
+                    Text.equal,
+                    ?user,
+                ).0;
+            };
+        };
+
+        Debug.print("after replace");
+
         nextMarketId += 1;
 
         markets := Trie.replace(
@@ -128,6 +202,8 @@ shared(msg) actor class Market() {
             Nat32.equal,
             ?newMarket,
         ).0;
+
+        Debug.print("after replace");
 
         return marketId;
     };

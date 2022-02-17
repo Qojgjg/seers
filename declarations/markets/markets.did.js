@@ -10,11 +10,11 @@ export const idlFactory = ({ IDL }) => {
     'description' : Description,
     'yesProb' : IDL.Nat64,
   });
-  const User = IDL.Record({
+  const UserResult = IDL.Record({
     'id' : IDL.Text,
     'seerBalance' : IDL.Nat64,
     'marketTokens' : IDL.Vec(IDL.Tuple(IDL.Nat64, IDL.Nat64, IDL.Nat64)),
-    'liquidityProviderFor' : IDL.Vec(IDL.Tuple(IDL.Nat64, IDL.Nat64)),
+    'liquidityProviderFor' : IDL.Vec(IDL.Tuple(IDL.Nat32, IDL.Nat64)),
   });
   const Author = IDL.Text;
   const Market__1 = IDL.Record({
@@ -38,7 +38,7 @@ export const idlFactory = ({ IDL }) => {
     'createMarket' : IDL.Func([MarketInitData], [IDL.Nat32], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteMarket' : IDL.Func([IDL.Nat32], [IDL.Bool], []),
-    'getUser' : IDL.Func([], [IDL.Opt(User)], []),
+    'getUser' : IDL.Func([], [IDL.Opt(UserResult)], []),
     'readAllMarkets' : IDL.Func([], [IDL.Vec(Market__1)], ['query']),
     'readMarket' : IDL.Func([IDL.Nat32], [IDL.Opt(Market__1)], ['query']),
     'updateMarket' : IDL.Func([IDL.Nat32, Market__1], [IDL.Bool], []),

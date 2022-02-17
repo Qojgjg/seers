@@ -30,15 +30,12 @@
     endDate = Date.parse(endDate) * 1_000_000
 
     const market: any = {
-      id: 0,
       title: newMarketTitle,
       description: newMarketDesc,
-      yesProb: BigInt(Math.floor(yesProb + 0.5)),
-      noProb: BigInt(Math.floor(noProb + 0.5)),
-      liquidity: BigInt(totalDeposit),
-      startDate: 0,
+      yesProb: Math.floor(yesProb + 0.5),
+      noProb: Math.floor(noProb + 0.5),
+      liquidity: totalDeposit,
       endDate: endDate,
-      author: "ui",
     }
 
     newMarketDesc = ""
@@ -46,6 +43,9 @@
     yesDeposit = ""
     noDeposit = ""
     endDate = ""
+
+    console.log("Attempting to create market")
+    console.log(market)
 
     await $auth.actor.createMarket(market)
     refreshMarkets()
@@ -78,6 +78,7 @@
         <div>Reserve No: {market.reserveNo}</div>
         <div>K Last: {market.kLast}</div>
         <div>Total shares: {market.totalShares}</div>
+        <div>Providers: {market.providers}</div>
         <div>
           Created: {new Date(
             Math.trunc(Number(market.startDate) / 1_000_000),

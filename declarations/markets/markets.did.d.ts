@@ -5,7 +5,7 @@ export interface Market {
   'createMarket' : (arg_0: MarketInitData) => Promise<number>,
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteMarket' : (arg_0: number) => Promise<boolean>,
-  'getUser' : () => Promise<[] | [User]>,
+  'getUser' : () => Promise<[] | [UserResult]>,
   'readAllMarkets' : () => Promise<Array<Market__1>>,
   'readMarket' : (arg_0: number) => Promise<[] | [Market__1]>,
   'updateMarket' : (arg_0: number, arg_1: Market__1) => Promise<boolean>,
@@ -37,10 +37,10 @@ export interface Market__1 {
 }
 export type Time = bigint;
 export type Title = string;
-export interface User {
+export interface UserResult {
   'id' : string,
   'seerBalance' : bigint,
   'marketTokens' : Array<[bigint, bigint, bigint]>,
-  'liquidityProviderFor' : Array<[bigint, bigint]>,
+  'liquidityProviderFor' : Array<[number, bigint]>,
 }
 export interface _SERVICE extends Market {}
