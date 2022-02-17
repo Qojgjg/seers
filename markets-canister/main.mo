@@ -19,55 +19,71 @@ shared(msg) actor class Market() {
     public type Title = Text;
     public type Description = Text;
     public type Author = Text;
+    public type MarketId = Nat32;
+    public type UserId = Text;
+    public type Shares = Nat64;
+    public type Probability = Nat64;
+    public type Balance = Nat64;
+
+    public type UserTokens = {
+        marketId: MarketId;
+        yesBalance: Balance;
+        noBalance: Balance;
+    };
+
+    public type UserShares = {
+        marketId: MarketId;
+        shares: Shares;
+    };
 
     public type User = {
-        var id: Text; // Principal text.
-        var seerBalance: Nat64;
-        var liquidityProviderFor: [(Nat32, Nat64)]; // [(MarketId, Shares)].
-        var marketTokens: [(Nat64, Nat64, Nat64)]; // [(MarketId, YesTokenBalance, NoTokenBalance)].
+        var id: UserId; // Principal.
+        var seerBalance: Balance;
+        var liquidityProviderFor: [UserShares];
+        var marketTokens: [UserTokens];
     };
 
     public type UserResult = {
-        id: Text; // Principal text.
-        seerBalance: Nat64;
-        liquidityProviderFor: [(Nat32, Nat64)]; // [(MarketId, Shares)].
-        marketTokens: [(Nat64, Nat64, Nat64)]; // [(MarketId, YesTokenBalance, NoTokenBalance)].
+        id: UserId; // Principal.
+        seerBalance: Balance;
+        liquidityProviderFor: [UserShares];
+        marketTokens: [UserTokens];
     };
 
     public type MarketInitData = {
         title: Title;
         description: Description;
-        yesProb: Nat64;
-        noProb: Nat64;
-        liquidity: Nat64;
+        yesProb: Probability;
+        noProb: Probability;
+        liquidity: Balance;
         endDate: Time.Time;
     };
 
     public type Market = {
-        id: Nat32;    
+        id: MarketId;    
         title: Title;
         description: Description;
-        yesProb: Nat64;
-        noProb: Nat64;
-        liquidity: Nat64;
+        yesProb: Probability;
+        noProb: Probability;
+        liquidity: Balance;
         startDate: Time.Time;
         endDate: Time.Time;
         author: Author;
         blockTimestampLast: Time.Time;
-        reserveYes: Nat64;
-        reserveNo: Nat64;
-        kLast: Nat64; // sqrt(reserve0 * reserve1)
-        totalShares: Nat64;
+        reserveYes: Balance;
+        reserveNo: Balance;
+        kLast: Balance; // sqrt(reserve0 * reserve1)
+        totalShares: Shares;
         providers: [Text]; // list of principals
     };  
 
     /* State */
     
-    private stable var nextMarketId: Nat32 = 0;
+    private stable var nextMarketId: MarketId = 0;
     private stable var anon: Text = "2vxsx-fae";
    
-    private stable var markets: Trie.Trie<Nat32, Market> = Trie.empty();
-    private stable var users: Trie.Trie<Text, User> = Trie.empty();
+    private stable var markets: Trie.Trie<MarketId, Market> = Trie.empty();
+    private stable var users: Trie.Trie<UserId, User> = Trie.empty();
 
     /* API */
 
@@ -159,7 +175,12 @@ shared(msg) actor class Market() {
                     case (?u) {
                         var user: User =  userResultToUser(u);
                         user.liquidityProviderFor := 
-                            Array.append(user.liquidityProviderFor, [(marketId, shares)]);
+                            Array.append(user.liquidityProviderFor, [
+                                {
+                                    marketId = marketId;
+                                    shares = shares;
+                                }
+                            ]);
                         users := Trie.replace(
                             users,
                             userKey(user.id),
@@ -171,7 +192,12 @@ shared(msg) actor class Market() {
             };
             case (?user) {
                 user.liquidityProviderFor := 
-                    Array.append(user.liquidityProviderFor, [(marketId, shares)]);
+                    Array.append(user.liquidityProviderFor, [
+                        {
+                            marketId = marketId;
+                            shares = shares;
+                        }
+                    ]);
                 users := Trie.replace(
                     users,
                     userKey(author),
@@ -194,7 +220,7 @@ shared(msg) actor class Market() {
     };
 
     // Read a market.
-    public query func readMarket(marketId: Nat32): async ?Market {
+    public query func readMarket(marketId: MarketId): async ?Market {
         let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
         return result;        
     };
@@ -206,7 +232,7 @@ shared(msg) actor class Market() {
     };
 
     // Update a market.
-    public func updateMarket(marketId: Nat32, market: Market): async Bool {
+    public func updateMarket(marketId: MarketId, market: Market): async Bool {
         let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
         let exists = Option.isSome(result);
         if (exists) {
@@ -221,7 +247,7 @@ shared(msg) actor class Market() {
     };
 
     // Delete a market.
-    public func deleteMarket(marketId: Nat32): async Bool {
+    public func deleteMarket(marketId: MarketId): async Bool {
         let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
         let exists = Option.isSome(result);
         if (exists) {
@@ -245,15 +271,15 @@ shared(msg) actor class Market() {
     * Utilities
     */
 
-    private func userKey(x: Text) : Trie.Key<Text> {
+    private func userKey(x: UserId) : Trie.Key<UserId> {
         return { hash = Text.hash(x); key = x };
     };
 
-    private func marketKey(x: Nat32) : Trie.Key<Nat32> {
+    private func marketKey(x: MarketId) : Trie.Key<MarketId> {
         return { hash = x; key = x };
     };
 
-    private func getMarket(k: Nat32, v: Market): Market {
+    private func getMarket(k: MarketId, v: Market): Market {
         return v;
     };
 
@@ -277,7 +303,7 @@ shared(msg) actor class Market() {
         return userResult;
     };
 
-    private func getUserResult(k: Text, v: User): UserResult {
+    private func getUserResult(k: UserId, v: User): UserResult {
         return userToUserResult(v);
     };
 };

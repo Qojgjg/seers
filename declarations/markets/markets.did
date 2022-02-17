@@ -1,57 +1,66 @@
+type UserTokens = 
+ record {
+   marketId: MarketId;
+   noBalance: Balance;
+   yesBalance: Balance;
+ };
+type UserShares = 
+ record {
+   marketId: MarketId;
+   shares: Shares;
+ };
 type UserResult = 
  record {
-   id: text;
-   liquidityProviderFor: vec record {
-                               nat32;
-                               nat64;
-                             };
-   marketTokens: vec record {
-                       nat64;
-                       nat64;
-                       nat64;
-                     };
-   seerBalance: nat64;
+   id: UserId;
+   liquidityProviderFor: vec UserShares;
+   marketTokens: vec UserTokens;
+   seerBalance: Balance;
  };
+type UserId = text;
 type Title = text;
 type Time = int;
+type Shares = nat64;
+type Probability = nat64;
 type Market__1 = 
  record {
    author: Author;
    blockTimestampLast: Time;
    description: Description;
    endDate: Time;
-   id: nat32;
-   kLast: nat64;
-   liquidity: nat64;
-   noProb: nat64;
+   id: MarketId;
+   kLast: Balance;
+   liquidity: Balance;
+   noProb: Probability;
    providers: vec text;
-   reserveNo: nat64;
-   reserveYes: nat64;
+   reserveNo: Balance;
+   reserveYes: Balance;
    startDate: Time;
    title: Title;
-   totalShares: nat64;
-   yesProb: nat64;
+   totalShares: Shares;
+   yesProb: Probability;
  };
 type MarketInitData = 
  record {
    description: Description;
    endDate: Time;
-   liquidity: nat64;
-   noProb: nat64;
+   liquidity: Balance;
+   noProb: Probability;
    title: Title;
-   yesProb: nat64;
+   yesProb: Probability;
  };
+type MarketId = nat32;
 type Market = 
  service {
    createMarket: (MarketInitData) -> (nat32);
    deleteAllMarkets: () -> ();
-   deleteMarket: (nat32) -> (bool);
+   deleteMarket: (MarketId) -> (bool);
    getOrCreateUser: () -> (opt UserResult);
    readAllMarkets: () -> (vec Market__1) query;
    readAllUsers: () -> (vec UserResult) query;
-   readMarket: (nat32) -> (opt Market__1) query;
-   updateMarket: (nat32, Market__1) -> (bool);
+   readMarket: (MarketId) -> (opt Market__1) query;
+   updateMarket: (MarketId, Market__1) -> (bool);
  };
 type Description = text;
+type Balance = nat64;
 type Author = text;
 service : () -> Market
