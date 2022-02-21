@@ -104,35 +104,6 @@ shared(msg) actor class Market() {
 
     /* API */
 
-    // Get or create new user.
-    public shared(msg) func getOrCreateUser(): async ?UserResult {
-        let userId = Principal.toText(msg.caller);
-        if (userId == anon) return null; // User needs to login.
-
-        var result: ?User = Trie.find(users, userKey(userId), Text.equal);
-
-        switch (result) {
-            case null {
-                // Create user because it does not exist.
-                let userResult: ?UserResult = ?{
-                    id = userId;
-                    seerBalance = 1000; // Airdrop
-                    liquidityProviderFor = [];
-                    marketTokens = [];
-                };
-
-                return userResult;
-            };
-            case (?user) {
-                // Copy user as static type.
-                let userResult: ?UserResult = ?userToUserResult(user);
-                return userResult;
-            };
-        };
-
-        return null;
-    };
-
     // Read all users.
     public query func readAllUsers(): async [UserResult] {
         let result = Trie.toArray(users, getUserResult);
@@ -189,7 +160,8 @@ shared(msg) actor class Market() {
 
         switch (result) {
             case null {
-                let r = await getOrCreateUser();
+                Debug.print(Text.concat("creating user ", author));
+                let r = getOrCreateUser(author);
                 switch (r) {
                     case null {
                         return 0;
@@ -213,6 +185,7 @@ shared(msg) actor class Market() {
                 };
             };
             case (?user) {
+                Debug.print("User already created");
                 user.liquidityProviderFor := 
                     Array.append(user.liquidityProviderFor, [
                         {
@@ -291,7 +264,9 @@ shared(msg) actor class Market() {
     };
 
     // Remove all liquidity provided in this market by calling user.
-    public func removeLiquidity(marketId: MarketId): async Bool {
+    public shared(msg) func removeLiquidity(marketId: MarketId): async Bool {
+        Debug.print(Text.concat("removeLiquidity for ", Nat32.toText(marketId)));
+
         // If user is anon we abort.
         let author = Principal.toText(msg.caller);
         assert(author != anon);
@@ -303,6 +278,10 @@ shared(msg) actor class Market() {
         switch (userOpt) {
             case null {
                 // If user is not in state we abort.
+                Debug.print(Text.concat(
+                    "User not in state ", 
+                    author
+                ));
                 return false;
             };
             case (?user) {
@@ -310,6 +289,10 @@ shared(msg) actor class Market() {
                 switch (marketOpt) {
                     case null {
                         // If market is not in state we abort.
+                        Debug.print(Text.concat(
+                            "Market not in state ", 
+                            ""
+                        ));
                         return false;
                     };
                     case (?market) {
@@ -358,6 +341,20 @@ shared(msg) actor class Market() {
                             };
                         };
                         user.liquidityProviderFor := newSharesBuffer.toArray();
+
+                        users := Trie.replace(
+                            users,
+                            userKey(user.id),
+                            Text.equal,
+                            ?user,
+                        ).0;
+
+                        markets := Trie.replace(
+                            markets,
+                            marketKey(market.id),
+                            Nat32.equal,
+                            ?market,
+                        ).0;
 
                         return true;
                     };
@@ -448,5 +445,42 @@ shared(msg) actor class Market() {
 
     private func getUserResult(k: UserId, v: User): UserResult {
         return userToUserResult(v);
+    };
+
+    // Get or create new user.
+    private func getOrCreateUser(userId: UserId): ?UserResult {
+        if (userId == anon) return null;
+
+        var result: ?User = Trie.find(users, userKey(userId), Text.equal);
+
+        switch (result) {
+            case null {
+                // Create user because it does not exist.
+                let user: User = {
+                    var id = userId;
+                    var seerBalance = 1000; // Airdrop
+                    var liquidityProviderFor = [];
+                    var marketTokens = [];
+                };
+
+                Debug.print(Text.concat("Creating user with id ", userId));
+
+                users := Trie.replace(
+                    users,
+                    userKey(user.id),
+                    Text.equal,
+                    ?user,
+                ).0;
+
+                return ?userToUserResult(user);
+            };
+            case (?user) {
+                // Copy user as static type.
+                let userResult: ?UserResult = ?userToUserResult(user);
+                return userResult;
+            };
+        };
+
+        return null;
     };
 };

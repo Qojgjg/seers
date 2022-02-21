@@ -13,21 +13,8 @@ export const idlFactory = ({ IDL }) => {
     'yesProb' : Probability,
   });
   const MarketId = IDL.Nat32;
-  const UserId = IDL.Text;
-  const UserTokens = IDL.Record({
-    'noBalance' : Balance,
-    'marketId' : MarketId,
-    'yesBalance' : Balance,
-  });
-  const Shares = IDL.Nat64;
-  const UserShares = IDL.Record({ 'shares' : Shares, 'marketId' : MarketId });
-  const UserResult = IDL.Record({
-    'id' : UserId,
-    'seerBalance' : Balance,
-    'marketTokens' : IDL.Vec(UserTokens),
-    'liquidityProviderFor' : IDL.Vec(UserShares),
-  });
   const Author = IDL.Text;
+  const Shares = IDL.Nat64;
   const MarketResult = IDL.Record({
     'id' : MarketId,
     'title' : Title,
@@ -45,12 +32,24 @@ export const idlFactory = ({ IDL }) => {
     'blockTimestampLast' : Time,
     'startDate' : Time,
   });
+  const UserId = IDL.Text;
+  const UserTokens = IDL.Record({
+    'noBalance' : Balance,
+    'marketId' : MarketId,
+    'yesBalance' : Balance,
+  });
+  const UserShares = IDL.Record({ 'shares' : Shares, 'marketId' : MarketId });
+  const UserResult = IDL.Record({
+    'id' : UserId,
+    'seerBalance' : Balance,
+    'marketTokens' : IDL.Vec(UserTokens),
+    'liquidityProviderFor' : IDL.Vec(UserShares),
+  });
   const Market = IDL.Service({
     'createMarket' : IDL.Func([MarketInitData], [IDL.Nat32], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteAllUsers' : IDL.Func([], [], []),
     'deleteMarket' : IDL.Func([MarketId], [IDL.Bool], []),
-    'getOrCreateUser' : IDL.Func([], [IDL.Opt(UserResult)], []),
     'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
     'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),

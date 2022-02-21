@@ -22,7 +22,10 @@
     await $auth.actor.deleteAllMarkets()
   }
 
-  const removeLiquidity = async () => {}
+  const removeLiquidity = async (marketId) => {
+    console.log("Removing liquidity for market " + marketId)
+    await $auth.actor.removeLiquidity(marketId)
+  }
   const addLiquidity = async () => {}
   const buyYes = async () => {}
   const buyNo = async () => {}
@@ -110,7 +113,10 @@
           </button>
         </div>
         <div style="padding: 1em; text-align:left; font-size: 0.8em">
-          <button class="demo-button" on:click={addLiquidity}>
+          <button
+            class="demo-button"
+            on:click={() => removeLiquidity(market.id)}
+          >
             Remove Liquidity
           </button>
         </div>
