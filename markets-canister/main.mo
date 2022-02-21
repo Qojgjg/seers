@@ -63,6 +63,24 @@ shared(msg) actor class Market() {
         id: MarketId;    
         title: Title;
         description: Description;
+        var yesProb: Probability;
+        var noProb: Probability;
+        var liquidity: Balance;
+        startDate: Time.Time;
+        endDate: Time.Time;
+        author: Author;
+        var blockTimestampLast: Time.Time;
+        var reserveYes: Balance;
+        var reserveNo: Balance;
+        var kLast: Balance; // sqrt(reserve0 * reserve1)
+        var totalShares: Shares;
+        var providers: [Text]; // list of principals
+    };
+
+    public type MarketResult = {
+        id: MarketId;    
+        title: Title;
+        description: Description;
         yesProb: Probability;
         noProb: Probability;
         liquidity: Balance;
@@ -152,18 +170,18 @@ shared(msg) actor class Market() {
             id = marketId;
             title = marketInitData.title;
             description = marketInitData.description;
-            yesProb = marketInitData.yesProb;
-            noProb = marketInitData.noProb;
-            liquidity = marketInitData.liquidity;
+            var yesProb = marketInitData.yesProb;
+            var noProb = marketInitData.noProb;
+            var liquidity = marketInitData.liquidity;
             startDate = Time.now();
             endDate = marketInitData.endDate;
             author = author;
-            blockTimestampLast = Time.now();
-            reserveYes = reserveYes; 
-            reserveNo = reserveNo;
-            kLast = reserveYes * reserveNo;
-            totalShares = shares;
-            providers = [author];
+            var blockTimestampLast = Time.now();
+            var reserveYes = reserveYes; 
+            var reserveNo = reserveNo;
+            var kLast = reserveYes * reserveNo;
+            var totalShares = shares;
+            var providers = [author];
         };
 
         // Update provider.
@@ -224,7 +242,7 @@ shared(msg) actor class Market() {
     };
 
     // Read a market.
-    public query func readMarket(marketId: MarketId): async ?Market {
+    public query func readMarket(marketId: MarketId): async ?MarketResult {
         let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
         return result;        
     };
@@ -271,6 +289,81 @@ shared(msg) actor class Market() {
         markets := Trie.empty();
     };
 
+    // Remove all liquidity provided in this market by calling user.
+    public func removeLiquidity(marketId: MarketId): async Bool {
+        // If user is anon we abort.
+        let author = Principal.toText(msg.caller);
+        assert(author != anon);
+
+        // Get user and market state.
+        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+        let userOpt = Trie.find(users, userKey(author), Text.equal);
+
+        switch (userOpt) {
+            case null {
+                // If user is not in state we abort.
+                return false;
+            };
+            case (?user) {
+
+                switch (marketOpt) {
+                    case null {
+                        // If market is not in state we abort.
+                        return false;
+                    };
+                    case (?market) {
+                        // All good, let's do it.
+                        // Loop throught user shares and find market data.
+                        
+                        let newSharesBuffer: Buffer.Buffer<Shares> 
+                            = Buffer.Buffer(user.liquidityProviderFor.size() - 1);
+                        
+                        for (userShare in user.liquidityProviderFor.vals()) {
+                            if (userShare.marketId != marketId) {
+                                // Other shares are kept.
+                                newSharesBuffer.add(userShare);
+                            } else {
+                                // Calculate percentage of user shares from total.
+                                let percent = userShare.shares / market.totalShares;
+                                let userLiquidity = market.liquidity * percent;
+
+                                // Remove user liquidity from total.                    
+                                market.liquidity := market.liquidity - user.liquidity;
+
+                                // Calculate tokens we need to give back.
+                                let userYesTokens = market.reserveYes * percent;
+                                let userNoTokens = market.reserveNo * percent;
+            
+                                // Remove tokens from total.
+                                market.yesBalance := market.yesBalance - user.yesTokens;
+                                market.noBalance := market.noBalance - user.noTokens; 
+
+                                // Add tokens to user.
+                                user.marketTokens.add({
+                                    marketId = marketId;
+                                    yesTokens = userYesTokens;
+                                    noTokens = userNoTokens;
+                                });
+
+                                // Remove user shares from total shares.
+                                market.totalShares := market.totalShares - userShare.shares;
+                                
+                                // Remove user from providers list.
+                                market.providers := 
+                                    Array.filter(market.providers, func (u: UserId): bool {
+                                        u != author;
+                                    });
+                            };
+                        };
+                        user.liquidityProviderFor := newSharesBuffer.toArray();
+
+                        return true;
+                    };
+                };
+            };
+        };
+    };
+
     /**
     * Utilities
     */
@@ -285,6 +378,26 @@ shared(msg) actor class Market() {
 
     private func getMarket(k: MarketId, v: Market): Market {
         return v;
+    };
+
+    private func marketResultToMarket(u: MarketResult): User {
+        let user = {
+            var id = u.id;
+            var seerBalance = u.seerBalance;
+            var liquidityProviderFor = u.liquidityProviderFor;
+            var marketTokens = u.marketTokens;
+        };
+        return user;
+    };
+
+    private func userToUserResult(u: User): UserResult {
+        let userResult = {
+            id = u.id;
+            seerBalance = u.seerBalance;
+            liquidityProviderFor = u.liquidityProviderFor;
+            marketTokens = u.marketTokens;
+        };
+        return userResult;
     };
 
     private func userResultToUser(u: UserResult): User {

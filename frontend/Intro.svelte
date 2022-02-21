@@ -10,6 +10,9 @@
   let yesDeposit: any = ""
   let noDeposit: any = ""
   let endDate: any = ""
+  let liquidityToAdd: any = ""
+  let yesAmountToBuy: any = ""
+  let noAmountToBuy: any = ""
 
   const refreshMarkets = async () => {
     ms = await $auth.actor.readAllMarkets()
@@ -18,6 +21,11 @@
   const deleteMarkets = async () => {
     await $auth.actor.deleteAllMarkets()
   }
+
+  const removeLiquidity = async () => {}
+  const addLiquidity = async () => {}
+  const buyYes = async () => {}
+  const buyNo = async () => {}
 
   const createMarket = async () => {
     yesDeposit = parseInt(yesDeposit, 10)
@@ -44,9 +52,6 @@
     noDeposit = ""
     endDate = ""
 
-    console.log("Attempting to create market")
-    console.log(market)
-
     await $auth.actor.createMarket(market)
     refreshMarkets()
   }
@@ -70,7 +75,7 @@
           #{market.id}
           <h3>{market.title}</h3>
         </div>
-        <div style="padding: 2em;">{market.description}</div>
+        <div>{market.description}</div>
         <div>Yes: {market.yesProb}%</div>
         <div>No: {market.noProb}%</div>
         <div>Liquidity: {market.liquidity}</div>
@@ -90,6 +95,25 @@
           ).toDateString()}
         </div>
         <div>Author: {market.author}</div>
+        <div style="padding: 1em; text-align:left; font-size: 0.8em">
+          Buy Yes: <input bind:value={yesAmountToBuy} />
+          <button class="demo-button" on:click={buyYes}>Buy Yes</button>
+        </div>
+        <div style="padding: 1em; text-align:left; font-size: 0.8em">
+          Buy No: <input bind:value={noAmountToBuy} />
+          <button class="demo-button" on:click={buyNo}> Buy No </button>
+        </div>
+        <div style="padding: 1em; text-align:left; font-size: 0.8em">
+          Add Liquidity: <input bind:value={liquidityToAdd} />
+          <button class="demo-button" on:click={addLiquidity}>
+            Add liquidity
+          </button>
+        </div>
+        <div style="padding: 1em; text-align:left; font-size: 0.8em">
+          <button class="demo-button" on:click={addLiquidity}>
+            Remove Liquidity
+          </button>
+        </div>
       </div>
     {/each}
   </div>
