@@ -28,7 +28,7 @@ export const idlFactory = ({ IDL }) => {
     'liquidityProviderFor' : IDL.Vec(UserShares),
   });
   const Author = IDL.Text;
-  const Market__1 = IDL.Record({
+  const MarketResult = IDL.Record({
     'id' : MarketId,
     'title' : Title,
     'noProb' : Probability,
@@ -51,10 +51,11 @@ export const idlFactory = ({ IDL }) => {
     'deleteAllUsers' : IDL.Func([], [], []),
     'deleteMarket' : IDL.Func([MarketId], [IDL.Bool], []),
     'getOrCreateUser' : IDL.Func([], [IDL.Opt(UserResult)], []),
-    'readAllMarkets' : IDL.Func([], [IDL.Vec(Market__1)], ['query']),
+    'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
-    'readMarket' : IDL.Func([MarketId], [IDL.Opt(Market__1)], ['query']),
-    'updateMarket' : IDL.Func([MarketId, Market__1], [IDL.Bool], []),
+    'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
+    'removeLiquidity' : IDL.Func([MarketId], [IDL.Bool], []),
+    'updateMarket' : IDL.Func([MarketId, MarketResult], [IDL.Bool], []),
   });
   return Market;
 };

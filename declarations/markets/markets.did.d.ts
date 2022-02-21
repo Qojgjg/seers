@@ -8,10 +8,11 @@ export interface Market {
   'deleteAllUsers' : () => Promise<undefined>,
   'deleteMarket' : (arg_0: MarketId) => Promise<boolean>,
   'getOrCreateUser' : () => Promise<[] | [UserResult]>,
-  'readAllMarkets' : () => Promise<Array<Market__1>>,
+  'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllUsers' : () => Promise<Array<UserResult>>,
-  'readMarket' : (arg_0: MarketId) => Promise<[] | [Market__1]>,
-  'updateMarket' : (arg_0: MarketId, arg_1: Market__1) => Promise<boolean>,
+  'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
+  'removeLiquidity' : (arg_0: MarketId) => Promise<boolean>,
+  'updateMarket' : (arg_0: MarketId, arg_1: MarketResult) => Promise<boolean>,
 }
 export type MarketId = number;
 export interface MarketInitData {
@@ -22,7 +23,7 @@ export interface MarketInitData {
   'description' : Description,
   'yesProb' : Probability,
 }
-export interface Market__1 {
+export interface MarketResult {
   'id' : MarketId,
   'title' : Title,
   'noProb' : Probability,

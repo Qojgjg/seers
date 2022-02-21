@@ -21,7 +21,7 @@ type Title = text;
 type Time = int;
 type Shares = nat64;
 type Probability = nat64;
-type Market__1 = 
+type MarketResult = 
  record {
    author: Author;
    blockTimestampLast: Time;
@@ -56,10 +56,11 @@ type Market =
    deleteAllUsers: () -> ();
    deleteMarket: (MarketId) -> (bool);
    getOrCreateUser: () -> (opt UserResult);
-   readAllMarkets: () -> (vec Market__1) query;
+   readAllMarkets: () -> (vec MarketResult) query;
    readAllUsers: () -> (vec UserResult) query;
-   readMarket: (MarketId) -> (opt Market__1) query;
-   updateMarket: (MarketId, Market__1) -> (bool);
+   readMarket: (MarketId) -> (opt MarketResult) query;
+   removeLiquidity: (MarketId) -> (bool);
+   updateMarket: (MarketId, MarketResult) -> (bool);
  };
 type Description = text;
 type Balance = nat64;
