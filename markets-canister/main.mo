@@ -156,36 +156,14 @@ shared(msg) actor class Market() {
         };
 
         // Update provider.
-        let result = Trie.find(users, userKey(author), Text.equal);
-
-        switch (result) {
+        let userOption = getOrCreateUser(author);
+                
+        switch (userOption) {
             case null {
-                Debug.print(Text.concat("creating user ", author));
-                let r = getOrCreateUser(author);
-                switch (r) {
-                    case null {
-                        return 0;
-                    };
-                    case (?u) {
-                        var user: User =  userResultToUser(u);
-                        user.liquidityProviderFor := 
-                            Array.append(user.liquidityProviderFor, [
-                                {
-                                    marketId = marketId;
-                                    shares = shares;
-                                }
-                            ]);
-                        users := Trie.replace(
-                            users,
-                            userKey(user.id),
-                            Text.equal,
-                            ?user,
-                        ).0;
-                    };
-                };
+                return 0;
             };
-            case (?user) {
-                Debug.print("User already created");
+            case (?u) {
+                var user: User = userResultToUser(u);
                 user.liquidityProviderFor := 
                     Array.append(user.liquidityProviderFor, [
                         {
@@ -195,7 +173,7 @@ shared(msg) actor class Market() {
                     ]);
                 users := Trie.replace(
                     users,
-                    userKey(author),
+                    userKey(user.id),
                     Text.equal,
                     ?user,
                 ).0;
@@ -284,12 +262,36 @@ shared(msg) actor class Market() {
                     * Float.fromInt64(Int64.fromNat64(newReserveYes)))));
 
                 let newLiquidity = market.liquidity + value;
+                let userShares = newTotalShares - market.totalShares;
                 
                 let callerIsProvider = Array.find(market.providers, func (u: UserId): Bool {
                     u == caller;
                 });
 
                 var newProviders = market.providers;
+                let userOption = getOrCreateUser(caller);
+                
+                switch (userOption) {
+                    case null {
+                        return false;
+                    };
+                    case (?u) {
+                        var user: User = userResultToUser(u);
+                        user.liquidityProviderFor := 
+                            Array.append(user.liquidityProviderFor, [
+                                {
+                                    marketId = market.id;
+                                    shares = userShares;
+                                }
+                            ]);
+                        users := Trie.replace(
+                            users,
+                            userKey(user.id),
+                            Text.equal,
+                            ?user,
+                        ).0;
+                    };
+                };
 
                 if (callerIsProvider == null) {
                     newProviders := Array.append(newProviders, [caller])
