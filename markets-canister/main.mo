@@ -162,8 +162,7 @@ shared(msg) actor class Market() {
             case null {
                 return 0;
             };
-            case (?u) {
-                var user: User = userResultToUser(u);
+            case (?user) {
                 user.liquidityProviderFor := 
                     Array.append(user.liquidityProviderFor, [
                         {
@@ -275,8 +274,7 @@ shared(msg) actor class Market() {
                     case null {
                         return false;
                     };
-                    case (?u) {
-                        var user: User = userResultToUser(u);
+                    case (?user) {
                         user.liquidityProviderFor := 
                             Array.append(user.liquidityProviderFor, [
                                 {
@@ -512,7 +510,7 @@ shared(msg) actor class Market() {
     };
 
     // Get or create new user.
-    private func getOrCreateUser(userId: UserId): ?UserResult {
+    private func getOrCreateUser(userId: UserId): ?User {
         if (userId == anon) return null;
 
         var result: ?User = Trie.find(users, userKey(userId), Text.equal);
@@ -536,12 +534,10 @@ shared(msg) actor class Market() {
                     ?user,
                 ).0;
 
-                return ?userToUserResult(user);
+                return ?user;
             };
             case (?user) {
-                // Copy user as static type.
-                let userResult: ?UserResult = ?userToUserResult(user);
-                return userResult;
+                return ?user;
             };
         };
 
