@@ -3,6 +3,7 @@ export type Author = string;
 export type Balance = bigint;
 export type Description = string;
 export interface Market {
+  'addLiquidity' : (arg_0: MarketId, arg_1: Balance) => Promise<boolean>,
   'createMarket' : (arg_0: MarketInitData) => Promise<number>,
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteAllUsers' : () => Promise<undefined>,

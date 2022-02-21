@@ -263,6 +263,68 @@ shared(msg) actor class Market() {
         markets := Trie.empty();
     };
 
+    // Add liquidity to this market by calling user.
+    public shared(msg) func addLiquidity(marketId: MarketId, value: Balance): async Bool {
+        Debug.print(Text.concat("addLiquidity to ", Nat32.toText(marketId)));
+        let caller = Principal.toText(msg.caller);
+        let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
+        
+        switch (result) {
+            case null {
+                // Market does not exist? WTF!
+                return false;
+            };
+            case (?market) {
+                let newReserveYes = market.reserveYes + (value * 50) / market.yesProb;
+                let newReserveNo = market.reserveNo + (value * 50) / market.noProb;
+
+                // TODO: this wraps on overflow. Should I use Int64 directly?
+                let newTotalShares = Int64.toNat64(Float.toInt64(Float.sqrt(
+                    Float.fromInt64(Int64.fromNat64(newReserveNo))
+                    * Float.fromInt64(Int64.fromNat64(newReserveYes)))));
+
+                let newLiquidity = market.liquidity + value;
+                
+                let callerIsProvider = Array.find(market.providers, func (u: UserId): Bool {
+                    u == caller;
+                });
+
+                var newProviders = market.providers;
+
+                if (callerIsProvider == null) {
+                    newProviders := Array.append(newProviders, [caller])
+                };
+
+                let newMarket: Market = {
+                    id = market.id;
+                    title = market.title;
+                    description = market.description;
+                    var yesProb = market.yesProb;
+                    var noProb = market.noProb;
+                    var liquidity = newLiquidity;
+                    startDate = market.startDate;
+                    endDate = market.endDate;
+                    author = market.author;
+                    var blockTimestampLast = Time.now();
+                    var reserveYes = newReserveYes; 
+                    var reserveNo = newReserveNo;
+                    var kLast = newReserveYes * newReserveNo;
+                    var totalShares = newTotalShares;
+                    var providers = newProviders;
+                };
+
+                markets := Trie.replace(
+                    markets,
+                    marketKey(newMarket.id),
+                    Nat32.equal,
+                    ?newMarket,
+                ).0;
+
+                return true;
+            };
+        };
+    };
+
     // Remove all liquidity provided in this market by calling user.
     public shared(msg) func removeLiquidity(marketId: MarketId): async Bool {
         Debug.print(Text.concat("removeLiquidity for ", Nat32.toText(marketId)));

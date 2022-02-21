@@ -51,6 +51,7 @@ type MarketInitData =
 type MarketId = nat32;
 type Market = 
  service {
+   addLiquidity: (MarketId, Balance) -> (bool);
    createMarket: (MarketInitData) -> (nat32);
    deleteAllMarkets: () -> ();
    deleteAllUsers: () -> ();

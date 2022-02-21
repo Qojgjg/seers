@@ -1,8 +1,9 @@
 export const idlFactory = ({ IDL }) => {
+  const MarketId = IDL.Nat32;
+  const Balance = IDL.Nat64;
   const Title = IDL.Text;
   const Probability = IDL.Nat64;
   const Time = IDL.Int;
-  const Balance = IDL.Nat64;
   const Description = IDL.Text;
   const MarketInitData = IDL.Record({
     'title' : Title,
@@ -12,7 +13,6 @@ export const idlFactory = ({ IDL }) => {
     'description' : Description,
     'yesProb' : Probability,
   });
-  const MarketId = IDL.Nat32;
   const Author = IDL.Text;
   const Shares = IDL.Nat64;
   const MarketResult = IDL.Record({
@@ -46,6 +46,7 @@ export const idlFactory = ({ IDL }) => {
     'liquidityProviderFor' : IDL.Vec(UserShares),
   });
   const Market = IDL.Service({
+    'addLiquidity' : IDL.Func([MarketId, Balance], [IDL.Bool], []),
     'createMarket' : IDL.Func([MarketInitData], [IDL.Nat32], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteAllUsers' : IDL.Func([], [], []),
