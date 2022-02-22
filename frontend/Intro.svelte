@@ -30,7 +30,7 @@
 
   const addLiquidity = async (marketId, value) => {
     console.log("Adding liquidity to market " + marketId)
-    await $auth.actor.addLiquidity(marketId, value)
+    await $auth.actor.addLiquidity(marketId, parseInt(value))
   }
   const buyYes = async () => {}
   const buyNo = async () => {}
