@@ -1,6 +1,7 @@
 <script lang="ts">
   import logo from "./assets/logo-dark.svg"
   import { onMount } from "svelte"
+  import { identity } from "svelte/internal"
 
   export let auth
 
@@ -23,10 +24,14 @@
   }
 
   const removeLiquidity = async (marketId) => {
-    console.log("Removing liquidity for market " + marketId)
+    console.log("Removing liquidity to market " + marketId)
     await $auth.actor.removeLiquidity(marketId)
   }
-  const addLiquidity = async () => {}
+
+  const addLiquidity = async (marketId, value) => {
+    console.log("Adding liquidity to market " + marketId)
+    await $auth.actor.addLiquidity(marketId, value)
+  }
   const buyYes = async () => {}
   const buyNo = async () => {}
 
@@ -108,7 +113,10 @@
         </div>
         <div style="padding: 1em; text-align:left; font-size: 0.8em">
           Add Liquidity: <input bind:value={liquidityToAdd} />
-          <button class="demo-button" on:click={addLiquidity}>
+          <button
+            class="demo-button"
+            on:click={() => addLiquidity(market.id, liquidityToAdd)}
+          >
             Add liquidity
           </button>
         </div>
