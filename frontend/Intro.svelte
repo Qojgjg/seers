@@ -32,8 +32,22 @@
     console.log("Adding liquidity to market " + marketId)
     await $auth.actor.addLiquidity(marketId, parseInt(value))
   }
-  const buyYes = async () => {}
-  const buyNo = async () => {}
+
+  const buyYes = async (marketId, value) => {
+    console.log(
+      "Buying Yes tokens from market " + marketId + " value " + parseInt(value),
+    )
+    const tokens = await $auth.actor.buyYes(marketId, parseInt(value))
+    console.log(tokens)
+  }
+
+  const buyNo = async (marketId, value) => {
+    console.log(
+      "Buying No tokens from market " + marketId + " value " + parseInt(value),
+    )
+    const tokens = await $auth.actor.buyNo(marketId, parseInt(value))
+    console.log(tokens)
+  }
 
   const createMarket = async () => {
     yesDeposit = parseInt(yesDeposit, 10)
@@ -105,11 +119,19 @@
         <div>Author: {market.author}</div>
         <div style="padding: 1em; text-align:left; font-size: 0.8em">
           Buy Yes: <input bind:value={yesAmountToBuy} />
-          <button class="demo-button" on:click={buyYes}>Buy Yes</button>
+          <button
+            class="demo-button"
+            on:click={() => buyYes(market.id, yesAmountToBuy)}>Buy Yes</button
+          >
         </div>
         <div style="padding: 1em; text-align:left; font-size: 0.8em">
           Buy No: <input bind:value={noAmountToBuy} />
-          <button class="demo-button" on:click={buyNo}> Buy No </button>
+          <button
+            class="demo-button"
+            on:click={() => buyNo(market.id, noAmountToBuy)}
+          >
+            Buy No
+          </button>
         </div>
         <div style="padding: 1em; text-align:left; font-size: 0.8em">
           Add Liquidity: <input bind:value={liquidityToAdd} />

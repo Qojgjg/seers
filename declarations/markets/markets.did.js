@@ -47,6 +47,8 @@ export const idlFactory = ({ IDL }) => {
   });
   const Market = IDL.Service({
     'addLiquidity' : IDL.Func([MarketId, Balance], [IDL.Bool], []),
+    'buyNo' : IDL.Func([MarketId, Balance], [IDL.Opt(Balance)], []),
+    'buyYes' : IDL.Func([MarketId, Balance], [IDL.Opt(Balance)], []),
     'createMarket' : IDL.Func([MarketInitData], [IDL.Nat32], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteAllUsers' : IDL.Func([], [], []),

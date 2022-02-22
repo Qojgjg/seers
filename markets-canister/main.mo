@@ -129,8 +129,8 @@ shared(msg) actor class Market() {
         assert(marketInitData.endDate > Time.now());
 
         let marketId = nextMarketId;
-        let reserveYes = (marketInitData.liquidity * 50) / marketInitData.yesProb;
-        let reserveNo = (marketInitData.liquidity * 50) / marketInitData.noProb;
+        let reserveYes = marketInitData.liquidity * 50 / marketInitData.yesProb;
+        let reserveNo = marketInitData.liquidity * 50 / marketInitData.noProb;
 
         // TODO: this wraps on overflow. Should I use Int64 directly?
         let shares = Int64.toNat64(Float.toInt64(Float.sqrt(
@@ -240,6 +240,71 @@ shared(msg) actor class Market() {
         markets := Trie.empty();
     };
 
+    public shared(msg) func buyNo(marketId: MarketId, value: Balance): async ?Balance {
+        Debug.print(Text.concat("buyNo from ", Nat32.toText(marketId)));
+        let caller = Principal.toText(msg.caller);
+        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+        
+        switch (marketOpt) {
+            case null {
+                return null;
+            };
+            case (?market) {
+                let newYesTokens = value * 100 / market.yesProb;
+                market.reserveYes := market.reserveYes + newYesTokens;
+                let newReserveNo = market.kLast / market.reserveYes;
+                let tokensOut = market.reserveNo - newReserveNo;
+                market.reserveNo := newReserveNo;
+                 
+                let totalReserve = market.reserveYes + market.reserveNo;
+                market.yesProb := market.reserveNo * 100 / totalReserve;
+                market.noProb := 100 - market.yesProb;
+
+                markets := Trie.replace(
+                    markets,
+                    marketKey(market.id),
+                    Nat32.equal,
+                    ?market,
+                ).0;
+
+                return ?tokensOut;
+            };
+        };
+    };
+
+
+    public shared(msg) func buyYes(marketId: MarketId, value: Balance): async ?Balance {
+        Debug.print(Text.concat("buyYes from ", Nat32.toText(marketId)));
+        let caller = Principal.toText(msg.caller);
+        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+        
+        switch (marketOpt) {
+            case null {
+                return null;
+            };
+            case (?market) {
+                let newNoTokens = value * 100 / market.noProb;
+                market.reserveNo := market.reserveNo + newNoTokens;
+                let newReserveYes = market.kLast / market.reserveNo;
+                let tokensOut = market.reserveYes - newReserveYes;
+                market.reserveYes := newReserveYes;
+                 
+                let totalReserve = market.reserveYes + market.reserveNo;
+                market.yesProb := market.reserveNo * 100 / totalReserve;
+                market.noProb := 100 - market.yesProb;
+
+                markets := Trie.replace(
+                    markets,
+                    marketKey(market.id),
+                    Nat32.equal,
+                    ?market,
+                ).0;
+
+                return ?tokensOut;
+            };
+        };
+    };
+
     // Add liquidity to this market by calling user.
     public shared(msg) func addLiquidity(marketId: MarketId, value: Balance): async Bool {
         Debug.print(Text.concat("addLiquidity to ", Nat32.toText(marketId)));
@@ -252,22 +317,25 @@ shared(msg) actor class Market() {
                 return false;
             };
             case (?market) {
-                let newReserveYes = market.reserveYes + (value * 50) / market.yesProb;
-                let newReserveNo = market.reserveNo + (value * 50) / market.noProb;
+                market.liquidity := market.liquidity + value;
+
+                market.reserveYes := market.liquidity * 50 / market.yesProb;
+                market.reserveNo := market.liquidity * 50 / market.noProb;
+                market.kLast := market.reserveYes * market.reserveNo;
 
                 // TODO: this wraps on overflow. Should I use Int64 directly?
                 let newTotalShares = Int64.toNat64(Float.toInt64(Float.sqrt(
-                    Float.fromInt64(Int64.fromNat64(newReserveNo))
-                    * Float.fromInt64(Int64.fromNat64(newReserveYes)))));
+                    Float.fromInt64(Int64.fromNat64(market.reserveNo))
+                    * Float.fromInt64(Int64.fromNat64(market.reserveYes)))));
 
-                let newLiquidity = market.liquidity + value;
                 let userShares = newTotalShares - market.totalShares;
-                
+                market.totalShares := newTotalShares;
+                market.blockTimestampLast := Time.now();
+
                 let callerIsProvider = Array.find(market.providers, func (u: UserId): Bool {
                     u == caller;
                 });
 
-                var newProviders = market.providers;
                 let userOption = getOrCreateUser(caller);
                 
                 switch (userOption) {
@@ -292,32 +360,14 @@ shared(msg) actor class Market() {
                 };
 
                 if (callerIsProvider == null) {
-                    newProviders := Array.append(newProviders, [caller])
-                };
-
-                let newMarket: Market = {
-                    id = market.id;
-                    title = market.title;
-                    description = market.description;
-                    var yesProb = market.yesProb;
-                    var noProb = market.noProb;
-                    var liquidity = newLiquidity;
-                    startDate = market.startDate;
-                    endDate = market.endDate;
-                    author = market.author;
-                    var blockTimestampLast = Time.now();
-                    var reserveYes = newReserveYes; 
-                    var reserveNo = newReserveNo;
-                    var kLast = newReserveYes * newReserveNo;
-                    var totalShares = newTotalShares;
-                    var providers = newProviders;
+                    market.providers := Array.append(market.providers, [caller])
                 };
 
                 markets := Trie.replace(
                     markets,
-                    marketKey(newMarket.id),
+                    marketKey(market.id),
                     Nat32.equal,
-                    ?newMarket,
+                    ?market,
                 ).0;
 
                 return true;

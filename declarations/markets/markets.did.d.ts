@@ -4,6 +4,8 @@ export type Balance = bigint;
 export type Description = string;
 export interface Market {
   'addLiquidity' : (arg_0: MarketId, arg_1: Balance) => Promise<boolean>,
+  'buyNo' : (arg_0: MarketId, arg_1: Balance) => Promise<[] | [Balance]>,
+  'buyYes' : (arg_0: MarketId, arg_1: Balance) => Promise<[] | [Balance]>,
   'createMarket' : (arg_0: MarketInitData) => Promise<number>,
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteAllUsers' : () => Promise<undefined>,
