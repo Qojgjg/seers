@@ -300,6 +300,57 @@ shared(msg) actor class Market() {
                     ?market,
                 ).0;
 
+                let userOption = getOrCreateUser(caller);
+                
+                switch (userOption) {
+                    case null {
+                        return null;
+                    };
+                    case (?user) {
+                        var marketTokensOpt = Array.find(user.marketTokens,
+                            func (ut: UserTokens): Bool {
+                                ut.marketId == market.id
+                            }
+                        );
+
+                        switch (marketTokensOpt) {
+                            case null {
+                                let newUserToken: UserTokens = {
+                                    marketId = market.id;
+                                    yesBalance = tokensOut;
+                                    noBalance = 0;
+                                };
+                                user.marketTokens := Array.append(user.marketTokens, [
+                                    newUserToken 
+                                ]);
+                            };
+                            case (?marketTokens) {
+                                user.marketTokens := Array.mapFilter(user.marketTokens, 
+                                    func (ut: UserTokens): ?UserTokens {
+                                        if (ut.marketId != market.id) {
+                                            return ?ut;
+                                        } else {
+                                            let newUserToken: UserTokens = {
+                                                marketId = market.id;
+                                                yesBalance = ut.yesBalance + tokensOut;
+                                                noBalance = 0;
+                                            };
+                                            return ?newUserToken;
+                                        };
+                                    }
+                                );
+                            };
+                        };
+
+                        users := Trie.replace(
+                            users,
+                            userKey(user.id),
+                            Text.equal,
+                            ?user,
+                        ).0;
+                    };
+                };
+
                 return ?tokensOut;
             };
         };
