@@ -255,6 +255,7 @@ shared(msg) actor class Market() {
                 let newReserveNo = market.kLast / market.reserveYes;
                 let tokensOut = market.reserveNo - newReserveNo;
                 market.reserveNo := newReserveNo;
+                market.liquidity := market.liquidity + value;
                  
                 let totalReserve = market.reserveYes + market.reserveNo;
                 market.yesProb := market.reserveNo * 100 / totalReserve;
@@ -266,6 +267,57 @@ shared(msg) actor class Market() {
                     Nat32.equal,
                     ?market,
                 ).0;
+
+                let userOption = getOrCreateUser(caller);
+                
+                switch (userOption) {
+                    case null {
+                        return null;
+                    };
+                    case (?user) {
+                        var marketTokensOpt = Array.find(user.marketTokens,
+                            func (ut: UserTokens): Bool {
+                                ut.marketId == market.id
+                            }
+                        );
+
+                        switch (marketTokensOpt) {
+                            case null {
+                                let newUserToken: UserTokens = {
+                                    marketId = market.id;
+                                    yesBalance = 0;
+                                    noBalance = tokensOut;
+                                };
+                                user.marketTokens := Array.append(user.marketTokens, [
+                                    newUserToken 
+                                ]);
+                            };
+                            case (?marketTokens) {
+                                user.marketTokens := Array.mapFilter(user.marketTokens, 
+                                    func (ut: UserTokens): ?UserTokens {
+                                        if (ut.marketId != market.id) {
+                                            return ?ut;
+                                        } else {
+                                            let newUserToken: UserTokens = {
+                                                marketId = market.id;
+                                                noBalance = ut.noBalance + tokensOut;
+                                                yesBalance = ut.yesBalance;
+                                            };
+                                            return ?newUserToken;
+                                        };
+                                    }
+                                );
+                            };
+                        };
+
+                        users := Trie.replace(
+                            users,
+                            userKey(user.id),
+                            Text.equal,
+                            ?user,
+                        ).0;
+                    };
+                };
 
                 return ?tokensOut;
             };
@@ -288,7 +340,8 @@ shared(msg) actor class Market() {
                 let newReserveYes = market.kLast / market.reserveNo;
                 let tokensOut = market.reserveYes - newReserveYes;
                 market.reserveYes := newReserveYes;
-                 
+                market.liquidity := market.liquidity + value;
+                
                 let totalReserve = market.reserveYes + market.reserveNo;
                 market.yesProb := market.reserveNo * 100 / totalReserve;
                 market.noProb := 100 - market.yesProb;
@@ -333,7 +386,7 @@ shared(msg) actor class Market() {
                                             let newUserToken: UserTokens = {
                                                 marketId = market.id;
                                                 yesBalance = ut.yesBalance + tokensOut;
-                                                noBalance = 0;
+                                                noBalance = ut.noBalance;
                                             };
                                             return ?newUserToken;
                                         };
