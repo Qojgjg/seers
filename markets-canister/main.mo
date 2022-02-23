@@ -255,10 +255,10 @@ shared(msg) actor class Market() {
                 let tokensOut = market.reserveYes - newReserveYes;
                 market.reserveYes := newReserveYes;
                 let totalReserve = market.reserveYes + market.reserveNo;
-                market.yesProb := (market.reserveNo / totalReserve) * 100;
+                market.yesProb := market.reserveNo * 100 / totalReserve;
                 market.noProb := 100 - market.yesProb;
 
-                var newLiquidity = (market.reserveNo / 50) * market.noProb;
+                var newLiquidity = market.reserveNo * market.noProb / 50;
                 newLiquidity := Nat64.max(newLiquidity, market.reserveYes * market.yesProb / 50);
                 let liquidityOut = market.liquidity - newLiquidity;
                 market.liquidity := newLiquidity;
