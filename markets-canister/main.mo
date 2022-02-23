@@ -258,8 +258,13 @@ shared(msg) actor class Market() {
                 market.yesProb := market.reserveNo * 100 / totalReserve;
                 market.noProb := 100 - market.yesProb;
 
-                var newLiquidity = market.reserveNo * market.noProb / 50;
-                newLiquidity := Nat64.max(newLiquidity, market.reserveYes * market.yesProb / 50);
+                let newLiquidity1 = floatToNat64(
+                    Float.floor(nat64ToFloat(market.reserveNo) * nat64ToFloat(market.noProb) / 50.0 + 0.5)
+                );
+                let newLiquidity2 = floatToNat64(
+                    Float.floor(nat64ToFloat(market.reserveYes) * nat64ToFloat(market.yesProb) / 50.0 + 0.5)
+                );
+                let newLiquidity = Nat64.max(newLiquidity1, newLiquidity2);
                 let liquidityOut = market.liquidity - newLiquidity;
                 market.liquidity := newLiquidity;
 
@@ -698,6 +703,14 @@ shared(msg) actor class Market() {
 
     private func getUserResult(k: UserId, v: User): UserResult {
         return userToUserResult(v);
+    };
+
+    private func floatToNat64(f: Float): Nat64 {
+        return Int64.toNat64(Float.toInt64(f));
+    };
+
+    private func nat64ToFloat(n: Nat64): Float {
+        return Float.fromInt64(Int64.fromNat64(n));
     };
 
     // Get or create new user.
