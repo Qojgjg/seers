@@ -21,16 +21,19 @@
 
   const deleteMarkets = async () => {
     await $auth.actor.deleteAllMarkets()
+    refreshMarkets()
   }
 
   const removeLiquidity = async (marketId) => {
     console.log("Removing liquidity to market " + marketId)
     await $auth.actor.removeLiquidity(marketId)
+    refreshMarkets()
   }
 
   const addLiquidity = async (marketId, value) => {
     console.log("Adding liquidity to market " + marketId)
     await $auth.actor.addLiquidity(marketId, parseInt(value))
+    refreshMarkets()
   }
 
   const buyYes = async (marketId, value) => {
@@ -39,6 +42,7 @@
     )
     const tokens = await $auth.actor.buyYes(marketId, parseInt(value))
     console.log(tokens)
+    refreshMarkets()
   }
 
   const buyNo = async (marketId, value) => {
@@ -47,6 +51,7 @@
     )
     const tokens = await $auth.actor.buyNo(marketId, parseInt(value))
     console.log(tokens)
+    refreshMarkets()
   }
 
   const createMarket = async () => {
