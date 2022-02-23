@@ -122,7 +122,7 @@ shared(msg) actor class Market() {
         // Debug.print("Executing createMarket");
 
         assert(author != anon);
-        assert(marketInitData.yesProb + marketInitData.noProb == 100);
+        // assert(marketInitData.yesProb + marketInitData.noProb == 100);
         assert(marketInitData.liquidity >= 1000);
         assert(marketInitData.title != "");
         assert(marketInitData.description != "");
@@ -238,6 +238,43 @@ shared(msg) actor class Market() {
     public func deleteAllMarkets(): async () {
         nextMarketId := 0;
         markets := Trie.empty();
+    };
+
+    public shared(msg) func sellNo(marketId: MarketId, value: Balance): async ?Balance {
+        Debug.print(Text.concat("sellNo from ", Nat32.toText(marketId)));
+        let caller = Principal.toText(msg.caller);
+        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+        
+        switch (marketOpt) {
+            case null {
+                return null;
+            };
+            case (?market) {
+                market.reserveNo := market.reserveNo + value;
+                let newReserveYes = market.kLast / market.reserveNo;
+                let tokensOut = market.reserveYes - newReserveYes;
+                market.reserveYes := newReserveYes;
+                let totalReserve = market.reserveYes + market.reserveNo;
+                market.yesProb := (market.reserveNo / totalReserve) * 100;
+                market.noProb := 100 - market.yesProb;
+
+                var newLiquidity = (market.reserveNo / 50) * market.noProb;
+                newLiquidity := Nat64.max(newLiquidity, market.reserveYes * market.yesProb / 50);
+                let liquidityOut = market.liquidity - newLiquidity;
+                market.liquidity := newLiquidity;
+
+                markets := Trie.replace(
+                    markets,
+                    marketKey(market.id),
+                    Nat32.equal,
+                    ?market,
+                ).0;
+
+                return ?liquidityOut;
+                // market.reserveYes := market.liquidity * 50 / market.yesProb;
+
+            };
+        };
     };
 
     public shared(msg) func buyNo(marketId: MarketId, value: Balance): async ?Balance {

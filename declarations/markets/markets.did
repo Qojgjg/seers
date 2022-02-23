@@ -62,6 +62,7 @@ type Market =
    readAllUsers: () -> (vec UserResult) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
    removeLiquidity: (MarketId) -> (bool);
+   sellNo: (MarketId, Balance) -> (opt Balance);
    updateMarket: (MarketId, MarketResult) -> (bool);
  };
 type Description = text;

@@ -14,6 +14,8 @@
   let liquidityToAdd: any = ""
   let yesAmountToBuy: any = ""
   let noAmountToBuy: any = ""
+  let yesAmountToSell: any = ""
+  let noAmountToSell: any = ""
 
   const refreshMarkets = async () => {
     ms = await $auth.actor.readAllMarkets()
@@ -50,6 +52,27 @@
       "Buying No tokens from market " + marketId + " value " + parseInt(value),
     )
     const tokens = await $auth.actor.buyNo(marketId, parseInt(value))
+    console.log(tokens)
+    refreshMarkets()
+  }
+
+  const sellYes = async (marketId, value) => {
+    console.log(
+      "Selling Yes tokens from market " +
+        marketId +
+        " value " +
+        parseInt(value),
+    )
+    const tokens = await $auth.actor.sellYes(marketId, parseInt(value))
+    console.log(tokens)
+    refreshMarkets()
+  }
+
+  const sellNo = async (marketId, value) => {
+    console.log(
+      "Selling No tokens from market " + marketId + " value " + parseInt(value),
+    )
+    const tokens = await $auth.actor.sellNo(marketId, parseInt(value))
     console.log(tokens)
     refreshMarkets()
   }
@@ -136,6 +159,23 @@
             on:click={() => buyNo(market.id, noAmountToBuy)}
           >
             Buy No
+          </button>
+        </div>
+        <div style="padding: 1em; text-align:left; font-size: 0.8em">
+          Sell Yes: <input bind:value={yesAmountToSell} />
+          <button
+            class="demo-button"
+            on:click={() => sellYes(market.id, yesAmountToSell)}
+            >Sell Yes</button
+          >
+        </div>
+        <div style="padding: 1em; text-align:left; font-size: 0.8em">
+          Sell No: <input bind:value={noAmountToSell} />
+          <button
+            class="demo-button"
+            on:click={() => sellNo(market.id, noAmountToSell)}
+          >
+            Sell No
           </button>
         </div>
         <div style="padding: 1em; text-align:left; font-size: 0.8em">
