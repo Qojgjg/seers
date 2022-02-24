@@ -127,13 +127,13 @@
       >
         <div><img src="https://picsum.photos/100" alt="random" /></div>
         <div>
-          #{market.id}
+          <!-- #{market.id} -->
           <h3>{market.title}</h3>
         </div>
-        <div>{market.description}</div>
+        <!-- <div>{market.description}</div> -->
         <div>Yes: {market.yesProb}%</div>
         <div>No: {market.noProb}%</div>
-        <div>Liquidity: {market.liquidity}</div>
+        <!-- <div>Liquidity: {market.liquidity}</div>
         <div>Reserve Yes: {market.reserveYes}</div>
         <div>Reserve No: {market.reserveNo}</div>
         <div>K Last: {market.kLast}</div>
@@ -149,8 +149,8 @@
             Number(market.endDate) / 1_000_000,
           ).toDateString()}
         </div>
-        <div>Author: {market.author}</div>
-        <div style="padding: 1em; text-align:left; font-size: 0.8em">
+        <div>Author: {market.author}</div> -->
+        <!-- <div style="padding: 1em; text-align:left; font-size: 0.8em">
           Buy Yes: <input bind:value={yesAmountToBuy} />
           <button
             class="demo-button"
@@ -199,7 +199,7 @@
           >
             Remove Liquidity
           </button>
-        </div>
+        </div> -->
       </div>
     {/each}
   </div>
