@@ -15,6 +15,7 @@ export interface Market {
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'removeLiquidity' : (arg_0: MarketId) => Promise<boolean>,
   'sellNo' : (arg_0: MarketId, arg_1: Balance) => Promise<[] | [Balance]>,
+  'sellYes' : (arg_0: MarketId, arg_1: Balance) => Promise<[] | [Balance]>,
   'updateMarket' : (arg_0: MarketId, arg_1: MarketResult) => Promise<boolean>,
 }
 export type MarketId = number;

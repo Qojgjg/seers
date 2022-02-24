@@ -240,6 +240,101 @@ shared(msg) actor class Market() {
         markets := Trie.empty();
     };
 
+
+    // Sell Yes tokens from caller back to the market.
+    public shared(msg) func sellYes(marketId: MarketId, value: Balance): async ?Balance {
+        Debug.print(Text.concat("sellYes from ", Nat32.toText(marketId)));
+        let caller = Principal.toText(msg.caller);
+        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+        
+        switch (marketOpt) {
+            case null {
+                return null;
+            };
+            case (?market) {
+                let userOption = getOrCreateUser(caller);
+
+                switch (userOption) {
+                    case null {
+                        return null;
+                    };
+                    case (?user) {
+                        var marketTokensOpt = Array.find(user.marketTokens,
+                            func (ut: UserTokens): Bool {
+                                ut.marketId == market.id
+                            }
+                        );
+
+                        switch (marketTokensOpt) {
+                            case null {
+                                // No tokens to sell.
+                                return null;
+                            };
+                            case (?marketTokens) {
+                                if (marketTokens.yesBalance < value) {
+                                    // No enought tokens to sell.
+                                    return null;
+                                };
+
+                                market.reserveYes := market.reserveYes + value;
+                                let newReserveNo = market.kLast / market.reserveYes;
+                                let tokensOut = market.reserveNo - newReserveNo;
+                                market.reserveNo := newReserveNo;
+                                let totalReserve = market.reserveNo + market.reserveYes;
+                                market.noProb := market.reserveYes * 100 / totalReserve;
+                                market.yesProb := 100 - market.noProb;
+
+                                let newLiquidity1 = floatToNat64(
+                                    Float.floor(nat64ToFloat(market.reserveYes) * nat64ToFloat(market.yesProb) / 50.0 + 0.5)
+                                );
+                                let newLiquidity2 = floatToNat64(
+                                    Float.floor(nat64ToFloat(market.reserveNo) * nat64ToFloat(market.noProb) / 50.0 + 0.5)
+                                );
+                                let newLiquidity = Nat64.max(newLiquidity1, newLiquidity2);
+                                let liquidityOut = market.liquidity - newLiquidity;
+                                market.liquidity := newLiquidity;
+
+                                markets := Trie.replace(
+                                    markets,
+                                    marketKey(market.id),
+                                    Nat32.equal,
+                                    ?market,
+                                ).0;
+
+                                user.marketTokens := Array.mapFilter(user.marketTokens, 
+                                    func (ut: UserTokens): ?UserTokens {
+                                        if (ut.marketId != market.id) {
+                                            return ?ut;
+                                        } else {
+                                            let newUserToken: UserTokens = {
+                                                marketId = market.id;
+                                                noBalance = ut.noBalance;
+                                                yesBalance = ut.yesBalance - value;
+                                            };
+                                            return ?newUserToken;
+                                        };
+                                    }
+                                );
+
+                                users := Trie.replace(
+                                    users,
+                                    userKey(user.id),
+                                    Text.equal,
+                                    ?user,
+                                ).0;
+
+                                return ?liquidityOut;
+                            };
+                        };
+                    };
+                };
+
+                return null;
+            };
+        };
+    };
+
+    // Sell No tokens from caller back to the market.
     public shared(msg) func sellNo(marketId: MarketId, value: Balance): async ?Balance {
         Debug.print(Text.concat("sellNo from ", Nat32.toText(marketId)));
         let caller = Principal.toText(msg.caller);

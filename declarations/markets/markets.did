@@ -63,6 +63,7 @@ type Market =
    readMarket: (MarketId) -> (opt MarketResult) query;
    removeLiquidity: (MarketId) -> (bool);
    sellNo: (MarketId, Balance) -> (opt Balance);
+   sellYes: (MarketId, Balance) -> (opt Balance);
    updateMarket: (MarketId, MarketResult) -> (bool);
  };
 type Description = text;
