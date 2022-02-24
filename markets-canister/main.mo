@@ -250,34 +250,84 @@ shared(msg) actor class Market() {
                 return null;
             };
             case (?market) {
-                market.reserveNo := market.reserveNo + value;
-                let newReserveYes = market.kLast / market.reserveNo;
-                let tokensOut = market.reserveYes - newReserveYes;
-                market.reserveYes := newReserveYes;
-                let totalReserve = market.reserveYes + market.reserveNo;
-                market.yesProb := market.reserveNo * 100 / totalReserve;
-                market.noProb := 100 - market.yesProb;
+                let userOption = getOrCreateUser(caller);
 
-                let newLiquidity1 = floatToNat64(
-                    Float.floor(nat64ToFloat(market.reserveNo) * nat64ToFloat(market.noProb) / 50.0 + 0.5)
-                );
-                let newLiquidity2 = floatToNat64(
-                    Float.floor(nat64ToFloat(market.reserveYes) * nat64ToFloat(market.yesProb) / 50.0 + 0.5)
-                );
-                let newLiquidity = Nat64.max(newLiquidity1, newLiquidity2);
-                let liquidityOut = market.liquidity - newLiquidity;
-                market.liquidity := newLiquidity;
+                switch (userOption) {
+                    case null {
+                        return null;
+                    };
+                    case (?user) {
+                        var marketTokensOpt = Array.find(user.marketTokens,
+                            func (ut: UserTokens): Bool {
+                                ut.marketId == market.id
+                            }
+                        );
 
-                markets := Trie.replace(
-                    markets,
-                    marketKey(market.id),
-                    Nat32.equal,
-                    ?market,
-                ).0;
+                        switch (marketTokensOpt) {
+                            case null {
+                                // No tokens to sell.
+                                return null;
+                            };
+                            case (?marketTokens) {
+                                if (marketTokens.noBalance < value) {
+                                    // No enought tokens to sell.
+                                    return null;
+                                };
 
-                return ?liquidityOut;
-                // market.reserveYes := market.liquidity * 50 / market.yesProb;
+                                market.reserveNo := market.reserveNo + value;
+                                let newReserveYes = market.kLast / market.reserveNo;
+                                let tokensOut = market.reserveYes - newReserveYes;
+                                market.reserveYes := newReserveYes;
+                                let totalReserve = market.reserveYes + market.reserveNo;
+                                market.yesProb := market.reserveNo * 100 / totalReserve;
+                                market.noProb := 100 - market.yesProb;
 
+                                let newLiquidity1 = floatToNat64(
+                                    Float.floor(nat64ToFloat(market.reserveNo) * nat64ToFloat(market.noProb) / 50.0 + 0.5)
+                                );
+                                let newLiquidity2 = floatToNat64(
+                                    Float.floor(nat64ToFloat(market.reserveYes) * nat64ToFloat(market.yesProb) / 50.0 + 0.5)
+                                );
+                                let newLiquidity = Nat64.max(newLiquidity1, newLiquidity2);
+                                let liquidityOut = market.liquidity - newLiquidity;
+                                market.liquidity := newLiquidity;
+
+                                markets := Trie.replace(
+                                    markets,
+                                    marketKey(market.id),
+                                    Nat32.equal,
+                                    ?market,
+                                ).0;
+
+                                user.marketTokens := Array.mapFilter(user.marketTokens, 
+                                    func (ut: UserTokens): ?UserTokens {
+                                        if (ut.marketId != market.id) {
+                                            return ?ut;
+                                        } else {
+                                            let newUserToken: UserTokens = {
+                                                marketId = market.id;
+                                                noBalance = ut.noBalance - value;
+                                                yesBalance = ut.yesBalance;
+                                            };
+                                            return ?newUserToken;
+                                        };
+                                    }
+                                );
+
+                                users := Trie.replace(
+                                    users,
+                                    userKey(user.id),
+                                    Text.equal,
+                                    ?user,
+                                ).0;
+
+                                return ?liquidityOut;
+                            };
+                        };
+                    };
+                };
+
+                return null;
             };
         };
     };
