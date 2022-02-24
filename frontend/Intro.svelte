@@ -1,9 +1,15 @@
 <script lang="ts">
   import logo from "./assets/logo-dark.svg"
-  import { onMount } from "svelte"
+  import { onMount, beforeUpdate } from "svelte"
   import { identity } from "svelte/internal"
 
+  const PAGE_SIZE = 20
+
+  export let page
   export let auth
+
+  let items
+  let offset
 
   let ms: any = []
   let newMarketTitle: any = ""
@@ -125,11 +131,15 @@
       <div
         style="width: 160px; font-size: 0.7em;  padding: 2em; margin: 2em; border-radius: 30px;  background: rgb(220 218 224 / 25%);"
       >
-        <div><img src="https://picsum.photos/100" alt="random" /></div>
-        <div>
-          <!-- #{market.id} -->
-          <h3>{market.title}</h3>
-        </div>
+        <a
+          href="#/market/{market.id}"
+          style="text-decoration:none; color: black"
+        >
+          <div>
+            <img src="https://picsum.photos/100" alt="random" />
+            <h3>{market.title}</h3>
+          </div>
+        </a>
         <!-- <div>{market.description}</div> -->
         <div>Yes: {market.yesProb}%</div>
         <div>No: {market.noProb}%</div>
