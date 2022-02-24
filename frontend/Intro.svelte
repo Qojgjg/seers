@@ -123,7 +123,7 @@
   <div style="display: flex; flex-wrap: wrap; padding: 0 4px;">
     {#each ms as market}
       <div
-        style="min-width: 30%;  font-size: 0.7em;  padding: 2em; margin: 2em; border-radius: 30px;  background: rgb(220 218 224 / 25%);"
+        style="width: 160px; font-size: 0.7em;  padding: 2em; margin: 2em; border-radius: 30px;  background: rgb(220 218 224 / 25%);"
       >
         <div><img src="https://picsum.photos/100" alt="random" /></div>
         <div>
