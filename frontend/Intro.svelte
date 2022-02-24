@@ -26,6 +26,11 @@
     refreshMarkets()
   }
 
+  const deleteUsers = async () => {
+    await $auth.actor.deleteAllUsers()
+    refreshMarkets()
+  }
+
   const removeLiquidity = async (marketId) => {
     console.log("Removing liquidity to market " + marketId)
     await $auth.actor.removeLiquidity(marketId)
@@ -218,9 +223,16 @@
       End date: <input bind:value={endDate} />
     </div>
 
-    <button class="demo-button" on:click={createMarket}> Create Market </button>
+    <button class="demo-button" on:click={createMarket}>Create Market</button>
   </div>
-  <button class="demo-button" on:click={deleteMarkets}> Delete Markets </button>
+  <div>
+    <button class="demo-button" on:click={deleteMarkets}>
+      Delete Markets
+    </button>
+  </div>
+  <div>
+    <button class="demo-button" on:click={deleteUsers}>Delete Users</button>
+  </div>
 </header>
 
 <style global>
