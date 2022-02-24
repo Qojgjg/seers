@@ -115,7 +115,7 @@
 </script>
 
 <header class="App-header">
-  <p style="font-size: 2em; margin-bottom: 0.5em">Seer</p>
+  <p style="font-size: 2em; margin-bottom: 0.5em">Seers</p>
   <div>
     <code>Prediction Markets</code>
     <p>Canister ID: {process.env.MARKETS_CANISTER_ID}</p>
@@ -206,21 +206,28 @@
   <div
     style="display:flex; float:left; flex-direction: column; margin: 2em; background-color: pink; border-radius: 30px; padding: 1em;"
   >
-    <div style="padding: 0.1em;"><h4 style="">Create new market</h4></div>
-    <div style="padding: 1em; text-align:left; font-size: 0.8em">
-      Title: <input bind:value={newMarketTitle} />
+    <div style="">
+      <h6 style="">Create new market</h6>
     </div>
-    <div style="padding: 1em; text-align:left; font-size: 0.8em">
-      Description: <input bind:value={newMarketDesc} />
+    <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <div>Title:</div>
+      <div><input bind:value={newMarketTitle} /></div>
     </div>
-    <div style="padding: 1em; text-align:left; font-size: 0.8em">
-      Yes deposit: <input bind:value={yesDeposit} />
+    <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <div>Description:</div>
+      <div><textarea bind:value={newMarketDesc} /></div>
     </div>
-    <div style="padding: 1em; text-align:left; font-size: 0.8em">
-      No deposit: <input bind:value={noDeposit} />
+    <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <div>Yes deposit:</div>
+      <div>$<input bind:value={yesDeposit} /></div>
     </div>
-    <div style="padding: 1em; text-align:left; font-size: 0.8em">
-      End date: <input bind:value={endDate} />
+    <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <div>No deposit:</div>
+      <div>$<input bind:value={noDeposit} /></div>
+    </div>
+    <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <div>End date:</div>
+      <div><input bind:value={endDate} /></div>
     </div>
 
     <button class="demo-button" on:click={createMarket}>Create Market</button>
