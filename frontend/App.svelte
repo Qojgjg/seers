@@ -1,13 +1,9 @@
 <script lang="ts">
-  import { onMount } from "svelte"
   import { auth, createActor } from "./store/auth"
-  import Intro from "./Intro.svelte"
+  import ListMarkets from "./ListMarkets.svelte"
   import Auth from "./Auth.svelte"
   import ViewMarket from "./ViewMarket.svelte"
-  // import MarketItem from "./MarketItem.svelte"
 
-  let item
-  let page
   let marketIdSelected
 
   async function hashchange() {
@@ -17,11 +13,6 @@
       marketIdSelected = path.slice(8)
       console.log("market selected " + marketIdSelected)
       window.scrollTo(0, 0)
-    } else if (path.startsWith("/top")) {
-      page = +path.slice(5)
-      item = null
-    } else {
-      window.location.hash = "/top/1"
     }
   }
 </script>
@@ -29,12 +20,12 @@
 <svelte:window on:hashchange={hashchange} />
 
 <main>
+  <Auth {auth} {createActor} />
   {#if marketIdSelected}
     <ViewMarket {auth} marketId={marketIdSelected} />
   {:else}
     <div class="App">
-      <Auth {auth} {createActor} />
-      <Intro {auth} />
+      <ListMarkets {auth} />
     </div>
   {/if}
 </main>
@@ -55,5 +46,8 @@
 
   .App {
     text-align: center;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
   }
 </style>

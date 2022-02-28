@@ -1,142 +1,4 @@
-<script lang="ts">
-  import logo from "./assets/logo-dark.svg"
-  import { onMount, beforeUpdate } from "svelte"
-  import { identity } from "svelte/internal"
-  import Header from "./Header.svelte"
-
-  const PAGE_SIZE = 20
-
-  export let auth
-
-  let items
-  let offset
-
-  let ms: any = []
-  let newMarketTitle: any = ""
-  let newMarketDesc: any = ""
-  let yesDeposit: any = ""
-  let noDeposit: any = ""
-  let endDate: any = ""
-  let liquidityToAdd: any = ""
-  let yesAmountToBuy: any = ""
-  let noAmountToBuy: any = ""
-  let yesAmountToSell: any = ""
-  let noAmountToSell: any = ""
-
-  const refreshMarkets = async () => {
-    ms = await $auth.actor.readAllMarkets()
-  }
-
-  const deleteMarkets = async () => {
-    await $auth.actor.deleteAllMarkets()
-    refreshMarkets()
-  }
-
-  const deleteUsers = async () => {
-    await $auth.actor.deleteAllUsers()
-    refreshMarkets()
-  }
-
-  const removeLiquidity = async (marketId) => {
-    console.log("Removing liquidity to market " + marketId)
-    await $auth.actor.removeLiquidity(marketId)
-    refreshMarkets()
-  }
-
-  const addLiquidity = async (marketId, value) => {
-    console.log("Adding liquidity to market " + marketId)
-    await $auth.actor.addLiquidity(marketId, parseInt(value))
-    refreshMarkets()
-  }
-
-  const buyYes = async (marketId, value) => {
-    console.log(
-      "Buying Yes tokens from market " + marketId + " value " + parseInt(value),
-    )
-    const tokens = await $auth.actor.buyYes(marketId, parseInt(value))
-    console.log(tokens)
-    refreshMarkets()
-  }
-
-  const buyNo = async (marketId, value) => {
-    console.log(
-      "Buying No tokens from market " + marketId + " value " + parseInt(value),
-    )
-    const tokens = await $auth.actor.buyNo(marketId, parseInt(value))
-    console.log(tokens)
-    refreshMarkets()
-  }
-
-  const sellYes = async (marketId, value) => {
-    console.log(
-      "Selling Yes tokens from market " +
-        marketId +
-        " value " +
-        parseInt(value),
-    )
-    const tokens = await $auth.actor.sellYes(marketId, parseInt(value))
-    console.log(tokens)
-    refreshMarkets()
-  }
-
-  const sellNo = async (marketId, value) => {
-    console.log(
-      "Selling No tokens from market " + marketId + " value " + parseInt(value),
-    )
-    const tokens = await $auth.actor.sellNo(marketId, parseInt(value))
-    console.log(tokens)
-    refreshMarkets()
-  }
-
-  const createMarket = async () => {
-    yesDeposit = parseInt(yesDeposit, 10)
-    noDeposit = parseInt(noDeposit, 10)
-
-    const totalDeposit = yesDeposit + noDeposit
-    const yesProb = (yesDeposit / totalDeposit) * 100.0
-    const noProb = (noDeposit / totalDeposit) * 100.0
-
-    endDate = Date.parse(endDate) * 1_000_000
-
-    const market: any = {
-      title: newMarketTitle,
-      description: newMarketDesc,
-      yesProb: Math.floor(yesProb + 0.5),
-      noProb: Math.floor(noProb + 0.5),
-      liquidity: totalDeposit,
-      endDate: endDate,
-    }
-
-    newMarketDesc = ""
-    newMarketTitle = ""
-    yesDeposit = ""
-    noDeposit = ""
-    endDate = ""
-
-    await $auth.actor.createMarket(market)
-    refreshMarkets()
-  }
-
-  onMount(refreshMarkets)
-</script>
-
-<Header />
-
-<div style="display: flex; flex-wrap: wrap; padding: 0 4px;">
-  {#each ms as market}
-    <div
-      style="width: 160px; font-size: 0.7em;  padding: 2em; margin: 2em; border-radius: 30px;  background: rgb(220 218 224 / 25%);"
-    >
-      <a href="#/market/{market.id}" style="text-decoration:none; color: black">
-        <div>
-          <img src="https://picsum.photos/100" alt="random" />
-          <h3>{market.title}</h3>
-        </div>
-      </a>
-      <!-- <div>{market.description}</div> -->
-      <div>Yes: {market.yesProb}%</div>
-      <div>No: {market.noProb}%</div>
-      <!-- <div>Liquidity: {market.liquidity}</div>
+<!-- <div>Liquidity: {market.liquidity}</div>
         <div>Reserve Yes: {market.reserveYes}</div>
         <div>Reserve No: {market.reserveNo}</div>
         <div>K Last: {market.kLast}</div>
@@ -153,7 +15,7 @@
           ).toDateString()}
         </div>
         <div>Author: {market.author}</div> -->
-      <!-- <div style="padding: 1em; text-align:left; font-size: 0.8em">
+<!-- <div style="padding: 1em; text-align:left; font-size: 0.8em">
           Buy Yes: <input bind:value={yesAmountToBuy} />
           <button
             class="demo-button"
@@ -203,9 +65,7 @@
             Remove Liquidity
           </button>
         </div> -->
-    </div>
-  {/each}
-</div>
+
 <div
   style="display:flex; float:left; flex-direction: column; margin: 2em; background-color: pink; border-radius: 30px; padding: 1em;"
 >
@@ -242,8 +102,19 @@
   <button class="demo-button" on:click={deleteUsers}>Delete Users</button>
 </div>
 
-<style global>
-  .App-logo {
+
+
+// } else if (path.startsWith("/top")) {
+    //   page = +path.slice(5)
+    //   item = null
+    // } else {
+    //   window.location.hash = "/top/1"
+    // }
+
+
+
+
+    .App-logo {
     height: 15vmin;
     pointer-events: none;
   }
@@ -278,4 +149,3 @@
     color: white;
     background: #979799;
   }
-</style>

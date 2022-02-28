@@ -1,4 +1,9 @@
+<script>
+  import logo from "./assets/logo-dark.svg"
+</script>
+
 <header class="App-header">
+  <img src={logo} alt="logo" />
   <p style="font-size: 2em; margin-bottom: 0.5em;">
     <a href="/" style="color: black; text-decoration: none">Seers</a>
   </p>
