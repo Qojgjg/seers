@@ -30,18 +30,114 @@
 </script>
 
 <Header />
-{#if market}
-  <a href="#/market/{market.id}" style="text-decoration:none; color: black">
-    <div>
-      <img src="https://picsum.photos/100" alt="random" />
-      <h3>{market.title}</h3>
+<div class="MarketDetails">
+  {#if market}
+    <div class="MarketHeader">
+      <div class="MarketImage">
+        <img src="https://picsum.photos/100" alt="random" />
+      </div>
+      <div class="MarketTitleDesc">
+        <h3>{market.title}</h3>
+        <p>{market.description}</p>
+      </div>
+      <div class="MarketControl">
+        <div class="TabOptions">
+          <div class="BuyTab">Buy</div>
+          <div class="SellTab">Sell</div>
+        </div>
+        <div class="ContentTab">
+          <div class="OutcomeTitle">Pick Outcome</div>
+          <div class="YesNoOptions">
+            <div class="BuyOpt">Yes</div>
+            <div class="SellOpt">No</div>
+          </div>
+          <div class="OutcomeTitle">Seers Token Amount:</div>
+          <div>
+            $<input />
+          </div>
+        </div>
+      </div>
     </div>
-  </a>
-{:else}
-  Loading
-{/if}
+  {:else}
+    Loading
+  {/if}
+</div>
 
 <style global>
+  .OutcomeTitle {
+    width: 100%;
+    padding: 0.5em;
+  }
+  .YesNoOptions {
+    width: 100%;
+    display: flex;
+    padding: 0.5em;
+    height: fit-content;
+    background-color: darkgray;
+  }
+  .TabOptions {
+    width: 100%;
+    display: flex;
+    padding: 0.5em;
+    height: fit-content;
+    background-color: darkgray;
+  }
+  .ContentTab {
+    background-color: gold;
+    width: 100%;
+  }
+  .BuyOpt {
+    width: 50%;
+    height: fit-content;
+    background-color: greenyellow;
+  }
+  .SellOpt {
+    width: 50%;
+    height: fit-content;
+    background-color: red;
+  }
+  .BuyTab {
+    width: 50%;
+    height: fit-content;
+    background-color: cyan;
+  }
+  .SellTab {
+    width: 50%;
+    height: fit-content;
+    background-color: chocolate;
+  }
+  .MarketImage {
+    padding: 2em;
+    background-color: chartreuse;
+  }
+  .MarketControl {
+    background-color: bisque;
+    display: flex;
+    flex-direction: column;
+    padding: 2em;
+    width: 200px;
+    height: 400px;
+  }
+  .MarketTitleDesc {
+    padding: 2em;
+    width: 400px;
+    background-color: cadetblue;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  .MarketDetails {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .MarketHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: start;
+  }
+
   .App-logo {
     height: 15vmin;
     pointer-events: none;
