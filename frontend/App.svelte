@@ -3,17 +3,19 @@
   import { auth, createActor } from "./store/auth"
   import Intro from "./Intro.svelte"
   import Auth from "./Auth.svelte"
+  import ViewMarket from "./ViewMarket.svelte"
   // import MarketItem from "./MarketItem.svelte"
 
   let item
   let page
+  let marketIdSelected
 
   async function hashchange() {
     const path = window.location.hash.slice(1)
-
-    if (path.startsWith("/market")) {
-      const id = path.slice(6)
-      // get market data
+    console.log("path: " + path)
+    if (path.startsWith("/market/")) {
+      marketIdSelected = path.slice(8)
+      console.log("market selected " + marketIdSelected)
       window.scrollTo(0, 0)
     } else if (path.startsWith("/top")) {
       page = +path.slice(5)
@@ -27,8 +29,8 @@
 <svelte:window on:hashchange={hashchange} />
 
 <main>
-  {#if item}
-    <div>Hello item</div>
+  {#if marketIdSelected}
+    <ViewMarket {auth} marketId={marketIdSelected} />
   {:else}
     <div class="App">
       <Auth {auth} {createActor} />

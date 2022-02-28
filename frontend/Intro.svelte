@@ -2,10 +2,10 @@
   import logo from "./assets/logo-dark.svg"
   import { onMount, beforeUpdate } from "svelte"
   import { identity } from "svelte/internal"
+  import Header from "./Header.svelte"
 
   const PAGE_SIZE = 20
 
-  export let page
   export let auth
 
   let items
@@ -120,30 +120,23 @@
   onMount(refreshMarkets)
 </script>
 
-<header class="App-header">
-  <p style="font-size: 2em; margin-bottom: 0.5em">Seers</p>
-  <div>
-    <code>Prediction Markets</code>
-    <p>Canister ID: {process.env.MARKETS_CANISTER_ID}</p>
-  </div>
-  <div style="display: flex; flex-wrap: wrap; padding: 0 4px;">
-    {#each ms as market}
-      <div
-        style="width: 160px; font-size: 0.7em;  padding: 2em; margin: 2em; border-radius: 30px;  background: rgb(220 218 224 / 25%);"
-      >
-        <a
-          href="#/market/{market.id}"
-          style="text-decoration:none; color: black"
-        >
-          <div>
-            <img src="https://picsum.photos/100" alt="random" />
-            <h3>{market.title}</h3>
-          </div>
-        </a>
-        <!-- <div>{market.description}</div> -->
-        <div>Yes: {market.yesProb}%</div>
-        <div>No: {market.noProb}%</div>
-        <!-- <div>Liquidity: {market.liquidity}</div>
+<Header />
+
+<div style="display: flex; flex-wrap: wrap; padding: 0 4px;">
+  {#each ms as market}
+    <div
+      style="width: 160px; font-size: 0.7em;  padding: 2em; margin: 2em; border-radius: 30px;  background: rgb(220 218 224 / 25%);"
+    >
+      <a href="#/market/{market.id}" style="text-decoration:none; color: black">
+        <div>
+          <img src="https://picsum.photos/100" alt="random" />
+          <h3>{market.title}</h3>
+        </div>
+      </a>
+      <!-- <div>{market.description}</div> -->
+      <div>Yes: {market.yesProb}%</div>
+      <div>No: {market.noProb}%</div>
+      <!-- <div>Liquidity: {market.liquidity}</div>
         <div>Reserve Yes: {market.reserveYes}</div>
         <div>Reserve No: {market.reserveNo}</div>
         <div>K Last: {market.kLast}</div>
@@ -160,7 +153,7 @@
           ).toDateString()}
         </div>
         <div>Author: {market.author}</div> -->
-        <!-- <div style="padding: 1em; text-align:left; font-size: 0.8em">
+      <!-- <div style="padding: 1em; text-align:left; font-size: 0.8em">
           Buy Yes: <input bind:value={yesAmountToBuy} />
           <button
             class="demo-button"
@@ -210,47 +203,44 @@
             Remove Liquidity
           </button>
         </div> -->
-      </div>
-    {/each}
+    </div>
+  {/each}
+</div>
+<div
+  style="display:flex; float:left; flex-direction: column; margin: 2em; background-color: pink; border-radius: 30px; padding: 1em;"
+>
+  <div style="">
+    <h6 style="">Create new market</h6>
   </div>
-  <div
-    style="display:flex; float:left; flex-direction: column; margin: 2em; background-color: pink; border-radius: 30px; padding: 1em;"
-  >
-    <div style="">
-      <h6 style="">Create new market</h6>
-    </div>
-    <div style="padding: 1em; text-align:left; font-size: 0.7em">
-      <div>Title:</div>
-      <div><input bind:value={newMarketTitle} /></div>
-    </div>
-    <div style="padding: 1em; text-align:left; font-size: 0.7em">
-      <div>Description:</div>
-      <div><textarea bind:value={newMarketDesc} /></div>
-    </div>
-    <div style="padding: 1em; text-align:left; font-size: 0.7em">
-      <div>Yes deposit:</div>
-      <div>$<input bind:value={yesDeposit} /></div>
-    </div>
-    <div style="padding: 1em; text-align:left; font-size: 0.7em">
-      <div>No deposit:</div>
-      <div>$<input bind:value={noDeposit} /></div>
-    </div>
-    <div style="padding: 1em; text-align:left; font-size: 0.7em">
-      <div>End date:</div>
-      <div><input bind:value={endDate} /></div>
-    </div>
+  <div style="padding: 1em; text-align:left; font-size: 0.7em">
+    <div>Title:</div>
+    <div><input bind:value={newMarketTitle} /></div>
+  </div>
+  <div style="padding: 1em; text-align:left; font-size: 0.7em">
+    <div>Description:</div>
+    <div><textarea bind:value={newMarketDesc} /></div>
+  </div>
+  <div style="padding: 1em; text-align:left; font-size: 0.7em">
+    <div>Yes deposit:</div>
+    <div>$<input bind:value={yesDeposit} /></div>
+  </div>
+  <div style="padding: 1em; text-align:left; font-size: 0.7em">
+    <div>No deposit:</div>
+    <div>$<input bind:value={noDeposit} /></div>
+  </div>
+  <div style="padding: 1em; text-align:left; font-size: 0.7em">
+    <div>End date:</div>
+    <div><input bind:value={endDate} /></div>
+  </div>
 
-    <button class="demo-button" on:click={createMarket}>Create Market</button>
-  </div>
-  <div>
-    <button class="demo-button" on:click={deleteMarkets}>
-      Delete Markets
-    </button>
-  </div>
-  <div>
-    <button class="demo-button" on:click={deleteUsers}>Delete Users</button>
-  </div>
-</header>
+  <button class="demo-button" on:click={createMarket}>Create Market</button>
+</div>
+<div>
+  <button class="demo-button" on:click={deleteMarkets}> Delete Markets </button>
+</div>
+<div>
+  <button class="demo-button" on:click={deleteUsers}>Delete Users</button>
+</div>
 
 <style global>
   .App-logo {

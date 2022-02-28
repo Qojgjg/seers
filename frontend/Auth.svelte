@@ -36,7 +36,7 @@
 
   const signIn = () => {
     client.login({
-      identityProvider: "http://rkp4c-7iaaa-aaaaa-aaaca-cai.localhost:8000/",
+      identityProvider: "http://rno2w-sqaaa-aaaaa-aaacq-cai.localhost:8000/",
       onSuccess: handleAuth,
     })
   }
