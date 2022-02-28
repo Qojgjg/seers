@@ -55,6 +55,12 @@
           <div>
             $<input />
           </div>
+          <div class="ControlData">
+            <div>LP fee 0.30%</div>
+            <div>Avg. price $1 seers</div>
+            <div>Max. winnings $4000 seers</div>
+          </div>
+          <button>Send</button>
         </div>
       </div>
     </div>
@@ -64,6 +70,10 @@
 </div>
 
 <style global>
+  .ControlData {
+    padding-top: 5em;
+  }
+
   .OutcomeTitle {
     width: 100%;
     padding: 0.5em;
