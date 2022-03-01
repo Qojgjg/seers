@@ -48,8 +48,8 @@
         <div class="ContentTab">
           <div class="OutcomeTitle">Pick Outcome</div>
           <div class="YesNoOptions">
-            <div class="BuyOpt">Yes</div>
-            <div class="SellOpt">No</div>
+            <div class="BuyOpt">Yes ${parseInt(market.yesProb) / 100.0}</div>
+            <div class="SellOpt">No ${parseInt(market.noProb) / 100.0}</div>
           </div>
           <div class="OutcomeTitle">Seers Token Amount:</div>
           <div>
