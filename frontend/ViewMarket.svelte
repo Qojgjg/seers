@@ -12,6 +12,8 @@
   let title
   let description
   let seerAmount
+  let buyTokens = true
+  let tokenIsYes = true
   //   let yesDeposit
   //   let noDeposit
   //   let endDate
@@ -27,7 +29,20 @@
     console.log(market)
   }
 
-  const buy = async (marketId, amount) => {
+  const doIt = async (marketId, amount) => {
+    if (buyTokens && tokenIsYes) {
+      // buy yes
+      await $auth.actor.buyYes(marketId, amount)
+    } else if (buyTokens && !tokenIsYes) {
+      // buy no
+      await $auth.actor.buyNo(marketId, amount)
+    } else if (!buyTokens && tokenIsYes) {
+      // sell yes
+      await $auth.actor.sellYes(marketId, amount)
+    } else if (!buyTokens && !tokenIsYes) {
+      // sell no
+      await $auth.actor.sellNo(marketId, amount)
+    }
     // markets = await $auth.actor.readAllMarkets()
   }
 
@@ -47,14 +62,34 @@
       </div>
       <div class="MarketControl">
         <div class="TabOptions">
-          <div class="BuyTab">Buy</div>
-          <div class="SellTab">Sell</div>
+          <button
+            class="BuyTab"
+            on:click={() => {
+              buyTokens = true
+            }}>Buy</button
+          >
+          <button
+            class="SellTab"
+            on:click={() => {
+              buyTokens = false
+            }}>Sell</button
+          >
         </div>
         <div class="ContentTab">
           <div class="OutcomeTitle">Pick Outcome</div>
           <div class="YesNoOptions">
-            <div class="BuyOpt">Yes ${parseInt(market.yesProb) / 100.0}</div>
-            <div class="SellOpt">No ${parseInt(market.noProb) / 100.0}</div>
+            <button
+              class="BuyOpt"
+              on:click={() => {
+                tokenIsYes = true
+              }}>Yes ${parseInt(market.yesProb) / 100.0}</button
+            >
+            <button
+              class="SellOpt"
+              on:click={() => {
+                tokenIsYes = false
+              }}>No ${parseInt(market.noProb) / 100.0}</button
+            >
           </div>
           <div class="OutcomeTitle">Seers Token Amount:</div>
           <div>
@@ -67,7 +102,7 @@
           </div>
           <button
             class="demo-button"
-            on:click={() => buy(market.id, seerAmount)}>Buy</button
+            on:click={() => doIt(market.id, seerAmount)}>Buy</button
           >
         </div>
       </div>
