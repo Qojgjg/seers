@@ -1,7 +1,7 @@
 <script lang="ts">
   import logo from "./assets/logo-dark.svg"
   import { onMount, beforeUpdate } from "svelte"
-  import { identity } from "svelte/internal"
+  import { identity, select_multiple_value } from "svelte/internal"
   import Header from "./Header.svelte"
 
   export let auth
@@ -102,8 +102,20 @@
           </div>
           <button
             class="demo-button"
-            on:click={() => doIt(market.id, seerAmount)}>Buy</button
+            on:click={() => doIt(market.id, seerAmount)}
           >
+            {#if buyTokens}
+              {#if tokenIsYes}
+                Buy Yes
+              {:else}
+                Buy No
+              {/if}
+            {:else if tokenIsYes}
+              Sell Yes
+            {:else}
+              Sell No
+            {/if}
+          </button>
         </div>
       </div>
     </div>
