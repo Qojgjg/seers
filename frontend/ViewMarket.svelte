@@ -30,6 +30,7 @@
   }
 
   const doIt = async (marketId, amount) => {
+    amount = parseInt(amount)
     if (buyTokens && tokenIsYes) {
       // buy yes
       await $auth.actor.buyYes(marketId, amount)
