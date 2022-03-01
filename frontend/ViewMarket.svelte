@@ -1,27 +1,15 @@
 <script lang="ts">
-  import logo from "./assets/logo-dark.svg"
   import { onMount, beforeUpdate } from "svelte"
   import { identity, select_multiple_value } from "svelte/internal"
   import Header from "./Header.svelte"
 
   export let auth
-
   export let marketId
 
   let market
-  let title
-  let description
   let seerAmount
   let buyTokens = true
   let tokenIsYes = true
-  //   let yesDeposit
-  //   let noDeposit
-  //   let endDate
-  //   let liquidityToAdd
-  //   let yesAmountToBuy
-  //   let noAmountToBuy
-  //   let yesAmountToSell
-  //   let noAmountToSell
 
   const readMarket = async () => {
     market = await $auth.actor.readMarket(parseInt(marketId))

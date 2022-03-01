@@ -72,7 +72,7 @@
   {/if}
 
   {#if signedIn}
-    <p>Signed in as: {principal}</p>
+    <p><a href="#/user/{principal}">{principal}</a></p>
     <button on:click={signOut} class="auth-button">Sign out</button>
   {/if}
 </div>
