@@ -11,6 +11,7 @@
   let market
   let title
   let description
+  let seerAmount
   //   let yesDeposit
   //   let noDeposit
   //   let endDate
@@ -24,6 +25,10 @@
     market = await $auth.actor.readMarket(parseInt(marketId))
     market = market[0]
     console.log(market)
+  }
+
+  const buy = async (marketId, amount) => {
+    // markets = await $auth.actor.readAllMarkets()
   }
 
   onMount(readMarket)
@@ -53,14 +58,17 @@
           </div>
           <div class="OutcomeTitle">Seers Token Amount:</div>
           <div>
-            $<input />
+            $<input bind:value={seerAmount} />
           </div>
           <div class="ControlData">
             <div>LP fee 0.30%</div>
             <div>Avg. price $1 seers</div>
             <div>Max. winnings $4000 seers</div>
           </div>
-          <button>Send</button>
+          <button
+            class="demo-button"
+            on:click={() => buy(market.id, seerAmount)}>Buy</button
+          >
         </div>
       </div>
     </div>
