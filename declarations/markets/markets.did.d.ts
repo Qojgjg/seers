@@ -10,6 +10,7 @@ export interface Market {
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteAllUsers' : () => Promise<undefined>,
   'deleteMarket' : (arg_0: MarketId) => Promise<boolean>,
+  'getUser' : (arg_0: UserId) => Promise<UserResult>,
   'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllUsers' : () => Promise<Array<UserResult>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,

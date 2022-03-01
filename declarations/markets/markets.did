@@ -58,6 +58,7 @@ type Market =
    deleteAllMarkets: () -> ();
    deleteAllUsers: () -> ();
    deleteMarket: (MarketId) -> (bool);
+   getUser: (UserId) -> (UserResult);
    readAllMarkets: () -> (vec MarketResult) query;
    readAllUsers: () -> (vec UserResult) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
