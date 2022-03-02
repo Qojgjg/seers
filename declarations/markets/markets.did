@@ -7,6 +7,7 @@ type UserResult =
 type UserMarket = 
  record {
    marketId: MarketId;
+   marketTitle: Title;
    noBalance: Balance;
    shares: Shares;
    yesBalance: Balance;

@@ -27,6 +27,7 @@ shared(msg) actor class Market() {
 
     public type UserMarket = {
         marketId: MarketId;
+        marketTitle: Title;
         yesBalance: Balance;
         noBalance: Balance;
         shares: Shares;
@@ -154,6 +155,7 @@ shared(msg) actor class Market() {
         
         let userMarket: UserMarket = {
             marketId = marketId;
+            marketTitle = marketInitData.title;
             yesBalance = 0;
             noBalance = 0;
             shares = shares;
@@ -290,6 +292,7 @@ shared(msg) actor class Market() {
                                 } else {
                                     let newUserToken: UserMarket = {
                                         marketId = market.id;
+                                        marketTitle = market.title;
                                         noBalance = ut.noBalance;
                                         yesBalance = ut.yesBalance - value;
                                         shares = ut.shares;
@@ -376,6 +379,7 @@ shared(msg) actor class Market() {
                                 } else {
                                     let newUserToken: UserMarket = {
                                         marketId = market.id;
+                                        marketTitle = market.title;
                                         noBalance = ut.noBalance - value;
                                         yesBalance = ut.yesBalance;
                                         shares = ut.shares;
@@ -441,6 +445,7 @@ shared(msg) actor class Market() {
                     case null {
                         let newUserMarket: UserMarket = {
                             marketId = market.id;
+                            marketTitle = market.title;
                             yesBalance = 0;
                             noBalance = tokensOut;
                             shares = 0;
@@ -455,6 +460,7 @@ shared(msg) actor class Market() {
                                 } else {
                                     let newUserMarket: UserMarket = {
                                         marketId = market.id;
+                                        marketTitle = market.title;
                                         noBalance = ut.noBalance + tokensOut;
                                         yesBalance = ut.yesBalance;
                                         shares = ut.shares;
@@ -519,6 +525,7 @@ shared(msg) actor class Market() {
                     case null {
                         let newUserToken: UserMarket = {
                             marketId = market.id;
+                            marketTitle = market.title;
                             yesBalance = tokensOut;
                             noBalance = 0;
                             shares = 0;
@@ -535,6 +542,7 @@ shared(msg) actor class Market() {
                                 } else {
                                     let newUserToken: UserMarket = {
                                         marketId = market.id;
+                                        marketTitle = market.title;
                                         yesBalance = ut.yesBalance + tokensOut;
                                         noBalance = ut.noBalance;
                                         shares = ut.shares;
@@ -593,6 +601,7 @@ shared(msg) actor class Market() {
                 
                 let userMarket: UserMarket = {
                     marketId = market.id;
+                    marketTitle = market.title;
                     yesBalance = 0;
                     noBalance = 0;
                     shares = userShares;
@@ -691,6 +700,7 @@ shared(msg) actor class Market() {
 
                                 let newUserMarket: UserMarket = {
                                     marketId = userMarket.marketId;
+                                    marketTitle = userMarket.marketTitle;
                                     yesBalance = userYesTokens;
                                     noBalance = userNoTokens;
                                     shares = 0;

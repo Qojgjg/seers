@@ -20,6 +20,7 @@ export const idlFactory = ({ IDL }) => {
     'noBalance' : Balance,
     'marketId' : MarketId,
     'yesBalance' : Balance,
+    'marketTitle' : Title,
   });
   const UserResult = IDL.Record({
     'id' : UserId,

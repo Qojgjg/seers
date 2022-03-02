@@ -55,6 +55,7 @@ export interface UserMarket {
   'noBalance' : Balance,
   'marketId' : MarketId,
   'yesBalance' : Balance,
+  'marketTitle' : Title,
 }
 export interface UserResult {
   'id' : UserId,
