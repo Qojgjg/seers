@@ -21,9 +21,17 @@
 <div class="UserBody">
   {#if user}
     <div>
-      User Data:
-      <div>Id: {user.id}.</div>
+      <div>User Id: {user.id}.</div>
       <div>Balance: {user.seerBalance} seers.</div>
+      <div>
+        Markets:
+        {#each user.markets as market}
+          <div>
+            id {market.marketId} | {market.yesBalance} $yes | {market.noBalance}
+            $no | {market.shares} shares
+          </div>
+        {/each}
+      </div>
     </div>
   {:else}
     loading...
