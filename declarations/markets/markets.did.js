@@ -14,18 +14,17 @@ export const idlFactory = ({ IDL }) => {
     'yesProb' : Probability,
   });
   const UserId = IDL.Text;
-  const UserTokens = IDL.Record({
+  const Shares = IDL.Nat64;
+  const UserMarket = IDL.Record({
+    'shares' : Shares,
     'noBalance' : Balance,
     'marketId' : MarketId,
     'yesBalance' : Balance,
   });
-  const Shares = IDL.Nat64;
-  const UserShares = IDL.Record({ 'shares' : Shares, 'marketId' : MarketId });
   const UserResult = IDL.Record({
     'id' : UserId,
     'seerBalance' : Balance,
-    'marketTokens' : IDL.Vec(UserTokens),
-    'liquidityProviderFor' : IDL.Vec(UserShares),
+    'markets' : IDL.Vec(UserMarket),
   });
   const Author = IDL.Text;
   const MarketResult = IDL.Record({

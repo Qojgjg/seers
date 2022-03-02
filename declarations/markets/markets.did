@@ -1,20 +1,15 @@
-type UserTokens = 
- record {
-   marketId: MarketId;
-   noBalance: Balance;
-   yesBalance: Balance;
- };
-type UserShares = 
- record {
-   marketId: MarketId;
-   shares: Shares;
- };
 type UserResult = 
  record {
    id: UserId;
-   liquidityProviderFor: vec UserShares;
-   marketTokens: vec UserTokens;
+   markets: vec UserMarket;
    seerBalance: Balance;
+ };
+type UserMarket = 
+ record {
+   marketId: MarketId;
+   noBalance: Balance;
+   shares: Shares;
+   yesBalance: Balance;
  };
 type UserId = text;
 type Title = text;

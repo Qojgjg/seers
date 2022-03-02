@@ -50,16 +50,15 @@ export type Shares = bigint;
 export type Time = bigint;
 export type Title = string;
 export type UserId = string;
-export interface UserResult {
-  'id' : UserId,
-  'seerBalance' : Balance,
-  'marketTokens' : Array<UserTokens>,
-  'liquidityProviderFor' : Array<UserShares>,
-}
-export interface UserShares { 'shares' : Shares, 'marketId' : MarketId }
-export interface UserTokens {
+export interface UserMarket {
+  'shares' : Shares,
   'noBalance' : Balance,
   'marketId' : MarketId,
   'yesBalance' : Balance,
+}
+export interface UserResult {
+  'id' : UserId,
+  'seerBalance' : Balance,
+  'markets' : Array<UserMarket>,
 }
 export interface _SERVICE extends Market {}

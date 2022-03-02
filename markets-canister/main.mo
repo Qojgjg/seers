@@ -25,29 +25,23 @@ shared(msg) actor class Market() {
     public type Probability = Nat64;
     public type Balance = Nat64;
 
-    public type UserTokens = {
+    public type UserMarket = {
         marketId: MarketId;
         yesBalance: Balance;
         noBalance: Balance;
-    };
-
-    public type UserShares = {
-        marketId: MarketId;
         shares: Shares;
     };
 
     public type User = {
         var id: UserId; // Principal.
         var seerBalance: Balance;
-        var liquidityProviderFor: [UserShares];
-        var marketTokens: [UserTokens];
+        var markets: [UserMarket];
     };
 
     public type UserResult = {
         id: UserId; // Principal.
         seerBalance: Balance;
-        liquidityProviderFor: [UserShares];
-        marketTokens: [UserTokens];
+        markets: [UserMarket];
     };
 
     public type MarketInitData = {
@@ -157,13 +151,15 @@ shared(msg) actor class Market() {
 
         // Update provider.
         var user = getOrCreateUser(author);
-        user.liquidityProviderFor := 
-            Array.append(user.liquidityProviderFor, [
-                {
-                    marketId = marketId;
-                    shares = shares;
-                }
-            ]);
+        
+        let userMarket: UserMarket = {
+            marketId = marketId;
+            yesBalance = 0;
+            noBalance = 0;
+            shares = shares;
+        };
+
+        user.markets := Array.append(user.markets, [userMarket]);
         users := Trie.replace(
             users,
             userKey(user.id),
@@ -245,8 +241,8 @@ shared(msg) actor class Market() {
             };
             case (?market) {
                 var user = getOrCreateUser(caller);
-                var marketTokensOpt = Array.find(user.marketTokens,
-                    func (ut: UserTokens): Bool {
+                var marketTokensOpt = Array.find(user.markets,
+                    func (ut: UserMarket): Bool {
                         ut.marketId == market.id
                     }
                 );
@@ -287,15 +283,16 @@ shared(msg) actor class Market() {
                             ?market,
                         ).0;
 
-                        user.marketTokens := Array.mapFilter(user.marketTokens, 
-                            func (ut: UserTokens): ?UserTokens {
+                        user.markets := Array.mapFilter(user.markets, 
+                            func (ut: UserMarket): ?UserMarket {
                                 if (ut.marketId != market.id) {
                                     return ?ut;
                                 } else {
-                                    let newUserToken: UserTokens = {
+                                    let newUserToken: UserMarket = {
                                         marketId = market.id;
                                         noBalance = ut.noBalance;
                                         yesBalance = ut.yesBalance - value;
+                                        shares = ut.shares;
                                     };
                                     return ?newUserToken;
                                 };
@@ -330,8 +327,8 @@ shared(msg) actor class Market() {
             };
             case (?market) {
                 var user = getOrCreateUser(caller);
-                var marketTokensOpt = Array.find(user.marketTokens,
-                    func (ut: UserTokens): Bool {
+                var marketTokensOpt = Array.find(user.markets,
+                    func (ut: UserMarket): Bool {
                         ut.marketId == market.id
                     }
                 );
@@ -372,15 +369,16 @@ shared(msg) actor class Market() {
                             ?market,
                         ).0;
 
-                        user.marketTokens := Array.mapFilter(user.marketTokens, 
-                            func (ut: UserTokens): ?UserTokens {
+                        user.markets := Array.mapFilter(user.markets, 
+                            func (ut: UserMarket): ?UserMarket {
                                 if (ut.marketId != market.id) {
                                     return ?ut;
                                 } else {
-                                    let newUserToken: UserTokens = {
+                                    let newUserToken: UserMarket = {
                                         marketId = market.id;
                                         noBalance = ut.noBalance - value;
                                         yesBalance = ut.yesBalance;
+                                        shares = ut.shares;
                                     };
                                     return ?newUserToken;
                                 };
@@ -433,35 +431,35 @@ shared(msg) actor class Market() {
 
                 var user = getOrCreateUser(caller);
                 
-                var marketTokensOpt = Array.find(user.marketTokens,
-                    func (ut: UserTokens): Bool {
+                var marketTokensOpt = Array.find(user.markets,
+                    func (ut: UserMarket): Bool {
                         ut.marketId == market.id
                     }
                 );
 
                 switch (marketTokensOpt) {
                     case null {
-                        let newUserToken: UserTokens = {
+                        let newUserMarket: UserMarket = {
                             marketId = market.id;
                             yesBalance = 0;
                             noBalance = tokensOut;
+                            shares = 0;
                         };
-                        user.marketTokens := Array.append(user.marketTokens, [
-                            newUserToken 
-                        ]);
+                        user.markets := Array.append(user.markets, [newUserMarket]);
                     };
                     case (?marketTokens) {
-                        user.marketTokens := Array.mapFilter(user.marketTokens, 
-                            func (ut: UserTokens): ?UserTokens {
+                        user.markets := Array.mapFilter(user.markets, 
+                            func (ut: UserMarket): ?UserMarket {
                                 if (ut.marketId != market.id) {
                                     return ?ut;
                                 } else {
-                                    let newUserToken: UserTokens = {
+                                    let newUserMarket: UserMarket = {
                                         marketId = market.id;
                                         noBalance = ut.noBalance + tokensOut;
                                         yesBalance = ut.yesBalance;
+                                        shares = ut.shares;
                                     };
-                                    return ?newUserToken;
+                                    return ?newUserMarket;
                                 };
                             }
                         );
@@ -511,33 +509,35 @@ shared(msg) actor class Market() {
 
                 var user = getOrCreateUser(caller);
                 
-                var marketTokensOpt = Array.find(user.marketTokens,
-                    func (ut: UserTokens): Bool {
+                var marketTokensOpt = Array.find(user.markets,
+                    func (ut: UserMarket): Bool {
                         ut.marketId == market.id
                     }
                 );
 
                 switch (marketTokensOpt) {
                     case null {
-                        let newUserToken: UserTokens = {
+                        let newUserToken: UserMarket = {
                             marketId = market.id;
                             yesBalance = tokensOut;
                             noBalance = 0;
+                            shares = 0;
                         };
-                        user.marketTokens := Array.append(user.marketTokens, [
+                        user.markets := Array.append(user.markets, [
                             newUserToken 
                         ]);
                     };
                     case (?marketTokens) {
-                        user.marketTokens := Array.mapFilter(user.marketTokens, 
-                            func (ut: UserTokens): ?UserTokens {
+                        user.markets := Array.mapFilter(user.markets, 
+                            func (ut: UserMarket): ?UserMarket {
                                 if (ut.marketId != market.id) {
                                     return ?ut;
                                 } else {
-                                    let newUserToken: UserTokens = {
+                                    let newUserToken: UserMarket = {
                                         marketId = market.id;
                                         yesBalance = ut.yesBalance + tokensOut;
                                         noBalance = ut.noBalance;
+                                        shares = ut.shares;
                                     };
                                     return ?newUserToken;
                                 };
@@ -591,13 +591,14 @@ shared(msg) actor class Market() {
 
                 var user = getOrCreateUser(caller);
                 
-                user.liquidityProviderFor := 
-                    Array.append(user.liquidityProviderFor, [
-                        {
-                            marketId = market.id;
-                            shares = userShares;
-                        }
-                    ]);
+                let userMarket: UserMarket = {
+                    marketId = market.id;
+                    yesBalance = 0;
+                    noBalance = 0;
+                    shares = userShares;
+                };
+
+                user.markets := Array.append(user.markets, [userMarket]);
                 users := Trie.replace(
                     users,
                     userKey(user.id),
@@ -663,18 +664,18 @@ shared(msg) actor class Market() {
                     };
                     case (?market) {
                         // All good, let's do it.
-                        // Loop throught user shares and find market data.
+                        // Loop throught user markets and and update this one.
                         
-                        let newSharesBuffer: Buffer.Buffer<UserShares> 
-                            = Buffer.Buffer(user.liquidityProviderFor.size() - 1);
+                        let newMarketsBuffer: Buffer.Buffer<UserMarket> 
+                            = Buffer.Buffer(user.markets.size() - 1);
                         
-                        for (userShare in user.liquidityProviderFor.vals()) {
-                            if (userShare.marketId != marketId) {
-                                // Other shares are kept.
-                                newSharesBuffer.add(userShare);
+                        for (userMarket in user.markets.vals()) {
+                            if (userMarket.marketId != marketId) {
+                                // Other markets are kept intact.
+                                newMarketsBuffer.add(userMarket);
                             } else {
                                 // Calculate percentage of user shares from total.
-                                let percent = userShare.shares / market.totalShares;
+                                let percent = userMarket.shares / market.totalShares;
                                 let userLiquidity = market.liquidity * percent;
 
                                 // Remove user liquidity from total.                    
@@ -688,25 +689,26 @@ shared(msg) actor class Market() {
                                 market.reserveYes := market.reserveYes - userYesTokens;
                                 market.reserveNo := market.reserveNo - userNoTokens; 
 
-                                // Add tokens to user.
-                                let userTokens: UserTokens = {
-                                    marketId = marketId;
+                                let newUserMarket: UserMarket = {
+                                    marketId = userMarket.marketId;
                                     yesBalance = userYesTokens;
                                     noBalance = userNoTokens;
+                                    shares = 0;
                                 };
-                                user.marketTokens := Array.append(user.marketTokens, [userTokens]);
 
                                 // Remove user shares from total shares.
-                                market.totalShares := market.totalShares - userShare.shares;
+                                market.totalShares := market.totalShares - userMarket.shares;
                                 
                                 // Remove user from providers list.
                                 market.providers := 
                                     Array.filter(market.providers, func (u: UserId): Bool {
                                         u != author;
                                     });
+
+                                newMarketsBuffer.add(newUserMarket);
                             };
                         };
-                        user.liquidityProviderFor := newSharesBuffer.toArray();
+                        user.markets := newMarketsBuffer.toArray();
 
                         users := Trie.replace(
                             users,
@@ -793,8 +795,7 @@ shared(msg) actor class Market() {
         let user = {
             var id = u.id;
             var seerBalance = u.seerBalance;
-            var liquidityProviderFor = u.liquidityProviderFor;
-            var marketTokens = u.marketTokens;
+            var markets = u.markets;
         };
         return user;
     };
@@ -803,8 +804,7 @@ shared(msg) actor class Market() {
         let userResult = {
             id = u.id;
             seerBalance = u.seerBalance;
-            liquidityProviderFor = u.liquidityProviderFor;
-            marketTokens = u.marketTokens;
+            markets = u.markets;
         };
         return userResult;
     };
@@ -833,8 +833,7 @@ shared(msg) actor class Market() {
                 let user: User = {
                     var id = userId;
                     var seerBalance = 1000; // Airdrop
-                    var liquidityProviderFor = [];
-                    var marketTokens = [];
+                    var markets = [];
                 };
 
                 Debug.print(Text.concat("Creating user with id ", userId));
