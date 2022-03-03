@@ -72,13 +72,13 @@
         {#if !signedIn && client}
           <button on:click={signIn} class="auth-button">
             Sign In
-            <img alt="" style="width: 33px;" src={dfinityLogo} />
+            <!-- <img alt="" style="width: 33px;" src={dfinityLogo} /> -->
           </button>
         {/if}
 
         {#if signedIn}
           <a href="#/user/{principal}" class="MenuLink">My Profile</a>
-          <a href="#/create/" class="MenuLink">Create New Market</a>
+          <a href="#/create/" class="MenuLink">Create</a>
           <button on:click={signOut} class="auth-button">Sign out</button>
         {/if}
       </div>
@@ -88,12 +88,11 @@
 
 <style>
   .Wrapper {
-    background-color: black;
     display: flex;
     justify-content: center;
   }
   .MenuLink {
-    padding: 20px;
+    padding: 5px;
     font-size: 1em;
   }
 

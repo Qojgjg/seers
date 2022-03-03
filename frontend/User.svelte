@@ -21,29 +21,25 @@
 <div class="UserBody">
   {#if user}
     <div>
-      <div>User Id: {user.id}.</div>
-      <div>Balance: {user.seerBalance} seers.</div>
+      <div style="margin-bottom: 10px">User Id: {user.id}.</div>
+      <div style="margin-bottom: 10px">Balance: {user.seerBalance} seers.</div>
       Markets:
       <div style="display:flex; flex-direction: column; ">
-        <div style="display:flex; flex-direction: row; gap: 10px">
-          <div>Title</div>
-          <div>Yes Balance</div>
-          <div>No Balance</div>
-          <div>Shares</div>
-        </div>
         {#each user.markets as market}
-          <div style="display:flex; flex-direction: row; gap: 10px">
+          <div
+            style="display:flex; flex-direction: row; gap: 10px; margin-top: 10px"
+          >
             <a href="#/market/{market.marketId}">
-              {market.marketTitle}
+              * {market.marketTitle}
             </a>
             <div>
-              {market.yesBalance}
+              {market.yesBalance} Yes
             </div>
             <div>
-              {market.noBalance}
+              {market.noBalance} No
             </div>
             <div>
-              {market.shares}
+              {market.shares} Shares.
             </div>
           </div>
         {/each}

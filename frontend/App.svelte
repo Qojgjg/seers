@@ -45,8 +45,8 @@
 
 <style global>
   a {
-    color: white;
     text-decoration: none;
+    color: white;
   }
   body {
     margin: 0;
