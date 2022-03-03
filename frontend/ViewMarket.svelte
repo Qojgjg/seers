@@ -47,7 +47,7 @@
   {#if market}
     <div class="MarketHeader">
       <div class="MarketImage">
-        <img src="https://picsum.photos/100" alt="random" />
+        <img class="Image" src="https://picsum.photos/100" alt="random" />
       </div>
       <div class="MarketTitleDesc">
         <h3>{market.title}</h3>
@@ -72,6 +72,7 @@
             action = "removeLiquidity"
           }}>Remove Liquidity</button
         >
+        <hr style="width: 100%; border-color: black" />
         {#if action == "removeLiquidity"}
           <button
             class="BuyTab"
@@ -120,9 +121,9 @@
                 }}>No ${parseInt(market.noProb) / 100.0}</button
               >
             </div>
-            <div class="OutcomeTitle">Seers Token Amount:</div>
-            <div>
-              $<input bind:value={seerAmount} />
+            <div class="OutcomeTitle">Amount:</div>
+            <div class="OutcomeTitle">
+              <input bind:value={seerAmount} />
             </div>
             <div class="ControlData">
               <div>LP fee 0.30%</div>
@@ -155,68 +156,68 @@
 </div>
 
 <style global>
+  .Image {
+    border-radius: 8px;
+    width: 100%;
+  }
+
   .ControlData {
-    padding-top: 5em;
+    margin-top: 0.5em;
   }
 
   .OutcomeTitle {
     width: 100%;
-    padding: 0.5em;
+    margin-top: 0.5em;
   }
   .YesNoOptions {
     width: 100%;
     display: flex;
-    padding: 0.5em;
+    margin-top: 0.5em;
     height: fit-content;
-    background-color: darkgray;
   }
   .TabOptions {
     width: 100%;
     display: flex;
-    padding: 0.5em;
+    margin-top: 0.5em;
     height: fit-content;
-    background-color: darkgray;
   }
   .ContentTab {
-    background-color: gold;
     width: 100%;
   }
   .BuyOpt {
     width: 50%;
     height: fit-content;
-    background-color: greenyellow;
   }
   .SellOpt {
     width: 50%;
     height: fit-content;
-    background-color: red;
   }
   .BuyTab {
     width: 50%;
     height: fit-content;
-    background-color: cyan;
   }
   .SellTab {
     width: 50%;
     height: fit-content;
-    background-color: chocolate;
   }
   .MarketImage {
-    padding: 2em;
-    background-color: chartreuse;
+    padding: 1em;
+    background: rgb(220 218 224 / 25%);
   }
   .MarketControl {
-    background-color: bisque;
+    background: rgb(220 218 224 / 25%);
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     padding: 2em;
     width: 200px;
-    height: 400px;
+    height: fit-content;
   }
   .MarketTitleDesc {
     padding: 2em;
     width: 400px;
-    background-color: cadetblue;
+    background: rgb(220 218 224 / 25%);
     justify-content: flex-start;
     align-items: flex-start;
   }
@@ -252,11 +253,11 @@
   }
 
   .demo-button {
-    background: #2e3677;
+    background: black;
     padding: 0 1em;
     margin-top: 1em;
     border-radius: 10px;
-    font-size: 0.7em;
+    font-size: 0.9em;
     height: 35px;
     outline: 0;
     border: 0;
