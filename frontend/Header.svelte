@@ -3,15 +3,11 @@
 </script>
 
 <header class="App-header">
-  <img src={logo} alt="logo" />
-  <p style="font-size: 2em; margin-bottom: 0.5em;">
-    <a href="/" style="color: black; text-decoration: none">Seers</a>
-  </p>
   <div
     style="align-items: center; justify-content: center; display: flex; flex-direction:column"
   >
-    <code>Prediction Markets</code>
-    <p>Canister ID: {process.env.MARKETS_CANISTER_ID}</p>
+    <!-- <div>Prediction Markets</div> -->
+    <!-- <p>Canister ID: {process.env.MARKETS_CANISTER_ID}</p> -->
   </div>
 </header>
 

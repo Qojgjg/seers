@@ -44,11 +44,15 @@
 </main>
 
 <style global>
+  a {
+    color: white;
+    text-decoration: none;
+  }
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-      "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-      "Helvetica Neue", sans-serif;
+    background-color: rgba(12, 3, 43, 0.9);
+    color: whitesmoke;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

@@ -19,10 +19,8 @@
 
 <div class="MarketList">
   {#each markets as market}
-    <div
-      style="width: 160px; font-size: 0.7em;  padding: 2em; margin: 2em; border-radius: 30px;  background: rgb(220 218 224 / 25%);"
-    >
-      <a href="#/market/{market.id}" style="text-decoration:none; color: black">
+    <div class="MarketItem">
+      <a href="#/market/{market.id}">
         <div>
           <img src="https://picsum.photos/100" alt="random" />
           <h3>{market.title}</h3>
@@ -35,6 +33,13 @@
 </div>
 
 <style global>
+  .MarketItem {
+    width: 160px;
+    padding: 2em;
+    margin: 2em;
+    border-radius: 20px;
+    background: rgb(220 218 224 / 25%);
+  }
   .MarketList {
     display: flex;
     justify-content: center;
