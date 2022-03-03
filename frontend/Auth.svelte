@@ -71,10 +71,15 @@
     </button>
   {/if}
 
-  {#if signedIn}
-    <p><a href="#/user/{principal}">{principal}</a></p>
-    <button on:click={signOut} class="auth-button">Sign out</button>
-  {/if}
+  <p style="display: flex; align-items:center; gap: 10px">
+    <a href="/">Home</a>
+    {#if signedIn}
+      <a href="#/user/{principal}">My Profile</a>
+      <a href="#/create/">Create New Market</a>
+
+      <button on:click={signOut} class="auth-button">Sign out</button>
+    {/if}
+  </p>
 </div>
 
 <style>

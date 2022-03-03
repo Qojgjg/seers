@@ -4,9 +4,11 @@
   import Auth from "./Auth.svelte"
   import ViewMarket from "./ViewMarket.svelte"
   import User from "./User.svelte"
+  import CreateMarket from "./CreateMarket.svelte"
 
   let userPrincipal
   let marketIdSelected
+  let createMarket = false
 
   async function hashchange() {
     const path = window.location.hash.slice(1)
@@ -18,6 +20,8 @@
     } else if (path.startsWith("/user/")) {
       userPrincipal = path.slice(6)
       console.log("Principal: " + userPrincipal)
+    } else if (path.startsWith("/create/")) {
+      createMarket = true
     }
   }
 </script>
@@ -30,6 +34,8 @@
     <ViewMarket {auth} marketId={marketIdSelected} />
   {:else if userPrincipal}
     <User {auth} principal={userPrincipal} />
+  {:else if createMarket}
+    <CreateMarket {auth} />
   {:else}
     <div class="App">
       <ListMarkets {auth} />
