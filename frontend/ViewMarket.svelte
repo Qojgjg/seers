@@ -211,10 +211,10 @@
   }
 
   .demo-button {
-    background: #a02480;
-    padding: 0 1.3em;
+    background: #2e3677;
+    padding: 0 1em;
     margin-top: 1em;
-    border-radius: 60px;
+    border-radius: 10px;
     font-size: 0.7em;
     height: 35px;
     outline: 0;
