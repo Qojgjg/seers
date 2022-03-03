@@ -23,13 +23,28 @@
     <div>
       <div>User Id: {user.id}.</div>
       <div>Balance: {user.seerBalance} seers.</div>
-      <div>
-        Markets:
+      Markets:
+      <div style="display:flex; flex-direction: column; ">
+        <div style="display:flex; flex-direction: row; gap: 10px">
+          <div>Title</div>
+          <div>Yes Balance</div>
+          <div>No Balance</div>
+          <div>Shares</div>
+        </div>
         {#each user.markets as market}
-          <div>
-            id {market.marketId} | {market.marketTitle} | {market.yesBalance} $yes
-            | {market.noBalance}
-            $no | {market.shares} shares
+          <div style="display:flex; flex-direction: row; gap: 10px">
+            <a href="#/market/{market.marketId}">
+              {market.marketTitle}
+            </a>
+            <div>
+              {market.yesBalance}
+            </div>
+            <div>
+              {market.noBalance}
+            </div>
+            <div>
+              {market.shares}
+            </div>
           </div>
         {/each}
       </div>
