@@ -7,7 +7,11 @@
   export let marketId
 
   let market
+
+  let action = "none" // none, trade, addLiquidity, removeLiquidity
   let seerAmount
+  let addLiquidityAmount
+  let removeLiquidityAmount
   let buyTokens = true
   let tokenIsYes = true
 
@@ -50,62 +54,89 @@
         <p>{market.description}</p>
       </div>
       <div class="MarketControl">
-        <div class="TabOptions">
-          <button
-            class="BuyTab"
-            on:click={() => {
-              buyTokens = true
-            }}>Buy</button
-          >
-          <button
-            class="SellTab"
-            on:click={() => {
-              buyTokens = false
-            }}>Sell</button
-          >
-        </div>
-        <div class="ContentTab">
-          <div class="OutcomeTitle">Pick Outcome</div>
-          <div class="YesNoOptions">
-            <button
-              class="BuyOpt"
-              on:click={() => {
-                tokenIsYes = true
-              }}>Yes ${parseInt(market.yesProb) / 100.0}</button
-            >
-            <button
-              class="SellOpt"
-              on:click={() => {
-                tokenIsYes = false
-              }}>No ${parseInt(market.noProb) / 100.0}</button
-            >
-          </div>
-          <div class="OutcomeTitle">Seers Token Amount:</div>
+        <button
+          class="BuyTab"
+          on:click={() => {
+            action = "trade"
+          }}>Trade</button
+        >
+        <button
+          class="BuyTab"
+          on:click={() => {
+            action = "addLiquidity"
+          }}>Add Liquidity</button
+        >
+        <button
+          class="BuyTab"
+          on:click={() => {
+            action = "removeLiquidity"
+          }}>Remove Liquidity</button
+        >
+        {#if action == "removeLiquidity"}
+          <button>Remove Liquidity</button>
+        {:else if action == "addLiquidity"}
           <div>
-            $<input bind:value={seerAmount} />
+            <input bind:value={addLiquidityAmount} />
+            <button>Add Liquidity</button>
           </div>
-          <div class="ControlData">
-            <div>LP fee 0.30%</div>
-            <div>Avg. price $1 seers</div>
-            <div>Max. winnings $4000 seers</div>
+        {:else if action == "trade"}
+          <div class="TabOptions">
+            <button
+              class="BuyTab"
+              on:click={() => {
+                buyTokens = true
+              }}>Buy</button
+            >
+            <button
+              class="SellTab"
+              on:click={() => {
+                buyTokens = false
+              }}>Sell</button
+            >
           </div>
-          <button
-            class="demo-button"
-            on:click={() => doIt(market.id, seerAmount)}
-          >
-            {#if buyTokens}
-              {#if tokenIsYes}
-                Buy Yes
+          <div class="ContentTab">
+            <div class="OutcomeTitle">Pick Outcome</div>
+            <div class="YesNoOptions">
+              <button
+                class="BuyOpt"
+                on:click={() => {
+                  tokenIsYes = true
+                }}>Yes ${parseInt(market.yesProb) / 100.0}</button
+              >
+              <button
+                class="SellOpt"
+                on:click={() => {
+                  tokenIsYes = false
+                }}>No ${parseInt(market.noProb) / 100.0}</button
+              >
+            </div>
+            <div class="OutcomeTitle">Seers Token Amount:</div>
+            <div>
+              $<input bind:value={seerAmount} />
+            </div>
+            <div class="ControlData">
+              <div>LP fee 0.30%</div>
+              <div>Avg. price $1 seers</div>
+              <div>Max. winnings $4000 seers</div>
+            </div>
+            <button
+              class="demo-button"
+              on:click={() => doIt(market.id, seerAmount)}
+            >
+              {#if buyTokens}
+                {#if tokenIsYes}
+                  Buy Yes
+                {:else}
+                  Buy No
+                {/if}
+              {:else if tokenIsYes}
+                Sell Yes
               {:else}
-                Buy No
+                Sell No
               {/if}
-            {:else if tokenIsYes}
-              Sell Yes
-            {:else}
-              Sell No
-            {/if}
-          </button>
-        </div>
+            </button>
+          </div>
+        {/if}
       </div>
     </div>
   {:else}
