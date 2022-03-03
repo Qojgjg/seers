@@ -73,11 +73,21 @@
           }}>Remove Liquidity</button
         >
         {#if action == "removeLiquidity"}
-          <button>Remove Liquidity</button>
+          <button
+            class="BuyTab"
+            on:click={() => {
+              $auth.actor.removeLiquidity(market.id)
+            }}>Remove Liquidity</button
+          >
         {:else if action == "addLiquidity"}
           <div>
             <input bind:value={addLiquidityAmount} />
-            <button>Add Liquidity</button>
+            <button
+              class="BuyTab"
+              on:click={() => {
+                $auth.actor.addLiquidity(market.id, addLiquidityAmount)
+              }}>Add Liquidity</button
+            >
           </div>
         {:else if action == "trade"}
           <div class="TabOptions">
