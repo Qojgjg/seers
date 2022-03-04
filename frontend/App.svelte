@@ -59,7 +59,6 @@
 
   button {
     font-weight: 600;
-    background-color: coral;
   }
 
   .App {

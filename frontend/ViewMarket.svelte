@@ -55,58 +55,65 @@
       </div>
       <div class="MarketControl">
         <button
-          class="BuyTab"
+          class={action === "trade" ? "menu-button-selected" : "menu-button"}
           on:click={() => {
             action = "trade"
           }}>Trade</button
         >
         <button
-          class="BuyTab"
+          class={action === "addLiquidity"
+            ? "menu-button-selected"
+            : "menu-button"}
           on:click={() => {
             action = "addLiquidity"
           }}>Add Liquidity</button
         >
         <button
-          class="BuyTab"
+          class={action === "removeLiquidity"
+            ? "menu-button-selected"
+            : "menu-button"}
           on:click={() => {
             action = "removeLiquidity"
           }}>Remove Liquidity</button
         >
         <hr style="width: 100%; border-color: black" />
         {#if action == "removeLiquidity"}
+          Remove all liquidity.
           <button
-            class="BuyTab"
+            class="demo-button"
             on:click={() => {
               $auth.actor.removeLiquidity(market.id)
-            }}>Remove Liquidity</button
+            }}>Remove</button
           >
         {:else if action == "addLiquidity"}
           <div>
+            Add liquidity with seers tokens.
             <input bind:value={addLiquidityAmount} />
             <button
-              class="BuyTab"
+              class="demo-button"
               on:click={() => {
                 $auth.actor.addLiquidity(market.id, addLiquidityAmount)
-              }}>Add Liquidity</button
+              }}>Add</button
             >
           </div>
         {:else if action == "trade"}
-          <div class="TabOptions">
+          Pick action:
+          <div class="YesNoOptions">
             <button
-              class="BuyTab"
+              class="BuyOpt"
               on:click={() => {
                 buyTokens = true
               }}>Buy</button
             >
             <button
-              class="SellTab"
+              class="SellOpt"
               on:click={() => {
                 buyTokens = false
               }}>Sell</button
             >
           </div>
+          Pick Outcome:
           <div class="ContentTab">
-            <div class="OutcomeTitle">Pick Outcome</div>
             <div class="YesNoOptions">
               <button
                 class="BuyOpt"
@@ -156,6 +163,38 @@
 </div>
 
 <style global>
+  .menu-button {
+    color: white;
+    background: rgb(220 218 224 / 25%);
+    padding: 5px;
+    margin: 3px 0px;
+    border-radius: 5px;
+    font-size: 1em;
+    height: 33px;
+    border: 0;
+    align-items: center;
+    text-align: center;
+    border-color: white;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .menu-button-selected {
+    color: white;
+    background: rgba(12, 3, 43, 0.9);
+    padding: 5px;
+    margin: 3px 0px;
+    border-radius: 5px;
+    font-size: 1em;
+    height: 33px;
+    border: 0;
+    align-items: center;
+    text-align: center;
+    border-color: white;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
   .Image {
     border-radius: 8px;
     width: 100%;
