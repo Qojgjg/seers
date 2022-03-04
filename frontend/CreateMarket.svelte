@@ -30,7 +30,7 @@
 <Header />
 
 <div class="CreateBody">
-  <div>
+  <div class="FormItem">
     <div style="">
       <h4 style="">Create New Market</h4>
     </div>
@@ -63,5 +63,12 @@
   .CreateBody {
     display: flex;
     justify-content: center;
+    width: 100%;
+  }
+
+  .FormItem {
+    padding: 20px;
+    border-radius: 10px;
+    background: rgb(220 218 224 / 25%);
   }
 </style>
