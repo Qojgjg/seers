@@ -5,6 +5,7 @@ export const idlFactory = ({ IDL }) => {
   const Probability = IDL.Nat64;
   const Time = IDL.Int;
   const Description = IDL.Text;
+  const Url = IDL.Text;
   const MarketInitData = IDL.Record({
     'title' : Title,
     'noProb' : Probability,
@@ -12,6 +13,7 @@ export const idlFactory = ({ IDL }) => {
     'liquidity' : Balance,
     'description' : Description,
     'yesProb' : Probability,
+    'imageUrl' : Url,
   });
   const UserId = IDL.Text;
   const Shares = IDL.Nat64;
@@ -38,6 +40,7 @@ export const idlFactory = ({ IDL }) => {
     'author' : Author,
     'yesProb' : Probability,
     'reserveNo' : Balance,
+    'imageUrl' : Url,
     'providers' : IDL.Vec(IDL.Text),
     'reserveYes' : Balance,
     'kLast' : Balance,

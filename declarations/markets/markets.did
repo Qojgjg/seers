@@ -13,6 +13,7 @@ type UserMarket =
    yesBalance: Balance;
  };
 type UserId = text;
+type Url = text;
 type Title = text;
 type Time = int;
 type Shares = nat64;
@@ -24,6 +25,7 @@ type MarketResult =
    description: Description;
    endDate: Time;
    id: MarketId;
+   imageUrl: Url;
    kLast: Balance;
    liquidity: Balance;
    noProb: Probability;
@@ -39,6 +41,7 @@ type MarketInitData =
  record {
    description: Description;
    endDate: Time;
+   imageUrl: Url;
    liquidity: Balance;
    noProb: Probability;
    title: Title;

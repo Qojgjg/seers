@@ -18,6 +18,7 @@ shared(msg) actor class Market() {
 
     public type Title = Text;
     public type Description = Text;
+    public type Url = Text;
     public type Author = Text;
     public type MarketId = Nat32;
     public type UserId = Text;
@@ -52,6 +53,7 @@ shared(msg) actor class Market() {
         noProb: Probability;
         liquidity: Balance;
         endDate: Time.Time;
+        imageUrl: Url;
     };
 
     public type Market = {
@@ -70,6 +72,7 @@ shared(msg) actor class Market() {
         var kLast: Balance; // sqrt(reserve0 * reserve1)
         var totalShares: Shares;
         var providers: [Text]; // list of principals
+        var imageUrl: Url;
     };
 
     public type MarketResult = {
@@ -88,6 +91,7 @@ shared(msg) actor class Market() {
         kLast: Balance; // sqrt(reserve0 * reserve1)
         totalShares: Shares;
         providers: [Text]; // list of principals
+        imageUrl: Url;
     };  
 
     /* State */
@@ -121,6 +125,7 @@ shared(msg) actor class Market() {
         assert(marketInitData.liquidity >= 1000);
         assert(marketInitData.title != "");
         assert(marketInitData.description != "");
+        assert(marketInitData.imageUrl != "");
         assert(marketInitData.endDate > Time.now());
 
         let marketId = nextMarketId;
@@ -148,6 +153,7 @@ shared(msg) actor class Market() {
             var kLast = reserveYes * reserveNo;
             var totalShares = shares;
             var providers = [author];
+            var imageUrl = marketInitData.imageUrl;
         };
 
         // Update provider.
@@ -774,6 +780,7 @@ shared(msg) actor class Market() {
             var kLast = m.kLast;
             var totalShares = m.totalShares;
             var providers = m.providers;
+            var imageUrl = m.imageUrl;
         };
 
         return market;
@@ -796,6 +803,7 @@ shared(msg) actor class Market() {
             kLast = m.kLast;
             totalShares = m.totalShares;
             providers = m.providers;
+            imageUrl = m.imageUrl;
         };
 
         return market;

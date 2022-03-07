@@ -27,6 +27,7 @@ export interface MarketInitData {
   'liquidity' : Balance,
   'description' : Description,
   'yesProb' : Probability,
+  'imageUrl' : Url,
 }
 export interface MarketResult {
   'id' : MarketId,
@@ -38,6 +39,7 @@ export interface MarketResult {
   'author' : Author,
   'yesProb' : Probability,
   'reserveNo' : Balance,
+  'imageUrl' : Url,
   'providers' : Array<string>,
   'reserveYes' : Balance,
   'kLast' : Balance,
@@ -49,6 +51,7 @@ export type Probability = bigint;
 export type Shares = bigint;
 export type Time = bigint;
 export type Title = string;
+export type Url = string;
 export type UserId = string;
 export interface UserMarket {
   'shares' : Shares,
