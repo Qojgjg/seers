@@ -8,6 +8,7 @@
   let yesDeposit
   let noDeposit
   let endDate
+  let imageUrl
 
   let createMarket = async () => {
     yesDeposit = parseInt(yesDeposit)
@@ -22,6 +23,7 @@
       noProb: noProb,
       liquidity: liquidity,
       endDate: Date.parse(endDate) * 1_000_000,
+      imageUrl: imageUrl,
     }
     await $auth.actor.createMarket(marketInitData)
   }
@@ -53,6 +55,10 @@
     <div style="padding: 1em; text-align:left; font-size: 0.7em">
       <div>End date:</div>
       <div><input bind:value={endDate} /></div>
+    </div>
+    <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <div>Image URL:</div>
+      <div><input bind:value={imageUrl} /></div>
     </div>
 
     <button class="demo-button" on:click={createMarket}>Create Market</button>

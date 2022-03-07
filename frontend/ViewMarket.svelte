@@ -47,7 +47,7 @@
   {#if market}
     <div class="MarketHeader">
       <div class="MarketImage">
-        <img class="Image" src="https://picsum.photos/100" alt="random" />
+        <img class="Image" src={market.imageUrl} alt="random" />
       </div>
       <div class="MarketTitleDesc">
         <h3>{market.title}</h3>

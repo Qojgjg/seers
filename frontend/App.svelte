@@ -8,33 +8,34 @@
 
   let userPrincipal
   let marketIdSelected
-  let createMarket = false
+  let page
 
   async function hashchange() {
     const path = window.location.hash.slice(1)
-    console.log("path: " + path)
     if (path.startsWith("/market/")) {
+      page = "market"
       marketIdSelected = path.slice(8)
-      console.log("market selected " + marketIdSelected)
       window.scrollTo(0, 0)
     } else if (path.startsWith("/user/")) {
+      page = "user"
       userPrincipal = path.slice(6)
-      console.log("Principal: " + userPrincipal)
     } else if (path.startsWith("/create/")) {
-      createMarket = true
+      page = "create"
+    } else {
+      window.location.hash = ""
     }
   }
 </script>
 
-<svelte:window on:hashchange={hashchange} />
+<svelte:window on:load={hashchange} on:hashchange={hashchange} />
 
 <main>
   <Auth {auth} {createActor} />
-  {#if marketIdSelected}
+  {#if page === "market"}
     <ViewMarket {auth} marketId={marketIdSelected} />
-  {:else if userPrincipal}
+  {:else if page === "user"}
     <User {auth} principal={userPrincipal} />
-  {:else if createMarket}
+  {:else if page === "create"}
     <CreateMarket {auth} />
   {:else}
     <div class="App">

@@ -22,7 +22,7 @@
     <div class="MarketItem">
       <a href="#/market/{market.id}">
         <div>
-          <img src="https://picsum.photos/100" alt="random" />
+          <img src={market.imageUrl} alt="random" />
           <h3>{market.title}</h3>
         </div>
       </a>
@@ -33,6 +33,10 @@
 </div>
 
 <style global>
+  img {
+    max-width: 150px;
+    max-height: 150px;
+  }
   .MarketItem {
     width: 160px;
     padding: 2em;
