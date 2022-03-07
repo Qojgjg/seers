@@ -9,16 +9,36 @@
   let market
 
   let action = "none" // none, trade, addLiquidity, removeLiquidity
-  let seerAmount
+  let seerAmount = 0
   let addLiquidityAmount
   let removeLiquidityAmount
   let buyTokens = true
   let tokenIsYes = true
+  let tokensEstimate
 
   const readMarket = async () => {
     market = await $auth.actor.readMarket(parseInt(marketId))
     market = market[0]
     console.log(market)
+  }
+
+  const dryRun = async (marketId, amount) => {
+    amount = parseInt(amount)
+    if (buyTokens && tokenIsYes) {
+      // buy yes
+      tokensEstimate = await $auth.actor.buyYes(marketId, amount, false)
+    } else if (buyTokens && !tokenIsYes) {
+      // buy no
+      tokensEstimate = await $auth.actor.buyNo(marketId, amount, false)
+    }
+    // else if (!buyTokens && tokenIsYes) {
+    //   // sell yes
+    //   tokensEstimate = await $auth.actor.sellYes(marketId, amount, false)
+    // } else if (!buyTokens && !tokenIsYes) {
+    //   // sell no
+    //   tokensEstimate = await $auth.actor.sellNo(marketId, amount, false)
+    // }
+    console.log("tokens estimate: " + tokensEstimate)
   }
 
   const doIt = async (marketId, amount) => {
@@ -36,7 +56,6 @@
       // sell no
       await $auth.actor.sellNo(marketId, amount, true)
     }
-    // markets = await $auth.actor.readAllMarkets()
   }
 
   onMount(readMarket)
@@ -130,12 +149,17 @@
             </div>
             <div class="OutcomeTitle">Amount:</div>
             <div class="OutcomeTitle">
-              <input bind:value={seerAmount} />
+              <input
+                bind:value={seerAmount}
+                on:change={() => dryRun(market.id, seerAmount)}
+              />
             </div>
             <div class="ControlData">
-              <div>LP fee 0.30%</div>
-              <div>Avg. price $1 seers</div>
-              <div>Max. winnings $4000 seers</div>
+              <div>LP fee 0.00%</div>
+              <div>
+                Avg. price {(seerAmount / tokensEstimate).toFixed(2)} seers
+              </div>
+              <div>Max. winnings {tokensEstimate - seerAmount} seers</div>
             </div>
             <button
               class="demo-button"

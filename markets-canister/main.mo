@@ -117,9 +117,6 @@ shared(msg) actor class Market() {
     // Create a market.
     public shared(msg) func createMarket(marketInitData: MarketInitData): async Nat32 {
         let author = Principal.toText(msg.caller);
-
-        // Debug.print("Executing createMarket");
-
         assert(author != anon);
         // assert(marketInitData.yesProb + marketInitData.noProb == 100);
         assert(marketInitData.liquidity >= 1000);
@@ -239,7 +236,6 @@ shared(msg) actor class Market() {
 
     // Sell Yes tokens from caller back to the market.
     public shared(msg) func sellYes(marketId: MarketId, value: Balance, save: Bool): async ?Balance {
-        Debug.print(Text.concat("sellYes from ", Nat32.toText(marketId)));
         let caller = Principal.toText(msg.caller);
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
         
@@ -330,7 +326,6 @@ shared(msg) actor class Market() {
 
     // Sell No tokens from caller back to the market.
     public shared(msg) func sellNo(marketId: MarketId, value: Balance, save: Bool): async ?Balance {
-        Debug.print(Text.concat("sellNo from ", Nat32.toText(marketId)));
         let caller = Principal.toText(msg.caller);
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
         
@@ -420,7 +415,6 @@ shared(msg) actor class Market() {
     };
 
     public shared(msg) func buyNo(marketId: MarketId, value: Balance, save: Bool): async ?Balance {
-        Debug.print(Text.concat("buyNo from ", Nat32.toText(marketId)));
         let caller = Principal.toText(msg.caller);
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
         
@@ -430,9 +424,15 @@ shared(msg) actor class Market() {
             };
             case (?market) {
                 let newYesTokens = value * 100 / market.yesProb;
-                market.reserveYes := market.reserveYes + newYesTokens;
-                let newReserveNo = market.kLast / market.reserveYes;
+                let newReserveYes = market.reserveYes + newYesTokens;
+                let newReserveNo = market.kLast / newReserveYes;
                 let tokensOut = market.reserveNo - newReserveNo;
+
+                if (not save) {
+                    return ?tokensOut;
+                };
+
+                market.reserveYes := newReserveYes;
                 market.reserveNo := newReserveNo;
                 market.liquidity := market.liquidity + value;
                  
@@ -440,14 +440,12 @@ shared(msg) actor class Market() {
                 market.yesProb := market.reserveNo * 100 / totalReserve;
                 market.noProb := 100 - market.yesProb;
 
-                if (save) {
-                    markets := Trie.replace(
-                        markets,
-                        marketKey(market.id),
-                        Nat32.equal,
-                        ?market,
-                    ).0;
-                };
+                markets := Trie.replace(
+                    markets,
+                    marketKey(market.id),
+                    Nat32.equal,
+                    ?market,
+                ).0;
 
                 var user = getOrCreateUser(caller);
                 
@@ -488,14 +486,12 @@ shared(msg) actor class Market() {
                     };
                 };
 
-                if (save) {
-                    users := Trie.replace(
-                        users,
-                        userKey(user.id),
-                        Text.equal,
-                        ?user,
-                    ).0;
-                };
+                users := Trie.replace(
+                    users,
+                    userKey(user.id),
+                    Text.equal,
+                    ?user,
+                ).0;
 
                 return ?tokensOut;
             };
@@ -504,7 +500,6 @@ shared(msg) actor class Market() {
 
 
     public shared(msg) func buyYes(marketId: MarketId, value: Balance, save: Bool): async ?Balance {
-        Debug.print(Text.concat("buyYes from ", Nat32.toText(marketId)));
         let caller = Principal.toText(msg.caller);
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
         
@@ -514,9 +509,15 @@ shared(msg) actor class Market() {
             };
             case (?market) {
                 let newNoTokens = value * 100 / market.noProb;
-                market.reserveNo := market.reserveNo + newNoTokens;
-                let newReserveYes = market.kLast / market.reserveNo;
+                let newReserveNo = market.reserveNo + newNoTokens;
+                let newReserveYes = market.kLast / newReserveNo;
                 let tokensOut = market.reserveYes - newReserveYes;
+
+                if (not save) {
+                    return ?tokensOut;
+                };
+
+                market.reserveNo := newReserveNo;
                 market.reserveYes := newReserveYes;
                 market.liquidity := market.liquidity + value;
                 
@@ -524,14 +525,12 @@ shared(msg) actor class Market() {
                 market.yesProb := market.reserveNo * 100 / totalReserve;
                 market.noProb := 100 - market.yesProb;
 
-                if (save) {
-                    markets := Trie.replace(
-                        markets,
-                        marketKey(market.id),
-                        Nat32.equal,
-                        ?market,
-                    ).0;
-                };
+                markets := Trie.replace(
+                    markets,
+                    marketKey(market.id),
+                    Nat32.equal,
+                    ?market,
+                ).0;
 
                 var user = getOrCreateUser(caller);
                 
@@ -574,14 +573,12 @@ shared(msg) actor class Market() {
                     };
                 };
 
-                if (save) {
-                    users := Trie.replace(
-                        users,
-                        userKey(user.id),
-                        Text.equal,
-                        ?user,
-                    ).0;
-                };
+                users := Trie.replace(
+                    users,
+                    userKey(user.id),
+                    Text.equal,
+                    ?user,
+                ).0;
 
                 return ?tokensOut;
             };
@@ -590,7 +587,6 @@ shared(msg) actor class Market() {
 
     // Add liquidity to this market by calling user.
     public shared(msg) func addLiquidity(marketId: MarketId, value: Balance): async Bool {
-        Debug.print(Text.concat("addLiquidity to ", Nat32.toText(marketId)));
         let caller = Principal.toText(msg.caller);
         let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
         
@@ -663,8 +659,6 @@ shared(msg) actor class Market() {
 
     // Remove all liquidity provided in this market by calling user.
     public shared(msg) func removeLiquidity(marketId: MarketId): async Bool {
-        Debug.print(Text.concat("removeLiquidity for ", Nat32.toText(marketId)));
-
         // If user is anon we abort.
         let author = Principal.toText(msg.caller);
         assert(author != anon);
@@ -676,10 +670,6 @@ shared(msg) actor class Market() {
         switch (userOpt) {
             case null {
                 // If user is not in state we abort.
-                Debug.print(Text.concat(
-                    "User not in state ", 
-                    author
-                ));
                 return false;
             };
             case (?user) {
@@ -687,10 +677,6 @@ shared(msg) actor class Market() {
                 switch (marketOpt) {
                     case null {
                         // If market is not in state we abort.
-                        Debug.print(Text.concat(
-                            "Market not in state ", 
-                            ""
-                        ));
                         return false;
                     };
                     case (?market) {
@@ -869,8 +855,6 @@ shared(msg) actor class Market() {
                     var seerBalance = 1000; // Airdrop
                     var markets = [];
                 };
-
-                Debug.print(Text.concat("Creating user with id ", userId));
 
                 users := Trie.replace(
                     users,
