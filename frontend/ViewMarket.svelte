@@ -25,16 +25,16 @@
     amount = parseInt(amount)
     if (buyTokens && tokenIsYes) {
       // buy yes
-      await $auth.actor.buyYes(marketId, amount)
+      await $auth.actor.buyYes(marketId, amount, true)
     } else if (buyTokens && !tokenIsYes) {
       // buy no
-      await $auth.actor.buyNo(marketId, amount)
+      await $auth.actor.buyNo(marketId, amount, true)
     } else if (!buyTokens && tokenIsYes) {
       // sell yes
-      await $auth.actor.sellYes(marketId, amount)
+      await $auth.actor.sellYes(marketId, amount, true)
     } else if (!buyTokens && !tokenIsYes) {
       // sell no
-      await $auth.actor.sellNo(marketId, amount)
+      await $auth.actor.sellNo(marketId, amount, true)
     }
     // markets = await $auth.actor.readAllMarkets()
   }

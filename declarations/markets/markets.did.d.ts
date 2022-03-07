@@ -4,8 +4,12 @@ export type Balance = bigint;
 export type Description = string;
 export interface Market {
   'addLiquidity' : (arg_0: MarketId, arg_1: Balance) => Promise<boolean>,
-  'buyNo' : (arg_0: MarketId, arg_1: Balance) => Promise<[] | [Balance]>,
-  'buyYes' : (arg_0: MarketId, arg_1: Balance) => Promise<[] | [Balance]>,
+  'buyNo' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
+      [] | [Balance]
+    >,
+  'buyYes' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
+      [] | [Balance]
+    >,
   'createMarket' : (arg_0: MarketInitData) => Promise<number>,
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteAllUsers' : () => Promise<undefined>,
@@ -15,8 +19,12 @@ export interface Market {
   'readAllUsers' : () => Promise<Array<UserResult>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'removeLiquidity' : (arg_0: MarketId) => Promise<boolean>,
-  'sellNo' : (arg_0: MarketId, arg_1: Balance) => Promise<[] | [Balance]>,
-  'sellYes' : (arg_0: MarketId, arg_1: Balance) => Promise<[] | [Balance]>,
+  'sellNo' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
+      [] | [Balance]
+    >,
+  'sellYes' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
+      [] | [Balance]
+    >,
   'updateMarket' : (arg_0: MarketId, arg_1: MarketResult) => Promise<boolean>,
 }
 export type MarketId = number;

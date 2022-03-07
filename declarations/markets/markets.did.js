@@ -50,8 +50,8 @@ export const idlFactory = ({ IDL }) => {
   });
   const Market = IDL.Service({
     'addLiquidity' : IDL.Func([MarketId, Balance], [IDL.Bool], []),
-    'buyNo' : IDL.Func([MarketId, Balance], [IDL.Opt(Balance)], []),
-    'buyYes' : IDL.Func([MarketId, Balance], [IDL.Opt(Balance)], []),
+    'buyNo' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
+    'buyYes' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
     'createMarket' : IDL.Func([MarketInitData], [IDL.Nat32], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteAllUsers' : IDL.Func([], [], []),
@@ -61,8 +61,8 @@ export const idlFactory = ({ IDL }) => {
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
     'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
     'removeLiquidity' : IDL.Func([MarketId], [IDL.Bool], []),
-    'sellNo' : IDL.Func([MarketId, Balance], [IDL.Opt(Balance)], []),
-    'sellYes' : IDL.Func([MarketId, Balance], [IDL.Opt(Balance)], []),
+    'sellNo' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
+    'sellYes' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
     'updateMarket' : IDL.Func([MarketId, MarketResult], [IDL.Bool], []),
   });
   return Market;

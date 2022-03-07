@@ -51,8 +51,8 @@ type MarketId = nat32;
 type Market = 
  service {
    addLiquidity: (MarketId, Balance) -> (bool);
-   buyNo: (MarketId, Balance) -> (opt Balance);
-   buyYes: (MarketId, Balance) -> (opt Balance);
+   buyNo: (MarketId, Balance, bool) -> (opt Balance);
+   buyYes: (MarketId, Balance, bool) -> (opt Balance);
    createMarket: (MarketInitData) -> (nat32);
    deleteAllMarkets: () -> ();
    deleteAllUsers: () -> ();
@@ -62,8 +62,8 @@ type Market =
    readAllUsers: () -> (vec UserResult) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
    removeLiquidity: (MarketId) -> (bool);
-   sellNo: (MarketId, Balance) -> (opt Balance);
-   sellYes: (MarketId, Balance) -> (opt Balance);
+   sellNo: (MarketId, Balance, bool) -> (opt Balance);
+   sellYes: (MarketId, Balance, bool) -> (opt Balance);
    updateMarket: (MarketId, MarketResult) -> (bool);
  };
 type Description = text;

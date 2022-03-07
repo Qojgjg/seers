@@ -238,7 +238,7 @@ shared(msg) actor class Market() {
 
 
     // Sell Yes tokens from caller back to the market.
-    public shared(msg) func sellYes(marketId: MarketId, value: Balance): async ?Balance {
+    public shared(msg) func sellYes(marketId: MarketId, value: Balance, save: Bool): async ?Balance {
         Debug.print(Text.concat("sellYes from ", Nat32.toText(marketId)));
         let caller = Principal.toText(msg.caller);
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
@@ -284,12 +284,14 @@ shared(msg) actor class Market() {
                         let liquidityOut = market.liquidity - newLiquidity;
                         market.liquidity := newLiquidity;
 
-                        markets := Trie.replace(
-                            markets,
-                            marketKey(market.id),
-                            Nat32.equal,
-                            ?market,
-                        ).0;
+                        if (save) {
+                            markets := Trie.replace(
+                                markets,
+                                marketKey(market.id),
+                                Nat32.equal,
+                                ?market,
+                            ).0;
+                        };
 
                         user.markets := Array.mapFilter(user.markets, 
                             func (ut: UserMarket): ?UserMarket {
@@ -308,12 +310,14 @@ shared(msg) actor class Market() {
                             }
                         );
 
-                        users := Trie.replace(
-                            users,
-                            userKey(user.id),
-                            Text.equal,
-                            ?user,
-                        ).0;
+                        if (save) {
+                            users := Trie.replace(
+                                users,
+                                userKey(user.id),
+                                Text.equal,
+                                ?user,
+                            ).0;
+                        };
 
                         return ?liquidityOut;
                     };
@@ -325,7 +329,7 @@ shared(msg) actor class Market() {
     };
 
     // Sell No tokens from caller back to the market.
-    public shared(msg) func sellNo(marketId: MarketId, value: Balance): async ?Balance {
+    public shared(msg) func sellNo(marketId: MarketId, value: Balance, save: Bool): async ?Balance {
         Debug.print(Text.concat("sellNo from ", Nat32.toText(marketId)));
         let caller = Principal.toText(msg.caller);
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
@@ -371,12 +375,14 @@ shared(msg) actor class Market() {
                         let liquidityOut = market.liquidity - newLiquidity;
                         market.liquidity := newLiquidity;
 
-                        markets := Trie.replace(
-                            markets,
-                            marketKey(market.id),
-                            Nat32.equal,
-                            ?market,
-                        ).0;
+                        if (save) {
+                            markets := Trie.replace(
+                                markets,
+                                marketKey(market.id),
+                                Nat32.equal,
+                                ?market,
+                            ).0;
+                        };
 
                         user.markets := Array.mapFilter(user.markets, 
                             func (ut: UserMarket): ?UserMarket {
@@ -395,12 +401,14 @@ shared(msg) actor class Market() {
                             }
                         );
 
-                        users := Trie.replace(
-                            users,
-                            userKey(user.id),
-                            Text.equal,
-                            ?user,
-                        ).0;
+                        if (save) {
+                            users := Trie.replace(
+                                users,
+                                userKey(user.id),
+                                Text.equal,
+                                ?user,
+                            ).0;
+                        };
 
                         return ?liquidityOut;
                     };
@@ -411,7 +419,7 @@ shared(msg) actor class Market() {
         };
     };
 
-    public shared(msg) func buyNo(marketId: MarketId, value: Balance): async ?Balance {
+    public shared(msg) func buyNo(marketId: MarketId, value: Balance, save: Bool): async ?Balance {
         Debug.print(Text.concat("buyNo from ", Nat32.toText(marketId)));
         let caller = Principal.toText(msg.caller);
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
@@ -432,12 +440,14 @@ shared(msg) actor class Market() {
                 market.yesProb := market.reserveNo * 100 / totalReserve;
                 market.noProb := 100 - market.yesProb;
 
-                markets := Trie.replace(
-                    markets,
-                    marketKey(market.id),
-                    Nat32.equal,
-                    ?market,
-                ).0;
+                if (save) {
+                    markets := Trie.replace(
+                        markets,
+                        marketKey(market.id),
+                        Nat32.equal,
+                        ?market,
+                    ).0;
+                };
 
                 var user = getOrCreateUser(caller);
                 
@@ -478,12 +488,14 @@ shared(msg) actor class Market() {
                     };
                 };
 
-                users := Trie.replace(
-                    users,
-                    userKey(user.id),
-                    Text.equal,
-                    ?user,
-                ).0;
+                if (save) {
+                    users := Trie.replace(
+                        users,
+                        userKey(user.id),
+                        Text.equal,
+                        ?user,
+                    ).0;
+                };
 
                 return ?tokensOut;
             };
@@ -491,7 +503,7 @@ shared(msg) actor class Market() {
     };
 
 
-    public shared(msg) func buyYes(marketId: MarketId, value: Balance): async ?Balance {
+    public shared(msg) func buyYes(marketId: MarketId, value: Balance, save: Bool): async ?Balance {
         Debug.print(Text.concat("buyYes from ", Nat32.toText(marketId)));
         let caller = Principal.toText(msg.caller);
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
@@ -512,12 +524,14 @@ shared(msg) actor class Market() {
                 market.yesProb := market.reserveNo * 100 / totalReserve;
                 market.noProb := 100 - market.yesProb;
 
-                markets := Trie.replace(
-                    markets,
-                    marketKey(market.id),
-                    Nat32.equal,
-                    ?market,
-                ).0;
+                if (save) {
+                    markets := Trie.replace(
+                        markets,
+                        marketKey(market.id),
+                        Nat32.equal,
+                        ?market,
+                    ).0;
+                };
 
                 var user = getOrCreateUser(caller);
                 
@@ -560,12 +574,14 @@ shared(msg) actor class Market() {
                     };
                 };
 
-                users := Trie.replace(
-                    users,
-                    userKey(user.id),
-                    Text.equal,
-                    ?user,
-                ).0;
+                if (save) {
+                    users := Trie.replace(
+                        users,
+                        userKey(user.id),
+                        Text.equal,
+                        ?user,
+                    ).0;
+                };
 
                 return ?tokensOut;
             };
