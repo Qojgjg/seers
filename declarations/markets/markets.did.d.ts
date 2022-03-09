@@ -47,6 +47,7 @@ export interface MarketResult {
   'author' : Author,
   'yesProb' : Probability,
   'reserveNo' : Balance,
+  'state' : MarketState,
   'imageUrl' : Url,
   'providers' : Array<string>,
   'reserveYes' : Balance,
@@ -55,6 +56,9 @@ export interface MarketResult {
   'blockTimestampLast' : Time,
   'startDate' : Time,
 }
+export type MarketState = { 'resolved' : null } |
+  { 'closed' : null } |
+  { 'open' : null };
 export type Probability = bigint;
 export type Shares = bigint;
 export type Time = bigint;

@@ -79,6 +79,7 @@ shared(msg) actor class Market() {
         var totalShares: Shares;
         var providers: [Text]; // list of principals
         var imageUrl: Url;
+        var state: MarketState;
     };
 
     public type MarketResult = {
@@ -98,6 +99,7 @@ shared(msg) actor class Market() {
         totalShares: Shares;
         providers: [Text]; // list of principals
         imageUrl: Url;
+        state: MarketState;
     };  
 
     /* State */
@@ -157,6 +159,7 @@ shared(msg) actor class Market() {
             var totalShares = shares;
             var providers = [author];
             var imageUrl = marketInitData.imageUrl;
+            var state = #open;
         };
 
         // Update provider.
@@ -789,6 +792,7 @@ shared(msg) actor class Market() {
             var totalShares = m.totalShares;
             var providers = m.providers;
             var imageUrl = m.imageUrl;
+            var state = m.state;
         };
 
         return market;
@@ -812,6 +816,7 @@ shared(msg) actor class Market() {
             totalShares = m.totalShares;
             providers = m.providers;
             imageUrl = m.imageUrl;
+            state = m.state;
         };
 
         return market;

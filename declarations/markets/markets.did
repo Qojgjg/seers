@@ -18,6 +18,12 @@ type Title = text;
 type Time = int;
 type Shares = nat64;
 type Probability = nat64;
+type MarketState = 
+ variant {
+   closed;
+   open;
+   resolved;
+ };
 type MarketResult = 
  record {
    author: Author;
@@ -33,6 +39,7 @@ type MarketResult =
    reserveNo: Balance;
    reserveYes: Balance;
    startDate: Time;
+   state: MarketState;
    title: Title;
    totalShares: Shares;
    yesProb: Probability;

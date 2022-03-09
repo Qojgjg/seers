@@ -30,6 +30,11 @@ export const idlFactory = ({ IDL }) => {
     'markets' : IDL.Vec(UserMarket),
   });
   const Author = IDL.Text;
+  const MarketState = IDL.Variant({
+    'resolved' : IDL.Null,
+    'closed' : IDL.Null,
+    'open' : IDL.Null,
+  });
   const MarketResult = IDL.Record({
     'id' : MarketId,
     'title' : Title,
@@ -40,6 +45,7 @@ export const idlFactory = ({ IDL }) => {
     'author' : Author,
     'yesProb' : Probability,
     'reserveNo' : Balance,
+    'state' : MarketState,
     'imageUrl' : Url,
     'providers' : IDL.Vec(IDL.Text),
     'reserveYes' : Balance,
