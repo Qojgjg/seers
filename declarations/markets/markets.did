@@ -71,7 +71,6 @@ type Market =
    removeLiquidity: (MarketId) -> (bool);
    sellNo: (MarketId, Balance, bool) -> (opt Balance);
    sellYes: (MarketId, Balance, bool) -> (opt Balance);
-   updateMarket: (MarketId, MarketResult) -> (bool);
  };
 type Description = text;
 type Balance = nat64;

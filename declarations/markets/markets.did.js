@@ -69,7 +69,6 @@ export const idlFactory = ({ IDL }) => {
     'removeLiquidity' : IDL.Func([MarketId], [IDL.Bool], []),
     'sellNo' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
     'sellYes' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
-    'updateMarket' : IDL.Func([MarketId, MarketResult], [IDL.Bool], []),
   });
   return Market;
 };

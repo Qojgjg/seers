@@ -25,7 +25,6 @@ export interface Market {
   'sellYes' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
       [] | [Balance]
     >,
-  'updateMarket' : (arg_0: MarketId, arg_1: MarketResult) => Promise<boolean>,
 }
 export type MarketId = number;
 export interface MarketInitData {

@@ -205,22 +205,6 @@ shared(msg) actor class Market() {
         return Array.map(result, marketToMarketResult);
     };
 
-    // Update a market.
-    public func updateMarket(marketId: MarketId, market: MarketResult): async Bool {
-        let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
-        let exists = Option.isSome(result);
-        if (exists) {
-            let newMarket = marketResultToMarket(market);
-            markets := Trie.replace(
-                markets,
-                marketKey(marketId),
-                Nat32.equal,
-                ?newMarket,
-            ).0;
-        };
-        return exists;
-    };
-
     // Delete a market.
     public func deleteMarket(marketId: MarketId): async Bool {
         let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
@@ -253,6 +237,11 @@ shared(msg) actor class Market() {
                 return null;
             };
             case (?market) {
+                if (market.endDate < Time.now()) {
+                    market.state := #closed;
+                    return null;
+                };
+
                 var user = getOrCreateUser(caller);
                 var marketTokensOpt = Array.find(user.markets,
                     func (ut: UserMarket): Bool {
@@ -343,6 +332,11 @@ shared(msg) actor class Market() {
                 return null;
             };
             case (?market) {
+                if (market.endDate < Time.now()) {
+                    market.state := #closed;
+                    return null;
+                };
+
                 var user = getOrCreateUser(caller);
                 var marketTokensOpt = Array.find(user.markets,
                     func (ut: UserMarket): Bool {
@@ -432,6 +426,11 @@ shared(msg) actor class Market() {
                 return null;
             };
             case (?market) {
+                if (market.endDate < Time.now()) {
+                    market.state := #closed;
+                    return null;
+                };
+
                 let newYesTokens = value * 100 / market.yesProb;
                 let newReserveYes = market.reserveYes + newYesTokens;
                 let newReserveNo = market.kLast / newReserveYes;
@@ -517,6 +516,11 @@ shared(msg) actor class Market() {
                 return null;
             };
             case (?market) {
+                if (market.endDate < Time.now()) {
+                    market.state := #closed;
+                    return null;
+                };
+
                 let newNoTokens = value * 100 / market.noProb;
                 let newReserveNo = market.reserveNo + newNoTokens;
                 let newReserveYes = market.kLast / newReserveNo;
@@ -605,6 +609,11 @@ shared(msg) actor class Market() {
                 return false;
             };
             case (?market) {
+                if (market.endDate < Time.now()) {
+                    market.state := #closed;
+                    return false;
+                };
+
                 market.liquidity := market.liquidity + value;
 
                 market.reserveYes := market.liquidity * 50 / market.yesProb;
@@ -689,6 +698,10 @@ shared(msg) actor class Market() {
                         return false;
                     };
                     case (?market) {
+                        if (market.endDate < Time.now()) {
+                            market.state := #closed;
+                            return false;
+                        };
                         // All good, let's do it.
                         // Loop throught user markets and and update this one.
                         
