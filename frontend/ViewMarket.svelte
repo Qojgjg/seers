@@ -67,34 +67,32 @@
     <div class="MarketHeader">
       <div class="MarketImage">
         <img class="Image" src={market.imageUrl} alt="random" />
-      </div>
-      <div class="MarketTitleDesc">
         <h3>{market.title}</h3>
-        <p>{market.description}</p>
-      </div>
-      <div class="MarketControl">
-        <button
-          class={action === "trade" ? "menu-button-selected" : "menu-button"}
-          on:click={() => {
-            action = "trade"
-          }}>Trade</button
-        >
-        <button
-          class={action === "addLiquidity"
-            ? "menu-button-selected"
-            : "menu-button"}
-          on:click={() => {
-            action = "addLiquidity"
-          }}>Add Liquidity</button
-        >
-        <button
-          class={action === "removeLiquidity"
-            ? "menu-button-selected"
-            : "menu-button"}
-          on:click={() => {
-            action = "removeLiquidity"
-          }}>Remove Liquidity</button
-        >
+        <div style="">{market.description}</div>
+        <div style="">
+          <button
+            class={action === "trade" ? "menu-button-selected" : "menu-button"}
+            on:click={() => {
+              action = "trade"
+            }}>Trade</button
+          >
+          <button
+            class={action === "addLiquidity"
+              ? "menu-button-selected"
+              : "menu-button"}
+            on:click={() => {
+              action = "addLiquidity"
+            }}>Add Liquidity</button
+          >
+          <button
+            class={action === "removeLiquidity"
+              ? "menu-button-selected"
+              : "menu-button"}
+            on:click={() => {
+              action = "removeLiquidity"
+            }}>Remove Liquidity</button
+          >
+        </div>
         <hr style="width: 100%; border-color: black" />
         {#if action == "removeLiquidity"}
           Remove all liquidity.
@@ -266,23 +264,14 @@
   .MarketImage {
     padding: 1em;
     background: rgb(220 218 224 / 25%);
-  }
-  .MarketControl {
-    background: rgb(220 218 224 / 25%);
+    min-height: 500px;
+    padding: 2em;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 2em;
-    width: 200px;
-    height: fit-content;
-  }
-  .MarketTitleDesc {
-    padding: 2em;
     width: 400px;
-    background: rgb(220 218 224 / 25%);
-    justify-content: flex-start;
-    align-items: flex-start;
+    border-radius: 1em;
   }
   .MarketDetails {
     display: flex;

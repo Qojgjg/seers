@@ -73,6 +73,7 @@
   }
 
   .FormItem {
+    min-width: 400px;
     padding: 20px;
     border-radius: 10px;
     background: rgb(220 218 224 / 25%);

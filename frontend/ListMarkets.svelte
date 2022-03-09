@@ -22,7 +22,7 @@
     <div class="MarketItem">
       <a href="#/market/{market.id}">
         <div>
-          <img src={market.imageUrl} alt="random" />
+          <img class="marketImage" src={market.imageUrl} alt="random" />
           <h3>{market.title}</h3>
         </div>
       </a>
@@ -33,7 +33,7 @@
 </div>
 
 <style global>
-  img {
+  .marketImage {
     max-width: 150px;
     max-height: 150px;
   }

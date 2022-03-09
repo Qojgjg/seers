@@ -1,4 +1,5 @@
 <script lang="ts">
+  import icLogo from "./assets/ic.svg"
   import { auth, createActor } from "./store/auth"
   import ListMarkets from "./ListMarkets.svelte"
   import Auth from "./Auth.svelte"
@@ -42,6 +43,11 @@
       <ListMarkets {auth} />
     </div>
   {/if}
+  <footer
+    style="width: 100%; text-align: center; padding: 20px 0px; align-items:center; display: flex; justify-content: center; gap: 15px"
+  >
+    <img src={icLogo} alt="ic logo" style="height: 30px" /> © Pense Technologies
+  </footer>
 </main>
 
 <style global>
