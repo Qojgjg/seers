@@ -51,7 +51,7 @@
   }
   body {
     margin: 0;
-    background-color: rgba(12, 3, 43, 0.9);
+    background-color: rgba(0, 0, 0, 0.9);
     color: whitesmoke;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     -webkit-font-smoothing: antialiased;

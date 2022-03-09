@@ -26,6 +26,12 @@ shared(msg) actor class Market() {
     public type Probability = Nat64;
     public type Balance = Nat64;
 
+    public type MarketState = {
+        #open: ();
+        #closed: ();
+        #resolved: ();
+    };
+
     public type UserMarket = {
         marketId: MarketId;
         marketTitle: Title;
