@@ -66,117 +66,123 @@
 <div class="container">
   <div class="market">
     {#if market}
-      <img class="Image" src={market.imageUrl} alt="random" />
-      <h3>{market.title}</h3>
-      {market.description}
-      <div style="">
-        <button
-          class={action === "trade" ? "menu-button-selected" : "menu-button"}
-          on:click={() => {
-            action = "trade"
-          }}>Trade</button
-        >
-        <button
-          class={action === "addLiquidity"
-            ? "menu-button-selected"
-            : "menu-button"}
-          on:click={() => {
-            action = "addLiquidity"
-          }}>Add Liquidity</button
-        >
-        <button
-          class={action === "removeLiquidity"
-            ? "menu-button-selected"
-            : "menu-button"}
-          on:click={() => {
-            action = "removeLiquidity"
-          }}>Remove Liquidity</button
-        >
+      <div style="width:70%">
+        <img class="Image" src={market.imageUrl} alt="random" />
+        <h3>{market.title}</h3>
+        {market.description}
       </div>
-      <hr style="width: 100%; border-color: black" />
-      {#if action == "removeLiquidity"}
-        Remove all liquidity.
-        <button
-          class="demo-button"
-          on:click={() => {
-            $auth.actor.removeLiquidity(market.id)
-          }}>Remove</button
-        >
-      {:else if action == "addLiquidity"}
+      <div
+        style="width: 30%; display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column"
+      >
         <div>
-          Add liquidity with seers tokens.
-          <input bind:value={addLiquidityAmount} />
+          <button
+            class={action === "trade" ? "menu-button-selected" : "menu-button"}
+            on:click={() => {
+              action = "trade"
+            }}>Trade</button
+          >
+          <button
+            class={action === "addLiquidity"
+              ? "menu-button-selected"
+              : "menu-button"}
+            on:click={() => {
+              action = "addLiquidity"
+            }}>Add Liquidity</button
+          >
+          <button
+            class={action === "removeLiquidity"
+              ? "menu-button-selected"
+              : "menu-button"}
+            on:click={() => {
+              action = "removeLiquidity"
+            }}>Remove Liquidity</button
+          >
+        </div>
+        <hr style="width: 100%; border-color: black" />
+        {#if action == "removeLiquidity"}
+          Remove all liquidity.
           <button
             class="demo-button"
             on:click={() => {
-              $auth.actor.addLiquidity(market.id, addLiquidityAmount)
-            }}>Add</button
+              $auth.actor.removeLiquidity(market.id)
+            }}>Remove</button
           >
-        </div>
-      {:else if action == "trade"}
-        Pick action:
-        <div class="YesNoOptions">
-          <button
-            class="BuyOpt"
-            on:click={() => {
-              buyTokens = true
-            }}>Buy</button
-          >
-          <button
-            class="SellOpt"
-            on:click={() => {
-              buyTokens = false
-            }}>Sell</button
-          >
-        </div>
-        Pick Outcome:
-        <div class="ContentTab">
+        {:else if action == "addLiquidity"}
+          <div>
+            Add liquidity with seers tokens.
+            <input bind:value={addLiquidityAmount} />
+            <button
+              class="demo-button"
+              on:click={() => {
+                $auth.actor.addLiquidity(market.id, addLiquidityAmount)
+              }}>Add</button
+            >
+          </div>
+        {:else if action == "trade"}
+          Pick action:
           <div class="YesNoOptions">
             <button
               class="BuyOpt"
               on:click={() => {
-                tokenIsYes = true
-              }}>Yes ${parseInt(market.yesProb) / 100.0}</button
+                buyTokens = true
+              }}>Buy</button
             >
             <button
               class="SellOpt"
               on:click={() => {
-                tokenIsYes = false
-              }}>No ${parseInt(market.noProb) / 100.0}</button
+                buyTokens = false
+              }}>Sell</button
             >
           </div>
-          <div class="OutcomeTitle">Amount:</div>
-          <div class="OutcomeTitle">
-            <input
-              bind:value={seerAmount}
-              on:change={() => dryRun(market.id, seerAmount)}
-            />
-          </div>
-          <div class="ControlData">
-            <div>LP fee 0.00%</div>
-            <div>
-              Avg. price {(seerAmount / tokensEstimate).toFixed(2)} seers
+          Pick Outcome:
+          <div class="ContentTab">
+            <div class="YesNoOptions">
+              <button
+                class="BuyOpt"
+                on:click={() => {
+                  tokenIsYes = true
+                }}>Yes ${parseInt(market.yesProb) / 100.0}</button
+              >
+              <button
+                class="SellOpt"
+                on:click={() => {
+                  tokenIsYes = false
+                }}>No ${parseInt(market.noProb) / 100.0}</button
+              >
             </div>
-            <div>Max. winnings {tokensEstimate - seerAmount} seers</div>
-          </div>
-          <button
-            class="demo-button"
-            on:click={() => doIt(market.id, seerAmount)}
-          >
-            {#if buyTokens}
-              {#if tokenIsYes}
-                Buy Yes
+            <div class="OutcomeTitle">Amount:</div>
+            <div class="OutcomeTitle">
+              <input
+                bind:value={seerAmount}
+                on:change={() => dryRun(market.id, seerAmount)}
+              />
+            </div>
+            <div class="ControlData">
+              <div>LP fee 0.00%</div>
+              <div>
+                Avg. price {(seerAmount / tokensEstimate).toFixed(2)} seers
+              </div>
+              <div>Max. winnings {tokensEstimate - seerAmount} seers</div>
+            </div>
+            <button
+              class="demo-button"
+              on:click={() => doIt(market.id, seerAmount)}
+            >
+              {#if buyTokens}
+                {#if tokenIsYes}
+                  Buy Yes
+                {:else}
+                  Buy No
+                {/if}
+              {:else if tokenIsYes}
+                Sell Yes
               {:else}
-                Buy No
+                Sell No
               {/if}
-            {:else if tokenIsYes}
-              Sell Yes
-            {:else}
-              Sell No
-            {/if}
-          </button>
-        </div>
-      {/if}
+            </button>
+          </div>
+        {/if}
+      </div>
     {:else}
       Loading
     {/if}
@@ -273,6 +279,8 @@
     border-radius: 1em;
     word-wrap: break-word;
     overflow: auto;
+    display: flex;
+    justify-content: center;
   }
   .MarketDetails {
     display: flex;
