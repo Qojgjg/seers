@@ -17,9 +17,12 @@
 
 <Header />
 
-<h3>Prediction Markets</h3>
-
 <div class="MarketList">
+  <div
+    style="width: 100%; display: flex; justify-content:start; margin: 1em; padding: 0 6px;"
+  >
+    <h3>Prediction Markets</h3>
+  </div>
   {#each markets as market}
     <div class="responsive">
       <div class="gallery">
