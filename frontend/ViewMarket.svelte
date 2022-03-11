@@ -8,7 +8,6 @@
 
   let market
 
-  let action = "none" // none, trade, addLiquidity, removeLiquidity
   let seerAmount = 0
   let addLiquidityAmount
   let removeLiquidityAmount
@@ -67,8 +66,8 @@
   {#if market}
     <div class="market">
       <div style="width:100%">
-        <img class="Image" src={market.imageUrl} alt="random" />
         <h3>{market.title}</h3>
+        <img class="Image" src={market.imageUrl} alt="random" />
         {market.description}
       </div>
     </div>
@@ -197,6 +196,8 @@
   .Image {
     border-radius: 8px;
     width: 200px;
+    float: left;
+    margin: 10px;
   }
 
   .ControlData {
@@ -243,11 +244,11 @@
     justify-content: center;
   }
   .market {
-    padding: 1em;
+    padding: 2em;
     background: rgb(220 218 224 / 25%);
     min-height: 500px;
     width: 50%;
-    margin: 1em;
+    margin: 0em 1em;
     border-radius: 1em;
     word-wrap: break-word;
     overflow: auto;
@@ -258,7 +259,7 @@
   .market-controls {
     padding: 1em;
     background: rgb(220 218 224 / 25%);
-    min-height: 500px;
+    height: fit-content;
     border-radius: 1em;
     word-wrap: break-word;
     overflow: auto;
