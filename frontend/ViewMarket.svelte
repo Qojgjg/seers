@@ -65,93 +65,112 @@
 <div class="container">
   {#if market}
     <div class="market">
-      <div style="width:100%">
+      <div style="width:100%; line-height: 1.6;">
         <h3>{market.title}</h3>
         <img class="Image" src={market.imageUrl} alt="random" />
         {market.description}
       </div>
     </div>
-    <div class="market-controls">
-      <div
-        style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column"
-      >
-        <button
-          class="demo-button"
-          on:click={() => {
-            $auth.actor.removeLiquidity(market.id)
-          }}>Remove All Liquidity</button
+    <div class="v-container">
+      <div class="market-controls">
+        <ul style="list-style-type: none; margin: 0; padding: 0">
+          <li>State: {Object.keys(market.state)}</li>
+          <li>
+            Start date: {new Date(
+              parseInt(market.startDate) / 1_000_000,
+            ).toLocaleDateString()}
+          </li>
+          <li>
+            End date: {new Date(
+              parseInt(market.endDate) / 1_000_000,
+            ).toLocaleDateString()}
+          </li>
+          <li>Liquidity: {market.liquidity}</li>
+          <li>Volume: 120,000</li>
+        </ul>
+      </div>
+      <div class="market-controls">
+        <div
+          style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column"
         >
-        <div>
-          <input bind:value={addLiquidityAmount} />
           <button
             class="demo-button"
             on:click={() => {
-              $auth.actor.addLiquidity(market.id, addLiquidityAmount)
-            }}>Add Liquidity</button
+              $auth.actor.removeLiquidity(market.id)
+            }}>Remove All Liquidity Provided</button
           >
-        </div>
+          <div>
+            <input bind:value={addLiquidityAmount} />
+            <button
+              class="demo-button"
+              on:click={() => {
+                $auth.actor.addLiquidity(market.id, addLiquidityAmount)
+              }}>Add Liquidity</button
+            >
+          </div>
 
-        Trade:
-        <div class="YesNoOptions">
-          <button
-            class="BuyOpt"
-            on:click={() => {
-              buyTokens = true
-            }}>Buy</button
-          >
-          <button
-            class="SellOpt"
-            on:click={() => {
-              buyTokens = false
-            }}>Sell</button
-          >
-        </div>
-        Pick Outcome:
-        <div class="ContentTab">
+          Trade:
           <div class="YesNoOptions">
             <button
               class="BuyOpt"
               on:click={() => {
-                tokenIsYes = true
-              }}>Yes ${parseInt(market.yesProb) / 100.0}</button
+                buyTokens = true
+              }}>Buy</button
             >
             <button
               class="SellOpt"
               on:click={() => {
-                tokenIsYes = false
-              }}>No ${parseInt(market.noProb) / 100.0}</button
+                buyTokens = false
+              }}>Sell</button
             >
           </div>
-          <div class="OutcomeTitle">Amount:</div>
-          <div class="OutcomeTitle">
-            <input
-              bind:value={seerAmount}
-              on:change={() => dryRun(market.id, seerAmount)}
-            />
-          </div>
-          <div class="ControlData">
-            <div>LP fee 0.00%</div>
-            <div>
-              Avg. price {(seerAmount / tokensEstimate).toFixed(2)} seers
+          Pick Outcome:
+          <div class="ContentTab">
+            <div class="YesNoOptions">
+              <button
+                class="BuyOpt"
+                on:click={() => {
+                  tokenIsYes = true
+                }}>Yes ${parseInt(market.yesProb) / 100.0}</button
+              >
+              <button
+                class="SellOpt"
+                on:click={() => {
+                  tokenIsYes = false
+                }}>No ${parseInt(market.noProb) / 100.0}</button
+              >
             </div>
-            <div>Max. winnings {tokensEstimate - seerAmount} seers</div>
-          </div>
-          <button
-            class="demo-button"
-            on:click={() => doIt(market.id, seerAmount)}
-          >
-            {#if buyTokens}
-              {#if tokenIsYes}
-                Buy Yes
+            <div class="OutcomeTitle">Amount:</div>
+            <div class="OutcomeTitle">
+              <input
+                bind:value={seerAmount}
+                on:change={() => dryRun(market.id, seerAmount)}
+              />
+            </div>
+            <div class="ControlData">
+              <div>LP fee 0.00%</div>
+              <div>
+                Avg. price {(seerAmount / tokensEstimate).toFixed(2)} seers
+              </div>
+              <div>Max. winnings {tokensEstimate - seerAmount} seers</div>
+            </div>
+            <button
+              class="demo-button"
+              on:click={() => doIt(market.id, seerAmount)}
+            >
+              {#if buyTokens}
+                {#if tokenIsYes}
+                  Buy Yes
+                {:else}
+                  Buy No
+                {/if}
+              {:else if tokenIsYes}
+                Sell Yes
               {:else}
-                Buy No
+                Sell No
               {/if}
-            {:else if tokenIsYes}
-              Sell Yes
-            {:else}
-              Sell No
-            {/if}
-          </button>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -243,6 +262,11 @@
     display: flex;
     justify-content: center;
   }
+  .v-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+  }
   .market {
     padding: 2em;
     background: rgb(220 218 224 / 25%);
@@ -257,6 +281,7 @@
   }
 
   .market-controls {
+    margin-bottom: 1em;
     padding: 1em;
     background: rgb(220 218 224 / 25%);
     height: fit-content;

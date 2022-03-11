@@ -77,7 +77,7 @@
         {/if}
 
         {#if signedIn}
-          <a href="#/user/{principal}" class="MenuLink">My Profile</a>
+          <a href="#/user/{principal}" class="MenuLink">Profile</a>
           <a href="#/create/" class="MenuLink">Create</a>
           <button on:click={signOut} class="auth-button">Sign out</button>
         {/if}
