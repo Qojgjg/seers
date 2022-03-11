@@ -64,129 +64,101 @@
 <Header />
 
 <div class="container">
-  <div class="market">
-    {#if market}
-      <div style="width:70%">
+  {#if market}
+    <div class="market">
+      <div style="width:100%">
         <img class="Image" src={market.imageUrl} alt="random" />
         <h3>{market.title}</h3>
         {market.description}
       </div>
+    </div>
+    <div class="market-controls">
       <div
-        style="width: 30%; display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column"
+        style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column"
       >
+        <button
+          class="demo-button"
+          on:click={() => {
+            $auth.actor.removeLiquidity(market.id)
+          }}>Remove All Liquidity</button
+        >
         <div>
-          <button
-            class={action === "trade" ? "menu-button-selected" : "menu-button"}
-            on:click={() => {
-              action = "trade"
-            }}>Trade</button
-          >
-          <button
-            class={action === "addLiquidity"
-              ? "menu-button-selected"
-              : "menu-button"}
-            on:click={() => {
-              action = "addLiquidity"
-            }}>Add Liquidity</button
-          >
-          <button
-            class={action === "removeLiquidity"
-              ? "menu-button-selected"
-              : "menu-button"}
-            on:click={() => {
-              action = "removeLiquidity"
-            }}>Remove Liquidity</button
-          >
-        </div>
-        <hr style="width: 100%; border-color: black" />
-        {#if action == "removeLiquidity"}
-          Remove all liquidity.
+          <input bind:value={addLiquidityAmount} />
           <button
             class="demo-button"
             on:click={() => {
-              $auth.actor.removeLiquidity(market.id)
-            }}>Remove</button
+              $auth.actor.addLiquidity(market.id, addLiquidityAmount)
+            }}>Add Liquidity</button
           >
-        {:else if action == "addLiquidity"}
-          <div>
-            Add liquidity with seers tokens.
-            <input bind:value={addLiquidityAmount} />
-            <button
-              class="demo-button"
-              on:click={() => {
-                $auth.actor.addLiquidity(market.id, addLiquidityAmount)
-              }}>Add</button
-            >
-          </div>
-        {:else if action == "trade"}
-          Pick action:
+        </div>
+
+        Trade:
+        <div class="YesNoOptions">
+          <button
+            class="BuyOpt"
+            on:click={() => {
+              buyTokens = true
+            }}>Buy</button
+          >
+          <button
+            class="SellOpt"
+            on:click={() => {
+              buyTokens = false
+            }}>Sell</button
+          >
+        </div>
+        Pick Outcome:
+        <div class="ContentTab">
           <div class="YesNoOptions">
             <button
               class="BuyOpt"
               on:click={() => {
-                buyTokens = true
-              }}>Buy</button
+                tokenIsYes = true
+              }}>Yes ${parseInt(market.yesProb) / 100.0}</button
             >
             <button
               class="SellOpt"
               on:click={() => {
-                buyTokens = false
-              }}>Sell</button
+                tokenIsYes = false
+              }}>No ${parseInt(market.noProb) / 100.0}</button
             >
           </div>
-          Pick Outcome:
-          <div class="ContentTab">
-            <div class="YesNoOptions">
-              <button
-                class="BuyOpt"
-                on:click={() => {
-                  tokenIsYes = true
-                }}>Yes ${parseInt(market.yesProb) / 100.0}</button
-              >
-              <button
-                class="SellOpt"
-                on:click={() => {
-                  tokenIsYes = false
-                }}>No ${parseInt(market.noProb) / 100.0}</button
-              >
+          <div class="OutcomeTitle">Amount:</div>
+          <div class="OutcomeTitle">
+            <input
+              bind:value={seerAmount}
+              on:change={() => dryRun(market.id, seerAmount)}
+            />
+          </div>
+          <div class="ControlData">
+            <div>LP fee 0.00%</div>
+            <div>
+              Avg. price {(seerAmount / tokensEstimate).toFixed(2)} seers
             </div>
-            <div class="OutcomeTitle">Amount:</div>
-            <div class="OutcomeTitle">
-              <input
-                bind:value={seerAmount}
-                on:change={() => dryRun(market.id, seerAmount)}
-              />
-            </div>
-            <div class="ControlData">
-              <div>LP fee 0.00%</div>
-              <div>
-                Avg. price {(seerAmount / tokensEstimate).toFixed(2)} seers
-              </div>
-              <div>Max. winnings {tokensEstimate - seerAmount} seers</div>
-            </div>
-            <button
-              class="demo-button"
-              on:click={() => doIt(market.id, seerAmount)}
-            >
-              {#if buyTokens}
-                {#if tokenIsYes}
-                  Buy Yes
-                {:else}
-                  Buy No
-                {/if}
-              {:else if tokenIsYes}
-                Sell Yes
+            <div>Max. winnings {tokensEstimate - seerAmount} seers</div>
+          </div>
+          <button
+            class="demo-button"
+            on:click={() => doIt(market.id, seerAmount)}
+          >
+            {#if buyTokens}
+              {#if tokenIsYes}
+                Buy Yes
               {:else}
-                Sell No
+                Buy No
               {/if}
-            </button>
-          </div>
-        {/if}
+            {:else if tokenIsYes}
+              Sell Yes
+            {:else}
+              Sell No
+            {/if}
+          </button>
+        </div>
       </div>
-    {:else}
-      Loading
-    {/if}
-  </div>
+    </div>
+  {:else}
+    Loading
+  {/if}
 </div>
 
 <style global>
@@ -274,8 +246,19 @@
     padding: 1em;
     background: rgb(220 218 224 / 25%);
     min-height: 500px;
-    padding: 2em;
-    width: 80%;
+    width: 50%;
+    margin: 1em;
+    border-radius: 1em;
+    word-wrap: break-word;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .market-controls {
+    padding: 1em;
+    background: rgb(220 218 224 / 25%);
+    min-height: 500px;
     border-radius: 1em;
     word-wrap: break-word;
     overflow: auto;
