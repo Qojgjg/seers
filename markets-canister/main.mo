@@ -113,7 +113,9 @@ shared(msg) actor class Market() {
 
     // Read all users.
     public query func readAllUsers(): async [UserResult] {
-        let result = Trie.toArray(users, getUserResult);
+        let result = Trie.toArray(users, func (id: UserId, u: User): UserResult {
+            return userToUserResult(u);
+        });
         return result;
     };
 
@@ -668,11 +670,14 @@ shared(msg) actor class Market() {
     };
 
     // Get user data.
-    public shared(msg) func getUser(userId: UserId): async UserResult {
-        let caller = Principal.toText(msg.caller);
-        assert(caller == userId);
-        let user = getOrCreateUser(userId);
-        return userToUserResult(user);
+    public query func getUserResult(userId: UserId): async ?UserResult {
+        return Option.map(getUser(userId), userToUserResult);
+    };
+
+    // Create user.
+    public shared(msg) func createUserResult(): async UserResult {
+        let caller = Principal.toText(msg.caller);        
+        return userToUserResult(createUser(caller));
     };
 
     // Remove all liquidity provided in this market by calling user.
@@ -853,10 +858,6 @@ shared(msg) actor class Market() {
         return userResult;
     };
 
-    private func getUserResult(k: UserId, v: User): UserResult {
-        return userToUserResult(v);
-    };
-
     private func floatToNat64(f: Float): Nat64 {
         return Int64.toNat64(Float.toInt64(f));
     };
@@ -865,29 +866,32 @@ shared(msg) actor class Market() {
         return Float.fromInt64(Int64.fromNat64(n));
     };
 
-    // Get or create new user.
-    private func getOrCreateUser(userId: UserId): User {
-        assert(userId != anon);
+    private func getUser(userId: UserId): ?User {
+        Trie.find(users, userKey(userId), Text.equal)
+    };
 
-        var result: ?User = Trie.find(users, userKey(userId), Text.equal);
+    private func createUser(userId: UserId): User {
+        let user: User = {
+            var id = userId;
+            var seerBalance = 1000; // Airdrop
+            var markets = [];
+        };
 
-        switch (result) {
+        users := Trie.replace(
+            users,
+            userKey(user.id),
+            Text.equal,
+            ?user,
+        ).0;
+
+        return user;
+    };
+
+    private func getOrCreateUser(u: UserId): User {
+        let r = getUser(u);
+        switch (r) {
             case null {
-                // Create user because it does not exist.
-                let user: User = {
-                    var id = userId;
-                    var seerBalance = 1000; // Airdrop
-                    var markets = [];
-                };
-
-                users := Trie.replace(
-                    users,
-                    userKey(user.id),
-                    Text.equal,
-                    ?user,
-                ).0;
-
-                return user;
+                return createUser(u);
             };
             case (?user) {
                 return user;

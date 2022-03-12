@@ -55,25 +55,23 @@ type MarketInitData =
    yesProb: Probability;
  };
 type MarketId = nat32;
-type Market = 
- service {
-   addLiquidity: (MarketId, Balance) -> (bool);
-   buyNo: (MarketId, Balance, bool) -> (opt Balance);
-   buyYes: (MarketId, Balance, bool) -> (opt Balance);
-   createMarket: (MarketInitData) -> (nat32);
-   createUserResult: () -> (UserResult);
-   deleteAllMarkets: () -> ();
-   deleteAllUsers: () -> ();
-   deleteMarket: (MarketId) -> (bool);
-   getUserResult: (UserId) -> (opt UserResult) query;
-   readAllMarkets: () -> (vec MarketResult) query;
-   readAllUsers: () -> (vec UserResult) query;
-   readMarket: (MarketId) -> (opt MarketResult) query;
-   removeLiquidity: (MarketId) -> (bool);
-   sellNo: (MarketId, Balance, bool) -> (opt Balance);
-   sellYes: (MarketId, Balance, bool) -> (opt Balance);
- };
 type Description = text;
 type Balance = nat64;
 type Author = text;
-service : () -> Market
+service : {
+  addLiquidity: (MarketId, Balance) -> (bool);
+  buyNo: (MarketId, Balance, bool) -> (opt Balance);
+  buyYes: (MarketId, Balance, bool) -> (opt Balance);
+  createMarket: (MarketInitData) -> (nat32);
+  createUserResult: (UserId) -> (UserResult);
+  deleteAllMarkets: () -> ();
+  deleteAllUsers: () -> ();
+  deleteMarket: (MarketId) -> (bool);
+  getUserResult: (UserId) -> (opt UserResult) query;
+  readAllMarkets: () -> (vec MarketResult) query;
+  readAllUsers: () -> (vec UserResult) query;
+  readMarket: (MarketId) -> (opt MarketResult) query;
+  removeLiquidity: (MarketId) -> (bool);
+  sellNo: (MarketId, Balance, bool) -> (opt Balance);
+  sellYes: (MarketId, Balance, bool) -> (opt Balance);
+}

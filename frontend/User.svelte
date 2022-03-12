@@ -9,7 +9,15 @@
   let user
 
   let getUserData = async () => {
-    user = await $auth.actor.getUser(principal)
+    user = await $auth.actor.getUserResult(principal)
+    if (user) {
+      user = user[0]
+    }
+    console.log(user)
+  }
+
+  let createUserData = async () => {
+    user = await $auth.actor.createUserResult()
     console.log(user)
   }
 
@@ -46,7 +54,11 @@
       </div>
     </div>
   {:else}
-    loading...
+    <button
+      on:click={() => {
+        createUserData()
+      }}>Create User</button
+    >
   {/if}
 </div>
 
