@@ -55,6 +55,7 @@
     </div>
   {:else}
     <button
+      class="demo-button"
       on:click={() => {
         createUserData()
       }}>Create User</button
@@ -63,6 +64,18 @@
 </div>
 
 <style global>
+  .demo-button {
+    background: black;
+    padding: 0 1em;
+    margin-top: 1em;
+    border-radius: 10px;
+    font-size: 0.9em;
+    height: 35px;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    color: white;
+  }
   .UserBody {
     display: flex;
     justify-content: center;
