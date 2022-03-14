@@ -30,24 +30,32 @@
   {#if user}
     <div>
       <div style="margin-bottom: 10px">User Id: {user.id}.</div>
-      <div style="margin-bottom: 10px">Balance: {user.seerBalance} seers.</div>
+      <div style="margin-bottom: 10px">Balance: {user.seerBalance} S.</div>
       Markets:
       <div style="display:flex; flex-direction: column; ">
         {#each user.markets as market}
           <div
-            style="display:flex; flex-direction: row; gap: 10px; margin-top: 10px"
+            style="display:flex; flex-direction: row; gap: 10px; margin-top: 10px; padding: 3px; background-color:white; "
           >
-            <a href="#/market/{market.marketId}">
-              * {market.marketTitle}
-            </a>
-            <div>
+            <div style="background-color:grey">
+              #{market.marketId}
+            </div>
+            <div style="background-color:grey">
+              <a href="#/market/{market.marketId}">
+                {market.marketTitle}
+              </a>
+            </div>
+            <div style="background-color:grey">
               {market.yesBalance} Yes
             </div>
-            <div>
+            <div style="background-color:grey">
               {market.noBalance} No
             </div>
-            <div>
-              {market.shares} Shares.
+            <div style="background-color:grey">
+              {market.shares} Shares
+            </div>
+            <div style="background-color:grey">
+              {Object.keys(market.state)}
             </div>
           </div>
         {/each}

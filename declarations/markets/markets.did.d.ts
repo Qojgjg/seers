@@ -71,6 +71,7 @@ export type UserId = string;
 export interface UserMarket {
   'shares' : Shares,
   'noBalance' : Balance,
+  'state' : MarketState,
   'marketId' : MarketId,
   'yesBalance' : Balance,
   'marketTitle' : Title,

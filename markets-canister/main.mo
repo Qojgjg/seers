@@ -40,6 +40,7 @@ shared(msg) actor class Market() {
         yesBalance: Balance;
         noBalance: Balance;
         shares: Shares;
+        state: MarketState;
     };
 
     public type User = {
@@ -164,7 +165,7 @@ shared(msg) actor class Market() {
             var totalShares = shares;
             var providers = [author];
             var imageUrl = marketInitData.imageUrl;
-            var state = #open;
+            var state = #pending;
             var volume = 0;
         };
 
@@ -177,6 +178,7 @@ shared(msg) actor class Market() {
             yesBalance = 0;
             noBalance = 0;
             shares = shares;
+            state = #pending;
         };
 
         user.markets := Array.append(user.markets, [userMarket]);
@@ -208,7 +210,7 @@ shared(msg) actor class Market() {
     // Read all markets.
     public query func readAllMarkets(): async [MarketResult] {
         let result = Trie.toArray(markets, getMarket);
-        return Array.map(result, marketToMarketResult);
+        return Array.mapFilter(result, keepOpenMarkets);
     };
 
     // Delete a market.
@@ -305,6 +307,7 @@ shared(msg) actor class Market() {
                                         noBalance = ut.noBalance;
                                         yesBalance = ut.yesBalance - value;
                                         shares = ut.shares;
+                                        state = ut.state;
                                     };
                                     return ?newUserToken;
                                 };
@@ -401,6 +404,7 @@ shared(msg) actor class Market() {
                                         noBalance = ut.noBalance - value;
                                         yesBalance = ut.yesBalance;
                                         shares = ut.shares;
+                                        state = ut.state;
                                     };
                                     return ?newUserToken;
                                 };
@@ -480,6 +484,7 @@ shared(msg) actor class Market() {
                             yesBalance = 0;
                             noBalance = tokensOut;
                             shares = 0;
+                            state = market.state;
                         };
                         user.markets := Array.append(user.markets, [newUserMarket]);
                     };
@@ -495,6 +500,7 @@ shared(msg) actor class Market() {
                                         noBalance = ut.noBalance + tokensOut;
                                         yesBalance = ut.yesBalance;
                                         shares = ut.shares;
+                                        state = ut.state;
                                     };
                                     return ?newUserMarket;
                                 };
@@ -571,6 +577,7 @@ shared(msg) actor class Market() {
                             yesBalance = tokensOut;
                             noBalance = 0;
                             shares = 0;
+                            state = market.state;
                         };
                         user.markets := Array.append(user.markets, [
                             newUserToken 
@@ -588,6 +595,7 @@ shared(msg) actor class Market() {
                                         yesBalance = ut.yesBalance + tokensOut;
                                         noBalance = ut.noBalance;
                                         shares = ut.shares;
+                                        state = ut.state;
                                     };
                                     return ?newUserToken;
                                 };
@@ -651,6 +659,7 @@ shared(msg) actor class Market() {
                     yesBalance = 0;
                     noBalance = 0;
                     shares = userShares;
+                    state = market.state;
                 };
 
                 user.markets := Array.append(user.markets, [userMarket]);
@@ -748,6 +757,7 @@ shared(msg) actor class Market() {
                                     yesBalance = userYesTokens;
                                     noBalance = userNoTokens;
                                     shares = 0;
+                                    state = userMarket.state;
                                 };
 
                                 // Remove user shares from total shares.
@@ -847,8 +857,39 @@ shared(msg) actor class Market() {
             state = m.state;
             volume = m.volume;
         };
+        return market;    
+    };
 
-        return market;
+
+    private func keepOpenMarkets(m: Market): ?MarketResult {
+        switch (m.state) {
+            case (#open) {
+                let market = {
+                    id = m.id;    
+                    title = m.title;
+                    description = m.description;
+                    yesProb = m.yesProb;
+                    noProb = m.noProb;
+                    liquidity = m.liquidity;
+                    startDate = m.startDate;
+                    endDate = m.endDate;
+                    author = m.author;
+                    blockTimestampLast = m.blockTimestampLast;
+                    reserveYes = m.reserveYes;
+                    reserveNo = m.reserveNo;
+                    kLast = m.kLast;
+                    totalShares = m.totalShares;
+                    providers = m.providers;
+                    imageUrl = m.imageUrl;
+                    state = m.state;
+                    volume = m.volume;
+                };
+                return ?market;
+            };
+            case (_) {
+                return null;
+            };
+        };
     };
 
     private func userResultToUser(u: UserResult): User {

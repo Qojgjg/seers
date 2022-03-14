@@ -16,12 +16,14 @@ type UserId = text;
 type Url = text;
 type Title = text;
 type Time = int;
-type Shares = nat64;
-type Probability = nat64;
+type Shares = int;
+type Probability = int;
 type MarketState = 
  variant {
+   approved;
    closed;
    open;
+   pending;
    resolved;
  };
 type MarketResult = 
@@ -42,6 +44,7 @@ type MarketResult =
    state: MarketState;
    title: Title;
    totalShares: Shares;
+   volume: Balance;
    yesProb: Probability;
  };
 type MarketInitData = 
@@ -56,13 +59,13 @@ type MarketInitData =
  };
 type MarketId = nat32;
 type Description = text;
-type Balance = nat64;
+type Balance = int;
 type Author = text;
 service : {
   addLiquidity: (MarketId, Balance) -> (bool);
   buyNo: (MarketId, Balance, bool) -> (opt Balance);
   buyYes: (MarketId, Balance, bool) -> (opt Balance);
-  createMarket: (MarketInitData) -> (nat32);
+  createMarket: (MarketInitData) -> (MarketId);
   createUserResult: () -> (UserResult);
   deleteAllMarkets: () -> ();
   deleteAllUsers: () -> ();
