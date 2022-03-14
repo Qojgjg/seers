@@ -4,6 +4,7 @@ export type Balance = bigint;
 export type Description = string;
 export interface Market {
   'addLiquidity' : (arg_0: MarketId, arg_1: Balance) => Promise<boolean>,
+  'approveMarket' : (arg_0: MarketId) => Promise<undefined>,
   'buyNo' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
       [] | [Balance]
     >,
@@ -60,8 +61,7 @@ export interface MarketResult {
 export type MarketState = { 'resolved' : null } |
   { 'closed' : null } |
   { 'pending' : null } |
-  { 'open' : null } |
-  { 'approved' : null };
+  { 'open' : null };
 export type Probability = bigint;
 export type Shares = bigint;
 export type Time = bigint;

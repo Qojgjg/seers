@@ -22,7 +22,6 @@ export const idlFactory = ({ IDL }) => {
     'closed' : IDL.Null,
     'pending' : IDL.Null,
     'open' : IDL.Null,
-    'approved' : IDL.Null,
   });
   const UserMarket = IDL.Record({
     'shares' : Shares,
@@ -60,6 +59,7 @@ export const idlFactory = ({ IDL }) => {
   });
   const Market = IDL.Service({
     'addLiquidity' : IDL.Func([MarketId, Balance], [IDL.Bool], []),
+    'approveMarket' : IDL.Func([MarketId], [], []),
     'buyNo' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
     'buyYes' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
     'createMarket' : IDL.Func([MarketInitData], [MarketId], []),

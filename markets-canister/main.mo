@@ -13,7 +13,7 @@ import Buffer "mo:base/Buffer";
 import Option "mo:base/Option";
 import Array "mo:base/Array";
 
-shared(msg) actor class Market() {
+shared({ caller = initializer }) actor class Market() {
     /* Types */
 
     public type Title = Text;
@@ -28,7 +28,6 @@ shared(msg) actor class Market() {
 
     public type MarketState = {
         #pending: ();
-        #approved: ();
         #open: ();
         #closed: ();
         #resolved: ();
@@ -127,6 +126,20 @@ shared(msg) actor class Market() {
     // Delete all users.
     public func deleteAllUsers(): async () {
         users := Trie.empty();
+    };
+
+    // Approve a market.
+    public shared(msg) func approveMarket(marketId: MarketId): async () {
+        assert(msg.caller == initializer); // Root call.
+        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+        switch (marketOpt) {
+            case (null) {
+                return;
+            };
+            case (?market) {
+                market.state := #open;
+            };
+        };
     };
 
     // Create a market.

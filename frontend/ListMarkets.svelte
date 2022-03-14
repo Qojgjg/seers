@@ -25,16 +25,16 @@
   </div>
   {#each markets as market}
     <div class="responsive">
-      <div class="gallery">
-        <a href="#/market/{market.id}">
+      <a href="#/market/{market.id}">
+        <div class="gallery">
           <img src={market.imageUrl} alt="random" />
           <h5>{market.title}</h5>
-        </a>
-        <div>Yes: {market.yesProb}%</div>
-        <div>No: {market.noProb}%</div>
-        <div>Volume: {market.volume} S</div>
-        <div>Liquidity: {market.liquidity} S</div>
-      </div>
+          <div>Yes: {market.yesProb}%</div>
+          <div>No: {market.noProb}%</div>
+          <div>Volume: {market.volume} S</div>
+          <div>Liquidity: {market.liquidity} S</div>
+        </div>
+      </a>
     </div>
   {/each}
 </div>
