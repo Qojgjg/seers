@@ -63,7 +63,7 @@ service : {
   buyNo: (MarketId, Balance, bool) -> (opt Balance);
   buyYes: (MarketId, Balance, bool) -> (opt Balance);
   createMarket: (MarketInitData) -> (nat32);
-  createUserResult: (UserId) -> (UserResult);
+  createUserResult: () -> (UserResult);
   deleteAllMarkets: () -> ();
   deleteAllUsers: () -> ();
   deleteMarket: (MarketId) -> (bool);

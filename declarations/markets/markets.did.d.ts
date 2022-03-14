@@ -10,7 +10,7 @@ export interface Market {
   'buyYes' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
       [] | [Balance]
     >,
-  'createMarket' : (arg_0: MarketInitData) => Promise<number>,
+  'createMarket' : (arg_0: MarketInitData) => Promise<MarketId>,
   'createUserResult' : () => Promise<UserResult>,
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteAllUsers' : () => Promise<undefined>,
@@ -44,6 +44,7 @@ export interface MarketResult {
   'endDate' : Time,
   'liquidity' : Balance,
   'description' : Description,
+  'volume' : Balance,
   'author' : Author,
   'yesProb' : Probability,
   'reserveNo' : Balance,
@@ -58,7 +59,9 @@ export interface MarketResult {
 }
 export type MarketState = { 'resolved' : null } |
   { 'closed' : null } |
-  { 'open' : null };
+  { 'pending' : null } |
+  { 'open' : null } |
+  { 'approved' : null };
 export type Probability = bigint;
 export type Shares = bigint;
 export type Time = bigint;

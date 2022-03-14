@@ -32,8 +32,8 @@
         </a>
         <div>Yes: {market.yesProb}%</div>
         <div>No: {market.noProb}%</div>
-        <div>Volume: $120,000</div>
-        <div>Liquidity: $120,000,000</div>
+        <div>Volume: {market.volume} S</div>
+        <div>Liquidity: {market.liquidity} S</div>
       </div>
     </div>
   {/each}

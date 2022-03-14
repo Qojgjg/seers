@@ -1,8 +1,8 @@
 import Map "mo:base/HashMap";
 import Text "mo:base/Text";
+import Nat "mo:base/Nat";
 import Nat32 "mo:base/Nat32";
-import Nat64 "mo:base/Nat64";
-import Int64 "mo:base/Int64";
+import Int "mo:base/Int";
 import Float "mo:base/Float";
 import List "mo:base/List";
 import Trie "mo:base/Trie";
@@ -22,11 +22,13 @@ shared(msg) actor class Market() {
     public type Author = Text;
     public type MarketId = Nat32;
     public type UserId = Text;
-    public type Shares = Nat64;
-    public type Probability = Nat64;
-    public type Balance = Nat64;
+    public type Shares = Int;
+    public type Probability = Int;
+    public type Balance = Int;
 
     public type MarketState = {
+        #pending: ();
+        #approved: ();
         #open: ();
         #closed: ();
         #resolved: ();
@@ -80,6 +82,7 @@ shared(msg) actor class Market() {
         var providers: [Text]; // list of principals
         var imageUrl: Url;
         var state: MarketState;
+        var volume: Balance;
     };
 
     public type MarketResult = {
@@ -100,6 +103,7 @@ shared(msg) actor class Market() {
         providers: [Text]; // list of principals
         imageUrl: Url;
         state: MarketState;
+        volume: Balance;
     };  
 
     /* State */
@@ -125,7 +129,7 @@ shared(msg) actor class Market() {
     };
 
     // Create a market.
-    public shared(msg) func createMarket(marketInitData: MarketInitData): async Nat32 {
+    public shared(msg) func createMarket(marketInitData: MarketInitData): async MarketId {
         let author = Principal.toText(msg.caller);
         assert(author != anon);
         // assert(marketInitData.yesProb + marketInitData.noProb == 100);
@@ -139,10 +143,9 @@ shared(msg) actor class Market() {
         let reserveYes = marketInitData.liquidity * 50 / marketInitData.yesProb;
         let reserveNo = marketInitData.liquidity * 50 / marketInitData.noProb;
 
-        // TODO: this wraps on overflow. Should I use Int64 directly?
-        let shares = Int64.toNat64(Float.toInt64(Float.sqrt(
-            Float.fromInt64(Int64.fromNat64(reserveNo))
-            * Float.fromInt64(Int64.fromNat64(reserveYes)))));
+        let shares = Float.toInt(Float.sqrt(
+            Float.fromInt(reserveNo)
+            * Float.fromInt(reserveYes)));
 
         let newMarket: Market = {
             id = marketId;
@@ -162,6 +165,7 @@ shared(msg) actor class Market() {
             var providers = [author];
             var imageUrl = marketInitData.imageUrl;
             var state = #open;
+            var volume = 0;
         };
 
         // Update provider.
@@ -270,14 +274,15 @@ shared(msg) actor class Market() {
                         market.noProb := market.reserveYes * 100 / totalReserve;
                         market.yesProb := 100 - market.noProb;
 
-                        let newLiquidity1 = floatToNat64(
-                            Float.floor(nat64ToFloat(market.reserveYes) * nat64ToFloat(market.yesProb) / 50.0 + 0.5)
+                        let newLiquidity1 = Float.toInt(
+                            Float.floor(Float.fromInt(market.reserveYes) * Float.fromInt(market.yesProb) / 50.0 + 0.5)
                         );
-                        let newLiquidity2 = floatToNat64(
-                            Float.floor(nat64ToFloat(market.reserveNo) * nat64ToFloat(market.noProb) / 50.0 + 0.5)
+                        let newLiquidity2 = Float.toInt(
+                            Float.floor(Float.fromInt(market.reserveNo) * Float.fromInt(market.noProb) / 50.0 + 0.5)
                         );
-                        let newLiquidity = Nat64.max(newLiquidity1, newLiquidity2);
+                        let newLiquidity = Int.max(newLiquidity1, newLiquidity2);
                         let liquidityOut = market.liquidity - newLiquidity;
+                        market.volume := market.volume + liquidityOut;
                         market.liquidity := newLiquidity;
 
                         if (save) {
@@ -365,15 +370,16 @@ shared(msg) actor class Market() {
                         market.yesProb := market.reserveNo * 100 / totalReserve;
                         market.noProb := 100 - market.yesProb;
 
-                        let newLiquidity1 = floatToNat64(
-                            Float.floor(nat64ToFloat(market.reserveNo) * nat64ToFloat(market.noProb) / 50.0 + 0.5)
+                        let newLiquidity1 = Float.toInt(
+                            Float.floor(Float.fromInt(market.reserveNo) * Float.fromInt(market.noProb) / 50.0 + 0.5)
                         );
-                        let newLiquidity2 = floatToNat64(
-                            Float.floor(nat64ToFloat(market.reserveYes) * nat64ToFloat(market.yesProb) / 50.0 + 0.5)
+                        let newLiquidity2 = Float.toInt(
+                            Float.floor(Float.fromInt(market.reserveYes) * Float.fromInt(market.yesProb) / 50.0 + 0.5)
                         );
-                        let newLiquidity = Nat64.max(newLiquidity1, newLiquidity2);
+                        let newLiquidity = Int.max(newLiquidity1, newLiquidity2);
                         let liquidityOut = market.liquidity - newLiquidity;
                         market.liquidity := newLiquidity;
+                        market.volume := market.volume + liquidityOut;
 
                         if (save) {
                             markets := Trie.replace(
@@ -445,6 +451,7 @@ shared(msg) actor class Market() {
                 market.reserveYes := newReserveYes;
                 market.reserveNo := newReserveNo;
                 market.liquidity := market.liquidity + value;
+                market.volume := market.volume + value;
                  
                 let totalReserve = market.reserveYes + market.reserveNo;
                 market.yesProb := market.reserveNo * 100 / totalReserve;
@@ -535,6 +542,7 @@ shared(msg) actor class Market() {
                 market.reserveNo := newReserveNo;
                 market.reserveYes := newReserveYes;
                 market.liquidity := market.liquidity + value;
+                market.volume := market.volume + value;
                 
                 let totalReserve = market.reserveYes + market.reserveNo;
                 market.yesProb := market.reserveNo * 100 / totalReserve;
@@ -617,15 +625,15 @@ shared(msg) actor class Market() {
                 };
 
                 market.liquidity := market.liquidity + value;
-
+                market.volume := market.volume + value;
                 market.reserveYes := market.liquidity * 50 / market.yesProb;
                 market.reserveNo := market.liquidity * 50 / market.noProb;
                 market.kLast := market.reserveYes * market.reserveNo;
 
                 // TODO: this wraps on overflow. Should I use Int64 directly?
-                let newTotalShares = Int64.toNat64(Float.toInt64(Float.sqrt(
-                    Float.fromInt64(Int64.fromNat64(market.reserveNo))
-                    * Float.fromInt64(Int64.fromNat64(market.reserveYes)))));
+                let newTotalShares = Float.toInt(Float.sqrt(
+                    Float.fromInt(market.reserveNo)
+                    * Float.fromInt(market.reserveYes)));
 
                 let userShares = newTotalShares - market.totalShares;
                 market.totalShares := newTotalShares;
@@ -724,6 +732,7 @@ shared(msg) actor class Market() {
 
                                 // Remove user liquidity from total.                    
                                 market.liquidity := market.liquidity - userLiquidity;
+                                market.volume := market.volume + userLiquidity;
 
                                 // Calculate tokens we need to give back.
                                 let userYesTokens = market.reserveYes * percent;
@@ -811,6 +820,7 @@ shared(msg) actor class Market() {
             var providers = m.providers;
             var imageUrl = m.imageUrl;
             var state = m.state;
+            var volume = m.volume;
         };
 
         return market;
@@ -835,6 +845,7 @@ shared(msg) actor class Market() {
             providers = m.providers;
             imageUrl = m.imageUrl;
             state = m.state;
+            volume = m.volume;
         };
 
         return market;
@@ -856,14 +867,6 @@ shared(msg) actor class Market() {
             markets = u.markets;
         };
         return userResult;
-    };
-
-    private func floatToNat64(f: Float): Nat64 {
-        return Int64.toNat64(Float.toInt64(f));
-    };
-
-    private func nat64ToFloat(n: Nat64): Float {
-        return Float.fromInt64(Int64.fromNat64(n));
     };
 
     private func getUser(userId: UserId): ?User {
