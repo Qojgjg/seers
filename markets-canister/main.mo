@@ -300,15 +300,7 @@ shared({ caller = initializer }) actor class Market() {
                         market.volume := market.volume + liquidityOut;
                         market.liquidity := newLiquidity;
 
-                        if (save) {
-                            markets := Trie.replace(
-                                markets,
-                                marketKey(market.id),
-                                Nat32.equal,
-                                ?market,
-                            ).0;
-                        };
-
+                        
                         user.markets := Array.mapFilter(user.markets, 
                             func (ut: UserMarket): ?UserMarket {
                                 if (ut.marketId != market.id) {
@@ -327,14 +319,7 @@ shared({ caller = initializer }) actor class Market() {
                             }
                         );
 
-                        if (save) {
-                            users := Trie.replace(
-                                users,
-                                userKey(user.id),
-                                Text.equal,
-                                ?user,
-                            ).0;
-                        };
+                        user.seerBalance := user.seerBalance + liquidityOut;
 
                         return ?liquidityOut;
                     };
@@ -397,15 +382,6 @@ shared({ caller = initializer }) actor class Market() {
                         market.liquidity := newLiquidity;
                         market.volume := market.volume + liquidityOut;
 
-                        if (save) {
-                            markets := Trie.replace(
-                                markets,
-                                marketKey(market.id),
-                                Nat32.equal,
-                                ?market,
-                            ).0;
-                        };
-
                         user.markets := Array.mapFilter(user.markets, 
                             func (ut: UserMarket): ?UserMarket {
                                 if (ut.marketId != market.id) {
@@ -423,15 +399,7 @@ shared({ caller = initializer }) actor class Market() {
                                 };
                             }
                         );
-
-                        if (save) {
-                            users := Trie.replace(
-                                users,
-                                userKey(user.id),
-                                Text.equal,
-                                ?user,
-                            ).0;
-                        };
+                        user.seerBalance := user.seerBalance + liquidityOut;
 
                         return ?liquidityOut;
                     };
@@ -474,13 +442,6 @@ shared({ caller = initializer }) actor class Market() {
                 market.yesProb := market.reserveNo * 100 / totalReserve;
                 market.noProb := 100 - market.yesProb;
 
-                markets := Trie.replace(
-                    markets,
-                    marketKey(market.id),
-                    Nat32.equal,
-                    ?market,
-                ).0;
-
                 var user = getOrCreateUser(caller);
                 
                 var marketTokensOpt = Array.find(user.markets,
@@ -522,12 +483,7 @@ shared({ caller = initializer }) actor class Market() {
                     };
                 };
 
-                users := Trie.replace(
-                    users,
-                    userKey(user.id),
-                    Text.equal,
-                    ?user,
-                ).0;
+                user.seerBalance := user.seerBalance - value;
 
                 return ?tokensOut;
             };
@@ -567,15 +523,7 @@ shared({ caller = initializer }) actor class Market() {
                 market.yesProb := market.reserveNo * 100 / totalReserve;
                 market.noProb := 100 - market.yesProb;
 
-                markets := Trie.replace(
-                    markets,
-                    marketKey(market.id),
-                    Nat32.equal,
-                    ?market,
-                ).0;
-
-                var user = getOrCreateUser(caller);
-                
+                var user = getOrCreateUser(caller);                
                 var marketTokensOpt = Array.find(user.markets,
                     func (ut: UserMarket): Bool {
                         ut.marketId == market.id
@@ -617,12 +565,7 @@ shared({ caller = initializer }) actor class Market() {
                     };
                 };
 
-                users := Trie.replace(
-                    users,
-                    userKey(user.id),
-                    Text.equal,
-                    ?user,
-                ).0;
+                user.seerBalance := user.seerBalance - value;
 
                 return ?tokensOut;
             };

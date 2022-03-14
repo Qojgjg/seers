@@ -21,7 +21,6 @@ type Shares = int;
 type Probability = int;
 type MarketState = 
  variant {
-   approved;
    closed;
    open;
    pending;
@@ -64,6 +63,7 @@ type Balance = int;
 type Author = text;
 service : {
   addLiquidity: (MarketId, Balance) -> (bool);
+  approveMarket: (MarketId) -> ();
   buyNo: (MarketId, Balance, bool) -> (opt Balance);
   buyYes: (MarketId, Balance, bool) -> (opt Balance);
   createMarket: (MarketInitData) -> (MarketId);
