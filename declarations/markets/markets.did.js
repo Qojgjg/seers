@@ -18,7 +18,7 @@ export const idlFactory = ({ IDL }) => {
   const UserId = IDL.Text;
   const Shares = IDL.Int;
   const MarketState = IDL.Variant({
-    'resolved' : IDL.Null,
+    'resolved' : IDL.Bool,
     'closed' : IDL.Null,
     'pending' : IDL.Null,
     'open' : IDL.Null,
@@ -72,6 +72,7 @@ export const idlFactory = ({ IDL }) => {
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
     'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
     'removeLiquidity' : IDL.Func([MarketId], [IDL.Bool], []),
+    'resolveMarket' : IDL.Func([MarketId, IDL.Bool], [IDL.Bool], []),
     'sellNo' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
     'sellYes' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
   });

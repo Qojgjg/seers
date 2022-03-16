@@ -30,7 +30,7 @@ shared({ caller = initializer }) actor class Market() {
         #pending: ();
         #open: ();
         #closed: ();
-        #resolved: ();
+        #resolved: Bool;
     };
 
     public type UserMarket = {
@@ -140,6 +140,22 @@ shared({ caller = initializer }) actor class Market() {
                 market.state := #open;
             };
         };
+    };
+
+    public shared(msg) func resolveMarket(marketId: MarketId, result: Bool): async Bool {
+        assert(msg.caller == initializer); // Root call.
+        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+        switch (marketOpt) {
+            case (null) {
+                return false;
+            };
+            case (?market) {
+                market.state := #resolved(result);
+                return true;
+            };
+        };
+
+        return false;
     };
 
     // Create a market.

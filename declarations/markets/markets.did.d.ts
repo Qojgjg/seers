@@ -21,6 +21,7 @@ export interface Market {
   'readAllUsers' : () => Promise<Array<UserResult>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'removeLiquidity' : (arg_0: MarketId) => Promise<boolean>,
+  'resolveMarket' : (arg_0: MarketId, arg_1: boolean) => Promise<boolean>,
   'sellNo' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
       [] | [Balance]
     >,
@@ -58,7 +59,7 @@ export interface MarketResult {
   'blockTimestampLast' : Time,
   'startDate' : Time,
 }
-export type MarketState = { 'resolved' : null } |
+export type MarketState = { 'resolved' : boolean } |
   { 'closed' : null } |
   { 'pending' : null } |
   { 'open' : null };
