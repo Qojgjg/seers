@@ -46,7 +46,7 @@
   <footer
     style="width: 100%; text-align: center; padding: 50px 0px; align-items:center; display: flex; justify-content: center; gap: 15px"
   >
-    <img src={icLogo} alt="ic logo" style="height: 30px" /> Created by Pense Tech
+    <img src={icLogo} alt="ic logo" style="height: 30px" />Pensen Tech
   </footer>
 </main>
 
