@@ -269,7 +269,7 @@
   }
   .market {
     padding: 2em;
-    background: rgb(220 218 224 / 25%);
+    background: rgb(220 218 224 / 10%);
     min-height: 500px;
     width: 50%;
     margin: 0em 1em;
@@ -283,7 +283,7 @@
   .market-controls {
     margin-bottom: 1em;
     padding: 1em;
-    background: rgb(220 218 224 / 25%);
+    background: rgb(220 218 224 / 10%);
     height: fit-content;
     border-radius: 1em;
     word-wrap: break-word;

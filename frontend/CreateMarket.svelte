@@ -37,30 +37,30 @@
       <h4 style="">Create New Market</h4>
     </div>
     <div style="padding: 1em; text-align:left; font-size: 0.7em">
-      <div>Title:</div>
-      <div><input bind:value={newMarketTitle} /></div>
+      <div style="font-size: 1.5em">Title:</div>
+      <div><input bind:value={newMarketTitle} size="80" maxlength="200" /></div>
     </div>
     <div style="padding: 1em; text-align:left; font-size: 0.7em">
-      <div>Description:</div>
-      <div><textarea bind:value={newMarketDesc} /></div>
+      <div style="font-size: 1.5em">Description:</div>
+      <div><textarea bind:value={newMarketDesc} rows="20" cols="70" /></div>
     </div>
     <div style="padding: 1em; text-align:left; font-size: 0.7em">
-      <div>Yes deposit:</div>
-      <div><input bind:value={yesDeposit} /></div>
-    </div>
-    <div style="padding: 1em; text-align:left; font-size: 0.7em">
-      <div>No deposit:</div>
-      <div><input bind:value={noDeposit} /></div>
-    </div>
-    <div style="padding: 1em; text-align:left; font-size: 0.7em">
-      <div>End date:</div>
-      <div><input bind:value={endDate} /></div>
-    </div>
-    <div style="padding: 1em; text-align:left; font-size: 0.7em">
-      <div>Image URL:</div>
-      <div><input bind:value={imageUrl} /></div>
+      <div style="font-size: 1.5em">Image URL:</div>
+      <div><input bind:value={imageUrl} size="80" maxlength="200" /></div>
     </div>
 
+    <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <div style="font-size: 1.5em">Yes deposit:</div>
+      <div><input bind:value={yesDeposit} size="20" maxlength="7" /></div>
+    </div>
+    <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <div style="font-size: 1.5em">No deposit:</div>
+      <div><input bind:value={noDeposit} size="20" maxlength="7" /></div>
+    </div>
+    <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <div style="font-size: 1.5em">End date:</div>
+      <div><input bind:value={endDate} size="20" maxlength="10" /></div>
+    </div>
     <button class="demo-button" on:click={createMarket}>Create Market</button>
   </div>
 </div>
@@ -76,6 +76,6 @@
     min-width: 400px;
     padding: 20px;
     border-radius: 10px;
-    background: rgb(220 218 224 / 25%);
+    background: rgb(220 218 224 / 10%);
   }
 </style>

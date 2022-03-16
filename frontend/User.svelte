@@ -34,30 +34,27 @@
       Markets:
       <div style="display:flex; flex-direction: column; ">
         {#each user.markets as market}
-          <div
-            style="display:flex; flex-direction: row; gap: 10px; margin-top: 10px; padding: 3px; background-color:white; "
-          >
-            <div style="background-color:grey">
-              #{market.marketId}
-            </div>
-            <div style="background-color:grey">
-              <a href="#/market/{market.marketId}">
+          <a href="#/market/{market.marketId}">
+            <div
+              style="display:flex; flex-direction: row; gap: 10px; margin-top: 10px; padding: 3px; background-color: rgb(220 218 224 / 10%); "
+            >
+              <div style="">
+                #{market.marketId}
+              </div>
+              <div style="">
                 {market.marketTitle}
-              </a>
+              </div>
+              <div style="">
+                {market.yesBalance} Yes
+              </div>
+              <div style="">
+                {market.noBalance} No
+              </div>
+              <div style="">
+                {market.shares} Shares
+              </div>
             </div>
-            <div style="background-color:grey">
-              {market.yesBalance} Yes
-            </div>
-            <div style="background-color:grey">
-              {market.noBalance} No
-            </div>
-            <div style="background-color:grey">
-              {market.shares} Shares
-            </div>
-            <div style="background-color:grey">
-              {Object.keys(market.state)}
-            </div>
-          </div>
+          </a>
         {/each}
       </div>
     </div>

@@ -18,31 +18,30 @@
 <Header />
 
 <div class="MarketList">
-  <div
-    style="width: 100%; display: flex; justify-content:start; margin: 1em; padding: 0 6px;"
-  >
+  <div style="width: 100%; display: flex; justify-content:center;">
     <h3>Prediction Markets</h3>
   </div>
-  {#each markets as market}
-    <div class="responsive">
-      <a href="#/market/{market.id}">
-        <div class="gallery">
-          <img src={market.imageUrl} alt="random" />
-          <h5>{market.title}</h5>
-          <div>Yes: {market.yesProb}%</div>
-          <div>No: {market.noProb}%</div>
-          <div>Volume: {market.volume} S</div>
-          <div>Liquidity: {market.liquidity} S</div>
-        </div>
-      </a>
-    </div>
-  {/each}
+  <div style="width: 100%; display: flex; justify-content:center; ">
+    {#each markets as market}
+      <div class="responsive">
+        <a href="#/market/{market.id}">
+          <div class="gallery">
+            <img src={market.imageUrl} alt="random" />
+            <h5>{market.title}</h5>
+            <div>Yes: {market.yesProb}%</div>
+            <div>No: {market.noProb}%</div>
+            <div>Volume: {market.volume} S</div>
+            <div>Liquidity: {market.liquidity} S</div>
+          </div>
+        </a>
+      </div>
+    {/each}
+  </div>
 </div>
 
 <style global>
   .MarketList {
-    width: 80%;
-    margin: 0 5% 0 15%;
+    width: 100%;
   }
 
   div.gallery {
@@ -72,7 +71,6 @@
   }
 
   .responsive {
-    padding: 0 6px;
     float: left;
     width: 24.99999%;
     margin: 1em;
@@ -81,7 +79,7 @@
   @media only screen and (max-width: 700px) {
     .responsive {
       width: 49.99999%;
-      margin: 6px 0;
+      /* margin: 6px 0; */
     }
   }
 
