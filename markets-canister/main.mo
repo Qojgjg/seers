@@ -140,6 +140,40 @@ shared({ caller = initializer }) actor class Market() {
                 market.state := #open;
             };
         };
+    }; 
+
+    public shared(msg) func claimTokens(marketId: MarketId): async Balance {
+        assert(msg.caller != anon);
+
+        let userId = Principal.toText(msg.caller);
+        let userOpt = Trie.find(users, userKey(userId), Text.equal);
+        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+
+        switch (marketOpt) {
+            case (null) {
+                return 0;
+            };
+            case (?market) {
+                switch (market.state) {
+                    case (#resolved(yes)) {
+                        return 0;
+                    };
+                    case (_) {
+                        return 0;
+                    };
+                };
+
+                switch (userOpt) {
+                    case (null) {
+                        return 0;
+                    };
+                    case (?user) {
+                        return 0;
+                    };
+                };
+                return 0;
+            };
+        };
     };
 
     public shared(msg) func resolveMarket(marketId: MarketId, result: Bool): async Bool {

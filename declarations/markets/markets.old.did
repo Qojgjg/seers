@@ -24,7 +24,7 @@ type MarketState =
    closed;
    open;
    pending;
-   resolved;
+   resolved: bool;
  };
 type MarketResult = 
  record {
@@ -76,6 +76,7 @@ service : {
   readAllUsers: () -> (vec UserResult) query;
   readMarket: (MarketId) -> (opt MarketResult) query;
   removeLiquidity: (MarketId) -> (bool);
+  resolveMarket: (MarketId) -> (bool);
   sellNo: (MarketId, Balance, bool) -> (opt Balance);
   sellYes: (MarketId, Balance, bool) -> (opt Balance);
 }

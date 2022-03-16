@@ -11,6 +11,7 @@ export interface Market {
   'buyYes' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
       [] | [Balance]
     >,
+  'claimTokens' : (arg_0: MarketId) => Promise<Balance>,
   'createMarket' : (arg_0: MarketInitData) => Promise<MarketId>,
   'createUserResult' : () => Promise<UserResult>,
   'deleteAllMarkets' : () => Promise<undefined>,
