@@ -288,6 +288,12 @@ shared({ caller = initializer }) actor class Market() {
     // Read all markets.
     public query func readAllMarkets(): async [MarketResult] {
         let result = Trie.toArray(markets, getMarket);
+        return Array.map(result, marketToMarketResult);
+    };
+
+    // Read all open markets.
+    public query func readAllOpenMarkets(): async [MarketResult] {
+        let result = Trie.toArray(markets, getMarket);
         return Array.mapFilter(result, keepOpenMarkets);
     };
 
