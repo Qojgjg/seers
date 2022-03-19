@@ -21,6 +21,11 @@
     console.log(user)
   }
 
+  let claimSeers = async (marketId) => {
+    let tokens = await $auth.actor.claimTokens(marketId)
+    console.log("Tokens claimed: " + tokens)
+  }
+
   onMount(getUserData)
 </script>
 
@@ -36,7 +41,7 @@
         {#each user.markets as market}
           <a href="#/market/{market.marketId}">
             <div
-              style="display:flex; flex-direction: row; gap: 10px; margin-top: 10px; padding: 3px; background-color: rgb(220 218 224 / 10%); "
+              style="display:flex; align-items: center; align-content: center; flex-direction: row; gap: 10px; margin-top: 10px; padding: 3px; background-color: rgb(220 218 224 / 10%); "
             >
               <div style="">
                 #{market.marketId}
@@ -52,6 +57,14 @@
               </div>
               <div style="">
                 {market.shares} Shares
+              </div>
+              <div>
+                <button
+                  class=""
+                  on:click={() => {
+                    claimSeers(market.marketId)
+                  }}>Claim</button
+                >
               </div>
             </div>
           </a>
