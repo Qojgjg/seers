@@ -938,6 +938,7 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     private func createUser(userId: UserId): User {
+        assert(userId != anon);
         let user: User = {
             var id = userId;
             var seerBalance = 1000; // Airdrop
