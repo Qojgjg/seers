@@ -18,7 +18,6 @@ type Market/1 =
     var state : MarketState;
     title : Title;
     var totalShares : Shares;
-    var volume : Balance;
     var yesProb : Probability
   };
 type MarketId = Nat32;

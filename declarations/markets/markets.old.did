@@ -10,21 +10,19 @@ type UserMarket =
    marketTitle: Title;
    noBalance: Balance;
    shares: Shares;
-   state: MarketState;
    yesBalance: Balance;
  };
 type UserId = text;
 type Url = text;
 type Title = text;
 type Time = int;
-type Shares = int;
-type Probability = int;
+type Shares = nat64;
+type Probability = nat64;
 type MarketState = 
  variant {
    closed;
    open;
-   pending;
-   resolved: bool;
+   resolved;
  };
 type MarketResult = 
  record {
@@ -44,7 +42,6 @@ type MarketResult =
    state: MarketState;
    title: Title;
    totalShares: Shares;
-   volume: Balance;
    yesProb: Probability;
  };
 type MarketInitData = 
@@ -59,15 +56,13 @@ type MarketInitData =
  };
 type MarketId = nat32;
 type Description = text;
-type Balance = int;
+type Balance = nat64;
 type Author = text;
 service : {
   addLiquidity: (MarketId, Balance) -> (bool);
-  approveMarket: (MarketId) -> ();
   buyNo: (MarketId, Balance, bool) -> (opt Balance);
   buyYes: (MarketId, Balance, bool) -> (opt Balance);
-  claimTokens: (MarketId) -> (Balance);
-  createMarket: (MarketInitData) -> (MarketId);
+  createMarket: (MarketInitData) -> (nat32);
   createUserResult: () -> (UserResult);
   deleteAllMarkets: () -> ();
   deleteAllUsers: () -> ();
@@ -77,7 +72,6 @@ service : {
   readAllUsers: () -> (vec UserResult) query;
   readMarket: (MarketId) -> (opt MarketResult) query;
   removeLiquidity: (MarketId) -> (bool);
-  resolveMarket: (MarketId, bool) -> (bool);
   sellNo: (MarketId, Balance, bool) -> (opt Balance);
   sellYes: (MarketId, Balance, bool) -> (opt Balance);
 }
