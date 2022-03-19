@@ -256,7 +256,6 @@ shared({ caller = initializer }) actor class Market() {
             yesBalance = 0;
             noBalance = 0;
             shares = shares;
-            state = #pending;
         };
 
         user.markets := Array.append(user.markets, [userMarket]);
@@ -377,7 +376,6 @@ shared({ caller = initializer }) actor class Market() {
                                         noBalance = ut.noBalance;
                                         yesBalance = ut.yesBalance - value;
                                         shares = ut.shares;
-                                        state = ut.state;
                                     };
                                     return ?newUserToken;
                                 };
@@ -458,7 +456,6 @@ shared({ caller = initializer }) actor class Market() {
                                         noBalance = ut.noBalance - value;
                                         yesBalance = ut.yesBalance;
                                         shares = ut.shares;
-                                        state = ut.state;
                                     };
                                     return ?newUserToken;
                                 };
@@ -523,7 +520,6 @@ shared({ caller = initializer }) actor class Market() {
                             yesBalance = 0;
                             noBalance = tokensOut;
                             shares = 0;
-                            state = market.state;
                         };
                         user.markets := Array.append(user.markets, [newUserMarket]);
                     };
@@ -539,7 +535,6 @@ shared({ caller = initializer }) actor class Market() {
                                         noBalance = ut.noBalance + tokensOut;
                                         yesBalance = ut.yesBalance;
                                         shares = ut.shares;
-                                        state = ut.state;
                                     };
                                     return ?newUserMarket;
                                 };
@@ -603,7 +598,6 @@ shared({ caller = initializer }) actor class Market() {
                             yesBalance = tokensOut;
                             noBalance = 0;
                             shares = 0;
-                            state = market.state;
                         };
                         user.markets := Array.append(user.markets, [
                             newUserToken 
@@ -621,7 +615,6 @@ shared({ caller = initializer }) actor class Market() {
                                         yesBalance = ut.yesBalance + tokensOut;
                                         noBalance = ut.noBalance;
                                         shares = ut.shares;
-                                        state = ut.state;
                                     };
                                     return ?newUserToken;
                                 };
@@ -680,7 +673,6 @@ shared({ caller = initializer }) actor class Market() {
                     yesBalance = 0;
                     noBalance = 0;
                     shares = userShares;
-                    state = market.state;
                 };
 
                 user.markets := Array.append(user.markets, [userMarket]);
@@ -778,7 +770,6 @@ shared({ caller = initializer }) actor class Market() {
                                     yesBalance = userYesTokens;
                                     noBalance = userNoTokens;
                                     shares = 0;
-                                    state = userMarket.state;
                                 };
 
                                 // Remove user shares from total shares.

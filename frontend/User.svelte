@@ -53,9 +53,6 @@
               <div style="">
                 {market.shares} Shares
               </div>
-              <div style="">
-                ({Object.keys(market.state)})
-              </div>
             </div>
           </a>
         {/each}
