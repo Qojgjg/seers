@@ -10,10 +10,7 @@ import { Actor, HttpAgent } from "@dfinity/agent";
  */
 export function createActor(options) {
   const hostOptions = {
-    host:
-      process.env.DFX_NETWORK === "ic"
-        ? `https://${process.env.MARKETS_CANISTER_ID}.ic0.app`
-        : "http://localhost:8000",
+    host:`https://${process.env.MARKETS_CANISTER_ID}.ic0.app`,
   };
   if (!options) {
     options = {
