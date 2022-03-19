@@ -124,7 +124,9 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Delete all users.
-    public func deleteAllUsers(): async () {
+    public shared(msg) func deleteAllUsers(): async () {
+        assert(msg.caller == initializer); // Root call.
+       
         users := Trie.empty();
     };
 
@@ -290,7 +292,9 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Delete a market.
-    public func deleteMarket(marketId: MarketId): async Bool {
+    public shared(msg) func deleteMarket(marketId: MarketId): async Bool {
+        assert(msg.caller == initializer); // Root call.
+        
         let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
         let exists = Option.isSome(result);
         if (exists) {
@@ -305,7 +309,9 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Delete all market.
-    public func deleteAllMarkets(): async () {
+    public shared(msg) func deleteAllMarkets(): async () {
+        assert(msg.caller == initializer); // Root call.
+        
         nextMarketId := 0;
         markets := Trie.empty();
     };
