@@ -12,6 +12,7 @@ import Debug "mo:base/Debug";
 import Buffer "mo:base/Buffer";
 import Option "mo:base/Option";
 import Array "mo:base/Array";
+import Hash "mo:base/Hash";
 
 shared({ caller = initializer }) actor class Market() {
     /* Types */
@@ -143,9 +144,9 @@ shared({ caller = initializer }) actor class Market() {
     }; 
 
     public shared(msg) func claimTokens(marketId: MarketId): async Balance {
-        assert(msg.caller != anon);
-
         let userId = Principal.toText(msg.caller);
+        assert(userId != anon);
+
         let userOpt = Trie.find(users, userKey(userId), Text.equal);
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
 
@@ -156,22 +157,36 @@ shared({ caller = initializer }) actor class Market() {
             case (?market) {
                 switch (market.state) {
                     case (#resolved(yes)) {
-                        return 0;
+                        switch (userOpt) {
+                            case (null) {
+                                return 0;
+                            };
+                            case (?user) {
+                                var reward: Balance = 0;
+                                user.markets := Array.mapFilter(user.markets, 
+                                    func (ut: UserMarket): ?UserMarket {
+                                        if (ut.marketId != market.id) {
+                                            return ?ut;
+                                        } else {
+                                            if (yes) {
+                                                reward := ut.yesBalance;
+                                                user.seerBalance := user.seerBalance + reward;
+                                            } else {
+                                                reward := ut.noBalance;
+                                                user.seerBalance := user.seerBalance + reward;
+                                            };
+                                            return null;
+                                        };
+                                    }
+                                );
+                                return reward;
+                            };
+                        };
                     };
                     case (_) {
                         return 0;
                     };
                 };
-
-                switch (userOpt) {
-                    case (null) {
-                        return 0;
-                    };
-                    case (?user) {
-                        return 0;
-                    };
-                };
-                return 0;
             };
         };
     };
