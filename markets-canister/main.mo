@@ -40,7 +40,6 @@ shared({ caller = initializer }) actor class Market() {
         yesBalance: Balance;
         noBalance: Balance;
         shares: Shares;
-        state: MarketState;
     };
 
     public type User = {

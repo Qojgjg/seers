@@ -10,7 +10,6 @@ type UserMarket =
    marketTitle: Title;
    noBalance: Balance;
    shares: Shares;
-   state: MarketState;
    yesBalance: Balance;
  };
 type UserId = text;

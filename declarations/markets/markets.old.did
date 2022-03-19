@@ -66,6 +66,7 @@ service : {
   approveMarket: (MarketId) -> ();
   buyNo: (MarketId, Balance, bool) -> (opt Balance);
   buyYes: (MarketId, Balance, bool) -> (opt Balance);
+  claimTokens: (MarketId) -> (Balance);
   createMarket: (MarketInitData) -> (MarketId);
   createUserResult: () -> (UserResult);
   deleteAllMarkets: () -> ();

@@ -17,16 +17,9 @@ export const idlFactory = ({ IDL }) => {
   });
   const UserId = IDL.Text;
   const Shares = IDL.Int;
-  const MarketState = IDL.Variant({
-    'resolved' : IDL.Bool,
-    'closed' : IDL.Null,
-    'pending' : IDL.Null,
-    'open' : IDL.Null,
-  });
   const UserMarket = IDL.Record({
     'shares' : Shares,
     'noBalance' : Balance,
-    'state' : MarketState,
     'marketId' : MarketId,
     'yesBalance' : Balance,
     'marketTitle' : Title,
@@ -37,6 +30,12 @@ export const idlFactory = ({ IDL }) => {
     'markets' : IDL.Vec(UserMarket),
   });
   const Author = IDL.Text;
+  const MarketState = IDL.Variant({
+    'resolved' : IDL.Bool,
+    'closed' : IDL.Null,
+    'pending' : IDL.Null,
+    'open' : IDL.Null,
+  });
   const MarketResult = IDL.Record({
     'id' : MarketId,
     'title' : Title,
