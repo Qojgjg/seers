@@ -278,6 +278,7 @@
     display: flex;
     flex-direction: column;
     justify-content: start;
+    margin: 0em 1em;
   }
   .market {
     padding: 2em;
