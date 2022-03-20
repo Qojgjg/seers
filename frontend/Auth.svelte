@@ -113,6 +113,10 @@
     background: none;
   }
 
+  .topnav button:hover {
+    cursor: pointer;
+  }
+
   .topnav .icon {
     display: none;
     color: white;

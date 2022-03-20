@@ -59,12 +59,15 @@
   onMount(readMarket)
 </script>
 
-<div class="container">
-  {#if market}
+{#if market}
+  <div class="header">
+    <h3>{market.title}</h3>
+  </div>
+  <div class="row">
     <div class="market">
+      <!-- <h3>{market.title}</h3> -->
+      <img class="Image" src={market.imageUrl} alt="random" />
       <div style="width:100%; line-height: 1.6;">
-        <h3>{market.title}</h3>
-        <img class="Image" src={market.imageUrl} alt="random" />
         {market.description}
       </div>
     </div>
@@ -171,12 +174,24 @@
         </div>
       </div>
     </div>
-  {:else}
-    Loading
-  {/if}
-</div>
+  </div>
+{:else}
+  <div class="header">Loading</div>
+{/if}
 
 <style global>
+  .header {
+    text-align: center;
+    padding-top: 60px;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4px;
+    justify-content: center;
+  }
+
   .menu-button {
     color: white;
     background: rgb(220 218 224 / 25%);
@@ -267,14 +282,15 @@
   .market {
     padding: 2em;
     background: rgb(220 218 224 / 10%);
-    min-height: 500px;
-    width: 50%;
     margin: 0em 1em;
     border-radius: 1em;
     word-wrap: break-word;
     overflow: auto;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    max-width: 300px;
+    margin-bottom: 1em;
   }
 
   .market-controls {
