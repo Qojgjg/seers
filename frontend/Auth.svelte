@@ -113,11 +113,6 @@
     background: none;
   }
 
-  .topnav button:hover {
-    background-color: #ddd;
-    color: black;
-  }
-
   .topnav .icon {
     display: none;
     color: white;
