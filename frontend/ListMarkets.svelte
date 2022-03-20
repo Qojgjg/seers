@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import Header from "./Header.svelte"
 
   const PAGE_SIZE = 20
 
@@ -14,8 +13,6 @@
 
   onMount(refreshMarkets)
 </script>
-
-<Header />
 
 <div class="MarketList">
   <div style="width: 100%; display: flex; justify-content:center;">

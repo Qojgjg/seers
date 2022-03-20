@@ -1,8 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte"
-
-  import Header from "./Header.svelte"
-
   export let auth
   export let principal
 
@@ -28,8 +25,6 @@
 
   onMount(getUserData)
 </script>
-
-<Header />
 
 <div class="UserBody">
   {#if user}

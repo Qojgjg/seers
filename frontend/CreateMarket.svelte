@@ -1,6 +1,4 @@
 <script>
-  import Header from "./Header.svelte"
-
   export let auth
 
   let marketCreated = false
@@ -30,8 +28,6 @@
     marketCreated = true
   }
 </script>
-
-<Header />
 
 {#if marketCreated}
   <div class="CreateBody">Market created!</div>

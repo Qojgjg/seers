@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount, beforeUpdate } from "svelte"
   import { identity, select_multiple_value } from "svelte/internal"
-  import Header from "./Header.svelte"
 
   export let auth
   export let marketId
@@ -59,8 +58,6 @@
 
   onMount(readMarket)
 </script>
-
-<Header />
 
 <div class="container">
   {#if market}
