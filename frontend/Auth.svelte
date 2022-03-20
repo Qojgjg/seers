@@ -113,11 +113,6 @@
     background: none;
   }
 
-  .topnav a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-
   .topnav button:hover {
     background-color: #ddd;
     color: black;
