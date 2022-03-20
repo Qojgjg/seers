@@ -44,9 +44,18 @@
     </div>
   {/if}
   <footer
-    style="width: 100%; text-align: center; padding: 50px 0px; align-items:center; display: flex; justify-content: center; gap: 15px"
+    style="width: 100%; text-align: center; padding: 50px 0px; align-items:center; display: flex; flex-direction: column;justify-content: center; gap: 15px"
   >
-    <img src={icLogo} alt="ic logo" style="height: 30px" />Pensen Tech
+    <div style="width: 50%;display:flex; justify-content:center">
+      <img
+        src={icLogo}
+        alt="ic logo"
+        style="height: 30px; width: 80%; max-width: 200px"
+      />
+    </div>
+    <div style="width: 50%;display:flex; justify-content:center;">
+      Pense Tech
+    </div>
   </footer>
 </main>
 
@@ -65,7 +74,8 @@
   }
 
   button {
-    font-weight: 600;
+    /* font-weight: 600; */
+    height: 49px;
   }
 
   .App {

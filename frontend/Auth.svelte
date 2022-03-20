@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte"
   import { AuthClient } from "@dfinity/auth-client"
-  import dfinityLogo from "./assets/dfinity.svg"
+  import Fa from "svelte-fa"
+  import { faBars } from "@fortawesome/free-solid-svg-icons"
 
   export let auth
   export let createActor
@@ -10,7 +11,20 @@
   /** @type {AuthClient} */
   let client
   let principal = ""
+  let navClass = "topnav"
 
+  function myFunction() {
+    var x = document.getElementById("myTopnav")
+    var classes = x.className.split(" ")
+    console.log(classes)
+    if (!classes.includes("responsive")) {
+      console.log("responsive")
+      navClass = "topnav responsive"
+    } else {
+      console.log("no responsive")
+      navClass = "topnav"
+    }
+  }
   const initAuth = async () => {
     client = await AuthClient.create()
     if (await client.isAuthenticated()) {
@@ -59,65 +73,91 @@
   onMount(initAuth)
 </script>
 
-<div class="Wrapper">
-  <div class="auth-section">
-    <div style="font-size: 2em; width: 50%">
-      <a href="/" style="float: left; text-decoration: none;">Seers</a>
-    </div>
+<div class={navClass} id="myTopnav">
+  <a href="/" class="active">Seers</a>
 
-    <div style="width: 50%;">
-      <div style="float: right;">
-        <a href="/" class="MenuLink">Home</a>
+  {#if !signedIn && client}
+    <button on:click={signIn}> Sign In </button>
+  {/if}
 
-        {#if !signedIn && client}
-          <button on:click={signIn} class="auth-button">
-            Sign In
-            <!-- <img alt="" style="width: 33px;" src={dfinityLogo} /> -->
-          </button>
-        {/if}
-
-        {#if signedIn}
-          <a href="#/user/{principal}" class="MenuLink">Profile</a>
-          <a href="#/create/" class="MenuLink">Create</a>
-          <button on:click={signOut} class="auth-button">Sign out</button>
-        {/if}
-      </div>
-    </div>
-  </div>
+  {#if signedIn}
+    <a href="#/user/{principal}">Profile</a>
+    <a href="#/create/">Create</a>
+    <button on:click={signOut}>Sign out</button>
+  {/if}
+  <a href="javascript:void(0);" class="icon" on:click={myFunction}>
+    <Fa icon={faBars} />
+  </a>
 </div>
 
 <style>
-  .Wrapper {
-    display: flex;
-    justify-content: center;
-  }
-  .MenuLink {
-    padding: 5px;
-    font-size: 1em;
-  }
-
-  .auth-section {
-    padding: 1em;
-    display: flex;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    width: 80%;
-    max-width: 1000px;
-  }
-
-  .auth-button {
-    color: white;
-    background: black;
-    padding: 0 2em;
-    border-radius: 60px;
-    font-size: 1em;
-    height: 33px;
-    border: 0;
-    align-items: center;
+  .topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
     text-align: center;
-    border-color: white;
-    cursor: pointer;
+    padding: 14px 16px;
     text-decoration: none;
+    font-size: 17px;
+  }
+
+  .topnav button {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    text-decoration: none;
+    font-size: 17px;
+    padding: 14px 16px;
+    border: none;
+    background: none;
+  }
+
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+  .topnav button:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+  .topnav .icon {
+    display: none;
+    color: white;
+  }
+
+  @media screen and (max-width: 600px) {
+    .topnav a:not(:first-child) {
+      display: none;
+    }
+    .topnav button:not(:first-child) {
+      display: none;
+    }
+    .topnav a.icon {
+      float: right;
+      display: block;
+      color: white;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .topnav.responsive .icon {
+      position: absolute;
+      right: 0;
+      top: 0;
+      color: white;
+    }
+    .topnav.responsive a {
+      float: none;
+      display: block;
+      text-align: left;
+    }
+    .topnav.responsive button {
+      float: none;
+      display: block;
+      text-align: left;
+    }
   }
 </style>

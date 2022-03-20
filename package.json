@@ -15,7 +15,11 @@
     "@dfinity/authentication": "0.10.0",
     "@dfinity/candid": "0.10.0",
     "@dfinity/identity": "0.10.0",
-    "@dfinity/principal": "0.10.0"
+    "@dfinity/principal": "0.10.0",
+    "@fortawesome/fontawesome-svg-core": "^6.1.0",
+    "@fortawesome/free-solid-svg-icons": "^6.1.0",
+    "fontawesome-svelte": "^2.0.1",
+    "svelte-fa": "^2.4.0"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "next",
