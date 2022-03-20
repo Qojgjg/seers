@@ -14,31 +14,37 @@
   onMount(refreshMarkets)
 </script>
 
-<div class="MarketList">
-  <div style="width: 100%; display: flex; justify-content:center;">
-    <h3>Prediction Markets</h3>
-  </div>
-  <div style="width: 100%; display: flex; justify-content:center; ">
-    {#each markets as market}
-      <div class="responsive">
-        <a href="#/market/{market.id}">
-          <div class="gallery">
-            <img src={market.imageUrl} alt="random" />
-            <h5>{market.title}</h5>
-            <div>Yes: {market.yesProb}%</div>
-            <div>No: {market.noProb}%</div>
-            <div>Volume: {market.volume} S</div>
-            <div>Liquidity: {market.liquidity} S</div>
-          </div>
-        </a>
-      </div>
-    {/each}
-  </div>
+<div class="header">
+  <h3>Prediction Markets</h3>
+</div>
+<div class="row">
+  {#each markets as market}
+    <div class="responsive">
+      <a href="#/market/{market.id}">
+        <div class="gallery">
+          <img src={market.imageUrl} alt="random" />
+          <h5>{market.title}</h5>
+          <div>Yes: {market.yesProb}%</div>
+          <div>No: {market.noProb}%</div>
+          <div>Volume: {market.volume} S</div>
+          <div>Liquidity: {market.liquidity} S</div>
+        </div>
+      </a>
+    </div>
+  {/each}
 </div>
 
 <style global>
-  .MarketList {
-    width: 100%;
+  .header {
+    text-align: center;
+    padding: 32px;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4px;
+    justify-content: center;
   }
 
   div.gallery {

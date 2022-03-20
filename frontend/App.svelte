@@ -30,34 +30,30 @@
 
 <svelte:window on:load={hashchange} on:hashchange={hashchange} />
 
-<main>
-  <Auth {auth} {createActor} />
-  {#if page === "market"}
-    <ViewMarket {auth} marketId={marketIdSelected} />
-  {:else if page === "user"}
-    <User {auth} principal={userPrincipal} />
-  {:else if page === "create"}
-    <CreateMarket {auth} />
-  {:else}
-    <div class="App">
-      <ListMarkets {auth} />
-    </div>
-  {/if}
-  <footer
-    style="width: 100%; text-align: center; padding: 50px 0px; align-items:center; display: flex; flex-direction: column;justify-content: center; gap: 15px"
-  >
-    <div style="width: 50%;display:flex; justify-content:center">
-      <img
-        src={icLogo}
-        alt="ic logo"
-        style="height: 30px; width: 80%; max-width: 200px"
-      />
-    </div>
-    <div style="width: 50%;display:flex; justify-content:center;">
-      Pense Tech
-    </div>
-  </footer>
-</main>
+<Auth {auth} {createActor} />
+{#if page === "market"}
+  <ViewMarket {auth} marketId={marketIdSelected} />
+{:else if page === "user"}
+  <User {auth} principal={userPrincipal} />
+{:else if page === "create"}
+  <CreateMarket {auth} />
+{:else}
+  <ListMarkets {auth} />
+{/if}
+<footer
+  style="width: 100%; text-align: center; padding: 50px 0px; align-items:center; display: flex; flex-direction: column;justify-content: center; gap: 15px"
+>
+  <div style="width: 50%;display:flex; justify-content:center">
+    <img
+      src={icLogo}
+      alt="ic logo"
+      style="height: 30px; width: 80%; max-width: 200px"
+    />
+  </div>
+  <div style="width: 50%;display:flex; justify-content:center;">
+    Pense Technologies
+  </div>
+</footer>
 
 <style global>
   a {
