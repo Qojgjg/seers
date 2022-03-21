@@ -160,9 +160,15 @@
             <div class="ControlData">
               <div>LP fee 0.00%</div>
               <div>
-                Avg. price {(seerAmount / tokensEstimate).toFixed(2)} seers
+                Avg. price {(seerAmount / tokensEstimate).toFixed(2)
+                  ? (seerAmount / tokensEstimate).toFixed(2)
+                  : 0} seers
               </div>
-              <div>Max. winnings {tokensEstimate - seerAmount} seers</div>
+              <div>
+                Max. winnings {tokensEstimate - seerAmount
+                  ? tokensEstimate - seerAmount
+                  : 0} seers
+              </div>
             </div>
             <button
               class="demo-button"
@@ -236,6 +242,7 @@
 
   button {
     border: none;
+    padding: 3px;
   }
 
   .Image {
@@ -293,11 +300,13 @@
   .YesTabSelected {
     width: 50%;
     height: fit-content;
+    color: white;
     background-color: chartreuse;
   }
   .NoTabSelected {
     width: 50%;
     height: fit-content;
+    color: white;
     background-color: crimson;
   }
   .YesTab {
