@@ -8,8 +8,10 @@
   let market
 
   let seerAmount = 0
-  let addLiquidityAmount
-  let removeLiquidityAmount
+  let yesOptClass = "YesTabSelected"
+  let noOptClass = "NoTab"
+  let buyOptClass = "BuyOptSelected"
+  let sellOptClass = "SellOpt"
   let buyTokens = true
   let tokenIsYes = true
   let tokensEstimate
@@ -93,7 +95,7 @@
         <div
           style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column"
         >
-          <button
+          <!-- <button
             class="demo-button"
             on:click={() => {
               $auth.actor.removeLiquidity(market.id)
@@ -107,19 +109,23 @@
                 $auth.actor.addLiquidity(market.id, addLiquidityAmount)
               }}>Add Liquidity</button
             >
-          </div>
+          </div> -->
 
           Trade:
           <div class="YesNoOptions">
             <button
-              class="BuyOpt"
+              class={buyOptClass}
               on:click={() => {
+                buyOptClass = "BuyOptSelected"
+                sellOptClass = "SellOpt"
                 buyTokens = true
               }}>Buy</button
             >
             <button
-              class="SellOpt"
+              class={sellOptClass}
               on:click={() => {
+                buyOptClass = "BuyOpt"
+                sellOptClass = "SellOptSelected"
                 buyTokens = false
               }}>Sell</button
             >
@@ -128,14 +134,18 @@
           <div class="ContentTab">
             <div class="YesNoOptions">
               <button
-                class="BuyOpt"
+                class={yesOptClass}
                 on:click={() => {
+                  yesOptClass = "YesTabSelected"
+                  noOptClass = "NoTab"
                   tokenIsYes = true
                 }}>Yes ${parseInt(market.yesProb) / 100.0}</button
               >
               <button
-                class="SellOpt"
+                class={noOptClass}
                 on:click={() => {
+                  noOptClass = "NoTabSelected"
+                  yesOptClass = "YesTab"
                   tokenIsYes = false
                 }}>No ${parseInt(market.noProb) / 100.0}</button
               >
@@ -224,9 +234,13 @@
     text-decoration: none;
   }
 
+  button {
+    border: none;
+  }
+
   .Image {
     border-radius: 8px;
-    width: 200px;
+    max-width: 150px;
     float: left;
     margin: 10px;
   }
@@ -262,13 +276,37 @@
     width: 50%;
     height: fit-content;
   }
-  .BuyTab {
+  .BuyOptSelected {
     width: 50%;
     height: fit-content;
+    color: white;
+    background: rgb(220 218 224 / 25%);
   }
-  .SellTab {
+  .SellOptSelected {
     width: 50%;
     height: fit-content;
+    color: white;
+    background: rgb(220 218 224 / 25%);
+  }
+  .YesTabSelected {
+    width: 50%;
+    height: fit-content;
+    background-color: chartreuse;
+  }
+  .NoTabSelected {
+    width: 50%;
+    height: fit-content;
+    background-color: crimson;
+  }
+  .YesTab {
+    width: 50%;
+    height: fit-content;
+    /* background-color: chartreuse; */
+  }
+  .NoTab {
+    width: 50%;
+    height: fit-content;
+    /* background-color: crimson; */
   }
   .container {
     display: flex;
@@ -289,9 +327,25 @@
     overflow: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    max-width: 300px;
+    justify-content: start;
+    max-width: 40%;
     margin-bottom: 1em;
+  }
+
+  @media only screen and (max-width: 600px) {
+    .market {
+      padding: 2em;
+      background: rgb(220 218 224 / 10%);
+      margin: 0em 1em;
+      border-radius: 1em;
+      word-wrap: break-word;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 234px;
+      margin-bottom: 1em;
+    }
   }
 
   .market-controls {
