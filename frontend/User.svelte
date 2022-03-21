@@ -26,13 +26,21 @@
   onMount(getUserData)
 </script>
 
-<div class="UserBody">
+<div class="header">
+  <h3>Profile Data</h3>
+</div>
+
+<div class="row">
   {#if user}
-    <div>
-      <div style="margin-bottom: 10px">User Id: {user.id}.</div>
-      <div style="margin-bottom: 10px">Balance: {user.seerBalance} seers.</div>
-      Markets:
+    <div style="margin-bottom: 10px; justify-content:start; width: 100%">
+      User Id: {user.id}.
+    </div>
+    <div style="margin-bottom: 10px; justify-content: start; width: 100%">
+      Balance: {user.seerBalance} seers.
+    </div>
+    {#if user.markets.length}
       <div style="display:flex; flex-direction: column; ">
+        Markets:
         {#each user.markets as market}
           <a href="#/market/{market.marketId}">
             <div
@@ -65,7 +73,7 @@
           </a>
         {/each}
       </div>
-    </div>
+    {/if}
   {:else}
     <button
       class="demo-button"
@@ -77,6 +85,18 @@
 </div>
 
 <style global>
+  .header {
+    text-align: center;
+    padding-top: 60px;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    justify-content: center;
+  }
+
   .demo-button {
     background: black;
     padding: 0 1em;
@@ -88,9 +108,5 @@
     border: 0;
     cursor: pointer;
     color: white;
-  }
-  .UserBody {
-    display: flex;
-    justify-content: center;
   }
 </style>
