@@ -271,10 +271,12 @@
   .BuyOpt {
     width: 50%;
     height: fit-content;
+    color: black;
   }
   .SellOpt {
     width: 50%;
     height: fit-content;
+    color: black;
   }
   .BuyOptSelected {
     width: 50%;
@@ -301,12 +303,12 @@
   .YesTab {
     width: 50%;
     height: fit-content;
-    /* background-color: chartreuse; */
+    color: black;
   }
   .NoTab {
     width: 50%;
     height: fit-content;
-    /* background-color: crimson; */
+    color: black;
   }
   .container {
     display: flex;
