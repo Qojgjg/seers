@@ -301,7 +301,7 @@
     width: 50%;
     height: fit-content;
     color: white;
-    background-color: chartreuse;
+    background-color: green;
   }
   .NoTabSelected {
     width: 50%;
