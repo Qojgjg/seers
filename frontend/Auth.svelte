@@ -56,6 +56,7 @@
   }
 
   const signOut = async () => {
+    myFunction()
     await client.logout()
     auth.update(() => ({
       loggedIn: false,
@@ -81,8 +82,8 @@
   {/if}
 
   {#if signedIn}
-    <a href="#/user/{principal}">Profile</a>
-    <a href="#/create/">Create</a>
+    <a href="#/user/{principal}" on:click={myFunction}>Profile</a>
+    <a href="#/create/" on:click={myFunction}>Create</a>
     <button on:click={signOut}>Sign out</button>
   {/if}
   <a href="javascript:void(0);" class="icon" on:click={myFunction}>

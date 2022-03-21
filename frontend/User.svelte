@@ -63,7 +63,7 @@
               </div>
               <div>
                 <button
-                  class=""
+                  class="demo-button"
                   on:click={() => {
                     claimSeers(market.marketId)
                   }}>Claim</button
@@ -108,5 +108,6 @@
     border: 0;
     cursor: pointer;
     color: white;
+    max-width: 150px;
   }
 </style>

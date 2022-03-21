@@ -401,7 +401,7 @@
     color: rgb(26, 117, 255);
   }
 
-  .demo-button {
+  .tton {
     background: black;
     padding: 0 1em;
     margin-top: 1em;
@@ -412,10 +412,6 @@
     border: 0;
     cursor: pointer;
     color: white;
-  }
-
-  .demo-button:active {
-    color: white;
-    background: #979799;
+    max-width: 200px;
   }
 </style>

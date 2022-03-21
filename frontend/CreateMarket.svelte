@@ -4,14 +4,12 @@
   let marketCreated = false
   let newMarketTitle
   let newMarketDesc
-  let yesDeposit
-  let noDeposit
+  let yesDeposit = 1000
+  let noDeposit = 1000
   let endDate
   let imageUrl
 
   let createMarket = async () => {
-    yesDeposit = parseInt(yesDeposit)
-    noDeposit = parseInt(noDeposit)
     const liquidity = yesDeposit + noDeposit
     const yesProb = Math.floor((yesDeposit * 100) / liquidity)
     const noProb = 100 - yesProb
@@ -29,57 +27,73 @@
   }
 </script>
 
+<div class="header">
+  <h3>Create Market</h3>
+</div>
 {#if marketCreated}
-  <div class="CreateBody">Market created!</div>
+  <div class="row">Market created!</div>
 {:else}
-  <div class="CreateBody">
-    <div class="FormItem">
-      <div style="">
-        <h4 style="">Create New Market</h4>
-      </div>
-      <div style="padding: 1em; text-align:left; font-size: 0.7em">
+  <div class="row">
+    <div class="form">
+      <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">Title:</div>
         <div>
-          <input bind:value={newMarketTitle} size="80" maxlength="200" />
+          <input bind:value={newMarketTitle} size="40" maxlength="200" />
         </div>
       </div>
-      <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">Description:</div>
-        <div><textarea bind:value={newMarketDesc} rows="20" cols="70" /></div>
+        <div><textarea bind:value={newMarketDesc} rows="20" cols="40" /></div>
       </div>
-      <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">Image URL:</div>
-        <div><input bind:value={imageUrl} size="80" maxlength="200" /></div>
+        <div><input bind:value={imageUrl} size="40" maxlength="200" /></div>
       </div>
 
-      <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <!-- <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">Yes deposit:</div>
         <div><input bind:value={yesDeposit} size="20" maxlength="7" /></div>
       </div>
-      <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">No deposit:</div>
         <div><input bind:value={noDeposit} size="20" maxlength="7" /></div>
-      </div>
-      <div style="padding: 1em; text-align:left; font-size: 0.7em">
+      </div> -->
+      <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">End date:</div>
         <div><input bind:value={endDate} size="20" maxlength="10" /></div>
       </div>
-      <button class="demo-button" on:click={createMarket}>Create Market</button>
+      <div style="width: 100%;text-align:center; ">
+        <button class="demo-button" on:click={createMarket}
+          >Create Market</button
+        >
+      </div>
     </div>
   </div>
 {/if}
 
 <style global>
-  .CreateBody {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+  .header {
+    text-align: center;
+    padding-top: 60px;
   }
 
-  .FormItem {
-    min-width: 400px;
-    padding: 20px;
-    border-radius: 10px;
+  .row {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 0 4px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 10px;
+    justify-content: center;
+    border-radius: 5px;
     background: rgb(220 218 224 / 10%);
   }
 </style>
