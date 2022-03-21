@@ -26,8 +26,8 @@
           <h5>{market.title}</h5>
           <div>Yes: {market.yesProb}%</div>
           <div>No: {market.noProb}%</div>
-          <div>Volume: {market.volume} S</div>
-          <div>Liquidity: {market.liquidity} S</div>
+          <div>Volume: {market.volume} seers</div>
+          <div>Liquidity: {market.liquidity} seers</div>
         </div>
       </a>
     </div>

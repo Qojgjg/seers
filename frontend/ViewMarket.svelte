@@ -87,8 +87,8 @@
               parseInt(market.endDate) / 1_000_000,
             ).toLocaleDateString()}
           </li>
-          <li>Liquidity: {market.liquidity} S</li>
-          <li>Volume: {market.volume} S</li>
+          <li>Liquidity: {market.liquidity} seers</li>
+          <li>Volume: {market.volume} seers</li>
         </ul>
       </div>
       <div class="market-controls">
@@ -160,7 +160,7 @@
             <div class="ControlData">
               <div>LP fee 0.00%</div>
               <div>
-                Avg. price {(seerAmount / tokensEstimate).toFixed(2)
+                Avg. price {tokensEstimate
                   ? (seerAmount / tokensEstimate).toFixed(2)
                   : 0} seers
               </div>

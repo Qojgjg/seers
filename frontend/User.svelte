@@ -30,7 +30,7 @@
   {#if user}
     <div>
       <div style="margin-bottom: 10px">User Id: {user.id}.</div>
-      <div style="margin-bottom: 10px">Balance: {user.seerBalance} S.</div>
+      <div style="margin-bottom: 10px">Balance: {user.seerBalance} seers.</div>
       Markets:
       <div style="display:flex; flex-direction: column; ">
         {#each user.markets as market}
