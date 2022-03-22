@@ -541,7 +541,7 @@ shared({ caller = initializer }) actor class Market() {
 
                 let probabilities: [var Probability] = Array.init(optionsSize, 1);
                 for (i in Iter.range(0, optionsSize - 1)) {
-                    probabilities[i] := (market.reserves[i] * 100) / totalReserve;
+                    probabilities[i] := (totalReserve - market.reserves[i]) * 100 / ((optionsSize - 1) * totalReserve);
                 };
                 market.probabilities :=  Array.freeze(probabilities);
 
