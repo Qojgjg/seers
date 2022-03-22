@@ -139,7 +139,7 @@
                   yesOptClass = "YesTabSelected"
                   noOptClass = "NoTab"
                   tokenIsYes = true
-                }}>Yes ${parseInt(market.probabilities[0]) / 100.0}</button
+                }}>Yes ${Number(market.probabilities[0]) / 1000.0}</button
               >
               <button
                 class={noOptClass}
@@ -147,7 +147,7 @@
                   noOptClass = "NoTabSelected"
                   yesOptClass = "YesTab"
                   tokenIsYes = false
-                }}>No ${parseInt(market.probabilities[1]) / 100.0}</button
+                }}>No ${Number(market.probabilities[1]) / 1000.0}</button
               >
             </div>
             <div class="OutcomeTitle">Amount:</div>

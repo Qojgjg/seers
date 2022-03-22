@@ -214,7 +214,7 @@ shared({ caller = initializer }) actor class Market() {
         assert(marketInitData.endDate > Time.now());
 
         let optionsLength = marketInitData.probabilities.size();
-        let multiplier = 100 / optionsLength;
+        let multiplier = 1000 / optionsLength;
         let marketId = nextMarketId;
 
         let initBalance: Balance = 0;
@@ -505,7 +505,7 @@ shared({ caller = initializer }) actor class Market() {
 
                 for (i in Iter.range(0, optionsSize - 1)) {
                     if (i != number) {
-                        newTokens[i] := value * 100 / market.probabilities[i];
+                        newTokens[i] := value * 1000 / market.probabilities[i];
                         newReserveTokens[i] := market.reserves[i] + newTokens[i];
                         mulOtherReserves := mulOtherReserves * newReserveTokens[i];
                         sumOtherReserves := sumOtherReserves + newReserveTokens[i];
@@ -541,7 +541,7 @@ shared({ caller = initializer }) actor class Market() {
 
                 let probabilities: [var Probability] = Array.init(optionsSize, 1);
                 for (i in Iter.range(0, optionsSize - 1)) {
-                    probabilities[i] := (totalReserve - market.reserves[i]) * 100 / ((optionsSize - 1) * totalReserve);
+                    probabilities[i] := (totalReserve - market.reserves[i]) * 1000 / ((optionsSize - 1) * totalReserve);
                 };
                 market.probabilities :=  Array.freeze(probabilities);
 

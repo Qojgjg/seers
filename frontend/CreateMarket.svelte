@@ -13,7 +13,7 @@
       title: newMarketTitle,
       description: newMarketDesc,
       labels: ["Benfica", "Liverpool", "Draw"],
-      probabilities: [33, 33, 33],
+      probabilities: [333, 333, 333],
       liquidity: liquidity,
       endDate: Date.parse(endDate) * 1_000_000,
       imageUrl: imageUrl,
