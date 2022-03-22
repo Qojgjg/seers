@@ -2,22 +2,18 @@
   export let auth
 
   let marketCreated = false
-  let newMarketTitle
-  let newMarketDesc
-  let yesDeposit = 1000
-  let noDeposit = 1000
-  let endDate
-  let imageUrl
+  let newMarketTitle = "Champions League: Benfica vs Liverpool."
+  let newMarketDesc = "Who will win?"
+  let endDate = "10/10/2022"
+  let imageUrl = "https://"
 
   let createMarket = async () => {
-    const liquidity = yesDeposit + noDeposit
-    const yesProb = Math.floor((yesDeposit * 100) / liquidity)
-    const noProb = 100 - yesProb
+    const liquidity = 3000
     const marketInitData = {
       title: newMarketTitle,
       description: newMarketDesc,
-      yesProb: yesProb,
-      noProb: noProb,
+      labels: ["Benfica", "Liverpool", "Draw"],
+      probabilities: [33, 33, 33],
       liquidity: liquidity,
       endDate: Date.parse(endDate) * 1_000_000,
       imageUrl: imageUrl,

@@ -56,6 +56,11 @@ export const idlFactory = ({ IDL }) => {
   });
   const Market = IDL.Service({
     'approveMarket' : IDL.Func([MarketId], [], []),
+    'buyOption' : IDL.Func(
+        [MarketId, Balance, IDL.Nat, IDL.Bool],
+        [IDL.Opt(Balance)],
+        [],
+      ),
     'claimTokens' : IDL.Func([MarketId], [Balance], []),
     'createMarket' : IDL.Func([MarketInitData], [MarketId], []),
     'createUserResult' : IDL.Func([], [UserResult], []),
