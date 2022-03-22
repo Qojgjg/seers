@@ -10,7 +10,8 @@ import { Actor, HttpAgent } from "@dfinity/agent";
  */
 export function createActor(options) {
   const hostOptions = {
-    host:`https://${process.env.MARKETS_CANISTER_ID}.ic0.app`,
+    host: 'http://localhost:8000',
+    // host:`https://${process.env.MARKETS_CANISTER_ID}.ic0.app`,
   };
   if (!options) {
     options = {
