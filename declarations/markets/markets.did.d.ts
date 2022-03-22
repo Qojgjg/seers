@@ -3,14 +3,7 @@ export type Author = string;
 export type Balance = bigint;
 export type Description = string;
 export interface Market {
-  'addLiquidity' : (arg_0: MarketId, arg_1: Balance) => Promise<boolean>,
   'approveMarket' : (arg_0: MarketId) => Promise<undefined>,
-  'buyNo' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
-      [] | [Balance]
-    >,
-  'buyYes' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
-      [] | [Balance]
-    >,
   'claimTokens' : (arg_0: MarketId) => Promise<Balance>,
   'createMarket' : (arg_0: MarketInitData) => Promise<MarketId>,
   'createUserResult' : () => Promise<UserResult>,
@@ -22,46 +15,38 @@ export interface Market {
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
   'readAllUsers' : () => Promise<Array<UserResult>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
-  'removeLiquidity' : (arg_0: MarketId) => Promise<boolean>,
-  'resolveMarket' : (arg_0: MarketId, arg_1: boolean) => Promise<boolean>,
-  'sellNo' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
-      [] | [Balance]
-    >,
-  'sellYes' : (arg_0: MarketId, arg_1: Balance, arg_2: boolean) => Promise<
-      [] | [Balance]
-    >,
+  'resolveMarket' : (arg_0: MarketId, arg_1: bigint) => Promise<boolean>,
 }
 export type MarketId = number;
 export interface MarketInitData {
   'title' : Title,
-  'noProb' : Probability,
+  'probabilities' : Array<Probability>,
   'endDate' : Time,
+  'labels' : Array<string>,
   'liquidity' : Balance,
   'description' : Description,
-  'yesProb' : Probability,
   'imageUrl' : Url,
 }
 export interface MarketResult {
   'id' : MarketId,
   'title' : Title,
-  'noProb' : Probability,
+  'probabilities' : Array<Probability>,
   'endDate' : Time,
+  'labels' : Array<string>,
   'liquidity' : Balance,
+  'reserves' : Array<Balance>,
   'description' : Description,
   'volume' : Balance,
   'author' : Author,
-  'yesProb' : Probability,
-  'reserveNo' : Balance,
   'state' : MarketState,
   'imageUrl' : Url,
   'providers' : Array<string>,
-  'reserveYes' : Balance,
   'kLast' : Balance,
   'totalShares' : Shares,
   'blockTimestampLast' : Time,
   'startDate' : Time,
 }
-export type MarketState = { 'resolved' : boolean } |
+export type MarketState = { 'resolved' : bigint } |
   { 'closed' : null } |
   { 'pending' : null } |
   { 'open' : null };
@@ -73,9 +58,8 @@ export type Url = string;
 export type UserId = string;
 export interface UserMarket {
   'shares' : Shares,
-  'noBalance' : Balance,
   'marketId' : MarketId,
-  'yesBalance' : Balance,
+  'balances' : Array<Balance>,
   'marketTitle' : Title,
 }
 export interface UserResult {

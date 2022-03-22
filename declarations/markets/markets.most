@@ -9,17 +9,16 @@ type Market/1 =
     id : MarketId;
     var imageUrl : Url;
     var kLast : Balance;
+    labels : [Text];
     var liquidity : Balance;
-    var noProb : Probability;
+    var probabilities : [Probability];
     var providers : [Text];
-    var reserveNo : Balance;
-    var reserveYes : Balance;
+    var reserves : [Balance];
     startDate : Time;
     var state : MarketState;
     title : Title;
     var totalShares : Shares;
-    var volume : Balance;
-    var yesProb : Probability
+    var volume : Balance
   };
 type MarketId = Nat32;
 type User =

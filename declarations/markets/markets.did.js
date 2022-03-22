@@ -8,20 +8,19 @@ export const idlFactory = ({ IDL }) => {
   const Url = IDL.Text;
   const MarketInitData = IDL.Record({
     'title' : Title,
-    'noProb' : Probability,
+    'probabilities' : IDL.Vec(Probability),
     'endDate' : Time,
+    'labels' : IDL.Vec(IDL.Text),
     'liquidity' : Balance,
     'description' : Description,
-    'yesProb' : Probability,
     'imageUrl' : Url,
   });
   const UserId = IDL.Text;
   const Shares = IDL.Int;
   const UserMarket = IDL.Record({
     'shares' : Shares,
-    'noBalance' : Balance,
     'marketId' : MarketId,
-    'yesBalance' : Balance,
+    'balances' : IDL.Vec(Balance),
     'marketTitle' : Title,
   });
   const UserResult = IDL.Record({
@@ -31,7 +30,7 @@ export const idlFactory = ({ IDL }) => {
   });
   const Author = IDL.Text;
   const MarketState = IDL.Variant({
-    'resolved' : IDL.Bool,
+    'resolved' : IDL.Nat,
     'closed' : IDL.Null,
     'pending' : IDL.Null,
     'open' : IDL.Null,
@@ -39,28 +38,24 @@ export const idlFactory = ({ IDL }) => {
   const MarketResult = IDL.Record({
     'id' : MarketId,
     'title' : Title,
-    'noProb' : Probability,
+    'probabilities' : IDL.Vec(Probability),
     'endDate' : Time,
+    'labels' : IDL.Vec(IDL.Text),
     'liquidity' : Balance,
+    'reserves' : IDL.Vec(Balance),
     'description' : Description,
     'volume' : Balance,
     'author' : Author,
-    'yesProb' : Probability,
-    'reserveNo' : Balance,
     'state' : MarketState,
     'imageUrl' : Url,
     'providers' : IDL.Vec(IDL.Text),
-    'reserveYes' : Balance,
     'kLast' : Balance,
     'totalShares' : Shares,
     'blockTimestampLast' : Time,
     'startDate' : Time,
   });
   const Market = IDL.Service({
-    'addLiquidity' : IDL.Func([MarketId, Balance], [IDL.Bool], []),
     'approveMarket' : IDL.Func([MarketId], [], []),
-    'buyNo' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
-    'buyYes' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
     'claimTokens' : IDL.Func([MarketId], [Balance], []),
     'createMarket' : IDL.Func([MarketInitData], [MarketId], []),
     'createUserResult' : IDL.Func([], [UserResult], []),
@@ -72,10 +67,7 @@ export const idlFactory = ({ IDL }) => {
     'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
     'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
-    'removeLiquidity' : IDL.Func([MarketId], [IDL.Bool], []),
-    'resolveMarket' : IDL.Func([MarketId, IDL.Bool], [IDL.Bool], []),
-    'sellNo' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
-    'sellYes' : IDL.Func([MarketId, Balance, IDL.Bool], [IDL.Opt(Balance)], []),
+    'resolveMarket' : IDL.Func([MarketId, IDL.Nat], [IDL.Bool], []),
   });
   return Market;
 };
