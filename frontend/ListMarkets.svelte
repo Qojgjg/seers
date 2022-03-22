@@ -24,8 +24,8 @@
         <div class="gallery">
           <img src={market.imageUrl} alt="random" />
           <h5>{market.title}</h5>
-          <div>Yes: {market.yesProb}%</div>
-          <div>No: {market.noProb}%</div>
+          <div>Yes: {market.probabilities[0]}%</div>
+          <div>No: {market.probabilities[1]}%</div>
           <div>Volume: {market.volume} seers</div>
           <div>Liquidity: {market.liquidity} seers</div>
         </div>

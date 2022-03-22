@@ -500,17 +500,19 @@ shared({ caller = initializer }) actor class Market() {
                 let optionsSize = market.reserves.size();
                 var newTokens: [var Balance] = Array.init(optionsSize, 0);
                 var newReserveTokens: [var Balance] = Array.init(optionsSize, 0);
-                var totalOtherReserves: Balance = 1;
+                var sumOtherReserves: Balance = 0;
+                var mulOtherReserves: Balance = 1;
 
                 for (i in Iter.range(0, optionsSize - 1)) {
                     if (i != number) {
                         newTokens[i] := value * 100 / market.probabilities[i];
                         newReserveTokens[i] := market.reserves[i] + newTokens[i];
-                        totalOtherReserves := totalOtherReserves * newReserveTokens[i];
+                        mulOtherReserves := mulOtherReserves * newReserveTokens[i];
+                        sumOtherReserves := sumOtherReserves + newReserveTokens[i];
                     };
                 };
 
-                let newOptionReserve: Balance = market.kLast / totalOtherReserves;
+                let newOptionReserve: Balance = market.kLast / mulOtherReserves;
                 let tokensOut = market.reserves[number] - newOptionReserve;
 
                 // let newYesTokens = value * 100 / market.yesProb;
@@ -535,7 +537,13 @@ shared({ caller = initializer }) actor class Market() {
                 // market.yesProb := market.reserveNo * 100 / totalReserve;
                 // market.noProb := 100 - market.yesProb;
 
-                let totalReserve = totalOtherReserves + newOptionReserve;
+                let totalReserve = sumOtherReserves + newOptionReserve;
+
+                let probabilities: [var Probability] = Array.init(optionsSize, 1);
+                for (i in Iter.range(0, optionsSize - 1)) {
+                    probabilities[i] := (market.reserves[i] * 100) / totalReserve;
+                };
+                market.probabilities :=  Array.freeze(probabilities);
 
                 var user = getOrCreateUser(caller);
                 

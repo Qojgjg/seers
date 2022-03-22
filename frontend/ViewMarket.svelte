@@ -26,10 +26,10 @@
     amount = parseInt(amount)
     if (buyTokens && tokenIsYes) {
       // buy yes
-      tokensEstimate = await $auth.actor.buyYes(marketId, amount, false)
+      tokensEstimate = await $auth.actor.buyOption(marketId, amount, 0, false)
     } else if (buyTokens && !tokenIsYes) {
       // buy no
-      tokensEstimate = await $auth.actor.buyNo(marketId, amount, false)
+      tokensEstimate = await $auth.actor.buyOption(marketId, amount, 1, false)
     }
     // else if (!buyTokens && tokenIsYes) {
     //   // sell yes
@@ -45,16 +45,16 @@
     amount = parseInt(amount)
     if (buyTokens && tokenIsYes) {
       // buy yes
-      await $auth.actor.buyYes(marketId, amount, true)
+      await $auth.actor.buyOption(marketId, amount, 0, true)
     } else if (buyTokens && !tokenIsYes) {
       // buy no
-      await $auth.actor.buyNo(marketId, amount, true)
+      await $auth.actor.buyOption(marketId, amount, 1, true)
     } else if (!buyTokens && tokenIsYes) {
       // sell yes
-      await $auth.actor.sellYes(marketId, amount, true)
+      // await $auth.actor.sellYes(marketId, amount, true)
     } else if (!buyTokens && !tokenIsYes) {
       // sell no
-      await $auth.actor.sellNo(marketId, amount, true)
+      // await $auth.actor.sellNo(marketId, amount, true)
     }
   }
 
@@ -139,7 +139,7 @@
                   yesOptClass = "YesTabSelected"
                   noOptClass = "NoTab"
                   tokenIsYes = true
-                }}>Yes ${parseInt(market.yesProb) / 100.0}</button
+                }}>Yes ${parseInt(market.probabilities[0]) / 100.0}</button
               >
               <button
                 class={noOptClass}
@@ -147,7 +147,7 @@
                   noOptClass = "NoTabSelected"
                   yesOptClass = "YesTab"
                   tokenIsYes = false
-                }}>No ${parseInt(market.noProb) / 100.0}</button
+                }}>No ${parseInt(market.probabilities[1]) / 100.0}</button
               >
             </div>
             <div class="OutcomeTitle">Amount:</div>

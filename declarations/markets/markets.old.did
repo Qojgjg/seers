@@ -60,6 +60,7 @@ type Balance = int;
 type Author = text;
 service : {
   approveMarket: (MarketId) -> ();
+  buyOption: (MarketId, Balance, nat, bool) -> (opt Balance);
   claimTokens: (MarketId) -> (Balance);
   createMarket: (MarketInitData) -> (MarketId);
   createUserResult: () -> (UserResult);
