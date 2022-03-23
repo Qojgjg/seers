@@ -73,6 +73,11 @@ export const idlFactory = ({ IDL }) => {
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
     'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
     'resolveMarket' : IDL.Func([MarketId, IDL.Nat], [IDL.Bool], []),
+    'sellYes' : IDL.Func(
+        [MarketId, Balance, IDL.Nat, IDL.Bool],
+        [IDL.Opt(Balance)],
+        [],
+      ),
   });
   return Market;
 };
