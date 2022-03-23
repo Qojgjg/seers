@@ -1,25 +1,45 @@
 <script>
   export let auth
 
+  let labels = []
+  let newLabel
   let marketCreated = false
   let newMarketTitle = "Champions League: Benfica vs Liverpool."
   let newMarketDesc = "Who will win?"
   let endDate = "10/10/2022"
-  let imageUrl = "https://"
+  let imageUrl =
+    "https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/UEFA_Champions_League_logo_2.svg/1200px-UEFA_Champions_League_logo_2.svg.png"
 
   let createMarket = async () => {
     const liquidity = 3000
+    let probabilities = []
+    let i = 0
+
+    console.log("labels: " + labels)
+
+    for (; i < labels.length; i++) {
+      probabilities.push(BigInt(Math.floor(1000 / labels.length)))
+    }
+
     const marketInitData = {
       title: newMarketTitle,
       description: newMarketDesc,
-      labels: ["Benfica", "Liverpool", "Draw"],
-      probabilities: [333, 333, 333],
+      labels: labels,
+      probabilities: probabilities,
       liquidity: liquidity,
       endDate: Date.parse(endDate) * 1_000_000,
       imageUrl: imageUrl,
     }
     await $auth.actor.createMarket(marketInitData)
     marketCreated = true
+  }
+
+  let addOption = () => {
+    if (newLabel.length > 0) {
+      labels.push(newLabel)
+      console.log(labels)
+      newLabel = ""
+    }
   }
 </script>
 
@@ -41,11 +61,16 @@
         <div style="font-size: 1.5em">Description:</div>
         <div><textarea bind:value={newMarketDesc} rows="20" cols="40" /></div>
       </div>
-      <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
+      <div>
         <div style="font-size: 1.5em">Image URL:</div>
         <div><input bind:value={imageUrl} size="40" maxlength="200" /></div>
       </div>
-
+      <div>{labels}</div>
+      <div>
+        <div style="font-size: 1.5em">New option:</div>
+        <div><input bind:value={newLabel} size="40" maxlength="200" /></div>
+        <button class="demo-button" on:click={addOption}>Add</button>
+      </div>
       <!-- <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">Yes deposit:</div>
         <div><input bind:value={yesDeposit} size="20" maxlength="7" /></div>

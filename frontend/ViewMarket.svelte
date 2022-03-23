@@ -8,8 +8,9 @@
   let market
 
   let seerAmount = 0
-  let yesOptClass = "YesTabSelected"
-  let noOptClass = "NoTab"
+  let selected
+  // let yesOptClass = "YesTabSelected"
+  // let noOptClass = "NoTab"
   let buyOptClass = "BuyOptSelected"
   let sellOptClass = "SellOpt"
   let buyTokens = true
@@ -43,19 +44,22 @@
 
   const doIt = async (marketId, amount) => {
     amount = parseInt(amount)
-    if (buyTokens && tokenIsYes) {
+    if (buyTokens) {
+      console.log(selected)
       // buy yes
-      await $auth.actor.buyOption(marketId, amount, 0, true)
-    } else if (buyTokens && !tokenIsYes) {
-      // buy no
-      await $auth.actor.buyOption(marketId, amount, 1, true)
-    } else if (!buyTokens && tokenIsYes) {
-      // sell yes
-      // await $auth.actor.sellYes(marketId, amount, true)
-    } else if (!buyTokens && !tokenIsYes) {
-      // sell no
-      // await $auth.actor.sellNo(marketId, amount, true)
+      await $auth.actor.buyOption(marketId, amount, selected, true)
     }
+
+    // else if (buyTokens && !tokenIsYes) {
+    //   // buy no
+    //   await $auth.actor.buyOption(marketId, amount, , true)
+    // } else if (!buyTokens && tokenIsYes) {
+    //   // sell yes
+    //   // await $auth.actor.sellYes(marketId, amount, true)
+    // } else if (!buyTokens && !tokenIsYes) {
+    //   // sell no
+    //   // await $auth.actor.sellNo(marketId, amount, true)
+    // }
   }
 
   onMount(readMarket)
@@ -132,7 +136,14 @@
           </div>
           Pick Outcome:
           <div class="ContentTab">
-            <div class="YesNoOptions">
+            <select bind:value={selected} style="width: 100%">
+              {#each market.labels as label, i}
+                <option value={i}>
+                  ${(Number(market.probabilities[i]) / 1000.0).toFixed(2)} - {label}
+                </option>
+              {/each}
+            </select>
+            <!-- <div class="YesNoOptions">
               <button
                 class={yesOptClass}
                 on:click={() => {
@@ -149,12 +160,13 @@
                   tokenIsYes = false
                 }}>No ${Number(market.probabilities[1]) / 1000.0}</button
               >
-            </div>
+            </div> -->
             <div class="OutcomeTitle">Amount:</div>
             <div class="OutcomeTitle">
               <input
                 bind:value={seerAmount}
                 on:change={() => dryRun(market.id, seerAmount)}
+                style="width:100%"
               />
             </div>
             <div class="ControlData">
