@@ -24,10 +24,13 @@
         <div class="gallery">
           <img src={market.imageUrl} alt="random" />
           <h5>{market.title}</h5>
-          <div>Yes: {Number(market.probabilities[0]) / 10.0}%</div>
-          <div>No: {Number(market.probabilities[1]) / 10.0}%</div>
-          <div>Volume: {market.volume} seers</div>
-          <div>Liquidity: {market.liquidity} seers</div>
+          <div style="margin-top: 10px; margin-bottom: 10px">
+            {#each market.labels as label, i}
+              <div>{label}: {Number(market.probabilities[i]) / 10.0}%</div>
+            {/each}
+          </div>
+          <div>Volume: ${market.volume}</div>
+          <div>Liquidity: ${market.liquidity}</div>
         </div>
       </a>
     </div>

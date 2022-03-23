@@ -8,7 +8,8 @@
   let market
 
   let seerAmount = 0
-  let selected
+  let selected = 0
+  let selectedLabel
   // let yesOptClass = "YesTabSelected"
   // let noOptClass = "NoTab"
   let buyOptClass = "BuyOptSelected"
@@ -20,6 +21,7 @@
   const readMarket = async () => {
     market = await $auth.actor.readMarket(parseInt(marketId))
     market = market[0]
+    selectedLabel = market.labels[0]
     console.log(market)
   }
 
@@ -136,7 +138,11 @@
           </div>
           Pick Outcome:
           <div class="ContentTab">
-            <select bind:value={selected} style="width: 100%">
+            <select
+              bind:value={selected}
+              style="width: 100%"
+              on:change={() => (selectedLabel = market.labels[selected])}
+            >
               {#each market.labels as label, i}
                 <option value={i}>
                   ${(Number(market.probabilities[i]) / 1000.0).toFixed(2)} - {label}
@@ -187,15 +193,9 @@
               on:click={() => doIt(market.id, seerAmount)}
             >
               {#if buyTokens}
-                {#if tokenIsYes}
-                  Buy Yes
-                {:else}
-                  Buy No
-                {/if}
-              {:else if tokenIsYes}
-                Sell Yes
+                Buy {selectedLabel}
               {:else}
-                Sell No
+                Sell {selectedLabel}
               {/if}
             </button>
           </div>
