@@ -1,7 +1,7 @@
 <script>
   export let auth
 
-  let labels = []
+  let labels = ["madrid", "berlin", "lisbon"]
   let newLabel
   let marketCreated = false
   let newMarketTitle = "Champions League: Benfica vs Liverpool."

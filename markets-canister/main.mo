@@ -361,11 +361,11 @@ shared({ caller = initializer }) actor class Market() {
                 
                         newReserveTokens[number] := market.reserves[number] + value;
                         let newOthersReserve = market.kLast / market.reserves[number];
-                        var oldOthersReserve: Balance = 0;
+                        var oldOthersReserve: Balance = 1;
                         
                         for (i in Iter.range(0, optionsSize - 1)) {
                             if (i != number) {
-                                oldOthersReserve := oldOthersReserve + market.reserves[i];
+                                oldOthersReserve := oldOthersReserve * market.reserves[i];
                             };
                         };
 
@@ -373,26 +373,17 @@ shared({ caller = initializer }) actor class Market() {
                         var totalReserve: Balance = 0;
                         for (i in Iter.range(0, optionsSize - 1)) {
                             if (i != number) {
-                                let reserve: Balance = market.reserves[i] * oldOthersReserve / newOthersReserve;
-                                newReserveTokens[i] := reserve;
-                                totalReserve := totalReserve + reserve;
+                                newReserveTokens[i] := (market.reserves[i] * newOthersReserve) / oldOthersReserve;
+                                totalReserve := totalReserve + newReserveTokens[i];
                             };
                         };
 
                         totalReserve := totalReserve + newReserveTokens[number];
                         let multiplier: Balance = 1000 / optionsSize;
-                        var maxLiquidity: Balance = 0;
-
-                        for (i in Iter.range(0, optionsSize - 1)) {
-                            let liquidity = newReserveTokens[i] * market.probabilities[i] / multiplier;
-                            if (liquidity > maxLiquidity) {
-                                maxLiquidity := liquidity;
-                            };
-                        };
-
-                        let liquidityOut = market.liquidity - maxLiquidity;
-                        market.liquidity := maxLiquidity;
-
+                        let newLiquidity = newReserveTokens[number] * market.probabilities[number] / multiplier;
+                        
+                        let liquidityOut =  newLiquidity - market.liquidity;
+                        
                         market.volume := market.volume + liquidityOut;
                         market.reserves := Array.freeze(newReserveTokens);
 
