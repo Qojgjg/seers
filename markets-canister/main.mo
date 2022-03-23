@@ -458,22 +458,25 @@ shared({ caller = initializer }) actor class Market() {
                 };
 
                 let optionsSize = market.reserves.size();
-                var newTokens: [var Balance] = Array.init(optionsSize, 0);
                 var newReserveTokens: [var Balance] = Array.init(optionsSize, 0);
+                var newTokens: [var Balance] = Array.init(optionsSize, 0);
                 var sumOtherReserves: Balance = 0;
                 var mulOtherReserves: Balance = 1;
+                
+                let newLiquidity = market.liquidity + value;
+                let multiplier = 1000 / optionsSize;
 
                 for (i in Iter.range(0, optionsSize - 1)) {
                     if (i != number) {
-                        newTokens[i] := value * 1000 / market.probabilities[i];
-                        newReserveTokens[i] := market.reserves[i] + newTokens[i];
+                        newReserveTokens[i] := newLiquidity * multiplier / market.probabilities[i];
                         mulOtherReserves := mulOtherReserves * newReserveTokens[i];
                         sumOtherReserves := sumOtherReserves + newReserveTokens[i];
                     };
                 };
 
                 let newOptionReserve: Balance = market.kLast / mulOtherReserves;
-                let tokensOut = market.reserves[number] - newOptionReserve;
+                let tokensOut = market.reserves[number] - newOptionReserve
+                    + value * multiplier / market.probabilities[number];
 
                 if (not save) {
                     return ?tokensOut;
@@ -481,8 +484,7 @@ shared({ caller = initializer }) actor class Market() {
 
                 newReserveTokens[number] := newOptionReserve; 
                 market.reserves := Array.freeze(newReserveTokens);
-
-                market.liquidity := market.liquidity + value;
+                market.liquidity := newLiquidity;
                 market.volume := market.volume + value;
                  
                 let totalReserve = sumOtherReserves + newOptionReserve;

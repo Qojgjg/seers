@@ -71,7 +71,7 @@ type Market =
    readAllUsers: () -> (vec UserResult) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
    resolveMarket: (MarketId, nat) -> (bool);
-   sellYes: (MarketId, Balance, nat, bool) -> (opt Balance);
+   sellOption: (MarketId, Balance, nat, bool) -> (opt Balance);
  };
 type Description = text;
 type Balance = int;

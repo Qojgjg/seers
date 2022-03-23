@@ -10,8 +10,6 @@
   let seerAmount = 0
   let selected = 0
   let selectedLabel
-  // let yesOptClass = "YesTabSelected"
-  // let noOptClass = "NoTab"
   let buyOptClass = "BuyOptSelected"
   let sellOptClass = "SellOpt"
   let buyTokens = true
@@ -27,41 +25,31 @@
 
   const dryRun = async (marketId, amount) => {
     amount = parseInt(amount)
-    if (buyTokens && tokenIsYes) {
-      // buy yes
-      tokensEstimate = await $auth.actor.buyOption(marketId, amount, 0, false)
-    } else if (buyTokens && !tokenIsYes) {
-      // buy no
-      tokensEstimate = await $auth.actor.buyOption(marketId, amount, 1, false)
+    if (buyTokens) {
+      tokensEstimate = await $auth.actor.buyOption(
+        marketId,
+        amount,
+        selected,
+        false,
+      )
+    } else {
+      tokensEstimate = await $auth.actor.sellOption(
+        marketId,
+        amount,
+        selected,
+        false,
+      )
     }
-    // else if (!buyTokens && tokenIsYes) {
-    //   // sell yes
-    //   tokensEstimate = await $auth.actor.sellYes(marketId, amount, false)
-    // } else if (!buyTokens && !tokenIsYes) {
-    //   // sell no
-    //   tokensEstimate = await $auth.actor.sellNo(marketId, amount, false)
-    // }
     console.log("tokens estimate: " + tokensEstimate)
   }
 
   const doIt = async (marketId, amount) => {
     amount = parseInt(amount)
     if (buyTokens) {
-      console.log(selected)
-      // buy yes
       await $auth.actor.buyOption(marketId, amount, selected, true)
+    } else {
+      await $auth.actor.sellOption(marketId, amount, selected, true)
     }
-
-    // else if (buyTokens && !tokenIsYes) {
-    //   // buy no
-    //   await $auth.actor.buyOption(marketId, amount, , true)
-    // } else if (!buyTokens && tokenIsYes) {
-    //   // sell yes
-    //   // await $auth.actor.sellYes(marketId, amount, true)
-    // } else if (!buyTokens && !tokenIsYes) {
-    //   // sell no
-    //   // await $auth.actor.sellNo(marketId, amount, true)
-    // }
   }
 
   onMount(readMarket)
@@ -101,22 +89,6 @@
         <div
           style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column"
         >
-          <!-- <button
-            class="demo-button"
-            on:click={() => {
-              $auth.actor.removeLiquidity(market.id)
-            }}>Remove All Liquidity Provided</button
-          >
-          <div>
-            <input bind:value={addLiquidityAmount} />
-            <button
-              class="demo-button"
-              on:click={() => {
-                $auth.actor.addLiquidity(market.id, addLiquidityAmount)
-              }}>Add Liquidity</button
-            >
-          </div> -->
-
           Trade:
           <div class="YesNoOptions">
             <button
@@ -149,24 +121,6 @@
                 </option>
               {/each}
             </select>
-            <!-- <div class="YesNoOptions">
-              <button
-                class={yesOptClass}
-                on:click={() => {
-                  yesOptClass = "YesTabSelected"
-                  noOptClass = "NoTab"
-                  tokenIsYes = true
-                }}>Yes ${Number(market.probabilities[0]) / 1000.0}</button
-              >
-              <button
-                class={noOptClass}
-                on:click={() => {
-                  noOptClass = "NoTabSelected"
-                  yesOptClass = "YesTab"
-                  tokenIsYes = false
-                }}>No ${Number(market.probabilities[1]) / 1000.0}</button
-              >
-            </div> -->
             <div class="OutcomeTitle">Amount:</div>
             <div class="OutcomeTitle">
               <input

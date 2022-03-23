@@ -32,14 +32,18 @@
 
 <div class="row">
   {#if user}
-    <div style="margin-bottom: 10px; justify-content:start; width: 100%">
-      User Id: {user.id}.
+    <div
+      style="margin-bottom: 10px; justify-content:center; width: 100%; text-align:center"
+    >
+      Id: {user.id}.
     </div>
-    <div style="margin-bottom: 10px; justify-content: start; width: 100%">
+    <div
+      style="margin-bottom: 10px; justify-content: center; width: 100;%text-align:center"
+    >
       Balance: {user.seerBalance} seers.
     </div>
     {#if user.markets.length}
-      <div style="display:flex; flex-direction: column; ">
+      <div style="display:flex; flex-direction: column;">
         Markets:
         {#each user.markets as market}
           <a href="#/market/{market.marketId}">
@@ -47,19 +51,16 @@
               style="display:flex; align-items: center; align-content: center; flex-direction: row; gap: 10px; margin-top: 10px; padding: 3px; background-color: rgb(220 218 224 / 10%); "
             >
               <div style="">
-                #{market.marketId}
+                #{market.marketId}.
               </div>
               <div style="">
                 {market.marketTitle}
               </div>
               <div style="">
-                {market.yesBalance} Yes
+                {market.balances} tokens.
               </div>
               <div style="">
-                {market.noBalance} No
-              </div>
-              <div style="">
-                {market.shares} Shares
+                {market.shares} shares.
               </div>
               <div>
                 <button
@@ -75,12 +76,14 @@
       </div>
     {/if}
   {:else}
-    <button
-      class="demo-button"
-      on:click={() => {
-        createUserData()
-      }}>Create User</button
-    >
+    <div class="row">
+      <button
+        class="demo-button"
+        on:click={() => {
+          createUserData()
+        }}>Create User</button
+      >
+    </div>
   {/if}
 </div>
 

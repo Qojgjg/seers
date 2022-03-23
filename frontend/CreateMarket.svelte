@@ -43,12 +43,16 @@
   }
 </script>
 
-<div class="header">
-  <h3>Create Market</h3>
-</div>
 {#if marketCreated}
-  <div class="row">Market created!</div>
+  <div class="header">
+    <h3>Market created!</h3>
+  </div>
+  <div class="row" />
 {:else}
+  <div class="header">
+    <h3>Create Market</h3>
+  </div>
+
   <div class="row">
     <div class="form">
       <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
@@ -61,24 +65,17 @@
         <div style="font-size: 1.5em">Description:</div>
         <div><textarea bind:value={newMarketDesc} rows="20" cols="40" /></div>
       </div>
-      <div>
+      <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">Image URL:</div>
         <div><input bind:value={imageUrl} size="40" maxlength="200" /></div>
       </div>
-      <div>{labels}</div>
-      <div>
+      <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">New option:</div>
-        <div><input bind:value={newLabel} size="40" maxlength="200" /></div>
+        <div style="font-size: 1.5em">
+          <input bind:value={newLabel} size="40" maxlength="200" />
+        </div>
         <button class="demo-button" on:click={addOption}>Add</button>
       </div>
-      <!-- <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
-        <div style="font-size: 1.5em">Yes deposit:</div>
-        <div><input bind:value={yesDeposit} size="20" maxlength="7" /></div>
-      </div>
-      <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
-        <div style="font-size: 1.5em">No deposit:</div>
-        <div><input bind:value={noDeposit} size="20" maxlength="7" /></div>
-      </div> -->
       <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">End date:</div>
         <div><input bind:value={endDate} size="20" maxlength="10" /></div>

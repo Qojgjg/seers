@@ -22,7 +22,7 @@ export interface Market {
   'readAllUsers' : () => Promise<Array<UserResult>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'resolveMarket' : (arg_0: MarketId, arg_1: bigint) => Promise<boolean>,
-  'sellYes' : (
+  'sellOption' : (
       arg_0: MarketId,
       arg_1: Balance,
       arg_2: bigint,
