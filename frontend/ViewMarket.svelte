@@ -108,7 +108,7 @@
               }}>Sell</button
             >
           </div>
-          Pick Outcome:
+          <div style="padding: 5px">Pick Outcome:</div>
           <img
             class="Image"
             src={market.images[selected]}
@@ -168,6 +168,12 @@
 {/if}
 
 <style global>
+  select {
+    background-color: white;
+    color: black;
+    border-color: white;
+    margin-top: 10px;
+  }
   .header {
     text-align: center;
     justify-content: center;
@@ -221,7 +227,7 @@
 
   .Image {
     border-radius: 8px;
-    max-width: 150px;
+    width: 150px;
     float: left;
     padding-right: 10px;
     padding-left: 10px;
