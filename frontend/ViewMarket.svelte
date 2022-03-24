@@ -81,8 +81,8 @@
               parseInt(market.endDate) / 1_000_000,
             ).toLocaleDateString()}
           </li>
-          <li>Liquidity: {market.liquidity} seers</li>
-          <li>Volume: {market.volume} seers</li>
+          <li>Liquidity: ${market.liquidity}</li>
+          <li>Volume: ${market.volume}</li>
         </ul>
       </div>
       <div class="market-controls">
