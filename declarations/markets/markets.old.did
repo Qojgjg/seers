@@ -32,6 +32,7 @@ type MarketResult =
    endDate: Time;
    id: MarketId;
    imageUrl: Url;
+   images: vec text;
    kLast: Balance;
    labels: vec text;
    liquidity: Balance;
@@ -49,6 +50,7 @@ type MarketInitData =
    description: Description;
    endDate: Time;
    imageUrl: Url;
+   images: vec text;
    labels: vec text;
    liquidity: Balance;
    probabilities: vec Probability;
