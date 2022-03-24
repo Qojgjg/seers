@@ -61,7 +61,6 @@
   </div>
   <div class="rowView">
     <div class="market">
-      <!-- <h3>{market.title}</h3> -->
       <img class="Image" src={market.imageUrl} alt="random" />
       <div style="line-height: 1.6;">
         {market.description}
@@ -304,7 +303,6 @@
     border-radius: 1em;
     word-wrap: break-word;
     overflow: auto;
-    display: flex;
     flex-direction: column;
     justify-content: start;
     min-width: 400px;

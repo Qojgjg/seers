@@ -59,6 +59,7 @@ shared({ caller = initializer }) actor class Market() {
         description: Description;
         probabilities: [Probability];
         labels: [Text];
+        images: [Text];
         liquidity: Balance;
         endDate: Time.Time;
         imageUrl: Url;
@@ -72,6 +73,7 @@ shared({ caller = initializer }) actor class Market() {
         endDate: Time.Time;
         author: Author;
         labels: [Text];
+        images: [Text];
         var probabilities: [Probability];
         var liquidity: Balance;
         var blockTimestampLast: Time.Time;
@@ -89,6 +91,7 @@ shared({ caller = initializer }) actor class Market() {
         title: Title;
         description: Description;
         labels: [Text];
+        images: [Text];
         probabilities: [Probability];
         liquidity: Balance;
         startDate: Time.Time;
@@ -541,75 +544,6 @@ shared({ caller = initializer }) actor class Market() {
         };
     };
 
-    // // Add liquidity to this market by calling user.
-    // public shared(msg) func addLiquidity(marketId: MarketId, value: Balance): async Bool {
-    //     let caller = Principal.toText(msg.caller);
-    //     let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
-        
-    //     switch (result) {
-    //         case null {
-    //             // Market does not exist? WTF!
-    //             return false;
-    //         };
-    //         case (?market) {
-    //             if (market.endDate < Time.now()) {
-    //                 market.state := #closed;
-    //                 return false;
-    //             };
-
-    //             market.liquidity := market.liquidity + value;
-    //             market.volume := market.volume + value;
-    //             market.reserveYes := market.liquidity * 50 / market.yesProb;
-    //             market.reserveNo := market.liquidity * 50 / market.noProb;
-    //             market.kLast := market.reserveYes * market.reserveNo;
-
-    //             // TODO: this wraps on overflow. Should I use Int64 directly?
-    //             let newTotalShares = Float.toInt(Float.sqrt(
-    //                 Float.fromInt(market.reserveNo)
-    //                 * Float.fromInt(market.reserveYes)));
-
-    //             let userShares = newTotalShares - market.totalShares;
-    //             market.totalShares := newTotalShares;
-    //             market.blockTimestampLast := Time.now();
-
-    //             let callerIsProvider = Array.find(market.providers, func (u: UserId): Bool {
-    //                 u == caller;
-    //             });
-
-    //             var user = getOrCreateUser(caller);
-                
-    //             let userMarket: UserMarket = {
-    //                 marketId = market.id;
-    //                 marketTitle = market.title;
-    //                 yesBalance = 0;
-    //                 noBalance = 0;
-    //                 shares = userShares;
-    //             };
-
-    //             user.markets := Array.append(user.markets, [userMarket]);
-    //             users := Trie.replace(
-    //                 users,
-    //                 userKey(user.id),
-    //                 Text.equal,
-    //                 ?user,
-    //             ).0;
-
-    //             if (callerIsProvider == null) {
-    //                 market.providers := Array.append(market.providers, [caller])
-    //             };
-
-    //             markets := Trie.replace(
-    //                 markets,
-    //                 marketKey(market.id),
-    //                 Nat32.equal,
-    //                 ?market,
-    //             ).0;
-
-    //             return true;
-    //         };
-    //     };
-    // };
-
     // Get user data.
     public query func getUserResult(userId: UserId): async ?UserResult {
         return Option.map(getUser(userId), userToUserResult);
@@ -620,103 +554,6 @@ shared({ caller = initializer }) actor class Market() {
         let caller = Principal.toText(msg.caller);        
         return userToUserResult(createUser(caller));
     };
-
-    // // Remove all liquidity provided in this market by calling user.
-    // public shared(msg) func removeLiquidity(marketId: MarketId): async Bool {
-    //     // If user is anon we abort.
-    //     let author = Principal.toText(msg.caller);
-    //     assert(author != anon);
-
-    //     // Get user and market state.
-    //     let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
-    //     let userOpt = Trie.find(users, userKey(author), Text.equal);
-
-    //     switch (userOpt) {
-    //         case null {
-    //             // If user is not in state we abort.
-    //             return false;
-    //         };
-    //         case (?user) {
-
-    //             switch (marketOpt) {
-    //                 case null {
-    //                     // If market is not in state we abort.
-    //                     return false;
-    //                 };
-    //                 case (?market) {
-    //                     if (market.endDate < Time.now()) {
-    //                         market.state := #closed;
-    //                         return false;
-    //                     };
-    //                     // All good, let's do it.
-    //                     // Loop throught user markets and and update this one.
-                        
-    //                     let newMarketsBuffer: Buffer.Buffer<UserMarket> 
-    //                         = Buffer.Buffer(user.markets.size() - 1);
-                        
-    //                     for (userMarket in user.markets.vals()) {
-    //                         if (userMarket.marketId != marketId) {
-    //                             // Other markets are kept intact.
-    //                             newMarketsBuffer.add(userMarket);
-    //                         } else {
-    //                             // Calculate percentage of user shares from total.
-    //                             let percent = userMarket.shares / market.totalShares;
-    //                             let userLiquidity = market.liquidity * percent;
-
-    //                             // Remove user liquidity from total.                    
-    //                             market.liquidity := market.liquidity - userLiquidity;
-    //                             market.volume := market.volume + userLiquidity;
-
-    //                             // Calculate tokens we need to give back.
-    //                             let userYesTokens = market.reserveYes * percent;
-    //                             let userNoTokens = market.reserveNo * percent;
-            
-    //                             // Remove tokens from total.
-    //                             market.reserveYes := market.reserveYes - userYesTokens;
-    //                             market.reserveNo := market.reserveNo - userNoTokens; 
-
-    //                             let newUserMarket: UserMarket = {
-    //                                 marketId = userMarket.marketId;
-    //                                 marketTitle = userMarket.marketTitle;
-    //                                 yesBalance = userYesTokens;
-    //                                 noBalance = userNoTokens;
-    //                                 shares = 0;
-    //                             };
-
-    //                             // Remove user shares from total shares.
-    //                             market.totalShares := market.totalShares - userMarket.shares;
-                                
-    //                             // Remove user from providers list.
-    //                             market.providers := 
-    //                                 Array.filter(market.providers, func (u: UserId): Bool {
-    //                                     u != author;
-    //                                 });
-
-    //                             newMarketsBuffer.add(newUserMarket);
-    //                         };
-    //                     };
-    //                     user.markets := newMarketsBuffer.toArray();
-
-    //                     users := Trie.replace(
-    //                         users,
-    //                         userKey(user.id),
-    //                         Text.equal,
-    //                         ?user,
-    //                     ).0;
-
-    //                     markets := Trie.replace(
-    //                         markets,
-    //                         marketKey(market.id),
-    //                         Nat32.equal,
-    //                         ?market,
-    //                     ).0;
-
-    //                     return true;
-    //                 };
-    //             };
-    //         };
-    //     };
-    // };
 
     /**
     * Utilities
