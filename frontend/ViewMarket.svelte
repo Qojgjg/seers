@@ -138,14 +138,14 @@
             <div class="ControlData">
               <div>LP fee 0.00%</div>
               <div>
-                Avg. price {tokensEstimate
+                Avg. price ${tokensEstimate
                   ? (seerAmount / tokensEstimate).toFixed(2)
-                  : 0} seers
+                  : 0}
               </div>
               <div>
-                Max. winnings {tokensEstimate - seerAmount
+                Max. winnings ${tokensEstimate - seerAmount
                   ? tokensEstimate - seerAmount
-                  : 0} seers
+                  : 0}
               </div>
             </div>
             <button
@@ -313,6 +313,7 @@
     overflow: auto;
     flex-direction: column;
     justify-content: start;
+    height: fit-content;
     min-width: 400px;
     max-width: 40%;
     margin-bottom: 1em;
