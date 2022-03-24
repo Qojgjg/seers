@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { concat } from "@dfinity/candid/lib/cjs/utils/buffer"
   import { onMount, beforeUpdate } from "svelte"
   import { identity, select_multiple_value } from "svelte/internal"
 
@@ -69,7 +70,7 @@
     <div class="v-container">
       <div class="market-controls">
         <ul style="list-style-type: none; margin: 0; padding: 0">
-          <li>State: {Object.keys(market.state)}</li>
+          <li>State: {Object.keys(market.state).toString().toUpperCase()}</li>
           <li>
             Start date: {new Date(
               parseInt(market.startDate) / 1_000_000,
@@ -108,6 +109,12 @@
             >
           </div>
           Pick Outcome:
+          <img
+            class="Image"
+            src={market.images[selected]}
+            alt="image of {selectedLabel}"
+          />
+
           <div class="ContentTab">
             <select
               bind:value={selected}
@@ -245,24 +252,24 @@
   .BuyOpt {
     width: 50%;
     height: fit-content;
-    color: black;
+    color: white;
+    background: rgb(220 218 224 / 25%);
   }
   .SellOpt {
     width: 50%;
     height: fit-content;
-    color: black;
+    color: white;
+    background: rgb(220 218 224 / 25%);
   }
   .BuyOptSelected {
     width: 50%;
     height: fit-content;
-    color: white;
-    background: rgb(220 218 224 / 25%);
+    color: black;
   }
   .SellOptSelected {
     width: 50%;
     height: fit-content;
-    color: white;
-    background: rgb(220 218 224 / 25%);
+    color: black;
   }
   .YesTabSelected {
     width: 50%;
@@ -298,7 +305,7 @@
   }
   .market {
     padding: 2em;
-    background: rgb(220 218 224 / 10%);
+    /* background: rgb(220 218 224 / 10%); */
     margin: 0em 1em;
     border-radius: 1em;
     word-wrap: break-word;
@@ -313,7 +320,7 @@
   @media only screen and (max-width: 600px) {
     .market {
       padding: 2em;
-      background: rgb(220 218 224 / 10%);
+      /* background: rgb(220 218 224 / 10%); */
       margin: 0em 1em;
       border-radius: 1em;
       word-wrap: break-word;

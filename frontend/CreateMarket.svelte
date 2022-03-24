@@ -1,30 +1,32 @@
 <script>
   export let auth
 
-  let labels = ["madrid", "berlin", "lisbon"]
-  let newLabel
+  let labels
+  let images
   let marketCreated = false
-  let newMarketTitle = "Champions League: Benfica vs Liverpool."
-  let newMarketDesc = "Who will win?"
-  let endDate = "10/10/2022"
-  let imageUrl =
-    "https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/UEFA_Champions_League_logo_2.svg/1200px-UEFA_Champions_League_logo_2.svg.png"
+  let newMarketTitle
+  let newMarketDesc
+  let endDate
+  let imageUrl
 
   let createMarket = async () => {
     const liquidity = 3000
     let probabilities = []
     let i = 0
 
-    console.log("labels: " + labels)
-
     for (; i < labels.length; i++) {
       probabilities.push(BigInt(Math.floor(1000 / labels.length)))
     }
 
+    labels = labels.split(",").map((s) => s.trim())
+    images = images.split(",").map((s) => s.trim())
+
+    console.log(labels, images)
     const marketInitData = {
       title: newMarketTitle,
       description: newMarketDesc,
       labels: labels,
+      images: images,
       probabilities: probabilities,
       liquidity: liquidity,
       endDate: Date.parse(endDate) * 1_000_000,
@@ -32,14 +34,6 @@
     }
     await $auth.actor.createMarket(marketInitData)
     marketCreated = true
-  }
-
-  let addOption = () => {
-    if (newLabel.length > 0) {
-      labels.push(newLabel)
-      console.log(labels)
-      newLabel = ""
-    }
   }
 </script>
 
@@ -70,11 +64,16 @@
         <div><input bind:value={imageUrl} size="40" maxlength="200" /></div>
       </div>
       <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
-        <div style="font-size: 1.5em">New option:</div>
+        <div style="font-size: 1.5em">Options: (eg. 'yes,no')</div>
         <div style="font-size: 1.5em">
-          <input bind:value={newLabel} size="40" maxlength="200" />
+          <input bind:value={labels} size="40" maxlength="1000" />
         </div>
-        <button class="demo-button" on:click={addOption}>Add</button>
+      </div>
+      <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
+        <div style="font-size: 1.5em">Options images: (optional)</div>
+        <div style="font-size: 1.5em">
+          <input bind:value={images} size="40" maxlength="1000" />
+        </div>
       </div>
       <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">End date:</div>
