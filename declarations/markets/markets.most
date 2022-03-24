@@ -8,6 +8,7 @@ type Market/1 =
     endDate : Time;
     id : MarketId;
     var imageUrl : Url;
+    images : [Text];
     var kLast : Balance;
     labels : [Text];
     var liquidity : Balance;

@@ -14,6 +14,7 @@ export const idlFactory = ({ IDL }) => {
     'liquidity' : Balance,
     'description' : Description,
     'imageUrl' : Url,
+    'images' : IDL.Vec(IDL.Text),
   });
   const UserId = IDL.Text;
   const Shares = IDL.Int;
@@ -53,6 +54,7 @@ export const idlFactory = ({ IDL }) => {
     'totalShares' : Shares,
     'blockTimestampLast' : Time,
     'startDate' : Time,
+    'images' : IDL.Vec(IDL.Text),
   });
   const Market = IDL.Service({
     'approveMarket' : IDL.Func([MarketId], [], []),

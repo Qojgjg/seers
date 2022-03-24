@@ -38,6 +38,7 @@ export interface MarketInitData {
   'liquidity' : Balance,
   'description' : Description,
   'imageUrl' : Url,
+  'images' : Array<string>,
 }
 export interface MarketResult {
   'id' : MarketId,
@@ -57,6 +58,7 @@ export interface MarketResult {
   'totalShares' : Shares,
   'blockTimestampLast' : Time,
   'startDate' : Time,
+  'images' : Array<string>,
 }
 export type MarketState = { 'resolved' : bigint } |
   { 'closed' : null } |
