@@ -47,13 +47,13 @@
   <div class="header">
     <h3>Market created!</h3>
   </div>
-  <div class="row" />
+  <div class="rowCreate" />
 {:else}
   <div class="header">
     <h3>Create Market</h3>
   </div>
 
-  <div class="row">
+  <div class="rowCreate">
     <div class="form">
       <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">Title:</div>
@@ -90,12 +90,7 @@
 {/if}
 
 <style global>
-  .header {
-    text-align: center;
-    padding-top: 60px;
-  }
-
-  .row {
+  .rowCreate {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;

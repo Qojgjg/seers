@@ -59,11 +59,11 @@
   <div class="header">
     <h3>{market.title}</h3>
   </div>
-  <div class="row">
+  <div class="rowView">
     <div class="market">
       <!-- <h3>{market.title}</h3> -->
       <img class="Image" src={market.imageUrl} alt="random" />
-      <div style="width:100%; line-height: 1.6;">
+      <div style="line-height: 1.6;">
         {market.description}
       </div>
     </div>
@@ -164,10 +164,12 @@
 <style global>
   .header {
     text-align: center;
+    justify-content: center;
     padding-top: 60px;
+    width: 100%;
   }
 
-  .row {
+  .rowView {
     display: flex;
     flex-wrap: wrap;
     padding: 0 4px;
@@ -305,6 +307,7 @@
     display: flex;
     flex-direction: column;
     justify-content: start;
+    min-width: 400px;
     max-width: 40%;
     margin-bottom: 1em;
   }

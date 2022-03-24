@@ -17,9 +17,9 @@
 <div class="header">
   <h3>Prediction Markets</h3>
 </div>
-<div class="row">
+<div class="rowList">
   {#each markets as market}
-    <div class="responsive">
+    <div class="responsiveItem">
       <a href="#/market/{market.id}">
         <div class="gallery">
           <img src={market.imageUrl} alt="random" />
@@ -38,12 +38,7 @@
 </div>
 
 <style global>
-  .header {
-    text-align: center;
-    padding: 32px;
-  }
-
-  .row {
+  .rowList {
     display: flex;
     flex-wrap: wrap;
     padding: 0 4px;
@@ -76,21 +71,21 @@
     box-sizing: border-box;
   }
 
-  .responsive {
+  .responsiveItem {
     float: left;
     width: 24.99999%;
     margin: 1em;
   }
 
   @media only screen and (max-width: 700px) {
-    .responsive {
+    .responsiveItem {
       width: 49.99999%;
       /* margin: 6px 0; */
     }
   }
 
   @media only screen and (max-width: 500px) {
-    .responsive {
+    .responsiveItem {
       width: 100%;
     }
   }

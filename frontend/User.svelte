@@ -30,7 +30,7 @@
   <h3>Profile Data</h3>
 </div>
 
-<div class="row">
+<div class="rowUser">
   {#if user}
     <div
       style="margin-bottom: 10px; justify-content:center; width: 100%; text-align:center"
@@ -38,7 +38,7 @@
       Id: {user.id}.
     </div>
     <div
-      style="margin-bottom: 10px; justify-content: center; width: 100;%text-align:center"
+      style="margin-bottom: 10px; justify-content: center; width: 100%;text-align:center"
     >
       Balance: {user.seerBalance} seers.
     </div>
@@ -76,7 +76,7 @@
       </div>
     {/if}
   {:else}
-    <div class="row">
+    <div class="rowUser">
       <button
         class="demo-button"
         on:click={() => {
@@ -88,12 +88,7 @@
 </div>
 
 <style global>
-  .header {
-    text-align: center;
-    padding-top: 60px;
-  }
-
-  .row {
+  .rowUser {
     display: flex;
     flex-wrap: wrap;
     padding: 10px;
