@@ -14,14 +14,13 @@
     let probabilities = []
     let i = 0
 
+    labels = labels.split(",").map((s) => s.trim())
+    images = images.split(",").map((s) => s.trim())
+
     for (; i < labels.length; i++) {
       probabilities.push(BigInt(Math.floor(1000 / labels.length)))
     }
 
-    labels = labels.split(",").map((s) => s.trim())
-    images = images.split(",").map((s) => s.trim())
-
-    console.log(labels, images)
     const marketInitData = {
       title: newMarketTitle,
       description: newMarketDesc,

@@ -70,7 +70,7 @@
     <div class="v-container">
       <div class="market-controls">
         <ul style="list-style-type: none; margin: 0; padding: 0">
-          <li>State: {Object.keys(market.state).toString().toUpperCase()}</li>
+          <li>State: {Object.keys(market.state).toString()}</li>
           <li>
             Start date: {new Date(
               parseInt(market.startDate) / 1_000_000,
@@ -223,7 +223,8 @@
     border-radius: 8px;
     max-width: 150px;
     float: left;
-    margin: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
   }
 
   .ControlData {
@@ -305,7 +306,7 @@
   }
   .market {
     padding: 2em;
-    /* background: rgb(220 218 224 / 10%); */
+    background: rgb(220 218 224 / 10%);
     margin: 0em 1em;
     border-radius: 1em;
     word-wrap: break-word;
@@ -320,7 +321,7 @@
   @media only screen and (max-width: 600px) {
     .market {
       padding: 2em;
-      /* background: rgb(220 218 224 / 10%); */
+      background: rgb(220 218 224 / 10%);
       margin: 0em 1em;
       border-radius: 1em;
       word-wrap: break-word;
