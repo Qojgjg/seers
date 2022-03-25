@@ -210,7 +210,7 @@ shared({ caller = initializer }) actor class Market() {
         let author = Principal.toText(msg.caller);
         
         assert(author != anon);
-        assert(marketInitData.liquidity >= 1000);
+        assert(marketInitData.liquidity > 0);
         assert(marketInitData.title != "");
         assert(marketInitData.description != "");
         assert(marketInitData.imageUrl != "");
@@ -390,16 +390,17 @@ shared({ caller = initializer }) actor class Market() {
                             };
                         };
 
-                        let rates: [var Probability] = Array.init(optionsSize, 0);
-                        var totalRates: Balance = 0;
+                        let rates: [var Float] = Array.init(optionsSize, 0.0);
+                        var totalRates: Float = 0;
 
                         for (i in Iter.range(0, optionsSize - 1)) {
-                            rates[i] := maxReserve * 1000 / market.reserves[i];
+                            rates[i] := Float.fromInt(maxReserve) 
+                                * Float.fromInt(1000) / Float.fromInt(market.reserves[i]);
                             totalRates := totalRates + rates[i];
                         };
 
                         for (i in Iter.range(0, optionsSize - 1)) {
-                            probabilities[i] := rates[i] * 1000 / totalRates;
+                            probabilities[i] := Float.toInt(rates[i] * 1000 / totalRates);
                         };
 
                         market.probabilities :=  Array.freeze(probabilities);
@@ -494,18 +495,18 @@ shared({ caller = initializer }) actor class Market() {
                     };
                 };
 
-                let rates: [var Probability] = Array.init(optionsSize, 0);
-                var totalRates: Balance = 0;
+                let rates: [var Float] = Array.init(optionsSize, 0.0);
+                var totalRates: Float = 0;
 
                 for (i in Iter.range(0, optionsSize - 1)) {
-                    rates[i] := maxReserve * 1000 / market.reserves[i];
+                    rates[i] := Float.fromInt(maxReserve) 
+                        * Float.fromInt(1000) / Float.fromInt(market.reserves[i]);
                     totalRates := totalRates + rates[i];
                 };
 
                 for (i in Iter.range(0, optionsSize - 1)) {
-                    probabilities[i] := rates[i] * 1000 / totalRates;
+                    probabilities[i] := Float.toInt(rates[i] * 1000 / totalRates);
                 };
-
                 market.probabilities :=  Array.freeze(probabilities);
 
                 var marketTokensOpt = Array.find(user.markets,

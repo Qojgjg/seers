@@ -10,7 +10,7 @@
   let imageUrl
 
   let createMarket = async () => {
-    const liquidity = 3000
+    const liquidity = 100
     let probabilities = []
     let i = 0
 
