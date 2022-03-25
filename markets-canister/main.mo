@@ -225,7 +225,7 @@ shared({ caller = initializer }) actor class Market() {
         var kLastFloat: Float = 1.0;
 
         for (i in Iter.range(0, optionsLength - 1)) {
-            reserves[i] := marketInitData.liquidity * multiplier / marketInitData.probabilities[i];
+            reserves[i] := marketInitData.liquidity;
             kLastFloat := kLastFloat * Float.fromInt(reserves[i]);
         };
 
@@ -463,15 +463,14 @@ shared({ caller = initializer }) actor class Market() {
 
                 for (i in Iter.range(0, optionsSize - 1)) {
                     if (i != number) {
-                        newReserveTokens[i] := newLiquidity * multiplier / market.probabilities[i];
+                        newReserveTokens[i] := market.reserves[i] + value;
                         mulOtherReserves := mulOtherReserves * newReserveTokens[i];
                         sumOtherReserves := sumOtherReserves + newReserveTokens[i];
                     };
                 };
 
                 let newOptionReserve: Balance = market.kLast / mulOtherReserves;
-                let tokensOut = market.reserves[number] - newOptionReserve
-                    + value * multiplier / market.probabilities[number];
+                let tokensOut = market.reserves[number] + value - newOptionReserve;
 
                 if (not save) {
                     return ?tokensOut;
