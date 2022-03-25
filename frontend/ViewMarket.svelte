@@ -143,9 +143,7 @@
                   : 0}
               </div>
               <div>
-                Max. winnings ${tokensEstimate - seerAmount
-                  ? tokensEstimate - seerAmount
-                  : 0}
+                Tokens ${tokensEstimate ? tokensEstimate : 0}
               </div>
             </div>
             <button
