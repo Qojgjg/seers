@@ -366,6 +366,7 @@ shared({ caller = initializer }) actor class Market() {
                         for (i in Iter.range(0, optionsSize - 1)) {
                             if (i != number) {
                                 newTotalReserve := newTotalReserve * market.reserves[i];
+                                newReserveTokens[i] := market.reserves[i];
                             };
                         };
                         let newLiquidity = market.kLast / newTotalReserve;
@@ -402,6 +403,7 @@ shared({ caller = initializer }) actor class Market() {
                         };
 
                         market.probabilities :=  Array.freeze(probabilities);
+                        market.liquidity := market.liquidity - liquidityOut;
 
                         user.markets := Array.mapFilter(user.markets, 
                             func (ut: UserMarket): ?UserMarket {
