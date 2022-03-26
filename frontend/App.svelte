@@ -63,8 +63,13 @@
 
   html {
     height: 100%;
-    background-color: #130f40;
-    background-image: linear-gradient(315deg, #130f40 0%, #000000 74%);
+
+    background: radial-gradient(
+      50% 50% at 50% 50%,
+      #fc077d10 0,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-color: #212429;
   }
 
   body {

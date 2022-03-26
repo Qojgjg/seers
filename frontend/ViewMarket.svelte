@@ -315,13 +315,22 @@
   }
   .market {
     padding: 2em;
-    background: rgb(220 218 224 / 10%);
+    /* background: rgb(33, 36, 41) !important; */
+    /* uniswap style follows */
+    background-color: rgb(25, 27, 31);
+    border: 2px solid rgb(25, 27, 31);
+    border-radius: 16px;
+    color: rgb(255, 255, 255);
+    justify-content: space-between;
+    font-family: "Inter", sans-serif;
+
+    /* padding: 6px 8px; */
+    /* background: rgb(220 218 224 / 10%); */
     margin: 0em 1em;
-    border-radius: 1em;
     word-wrap: break-word;
     overflow: auto;
     flex-direction: column;
-    justify-content: start;
+    /* justify-content: start; */
     height: fit-content;
     min-width: 400px;
     max-width: 40%;
@@ -347,7 +356,22 @@
   .market-controls {
     margin-bottom: 1em;
     padding: 1em;
-    background: rgb(220 218 224 / 10%);
+    /* background: rgb(220 218 224 / 10%); */
+    color: rgb(195, 197, 203);
+    background-color: rgb(25, 27, 31);
+    border: 2px solid rgb(25, 27, 31);
+    border-radius: 16px;
+    justify-content: space-between;
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    /* padding: 8px 12px; */
+    word-break: break-word;
+    overflow: hidden;
+    white-space: nowrap;
+
+    /* line-height: 1.4em; */
+
     height: fit-content;
     border-radius: 1em;
     word-wrap: break-word;
