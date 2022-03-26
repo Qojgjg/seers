@@ -1,5 +1,6 @@
 <script lang="ts">
   import { concat } from "@dfinity/candid/lib/cjs/utils/buffer"
+  import { faImages } from "@fortawesome/free-solid-svg-icons"
   import { onMount, beforeUpdate } from "svelte"
   import { identity, select_multiple_value } from "svelte/internal"
 
@@ -62,7 +63,9 @@
   </div>
   <div class="rowView">
     <div class="market">
-      <img class="Image" src={market.imageUrl} alt="random" />
+      {#if market.imageUrl}
+        <img class="Image" src={market.imageUrl} alt="random" />
+      {/if}
       <div style="line-height: 1.6;">
         {market.description}
       </div>
@@ -109,11 +112,13 @@
             >
           </div>
           <div style="padding: 5px">Pick Outcome:</div>
-          <img
-            class="Image"
-            src={market.images[selected]}
-            alt="image of {selectedLabel}"
-          />
+          {#if market.images[selected]}
+            <img
+              class="Image"
+              src={market.images[selected]}
+              alt="image of {selectedLabel}"
+            />
+          {/if}
 
           <div class="ContentTab">
             <select
