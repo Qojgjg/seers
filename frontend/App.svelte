@@ -60,9 +60,15 @@
     text-decoration: none;
     color: white;
   }
+
+  html {
+    height: 100%;
+    background-color: #130f40;
+    background-image: linear-gradient(315deg, #130f40 0%, #000000 74%);
+  }
+
   body {
     margin: 0;
-    background-color: rgba(0, 0, 0, 0.9);
     color: whitesmoke;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     -webkit-font-smoothing: antialiased;
