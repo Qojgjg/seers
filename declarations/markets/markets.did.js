@@ -2,13 +2,11 @@ export const idlFactory = ({ IDL }) => {
   const MarketId = IDL.Nat32;
   const Balance = IDL.Int;
   const Title = IDL.Text;
-  const Probability = IDL.Int;
   const Time = IDL.Int;
   const Description = IDL.Text;
   const Url = IDL.Text;
   const MarketInitData = IDL.Record({
     'title' : Title,
-    'probabilities' : IDL.Vec(Probability),
     'endDate' : Time,
     'labels' : IDL.Vec(IDL.Text),
     'liquidity' : Balance,
@@ -29,6 +27,7 @@ export const idlFactory = ({ IDL }) => {
     'seerBalance' : Balance,
     'markets' : IDL.Vec(UserMarket),
   });
+  const Probability = IDL.Int;
   const Author = IDL.Text;
   const MarketState = IDL.Variant({
     'resolved' : IDL.Nat,
@@ -41,8 +40,8 @@ export const idlFactory = ({ IDL }) => {
     'title' : Title,
     'probabilities' : IDL.Vec(Probability),
     'endDate' : Time,
+    'liquidities' : IDL.Vec(Balance),
     'labels' : IDL.Vec(IDL.Text),
-    'liquidity' : Balance,
     'reserves' : IDL.Vec(Balance),
     'description' : Description,
     'volume' : Balance,
@@ -50,7 +49,7 @@ export const idlFactory = ({ IDL }) => {
     'state' : MarketState,
     'imageUrl' : Url,
     'providers' : IDL.Vec(IDL.Text),
-    'kLast' : Balance,
+    'kLasts' : IDL.Vec(Balance),
     'totalShares' : Shares,
     'blockTimestampLast' : Time,
     'startDate' : Time,

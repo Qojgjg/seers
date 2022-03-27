@@ -32,7 +32,6 @@ export interface Market {
 export type MarketId = number;
 export interface MarketInitData {
   'title' : Title,
-  'probabilities' : Array<Probability>,
   'endDate' : Time,
   'labels' : Array<string>,
   'liquidity' : Balance,
@@ -45,8 +44,8 @@ export interface MarketResult {
   'title' : Title,
   'probabilities' : Array<Probability>,
   'endDate' : Time,
+  'liquidities' : Array<Balance>,
   'labels' : Array<string>,
-  'liquidity' : Balance,
   'reserves' : Array<Balance>,
   'description' : Description,
   'volume' : Balance,
@@ -54,7 +53,7 @@ export interface MarketResult {
   'state' : MarketState,
   'imageUrl' : Url,
   'providers' : Array<string>,
-  'kLast' : Balance,
+  'kLasts' : Array<Balance>,
   'totalShares' : Shares,
   'blockTimestampLast' : Time,
   'startDate' : Time,

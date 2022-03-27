@@ -28,6 +28,7 @@
 
   const dryRun = async (marketId, amount) => {
     amount = parseInt(amount)
+    console.log("Selected: " + selected)
     if (buyTokens) {
       tokensEstimate = await $auth.actor.buyOption(
         marketId,
@@ -48,6 +49,8 @@
   const doIt = async (marketId, amount) => {
     buttonLabel = "Processing..."
     amount = parseInt(amount)
+    console.log("Selected: " + selected)
+
     if (buyTokens) {
       await $auth.actor.buyOption(marketId, amount, selected, true)
     } else {

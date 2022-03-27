@@ -29,8 +29,8 @@
               <div>{label}: {Number(market.probabilities[i]) / 10.0}%</div>
             {/each}
           </div>
-          <div>Volume: ${market.volume}</div>
-          <div>Liquidity: ${market.liquidity}</div>
+          <div>Volume: {market.volume} &Sigma;</div>
+          <div>Liquidity: {market.liquidity} &Sigma;</div>
         </div>
       </a>
     </div>
