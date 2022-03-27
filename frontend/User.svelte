@@ -30,69 +30,72 @@
   <h3>Profile Data</h3>
 </div>
 
-<div class="rowUser">
-  {#if user}
-    <div
-      style="margin-bottom: 10px; justify-content:center; width: 100%; text-align:center"
-    >
-      Id: {user.id}.
-    </div>
-    <div
-      style="margin-bottom: 10px; justify-content: center; width: 100%;text-align:center"
-    >
-      Balance: {user.seerBalance} seers.
-    </div>
-    {#if user.markets.length}
-      <div style="display:flex; flex-direction: column;">
-        Markets:
-        {#each user.markets as market}
-          <a href="#/market/{market.marketId}">
-            <div
-              style="display:flex; align-items: center; align-content: center; flex-direction: row; gap: 10px; margin-top: 10px; padding: 3px; background-color: rgb(220 218 224 / 10%); "
-            >
-              <div style="">
-                #{market.marketId}.
+<div style="justify-content: center; display: flex">
+  <div class="rowUser">
+    {#if user}
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        Id: {user.id}.
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        Balance: {user.seerBalance} Σ.
+      </div>
+      {#if user.markets.length}
+        <div style="display:flex; flex-direction: column;">
+          Markets:
+          {#each user.markets as market}
+            <a href="#/market/{market.marketId}">
+              <div
+                style="display:flex; align-items: center; align-content: center; flex-direction: row; gap: 10px; margin-top: 10px; padding: 3px; background-color: rgb(220 218 224 / 10%); "
+              >
+                <div style="">
+                  #{market.marketId}.
+                </div>
+                <div style="">
+                  {market.marketTitle}
+                </div>
+                <div style="">
+                  {market.balances} tokens.
+                </div>
+                <div style="">
+                  {market.shares} shares.
+                </div>
+                <div>
+                  <button
+                    class="demo-button"
+                    on:click={() => {
+                      claimSeers(market.marketId)
+                    }}>Claim</button
+                  >
+                </div>
               </div>
-              <div style="">
-                {market.marketTitle}
-              </div>
-              <div style="">
-                {market.balances} tokens.
-              </div>
-              <div style="">
-                {market.shares} shares.
-              </div>
-              <div>
-                <button
-                  class="demo-button"
-                  on:click={() => {
-                    claimSeers(market.marketId)
-                  }}>Claim</button
-                >
-              </div>
-            </div>
-          </a>
-        {/each}
+            </a>
+          {/each}
+        </div>
+      {/if}
+    {:else}
+      <div class="rowUser">
+        <button
+          class="demo-button"
+          on:click={() => {
+            createUserData()
+          }}>Create User</button
+        >
       </div>
     {/if}
-  {:else}
-    <div class="rowUser">
-      <button
-        class="demo-button"
-        on:click={() => {
-          createUserData()
-        }}>Create User</button
-      >
-    </div>
-  {/if}
+  </div>
 </div>
 
 <style global>
   .rowUser {
     display: flex;
     flex-wrap: wrap;
-    padding: 10px;
-    justify-content: center;
+    padding: 1em;
+    justify-content: start;
+    max-width: fit-content;
+    background-color: rgb(25, 27, 31);
+    border: 2px solid rgb(25, 27, 31);
+    border-radius: 16px;
+    color: rgb(255, 255, 255);
   }
 
   .demo-button {
