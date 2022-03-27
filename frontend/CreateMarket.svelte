@@ -79,9 +79,7 @@
         <div><input bind:value={endDate} size="20" maxlength="10" /></div>
       </div>
       <div style="width: 100%;text-align:center; ">
-        <button class="demo-button" on:click={createMarket}
-          >Create Market</button
-        >
+        <button class="demo-button" on:click={createMarket}>Create</button>
       </div>
     </div>
   </div>
