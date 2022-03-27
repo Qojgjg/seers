@@ -15,13 +15,14 @@
   let buyOptClass = "BuyOptSelected"
   let sellOptClass = "SellOpt"
   let buyTokens = true
-  let tokenIsYes = true
+  let buttonLabel
   let tokensEstimate
 
   const readMarket = async () => {
     market = await $auth.actor.readMarket(parseInt(marketId))
     market = market[0]
     selectedLabel = market.labels[0]
+    buttonLabel = "Buy " + selectedLabel
     console.log(market)
   }
 
@@ -42,16 +43,18 @@
         false,
       )
     }
-    console.log("tokens estimate: " + tokensEstimate)
   }
 
   const doIt = async (marketId, amount) => {
+    buttonLabel = "Processing..."
     amount = parseInt(amount)
     if (buyTokens) {
       await $auth.actor.buyOption(marketId, amount, selected, true)
     } else {
       await $auth.actor.sellOption(marketId, amount, selected, true)
     }
+    if (buyTokens) buttonLabel = "Buy " + selectedLabel
+    else buttonLabel = "Sell " + selectedLabel
   }
 
   onMount(readMarket)
@@ -126,7 +129,11 @@
             <select
               bind:value={selected}
               style="width: 100%"
-              on:change={() => (selectedLabel = market.labels[selected])}
+              on:change={() => {
+                selectedLabel = market.labels[selected]
+                if (buyTokens) buttonLabel = "Buy " + selectedLabel
+                else buttonLabel = "Sell " + selectedLabel
+              }}
             >
               {#each market.labels as label, i}
                 <option value={i}>
@@ -158,11 +165,7 @@
               class="demo-button"
               on:click={() => doIt(market.id, seerAmount)}
             >
-              {#if buyTokens}
-                Buy {selectedLabel}
-              {:else}
-                Sell {selectedLabel}
-              {/if}
+              {buttonLabel}
             </button>
           </div>
         </div>
