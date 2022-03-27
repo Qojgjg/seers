@@ -325,7 +325,7 @@ shared({ caller = initializer }) actor class Market() {
     };
 
 
-    // Sell tokens from caller back to the market.
+    // lklk tokens from caller back to the market.
     public shared(msg) func sellOption(marketId: MarketId, value: Balance, number: Nat, save: Bool): async ?Balance {
         let caller = Principal.toText(msg.caller);
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);

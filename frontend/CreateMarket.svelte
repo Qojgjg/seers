@@ -104,7 +104,13 @@
     flex-wrap: wrap;
     padding: 10px;
     justify-content: center;
+
+    background-color: rgb(25, 27, 31);
+    border: 2px solid rgb(25, 27, 31);
+    border-radius: 16px;
+    color: rgb(255, 255, 255);
+    /*     
     border-radius: 5px;
-    background: rgb(220 218 224 / 10%);
+    background: rgb(220 218 224 / 10%); */
   }
 </style>
