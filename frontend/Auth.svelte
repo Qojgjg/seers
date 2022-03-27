@@ -76,7 +76,7 @@
 </script>
 
 <div class={navClass} id="myTopnav">
-  <a href="/" class="active">Seers</a>
+  <a href="/" class="active">Markets</a>
 
   {#if !signedIn && client}
     <button on:click={signIn}> Sign In </button>

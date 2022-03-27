@@ -75,7 +75,9 @@
   body {
     margin: 0;
     color: whitesmoke;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: "Inter", sans-serif;
+
+    /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

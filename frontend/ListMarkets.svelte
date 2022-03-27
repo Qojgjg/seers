@@ -47,13 +47,18 @@
 
   div.gallery {
     padding: 2em;
-    background: rgb(220 218 224 / 10%);
-    border-radius: 20px;
+
+    background-color: rgb(25, 27, 31);
+    border: 2px solid rgb(25, 27, 31);
+    border-radius: 16px;
+    color: rgb(255, 255, 255);
   }
 
   div.gallery:hover {
     padding: 2em;
-    background: rgb(220 218 224 / 20%);
+    /* background: rgb(220 218 224 / 20%); */
+    background: rgb(33, 36, 41) !important;
+
     border-radius: 20px;
   }
 

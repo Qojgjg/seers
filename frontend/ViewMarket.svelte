@@ -73,26 +73,28 @@
     <div class="v-container">
       <div class="market-controls">
         <ul style="list-style-type: none; margin: 0; padding: 0">
+          <h4>Details</h4>
+
           <li>State: {Object.keys(market.state).toString()}</li>
           <li>
-            Start date: {new Date(
+            Starts: {new Date(
               parseInt(market.startDate) / 1_000_000,
             ).toLocaleDateString()}
           </li>
           <li>
-            End date: {new Date(
+            Ends: {new Date(
               parseInt(market.endDate) / 1_000_000,
             ).toLocaleDateString()}
           </li>
-          <li>Liquidity: ${market.liquidity}</li>
-          <li>Volume: ${market.volume}</li>
+          <li>Liquidity: {market.liquidity} &Sigma;</li>
+          <li>Volume: {market.volume} &Sigma;</li>
         </ul>
       </div>
       <div class="market-controls">
         <div
           style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column"
         >
-          Trade:
+          <h4>Trade</h4>
           <div class="YesNoOptions">
             <button
               class={buyOptClass}
@@ -128,7 +130,8 @@
             >
               {#each market.labels as label, i}
                 <option value={i}>
-                  ${(Number(market.probabilities[i]) / 1000.0).toFixed(2)} - {label}
+                  {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
+                  - {label}
                 </option>
               {/each}
             </select>
@@ -143,12 +146,12 @@
             <div class="ControlData">
               <div>LP fee 0.00%</div>
               <div>
-                Avg. price ${tokensEstimate
+                Avg. price {tokensEstimate
                   ? (seerAmount / tokensEstimate).toFixed(2)
-                  : 0}
+                  : 0} &Sigma;
               </div>
               <div>
-                Tokens ${tokensEstimate ? tokensEstimate : 0}
+                Max. Winnings {tokensEstimate ? tokensEstimate : 0} &Sigma;
               </div>
             </div>
             <button
@@ -247,7 +250,6 @@
   .YesNoOptions {
     width: 100%;
     display: flex;
-    margin-top: 0.5em;
     height: fit-content;
   }
   .TabOptions {
@@ -357,7 +359,6 @@
     margin-bottom: 1em;
     padding: 1em;
     /* background: rgb(220 218 224 / 10%); */
-    color: rgb(195, 197, 203);
     background-color: rgb(25, 27, 31);
     border: 2px solid rgb(25, 27, 31);
     border-radius: 16px;
