@@ -96,7 +96,8 @@
   }
 
   .demo-button {
-    background: black;
+    background: rgb(33, 114, 229);
+    box-shadow: rgb(0 0 0 / 8%) 0px 6px 10px;
     padding: 0 1em;
     margin-top: 1em;
     border-radius: 10px;
@@ -107,5 +108,9 @@
     cursor: pointer;
     color: white;
     max-width: 150px;
+  }
+
+  .demo-button:hover {
+    background: rgb(25, 108, 224);
   }
 </style>
