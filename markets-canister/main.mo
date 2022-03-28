@@ -498,23 +498,19 @@ shared({ caller = initializer }) actor class Market() {
 
                 let weight: [var Balance] = Array.init(optionsSize, 1); 
                 let probabilities: [var Probability] = Array.init(optionsSize, 0);
-                
+                var weightSum: Balance  = 0;
+                    
                 for (i in Iter.range(0, optionsSize - 1)) {
                     for (j in Iter.range(0, optionsSize - 1)) {
                         if (i != j) {
                             weight[i] := weight[i] * market.reserves[j];
                         };
                     };
+                    weightSum := weightSum + weight[i];
                 };
 
                 for (i in Iter.range(0, optionsSize - 1)) {
-                    var weightSum: Balance  = 0;
-                    for (j in Iter.range(0, optionsSize - 1)) {
-                        if (i != j) {
-                            weightSum := weightSum + weight[j];
-                        };
-                    };
-                    probabilities[i] := weight[i] * 1000 / weightSum; 
+                    probabilities[i] := weight[i] * 1000 / weightSum;
                 };
 
                 market.probabilities :=  Array.freeze(probabilities);
