@@ -374,7 +374,7 @@ shared({ caller = initializer }) actor class Market() {
                                 calcK := calcK * (Float.fromInt(newReserves[i]) - x);
                             };
 
-                            return calcK;               
+                            return calcK - Float.fromInt(market.k);               
                         };
 
                         var rOpt = newtonMethod(0.0, f);
