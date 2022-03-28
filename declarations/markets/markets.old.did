@@ -33,9 +33,9 @@ type MarketResult =
    id: MarketId;
    imageUrl: Url;
    images: vec text;
-   kLasts: vec Balance;
+   k: Balance;
    labels: vec text;
-   liquidities: vec Balance;
+   liquidity: Balance;
    probabilities: vec Probability;
    providers: vec text;
    reserves: vec Balance;
