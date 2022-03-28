@@ -93,10 +93,12 @@
     flex-wrap: wrap;
     padding: 1em;
     justify-content: start;
+    min-width: 200px;
     max-width: fit-content;
     background-color: rgb(25, 27, 31);
     border: 2px solid rgb(25, 27, 31);
     border-radius: 16px;
+    justify-content: center;
     color: rgb(255, 255, 255);
   }
 

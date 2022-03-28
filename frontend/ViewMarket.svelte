@@ -110,6 +110,7 @@
                 buyOptClass = "BuyOptSelected"
                 sellOptClass = "SellOpt"
                 buyTokens = true
+                buttonLabel = "Buy " + selectedLabel
               }}>Buy</button
             >
             <button
@@ -118,6 +119,7 @@
                 buyOptClass = "BuyOpt"
                 sellOptClass = "SellOptSelected"
                 buyTokens = false
+                buttonLabel = "Sell " + selectedLabel
               }}>Sell</button
             >
           </div>
@@ -158,12 +160,22 @@
             <div class="ControlData">
               <div>LP fee 0.00%</div>
               <div>
-                Avg. price {tokensEstimate
-                  ? (seerAmount / tokensEstimate).toFixed(2)
-                  : 0} &Sigma;
+                {#if buyTokens}
+                  Avg. price {tokensEstimate
+                    ? (seerAmount / tokensEstimate).toFixed(2)
+                    : 0} &Sigma;
+                {:else}
+                  Avg. price {tokensEstimate
+                    ? (seerAmount / tokensEstimate).toFixed(2)
+                    : 0} tokens
+                {/if}
               </div>
               <div>
-                Max. Winnings {tokensEstimate ? tokensEstimate : 0} &Sigma;
+                {#if buyTokens}
+                  Max. Winnings {tokensEstimate ? tokensEstimate : 0} &Sigma;
+                {:else}
+                  Get back {tokensEstimate ? tokensEstimate : 0} &Sigma;
+                {/if}
               </div>
             </div>
             <button
