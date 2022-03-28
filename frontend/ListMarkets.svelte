@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte"
+  import { select_multiple_value } from "svelte/internal"
 
   const PAGE_SIZE = 20
 
@@ -30,7 +31,9 @@
             {/each}
           </div>
           <div>Volume: {market.volume} &Sigma;</div>
-          <div>Liquidity: {market.liquidity} &Sigma;</div>
+          <div>
+            Liquidity: {market.liquidities.reduce((s, a) => s + a, BigInt(0))} &Sigma;
+          </div>
         </div>
       </a>
     </div>

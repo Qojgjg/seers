@@ -40,12 +40,13 @@ export interface MarketInitData {
   'images' : Array<string>,
 }
 export interface MarketResult {
+  'k' : Balance,
   'id' : MarketId,
   'title' : Title,
   'probabilities' : Array<Probability>,
   'endDate' : Time,
-  'liquidities' : Array<Balance>,
   'labels' : Array<string>,
+  'liquidity' : Balance,
   'reserves' : Array<Balance>,
   'description' : Description,
   'volume' : Balance,
@@ -53,7 +54,6 @@ export interface MarketResult {
   'state' : MarketState,
   'imageUrl' : Url,
   'providers' : Array<string>,
-  'kLasts' : Array<Balance>,
   'totalShares' : Shares,
   'blockTimestampLast' : Time,
   'startDate' : Time,

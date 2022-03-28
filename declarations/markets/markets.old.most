@@ -9,9 +9,9 @@ type Market/1 =
     id : MarketId;
     var imageUrl : Url;
     images : [Text];
-    var k : Balance;
+    var kLasts : [Balance];
     labels : [Text];
-    var liquidity : Balance;
+    var liquidities : [Balance];
     var probabilities : [Probability];
     var providers : [Text];
     var reserves : [Balance];

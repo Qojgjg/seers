@@ -36,12 +36,13 @@ export const idlFactory = ({ IDL }) => {
     'open' : IDL.Null,
   });
   const MarketResult = IDL.Record({
+    'k' : Balance,
     'id' : MarketId,
     'title' : Title,
     'probabilities' : IDL.Vec(Probability),
     'endDate' : Time,
-    'liquidities' : IDL.Vec(Balance),
     'labels' : IDL.Vec(IDL.Text),
+    'liquidity' : Balance,
     'reserves' : IDL.Vec(Balance),
     'description' : Description,
     'volume' : Balance,
@@ -49,7 +50,6 @@ export const idlFactory = ({ IDL }) => {
     'state' : MarketState,
     'imageUrl' : Url,
     'providers' : IDL.Vec(IDL.Text),
-    'kLasts' : IDL.Vec(Balance),
     'totalShares' : Shares,
     'blockTimestampLast' : Time,
     'startDate' : Time,

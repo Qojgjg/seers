@@ -74,9 +74,9 @@ shared({ caller = initializer }) actor class Market() {
         labels: [Text];
         images: [Text];
         var probabilities: [Probability];
-        var liquidities: [Balance]; // liquidities
-        var reserves: [Balance]; // reserves
-        var kLasts: [Balance]; // kLasts
+        var liquidity: Balance;
+        var reserves: [Balance];
+        var k: Balance;
         var providers: [Text]; // list of principals
         var blockTimestampLast: Time.Time;
         var totalShares: Shares;
@@ -95,9 +95,9 @@ shared({ caller = initializer }) actor class Market() {
         labels: [Text];
         images: [Text];
         probabilities: [Probability];
-        liquidities: [Balance];
+        liquidity: Balance;
         reserves: [Balance];
-        kLasts: [Balance];
+        k: Balance;
         providers: [Text]; // list of principals
         blockTimestampLast: Time.Time;
         totalShares: Shares;
@@ -220,24 +220,17 @@ shared({ caller = initializer }) actor class Market() {
         let liquidity = marketInitData.liquidity;
 
         var reserves: [var Balance] = Array.init<Balance>(optionsLength, 0);
-        var liquidities: [var Balance] = Array.init<Balance>(optionsLength, 0);
-        var kLasts: [var Balance] = Array.init<Balance>(optionsLength, 0);
         let probabilities: [var Probability] = Array.init<Probability>(optionsLength, 1000 / optionsLength);
         
-        var kLastFloat: Float = 1.0;
+        var k: Balance = 1;
 
         for (i in Iter.range(0, optionsLength - 1)) {
             reserves[i] := liquidity * optionsLength;
-            kLastFloat := kLastFloat * Float.fromInt(reserves[i]);
+            k := k * reserves[i];
         };
     
-        let shares = Float.toInt(Float.sqrt(kLastFloat));
-        let kLast = Float.toInt(kLastFloat) * marketInitData.liquidity;
-
-        for (i in Iter.range(0, optionsLength - 1)) {
-            kLasts[i] := kLast;
-            liquidities[i] := liquidity;
-        };
+        // Dummy value.
+        let shares = Float.toInt(Float.sqrt(0));
 
         let newMarket: Market = {
             id = marketId;
@@ -249,8 +242,8 @@ shared({ caller = initializer }) actor class Market() {
             labels = marketInitData.labels;
             images = marketInitData.images;
             var probabilities = Array.freeze(probabilities);
-            var liquidities = Array.freeze(liquidities);
-            var kLasts = Array.freeze(kLasts);
+            var liquidity = liquidity;
+            var k = k;
             var reserves = Array.freeze(reserves);
             var blockTimestampLast = Time.now();
             var totalShares = shares;
@@ -453,125 +446,128 @@ shared({ caller = initializer }) actor class Market() {
         // };
     };
 
-    public shared(msg) func buyOption(marketId: MarketId, value: Balance, number: Nat, save: Bool): async ?Balance {
-        // let caller = Principal.toText(msg.caller);
-        // let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
-        // var user = getOrCreateUser(caller);
+    public shared(msg) func buyOption(marketId: MarketId, value: Balance, selected: Nat, save: Bool): async ?Balance {
+        assert(not Principal.isAnonymous(msg.caller));
 
-        // assert(user.seerBalance >= value);
+        let caller = Principal.toText(msg.caller);
+        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+        var user = getOrCreateUser(caller);
+
+        assert(user.seerBalance >= value);
         
-        // switch (marketOpt) {
-        //     case null {
-        //         return null;
-        //     };
-        //     case (?market) {
-        //         if (market.endDate < Time.now()) {
-        //             market.state := #closed;
-        //             return null;
-        //         };
-
-        //         let optionsSize = market.reserves.size();
-        //         var newReserveTokens: [var Balance] = Array.init(optionsSize, 0);
+        switch (marketOpt) {
+            case null {
+                return null;
+            };
+            case (?market) {
+                if (market.endDate < Time.now()) {
+                    market.state := #closed;
+                    return null;
+                };
                 
-        //         let newLiquidity = market.liquidity + value;
-        //         var mulOtherReserves = newLiquidity;
+                let optionsSize = market.reserves.size();
+                var semiK: Balance = 1;
+
+                for (i in Iter.range(0, optionsSize - 1)) {
+                    if (i != selected) {
+                        semiK := semiK * (market.reserves[i] + value);
+                    };
+                };
                 
-        //         for (i in Iter.range(0, optionsSize - 1)) {
-        //             if (i != number) {
-        //                 newReserveTokens[i] := market.reserves[i];
-        //                 mulOtherReserves := mulOtherReserves * newReserveTokens[i];
-        //             };
-        //         };
-
-        //         let newOptionReserve: Balance = market.kLast / mulOtherReserves;
-        //         let tokensOut = market.reserves[number] - newOptionReserve;
+                let newSelectedReserve: Balance = market.k / semiK;
+                let tokensOut = market.reserves[selected] - newSelectedReserve;
                 
-        //         if (not save) {
-        //             return ?tokensOut;
-        //         };
+                if (not save) { // Dry run.
+                    return ?tokensOut;
+                };
 
-        //         newReserveTokens[number] := newOptionReserve;
-        //         market.reserves := Array.freeze(newReserveTokens);
-        //         market.liquidity := newLiquidity;
-        //         market.volume := market.volume + value;
-                 
-        //         let probabilities: [var Probability] = Array.init(optionsSize, 0);
-        //         var maxReserve: Balance = 0;
+                var newReserves: [var Balance] = Array.init(optionsSize, 0);
+                let newLiquidity = market.liquidity + value;
+                var reserveSum: Balance = 0;
 
-        //         for (i in Iter.range(0, optionsSize - 1)) {
-        //             if (maxReserve < market.reserves[i]) {
-        //                 maxReserve := market.reserves[i];
-        //             };
-        //         };
+                for (i in Iter.range(0, optionsSize - 1)) {
+                    if (i != selected) {
+                        newReserves[i] := market.reserves[i] + value;
+                    } else {
+                        newReserves[i] := newSelectedReserve;
+                    };
+                    reserveSum := reserveSum + newReserves[i];
+                };
+                
+                market.reserves := Array.freeze(newReserves);
+                market.liquidity := newLiquidity;
+                market.volume := market.volume + value;
 
-        //         let rates: [var Float] = Array.init(optionsSize, 0.0);
-        //         var totalRates: Float = 0;
+                let weight: [var Balance] = Array.init(optionsSize, 1); 
+                let probabilities: [var Probability] = Array.init(optionsSize, 0);
+                
+                for (i in Iter.range(0, optionsSize - 1)) {
+                    reserveSum := reserveSum + newReserves[i];
+                    
+                    for (j in Iter.range(0, optionsSize - 1)) {
+                        if (i != j) {
+                            weight[i] := weight[i] * newReserves[j];
+                        };
+                    };
 
-        //         for (i in Iter.range(0, optionsSize - 1)) {
-        //             rates[i] := Float.fromInt(maxReserve) 
-        //                 * Float.fromInt(1000) / Float.fromInt(market.reserves[i]);
-        //             totalRates := totalRates + rates[i];
-        //         };
+                    probabilities[i] := weight[i] * 1000 / reserveSum; 
+                };
 
-        //         for (i in Iter.range(0, optionsSize - 1)) {
-        //             probabilities[i] := Float.toInt(rates[i] * 1000 / totalRates);
-        //         };
-        //         market.probabilities :=  Array.freeze(probabilities);
+                market.probabilities :=  Array.freeze(probabilities);
 
-        //         var marketTokensOpt = Array.find(user.markets,
-        //             func (ut: UserMarket): Bool {
-        //                 ut.marketId == market.id
-        //             }
-        //         );
+                var marketTokensOpt = Array.find(user.markets,
+                    func (ut: UserMarket): Bool {
+                        ut.marketId == market.id
+                    }
+                );
 
-        //         switch (marketTokensOpt) {
-        //             case null {
-        //                 let balances: [var Balance] = Array.init(optionsSize, 0);
-        //                 balances[number] := tokensOut;
+                switch (marketTokensOpt) {
+                    case null {
+                        let balances: [var Balance] = Array.init(optionsSize, 0);
+                        balances[selected] := tokensOut;
 
-        //                 let newUserMarket: UserMarket = {
-        //                     marketId = market.id;
-        //                     marketTitle = market.title;
-        //                     balances = Array.freeze(balances);
-        //                     shares = 0;
-        //                 };
-        //                 user.markets := Array.append(user.markets, [newUserMarket]);
-        //             };
-        //             case (?marketTokens) {
-        //                 user.markets := Array.mapFilter(user.markets, 
-        //                     func (ut: UserMarket): ?UserMarket {
-        //                         if (ut.marketId != market.id) {
-        //                             return ?ut;
-        //                         } else {
-        //                             let newBalances = Array.mapEntries(ut.balances,
-        //                                 func (b: Balance, i: Nat): Balance {
-        //                                     if (i == number) {
-        //                                         return b + tokensOut;
-        //                                     } else {
-        //                                         return b;
-        //                                     };
-        //                                 }
-        //                             );
+                        let newUserMarket: UserMarket = {
+                            marketId = market.id;
+                            marketTitle = market.title;
+                            balances = Array.freeze(balances);
+                            shares = 0;
+                        };
+                        user.markets := Array.append(user.markets, [newUserMarket]);
+                    };
+                    case (?marketTokens) {
+                        user.markets := Array.mapFilter(user.markets, 
+                            func (ut: UserMarket): ?UserMarket {
+                                if (ut.marketId != market.id) {
+                                    return ?ut;
+                                } else {
+                                    let newBalances = Array.mapEntries(ut.balances,
+                                        func (b: Balance, i: Nat): Balance {
+                                            if (i == selected) {
+                                                return b + tokensOut;
+                                            } else {
+                                                return b;
+                                            };
+                                        }
+                                    );
 
-        //                             let newUserMarket: UserMarket = {
-        //                                 marketId = market.id;
-        //                                 marketTitle = market.title;
-        //                                 balances = newBalances;
-        //                                 shares = ut.shares;
-        //                             };
-        //                             return ?newUserMarket;
-        //                         };
-        //                     }
-        //                 );
-        //             };
-        //         };
+                                    let newUserMarket: UserMarket = {
+                                        marketId = market.id;
+                                        marketTitle = market.title;
+                                        balances = newBalances;
+                                        shares = ut.shares;
+                                    };
+                                    return ?newUserMarket;
+                                };
+                            }
+                        );
+                    };
+                };
 
-        //         user.seerBalance := user.seerBalance - value;
+                user.seerBalance := user.seerBalance - value;
 
-        //         return ?tokensOut;
-        //     };
-        // };
-        return null;
+                return ?tokensOut;
+            };
+        };
     };
 
     // Get user data.
@@ -612,9 +608,9 @@ shared({ caller = initializer }) actor class Market() {
             labels = m.labels;
             images = m.images;
             var probabilities = m.probabilities;
-            var liquidities = m.liquidities;
+            var liquidity = m.liquidity;
             var reserves = m.reserves;
-            var kLasts = m.kLasts;
+            var k = m.k;
             var blockTimestampLast = m.blockTimestampLast;
             var totalShares = m.totalShares;
             var providers = m.providers;
@@ -634,9 +630,9 @@ shared({ caller = initializer }) actor class Market() {
             labels = m.labels;
             images = m.images;
             probabilities = m.probabilities;
-            liquidities = m.liquidities;
+            liquidity = m.liquidity;
             reserves = m.reserves;
-            kLasts = m.kLasts;
+            k = m.k;
             startDate = m.startDate;
             endDate = m.endDate;
             author = m.author;
@@ -661,9 +657,9 @@ shared({ caller = initializer }) actor class Market() {
                     labels = m.labels;
                     images = m.images;
                     probabilities = m.probabilities;
-                    liquidities = m.liquidities;
+                    liquidity = m.liquidity;
                     reserves = m.reserves;
-                    kLasts = m.kLasts;
+                    k = m.k;
                     startDate = m.startDate;
                     endDate = m.endDate;
                     author = m.author;
