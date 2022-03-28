@@ -40,7 +40,7 @@
         Balance: {user.seerBalance} Σ.
       </div>
       {#if user.markets.length}
-        <div style="display:flex; flex-direction: column;">
+        <div style="display:flex; flex-direction: column;width: 100%">
           Markets:
           {#each user.markets as market}
             <a href="#/market/{market.marketId}">
@@ -94,7 +94,7 @@
     padding: 1em;
     justify-content: start;
     min-width: 200px;
-    max-width: fit-content;
+    max-width: 800px;
     background-color: rgb(25, 27, 31);
     border: 2px solid rgb(25, 27, 31);
     border-radius: 16px;
