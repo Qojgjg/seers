@@ -93,7 +93,7 @@
             ).toLocaleDateString()}
           </li>
           <li>
-            Liquidity: {market.liquidities.reduce((s, a) => s + a, BigInt(0))} &Sigma;
+            Liquidity: {market.liquidity} &Sigma;
           </li>
           <li>Volume: {market.volume} &Sigma;</li>
         </ul>

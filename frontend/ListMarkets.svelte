@@ -32,7 +32,7 @@
           </div>
           <div>Volume: {market.volume} &Sigma;</div>
           <div>
-            Liquidity: {market.liquidities.reduce((s, a) => s + a, BigInt(0))} &Sigma;
+            Liquidity: {market.liquidity} &Sigma;
           </div>
         </div>
       </a>

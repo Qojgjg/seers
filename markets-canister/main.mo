@@ -225,7 +225,7 @@ shared({ caller = initializer }) actor class Market() {
         var k: Balance = 1;
 
         for (i in Iter.range(0, optionsLength - 1)) {
-            reserves[i] := liquidity * optionsLength;
+            reserves[i] := liquidity;
             k := k * reserves[i];
         };
     
@@ -483,15 +483,13 @@ shared({ caller = initializer }) actor class Market() {
 
                 var newReserves: [var Balance] = Array.init(optionsSize, 0);
                 let newLiquidity = market.liquidity + value;
-                var reserveSum: Balance = 0;
-
+               
                 for (i in Iter.range(0, optionsSize - 1)) {
                     if (i != selected) {
                         newReserves[i] := market.reserves[i] + value;
                     } else {
                         newReserves[i] := newSelectedReserve;
                     };
-                    reserveSum := reserveSum + newReserves[i];
                 };
                 
                 market.reserves := Array.freeze(newReserves);
@@ -502,15 +500,21 @@ shared({ caller = initializer }) actor class Market() {
                 let probabilities: [var Probability] = Array.init(optionsSize, 0);
                 
                 for (i in Iter.range(0, optionsSize - 1)) {
-                    reserveSum := reserveSum + newReserves[i];
-                    
                     for (j in Iter.range(0, optionsSize - 1)) {
                         if (i != j) {
                             weight[i] := weight[i] * newReserves[j];
                         };
                     };
+                };
 
-                    probabilities[i] := weight[i] * 1000 / reserveSum; 
+                for (i in Iter.range(0, optionsSize - 1)) {
+                    var weightSum := 0;
+                    for (j in Iter.range(0, optionsSize - 1)) {
+                        if (i != j) {
+                            weightSum := weighSum + weight[i];
+                        };
+                    };
+                    probabilities[i] := weight[i] * 1000 / weighSum; 
                 };
 
                 market.probabilities :=  Array.freeze(probabilities);
