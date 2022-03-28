@@ -475,7 +475,7 @@ shared({ caller = initializer }) actor class Market() {
                 };
                 
                 let newSelectedReserve: Balance = market.k / semiK;
-                let tokensOut = market.reserves[selected] - newSelectedReserve;
+                let tokensOut = market.reserves[selected] - newSelectedReserve + value;
                 
                 if (not save) { // Dry run.
                     return ?tokensOut;

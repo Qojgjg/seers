@@ -27,7 +27,10 @@
           <h5>{market.title}</h5>
           <div style="margin-top: 10px; margin-bottom: 10px">
             {#each market.labels as label, i}
-              <div>{label}: {Number(market.probabilities[i]) / 10.0}%</div>
+              <div>
+                {label}: {(Number(market.probabilities[i]) / 1000.0).toFixed(2)}
+                &Sigma;
+              </div>
             {/each}
           </div>
           <div>Volume: {market.volume} &Sigma;</div>
