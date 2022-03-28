@@ -1,6 +1,6 @@
 export const idlFactory = ({ IDL }) => {
   const MarketId = IDL.Nat32;
-  const Balance = IDL.Int;
+  const Balance = IDL.Float64;
   const Title = IDL.Text;
   const Time = IDL.Int;
   const Description = IDL.Text;
@@ -27,7 +27,7 @@ export const idlFactory = ({ IDL }) => {
     'seerBalance' : Balance,
     'markets' : IDL.Vec(UserMarket),
   });
-  const Probability = IDL.Int;
+  const Probability = IDL.Float64;
   const Author = IDL.Text;
   const MarketState = IDL.Variant({
     'resolved' : IDL.Nat,

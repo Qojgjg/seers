@@ -1,6 +1,6 @@
 import type { Principal } from '@dfinity/principal';
 export type Author = string;
-export type Balance = bigint;
+export type Balance = number;
 export type Description = string;
 export interface Market {
   'approveMarket' : (arg_0: MarketId) => Promise<undefined>,
@@ -63,7 +63,7 @@ export type MarketState = { 'resolved' : bigint } |
   { 'closed' : null } |
   { 'pending' : null } |
   { 'open' : null };
-export type Probability = bigint;
+export type Probability = number;
 export type Shares = bigint;
 export type Time = bigint;
 export type Title = string;

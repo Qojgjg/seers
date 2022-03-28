@@ -25,8 +25,8 @@ shared({ caller = initializer }) actor class Market() {
     public type MarketId = Nat32;
     public type UserId = Text;
     public type Shares = Int;
-    public type Probability = Int;
-    public type Balance = Int;
+    public type Probability = Float;
+    public type Balance = Float;
 
     public type MarketState = {
         #pending: ();
@@ -220,7 +220,7 @@ shared({ caller = initializer }) actor class Market() {
         let liquidity = marketInitData.liquidity;
 
         var reserves: [var Balance] = Array.init<Balance>(optionsLength, 0);
-        let probabilities: [var Probability] = Array.init<Probability>(optionsLength, 1000 / optionsLength);
+        let probabilities: [var Probability] = Array.init<Probability>(optionsLength, 1000 / Float.fromInt(optionsLength));
         
         var k: Balance = 1;
 
@@ -361,7 +361,7 @@ shared({ caller = initializer }) actor class Market() {
                         };
 
                         let optionsSize = market.reserves.size();
-                        var newReserves: [var Balance] = Array.init(optionsSize, 0);
+                        var newReserves: [var Balance] = Array.init(optionsSize, 0.0);
                         
                         for (i in Iter.range(0, optionsSize - 1)) {
                             newReserves[i] := market.reserves[i];
@@ -371,10 +371,10 @@ shared({ caller = initializer }) actor class Market() {
                         let f = func (x: Float): Float {
                             var calcK: Float = 1;
                             for (i in Iter.range(0, optionsSize - 1)) {
-                                calcK := calcK * (Float.fromInt(newReserves[i]) - x);
+                                calcK := calcK * (newReserves[i] - x);
                             };
 
-                            return calcK - Float.fromInt(market.k);               
+                            return calcK - market.k;               
                         };
 
                         var rOpt = newtonMethod(0.0, f);
@@ -383,9 +383,7 @@ shared({ caller = initializer }) actor class Market() {
                             case (null) {
                                 return null;
                             };
-                            case (?rr) {
-                                let r = Float.toInt(rr);
-
+                            case (?r) {
                                 for (i in Iter.range(0, optionsSize - 1)) {
                                     newReserves[i] := newReserves[i] - r;
                                 };
@@ -399,9 +397,9 @@ shared({ caller = initializer }) actor class Market() {
                                 market.volume := market.volume + liquidityOut;
                                 market.reserves := Array.freeze(newReserves);
 
-                                let weight: [var Balance] = Array.init(optionsSize, 1); 
-                                let probabilities: [var Probability] = Array.init(optionsSize, 0);
-                                var weightSum: Balance  = 0;
+                                let weight: [var Balance] = Array.init(optionsSize, 1.0); 
+                                let probabilities: [var Probability] = Array.init(optionsSize, 0.0);
+                                var weightSum: Balance  = 0.0;
                                     
                                 for (i in Iter.range(0, optionsSize - 1)) {
                                     for (j in Iter.range(0, optionsSize - 1)) {
@@ -413,7 +411,7 @@ shared({ caller = initializer }) actor class Market() {
                                 };
 
                                 for (i in Iter.range(0, optionsSize - 1)) {
-                                    probabilities[i] := weight[i] * 1000 / weightSum;
+                                    probabilities[i] := weight[i] * 1000.0 / weightSum;
                                 };
 
                                 market.probabilities := Array.freeze(probabilities);
@@ -478,7 +476,7 @@ shared({ caller = initializer }) actor class Market() {
                 };
                 
                 let optionsSize = market.reserves.size();
-                var semiK: Balance = 1;
+                var semiK: Balance = 1.0;
 
                 for (i in Iter.range(0, optionsSize - 1)) {
                     if (i != selected) {
@@ -493,7 +491,7 @@ shared({ caller = initializer }) actor class Market() {
                     return ?tokensOut;
                 };
 
-                var newReserves: [var Balance] = Array.init(optionsSize, 0);
+                var newReserves: [var Balance] = Array.init(optionsSize, 0.0);
                 let newLiquidity = market.liquidity + value;
                
                 for (i in Iter.range(0, optionsSize - 1)) {
@@ -508,9 +506,9 @@ shared({ caller = initializer }) actor class Market() {
                 market.liquidity := newLiquidity;
                 market.volume := market.volume + value;
 
-                let weight: [var Balance] = Array.init(optionsSize, 1); 
-                let probabilities: [var Probability] = Array.init(optionsSize, 0);
-                var weightSum: Balance  = 0;
+                let weight: [var Balance] = Array.init(optionsSize, 1.0); 
+                let probabilities: [var Probability] = Array.init(optionsSize, 0.0);
+                var weightSum: Balance  = 0.0;
                     
                 for (i in Iter.range(0, optionsSize - 1)) {
                     for (j in Iter.range(0, optionsSize - 1)) {
@@ -522,7 +520,7 @@ shared({ caller = initializer }) actor class Market() {
                 };
 
                 for (i in Iter.range(0, optionsSize - 1)) {
-                    probabilities[i] := weight[i] * 1000 / weightSum;
+                    probabilities[i] := weight[i] * 1000.0 / weightSum;
                 };
 
                 market.probabilities :=  Array.freeze(probabilities);
@@ -535,7 +533,7 @@ shared({ caller = initializer }) actor class Market() {
 
                 switch (marketTokensOpt) {
                     case null {
-                        let balances: [var Balance] = Array.init(optionsSize, 0);
+                        let balances: [var Balance] = Array.init(optionsSize, 0.0);
                         balances[selected] := tokensOut;
 
                         let newUserMarket: UserMarket = {
@@ -715,7 +713,7 @@ shared({ caller = initializer }) actor class Market() {
     private func createUser(userId: UserId): User {
         let user: User = {
             var id = userId;
-            var seerBalance = 1000; // Airdrop
+            var seerBalance = 1000.0; // Airdrop
             var markets = [];
         };
 

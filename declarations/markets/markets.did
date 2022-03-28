@@ -16,7 +16,7 @@ type Url = text;
 type Title = text;
 type Time = int;
 type Shares = int;
-type Probability = int;
+type Probability = float64;
 type MarketState = 
  variant {
    closed;
@@ -75,6 +75,6 @@ type Market =
    sellOption: (MarketId, Balance, nat, bool) -> (opt Balance);
  };
 type Description = text;
-type Balance = int;
+type Balance = float64;
 type Author = text;
 service : () -> Market
