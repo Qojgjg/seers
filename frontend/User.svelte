@@ -27,14 +27,14 @@
 </script>
 
 <div class="header">
-  <h3>Profile Data</h3>
+  <h3>User Data</h3>
 </div>
 
 <div style="justify-content: center; display: flex">
   <div class="rowUser">
     {#if user}
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Id: {user.id}.
+        ID: {user.id}.
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
         Balance: {user.seerBalance} Σ.
@@ -45,7 +45,7 @@
           {#each user.markets as market}
             <a href="#/market/{market.marketId}">
               <div
-                style="display:flex; align-items: center; align-content: center; flex-direction: row; gap: 10px; margin-top: 10px; padding: 3px; background-color: rgb(220 218 224 / 10%); "
+                style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: row; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
               >
                 <div style="">
                   #{market.marketId}.
@@ -54,12 +54,14 @@
                   {market.marketTitle}
                 </div>
                 <div style="">
-                  {market.balances} tokens.
+                  ({market.balances}) tokens.
                 </div>
-                <div style="">
+                <!-- <div style="">
                   {market.shares} shares.
-                </div>
-                <div>
+                </div> -->
+                <div
+                  style="display:flex; align-items: center; align-content: center; justify-content: center;"
+                >
                   <button
                     class="demo-button"
                     on:click={() => {
@@ -102,7 +104,6 @@
     background: rgb(33, 114, 229);
     box-shadow: rgb(0 0 0 / 8%) 0px 6px 10px;
     padding: 0 1em;
-    margin-top: 1em;
     border-radius: 10px;
     font-size: 0.9em;
     height: 35px;
