@@ -59,7 +59,7 @@
         <div><textarea bind:value={newMarketDesc} rows="20" cols="40" /></div>
       </div>
       <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
-        <div style="font-size: 1.5em">Image URL:</div>
+        <div style="font-size: 1.5em">Image link:</div>
         <div><input bind:value={imageUrl} size="40" maxlength="200" /></div>
       </div>
       <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
