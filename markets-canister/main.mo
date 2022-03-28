@@ -508,7 +508,7 @@ shared({ caller = initializer }) actor class Market() {
                 };
 
                 for (i in Iter.range(0, optionsSize - 1)) {
-                    var weightSum = 0;
+                    var weightSum: Balance = 0;
                     for (j in Iter.range(0, optionsSize - 1)) {
                         if (i != j) {
                             weightSum := weightSum + weight[i];
