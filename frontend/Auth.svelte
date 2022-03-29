@@ -3,6 +3,7 @@
   import { AuthClient } from "@dfinity/auth-client"
   import Fa from "svelte-fa"
   import { faBars } from "@fortawesome/free-solid-svg-icons"
+  import logo from "./assets/favicon.png"
 
   export let auth
   export let createActor
@@ -79,16 +80,28 @@
 </script>
 
 <div class={navClass} id="myTopnav">
-  <a href="/" class="active">Markets</a>
+  <a
+    href="/"
+    class="active"
+    style="margin: 0; padding: 0; margin-right: 20px; margin-left: 20px"
+    ><img
+      src={logo}
+      alt="logo"
+      style="width: 80px; align-content:center; text-align:center;"
+    /></a
+  >
+  <a href="/" class="active" style="margin-top: 5px">Markets</a>
 
   {#if !signedIn && client}
-    <button on:click={signIn}>Login</button>
+    <button on:click={signIn} style="margin-top: 5px">Login</button>
   {/if}
 
   {#if signedIn}
-    <a href="#/user/{principal}" on:click={myFunction}>Profile</a>
-    <a href="#/create/" on:click={myFunction}>Create</a>
-    <button on:click={signOut}>Logout</button>
+    <a href="#/user/{principal}" on:click={myFunction} style="margin-top: 5px"
+      >Profile</a
+    >
+    <a href="#/create/" on:click={myFunction} style="margin-top: 5px">Create</a>
+    <button on:click={signOut} style="margin-top: 5px">Logout</button>
   {/if}
   <a href="javascript:void(0);" class="icon" on:click={myFunction}>
     <Fa icon={faBars} />
