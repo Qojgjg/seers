@@ -80,8 +80,10 @@
     </div>
     <div class="v-container">
       <div class="market-controls">
-        <ul style="list-style-type: none; margin: 0; padding: 0">
-          <h4 style="text-align:center">Details</h4>
+        <ul
+          style="list-style-type: none; margin: 0; padding: 10px; width: 100%; line-height: 1.5em"
+        >
+          <h4 style="text-align:center; padding: 3px; margin: 3px">Details</h4>
 
           <li>State: {Object.keys(market.state).toString()}</li>
           <li>
@@ -102,7 +104,7 @@
       </div>
       <div class="market-controls">
         <div
-          style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column"
+          style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column;width: 100%; padding: 10px;"
         >
           <h4>Trade</h4>
           {#if signedIn}
@@ -388,8 +390,7 @@
 
   .market-controls {
     margin-bottom: 1em;
-    padding: 1em;
-    /* background: rgb(220 218 224 / 10%); */
+    padding: 0.5em;
     background-color: rgb(25, 27, 31);
     border: 2px solid rgb(25, 27, 31);
     border-radius: 16px;
@@ -397,19 +398,16 @@
     font-family: "Inter", sans-serif;
     font-size: 1rem;
     font-weight: 500;
-    /* padding: 8px 12px; */
     word-break: break-word;
     overflow: hidden;
     white-space: nowrap;
-
-    /* line-height: 1.4em; */
-
     height: fit-content;
     border-radius: 1em;
     word-wrap: break-word;
     overflow: auto;
     display: flex;
     justify-content: center;
+    width: 250px;
   }
   .MarketDetails {
     display: flex;
