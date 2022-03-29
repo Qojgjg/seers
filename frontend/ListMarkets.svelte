@@ -69,6 +69,7 @@
   div.gallery {
     display: flex;
     padding: 2em;
+    box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
     background-color: rgb(25, 27, 31);
     border: 2px solid rgb(25, 27, 31);
     border-radius: 16px;

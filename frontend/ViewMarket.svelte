@@ -223,7 +223,7 @@
   .rowView {
     display: flex;
     flex-wrap: wrap;
-    padding: 60px 4px;
+    padding-top: 40px;
     justify-content: center;
     width: 100%;
   }
@@ -350,22 +350,17 @@
   }
   .market {
     padding: 2em;
-    /* background: rgb(33, 36, 41) !important; */
-    /* uniswap style follows */
+    box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
     background-color: rgb(25, 27, 31);
     border: 2px solid rgb(25, 27, 31);
     border-radius: 16px;
     color: rgb(255, 255, 255);
     justify-content: space-between;
     font-family: "Inter", sans-serif;
-
-    /* padding: 6px 8px; */
-    /* background: rgb(220 218 224 / 10%); */
     margin: 0em 1em;
     word-wrap: break-word;
     overflow: auto;
     flex-direction: column;
-    /* justify-content: start; */
     height: fit-content;
     min-width: 400px;
     max-width: 40%;
@@ -389,6 +384,7 @@
   }
 
   .market-controls {
+    box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
     margin-bottom: 1em;
     padding: 0.5em;
     background-color: rgb(25, 27, 31);
