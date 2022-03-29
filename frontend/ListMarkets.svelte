@@ -23,24 +23,28 @@
     <div class="responsiveItem">
       <a href="#/market/{market.id}">
         <div class="gallery">
-          <img src={market.imageUrl} alt="random" />
-          <h3>{market.title}</h3>
-          <div style="margin-top: 10px; margin-bottom: 10px">
-            {#each market.labels as label, i}
-              <div style="width: 100%; display: flex; font-size: 1.2em;">
-                <div style="width: 50%">{label}</div>
-                <div style="width: 50%">
-                  {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
-                </div>
-              </div>
-            {/each}
+          <div>
+            <img src={market.imageUrl} alt="random" />
           </div>
-          <div
-            style="width: 100%; display: flex; flex-direction: row; font-size: 1.2em; padding-top: 5px"
-          >
-            <div style="width: 50%; ">Volume: {market.volume} &Sigma;</div>
-            <div style="width: 50%">
-              Liquidity: {market.liquidity} &Sigma;
+          <div class="content">
+            <h4 style="padding-top: 0;margin-top:0">{market.title}</h4>
+            <div style="margin-top: 10px; margin-bottom: 10px">
+              {#each market.labels as label, i}
+                <div style="width: 100%; display: flex; font-size: 1.2em;">
+                  <div style="width: 50%">{label}</div>
+                  <div style="width: 50%">
+                    {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
+                  </div>
+                </div>
+              {/each}
+            </div>
+            <div
+              style="width: 100%; display: flex; flex-direction: row; font-size: 1.2em; padding-top: 5px"
+            >
+              <div style="width: 50%; ">Volume: {market.volume} &Sigma;</div>
+              <div style="width: 50%">
+                Liquidity: {market.liquidity} &Sigma;
+              </div>
             </div>
           </div>
         </div>
@@ -50,14 +54,20 @@
 </div>
 
 <style global>
+  .content {
+    margin-left: 15px;
+  }
+
   .rowList {
     display: flex;
     flex-wrap: wrap;
     padding: 0 4px;
     justify-content: center;
+    width: 100%;
   }
 
   div.gallery {
+    display: flex;
     padding: 2em;
     background-color: rgb(25, 27, 31);
     border: 2px solid rgb(25, 27, 31);
@@ -72,7 +82,7 @@
   }
 
   div.gallery img {
-    width: 100%;
+    max-width: 150px;
     height: auto;
   }
 
@@ -87,7 +97,7 @@
 
   .responsiveItem {
     float: left;
-    width: 40%;
+    width: 80%;
     max-width: 500px;
     margin: 1em;
   }
@@ -96,13 +106,15 @@
     .responsiveItem {
       width: 80%;
     }
-  }
-
-  /* @media only screen and (max-width: 500px) {
-    .responsiveItem {
-      width: 80%;
+    .gallery {
+      flex-direction: column;
     }
-  } */
+
+    .content {
+      margin-left: 0;
+      margin-top: 15px;
+    }
+  }
 
   .clearfix:after {
     content: "";
