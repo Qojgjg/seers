@@ -39,7 +39,7 @@
               {/each}
             </div>
             <div
-              style="width: 100%; display: flex; flex-direction: row; font-size: 1.2em; padding-top: 5px"
+              style="width: 100%; display: flex; flex-direction: row; font-size: 1em; padding-top: 5px"
             >
               <div style="width: 50%; ">Volume: {market.volume} &Sigma;</div>
               <div style="width: 50%">
