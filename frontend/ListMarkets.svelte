@@ -24,18 +24,24 @@
       <a href="#/market/{market.id}">
         <div class="gallery">
           <img src={market.imageUrl} alt="random" />
-          <h5>{market.title}</h5>
+          <h3>{market.title}</h3>
           <div style="margin-top: 10px; margin-bottom: 10px">
             {#each market.labels as label, i}
-              <div>
-                {label}: {(Number(market.probabilities[i]) / 1000.0).toFixed(2)}
-                &Sigma;
+              <div style="width: 100%; display: flex; font-size: 1.2em;">
+                <div style="width: 50%">{label}</div>
+                <div style="width: 50%">
+                  {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
+                </div>
               </div>
             {/each}
           </div>
-          <div>Volume: {market.volume} &Sigma;</div>
-          <div>
-            Liquidity: {market.liquidity} &Sigma;
+          <div
+            style="width: 100%; display: flex; flex-direction: row; font-size: 1.2em; padding-top: 5px"
+          >
+            <div style="width: 50%; ">Volume: {market.volume} &Sigma;</div>
+            <div style="width: 50%">
+              Liquidity: {market.liquidity} &Sigma;
+            </div>
           </div>
         </div>
       </a>
@@ -81,22 +87,22 @@
 
   .responsiveItem {
     float: left;
-    width: 24.99999%;
+    width: 40%;
+    max-width: 500px;
     margin: 1em;
   }
 
-  @media only screen and (max-width: 700px) {
-    .responsiveItem {
-      width: 49.99999%;
-      /* margin: 6px 0; */
-    }
-  }
-
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 1000px) {
     .responsiveItem {
       width: 80%;
     }
   }
+
+  /* @media only screen and (max-width: 500px) {
+    .responsiveItem {
+      width: 80%;
+    }
+  } */
 
   .clearfix:after {
     content: "";
