@@ -10,6 +10,7 @@
   let userPrincipal
   let marketIdSelected
   let page
+  let signedIn = false
 
   async function hashchange() {
     const path = window.location.hash.slice(1)
@@ -30,9 +31,9 @@
 
 <svelte:window on:load={hashchange} on:hashchange={hashchange} />
 
-<Auth {auth} {createActor} />
+<Auth {auth} signedInF={(val) => (signedIn = val)} {createActor} />
 {#if page === "market"}
-  <ViewMarket {auth} marketId={marketIdSelected} />
+  <ViewMarket {auth} {signedIn} marketId={marketIdSelected} />
 {:else if page === "user"}
   <User {auth} principal={userPrincipal} />
 {:else if page === "create"}

@@ -6,8 +6,10 @@
 
   export let auth
   export let createActor
+  export let signedInF
 
   let signedIn = false
+
   /** @type {AuthClient} */
   let client
   let principal = ""
@@ -45,12 +47,13 @@
       }),
     }))
     principal = client.getIdentity().getPrincipal()
+    signedInF(true)
     signedIn = true
   }
 
   const signIn = () => {
     client.login({
-      identityProvider: "http://rkp4c-7iaaa-aaaaa-aaaca-cai.localhost:8000/",
+      identityProvider: "http://rwlgt-iiaaa-aaaaa-aaaaa-cai.localhost:8000/",
       // identityProvider: "https://identity.ic0.app/",
       onSuccess: handleAuth,
     })
@@ -79,13 +82,13 @@
   <a href="/" class="active">Markets</a>
 
   {#if !signedIn && client}
-    <button on:click={signIn}> Sign In </button>
+    <button on:click={signIn}>Login</button>
   {/if}
 
   {#if signedIn}
     <a href="#/user/{principal}" on:click={myFunction}>Profile</a>
     <a href="#/create/" on:click={myFunction}>Create</a>
-    <button on:click={signOut}>Sign out</button>
+    <button on:click={signOut}>Logout</button>
   {/if}
   <a href="javascript:void(0);" class="icon" on:click={myFunction}>
     <Fa icon={faBars} />

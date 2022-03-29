@@ -54,7 +54,7 @@
                   {market.marketTitle}
                 </div>
                 <div style="">
-                  ({market.balances}) tokens.
+                  ({market.balances.map((a) => Number(a).toFixed(2))}) tokens.
                 </div>
                 <!-- <div style="">
                   {market.shares} shares.

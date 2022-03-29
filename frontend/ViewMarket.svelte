@@ -6,6 +6,7 @@
 
   export let auth
   export let marketId
+  export let signedIn
 
   let market
 
@@ -16,7 +17,7 @@
   let sellOptClass = "SellOpt"
   let buyTokens = true
   let buttonLabel
-  let tokensEstimate
+  let tokensEstimate = 0.0
 
   const readMarket = async () => {
     market = await $auth.actor.readMarket(parseInt(marketId))
@@ -58,17 +59,18 @@
     }
     if (buyTokens) buttonLabel = "Buy " + selectedLabel
     else buttonLabel = "Sell " + selectedLabel
+
+    readMarket()
   }
 
   onMount(readMarket)
 </script>
 
 {#if market}
-  <div class="header">
-    <h3>{market.title}</h3>
-  </div>
   <div class="rowView">
     <div class="market">
+      <h3>{market.title}</h3>
+
       {#if market.imageUrl}
         <img class="Image" src={market.imageUrl} alt="random" />
       {/if}
@@ -79,7 +81,7 @@
     <div class="v-container">
       <div class="market-controls">
         <ul style="list-style-type: none; margin: 0; padding: 0">
-          <h4>Details</h4>
+          <h4 style="text-align:center">Details</h4>
 
           <li>State: {Object.keys(market.state).toString()}</li>
           <li>
@@ -103,88 +105,97 @@
           style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column"
         >
           <h4>Trade</h4>
-          <div class="YesNoOptions">
-            <button
-              class={buyOptClass}
-              on:click={() => {
-                buyOptClass = "BuyOptSelected"
-                sellOptClass = "SellOpt"
-                buyTokens = true
-                buttonLabel = "Buy " + selectedLabel
-              }}>Buy</button
-            >
-            <button
-              class={sellOptClass}
-              on:click={() => {
-                buyOptClass = "BuyOpt"
-                sellOptClass = "SellOptSelected"
-                buyTokens = false
-                buttonLabel = "Sell " + selectedLabel
-              }}>Sell</button
-            >
-          </div>
-          <div style="padding: 5px">Pick Outcome:</div>
-          {#if market.images[selected]}
-            <img
-              class="Image"
-              src={market.images[selected]}
-              alt="image of {selectedLabel}"
-            />
-          {/if}
-
-          <div class="ContentTab">
-            <select
-              bind:value={selected}
-              style="width: 100%"
-              on:change={() => {
-                selectedLabel = market.labels[selected]
-                if (buyTokens) buttonLabel = "Buy " + selectedLabel
-                else buttonLabel = "Sell " + selectedLabel
-              }}
-            >
-              {#each market.labels as label, i}
-                <option value={i}>
-                  {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
-                  - {label}
-                </option>
-              {/each}
-            </select>
-            <div class="OutcomeTitle">Amount:</div>
-            <div class="OutcomeTitle">
-              <input
-                bind:value={seerAmount}
-                on:change={() => dryRun(market.id, seerAmount)}
-                style="width:100%"
+          {#if signedIn}
+            <div class="YesNoOptions">
+              <button
+                class={buyOptClass}
+                on:click={() => {
+                  buyOptClass = "BuyOptSelected"
+                  sellOptClass = "SellOpt"
+                  buyTokens = true
+                  buttonLabel = "Buy " + selectedLabel
+                }}>Buy</button
+              >
+              <button
+                class={sellOptClass}
+                on:click={() => {
+                  buyOptClass = "BuyOpt"
+                  sellOptClass = "SellOptSelected"
+                  buyTokens = false
+                  buttonLabel = "Sell " + selectedLabel
+                }}>Sell</button
+              >
+            </div>
+            <div style="padding: 5px">Pick Outcome:</div>
+            {#if market.images[selected]}
+              <img
+                class="Image"
+                src={market.images[selected]}
+                alt="image of {selectedLabel}"
               />
-            </div>
-            <div class="ControlData">
-              <div>LP fee 0.00%</div>
-              <div>
-                {#if buyTokens}
-                  Avg. price {tokensEstimate
-                    ? (seerAmount / tokensEstimate).toFixed(2)
-                    : 0} &Sigma;
-                {:else}
-                  Avg. price {tokensEstimate
-                    ? (seerAmount / tokensEstimate).toFixed(2)
-                    : 0} tokens
-                {/if}
+            {/if}
+
+            <div class="ContentTab">
+              <select
+                bind:value={selected}
+                style="width: 100%"
+                on:change={() => {
+                  selectedLabel = market.labels[selected]
+                  if (buyTokens) buttonLabel = "Buy " + selectedLabel
+                  else buttonLabel = "Sell " + selectedLabel
+                }}
+              >
+                {#each market.labels as label, i}
+                  <option value={i}>
+                    {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
+                    - {label}
+                  </option>
+                {/each}
+              </select>
+              <div class="OutcomeTitle">Amount:</div>
+              <div class="OutcomeTitle">
+                <input
+                  bind:value={seerAmount}
+                  on:change={() => dryRun(market.id, seerAmount)}
+                  style="width:100%"
+                />
               </div>
-              <div>
-                {#if buyTokens}
-                  Max. Winnings {tokensEstimate ? tokensEstimate : 0} &Sigma;
-                {:else}
-                  Get back {tokensEstimate ? tokensEstimate : 0} &Sigma;
-                {/if}
+              <div class="ControlData">
+                <div>LP fee 0.00%</div>
+                <div>
+                  {#if buyTokens}
+                    Avg. price {tokensEstimate
+                      ? (seerAmount / tokensEstimate).toFixed(2)
+                      : 0} &Sigma;
+                  {:else}
+                    Avg. price {tokensEstimate
+                      ? (seerAmount / tokensEstimate).toFixed(2)
+                      : 0} tokens
+                  {/if}
+                </div>
+                <div>
+                  {#if buyTokens}
+                    Max. Winnings {tokensEstimate
+                      ? Number(tokensEstimate).toFixed(2)
+                      : Number(0).toFixed(2)}
+                    &Sigma;
+                  {:else}
+                    Get back {tokensEstimate
+                      ? Number(tokensEstimate).toFixed(2)
+                      : Number(0).toFixed(2)} &Sigma;
+                  {/if}
+                </div>
               </div>
+              <button
+                class="demo-button"
+                on:click={() => doIt(market.id, seerAmount)}
+              >
+                {buttonLabel}
+              </button>
             </div>
-            <button
-              class="demo-button"
-              on:click={() => doIt(market.id, seerAmount)}
-            >
-              {buttonLabel}
-            </button>
-          </div>
+          {:else}
+            Please login to trade
+          {/if}
         </div>
       </div>
     </div>
@@ -210,8 +221,9 @@
   .rowView {
     display: flex;
     flex-wrap: wrap;
-    padding: 0 4px;
+    padding: 60px 4px;
     justify-content: center;
+    width: 100%;
   }
 
   .menu-button {
@@ -255,8 +267,7 @@
     border-radius: 8px;
     width: 150px;
     float: left;
-    padding-right: 10px;
-    padding-left: 10px;
+    padding: 10px;
   }
 
   .ControlData {
