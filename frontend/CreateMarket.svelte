@@ -8,6 +8,7 @@
   let newMarketDesc
   let endDate
   let imageUrl
+  let buttonLabel = "Create"
 
   let createMarket = async () => {
     const liquidity = 100
@@ -31,14 +32,16 @@
       endDate: Date.parse(endDate) * 1_000_000,
       imageUrl: imageUrl,
     }
+    buttonLabel = "Processing..."
     await $auth.actor.createMarket(marketInitData)
+    buttonLabel = "Create"
     marketCreated = true
   }
 </script>
 
 {#if marketCreated}
   <div class="header">
-    <h3>Market created!</h3>
+    <h3>Market created and waiting approval!</h3>
   </div>
   <div class="rowCreate" />
 {:else}
@@ -79,7 +82,9 @@
         <div><input bind:value={endDate} size="20" maxlength="10" /></div>
       </div>
       <div style="width: 100%;text-align:center; ">
-        <button class="demo-button" on:click={createMarket}>Create</button>
+        <button class="demo-button" on:click={createMarket}
+          >{buttonLabel}</button
+        >
       </div>
     </div>
   </div>
