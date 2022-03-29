@@ -47,20 +47,20 @@
               <div
                 style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: row; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
               >
-                <div style="">
-                  #{market.marketId}.
+                <div style="width: 20px;">
+                  #{market.marketId}:
                 </div>
-                <div style="">
+                <div style="width: 50%">
                   {market.marketTitle}
                 </div>
-                <div style="">
+                <div style="width: auto">
                   ({market.balances.map((a) => Number(a).toFixed(2))}) tokens.
                 </div>
                 <!-- <div style="">
                   {market.shares} shares.
                 </div> -->
                 <div
-                  style="display:flex; align-items: center; align-content: center; justify-content: center;"
+                  style="display:flex; align-items: center; align-content: center; justify-content: center; width: 80px"
                 >
                   <button
                     class="demo-button"
