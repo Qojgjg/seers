@@ -94,7 +94,7 @@
 
   @media only screen and (max-width: 500px) {
     .responsiveItem {
-      width: 100%;
+      width: 80%;
     }
   }
 
