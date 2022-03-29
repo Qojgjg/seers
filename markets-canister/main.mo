@@ -329,6 +329,8 @@ shared({ caller = initializer }) actor class Market() {
 
     // Sell tokens from caller back to the market.
     public shared(msg) func sellOption(marketId: MarketId, value: Balance, selected: Nat, save: Bool): async ?Balance {
+        assert(not Principal.isAnonymous(msg.caller));
+
         let caller = Principal.toText(msg.caller);
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
         
