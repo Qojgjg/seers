@@ -42,7 +42,7 @@
   <ListMarkets {auth} />
 {/if}
 <footer
-  style=" width: 100%; text-align: center; padding: 50px 0px; align-items:center; display: flex; flex-direction: column;justify-content: center; gap: 15px"
+  style=" width: 100%; text-align: center; padding: 20px 0px; align-items:center; display: flex; flex-direction: column;justify-content: center; gap: 15px"
 >
   <div style="width: 50%;display:flex; justify-content:center">
     <img
