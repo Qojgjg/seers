@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { faBreadSlice } from "@fortawesome/free-solid-svg-icons"
+
   import { onMount } from "svelte"
   export let auth
 
@@ -24,17 +26,19 @@
 <div style="justify-content: center; display: flex;width: 100%">
   <div class="ranking">
     <div class="row">
-      <div>Position</div>
-      <div>Handle</div>
+      <div style="width: 20%;margin: 3px">Position</div>
+      <div style="width: 70%;margin: 3px">Handle</div>
       <!-- <div># Markets</div> -->
-      <div>Seers Balance</div>
+      <div style="width: 10%;margin: 3px">&Sigma;</div>
     </div>
     {#each response as user, i}
       <div class="row">
-        <div>#{i}</div>
-        <div>{user.handle ? user.handle : user.id.slice(0, 11)}</div>
+        <div style="width: 20%;margin: 3px">#{i}</div>
+        <div style="width: 70%;margin: 3px">
+          {user.handle ? user.handle : user.id.slice(0, 11)}
+        </div>
         <!-- <div>{user.markets.length}</div> -->
-        <div>{user.seerBalance}</div>
+        <div style="width: 10%;margin: 3px">{user.seerBalance}</div>
       </div>
     {/each}
   </div>
@@ -44,10 +48,6 @@
   .row {
     display: flex;
     width: 100%;
-  }
-  .row > div {
-    width: 25%;
-    margin: 6px;
   }
   .ranking {
     display: flex;

@@ -56,6 +56,8 @@
 <style global>
   .content {
     margin-left: 15px;
+    width: 100%;
+    min-height: 170px;
   }
 
   .rowList {

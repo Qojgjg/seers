@@ -36,6 +36,7 @@
     market = await $auth.actor.readMarket(parseInt(marketId))
     market = market[0]
     selectedLabel = market.labels[0]
+    selected = 0
     buttonLabel = "Buy " + selectedLabel
     console.log(market)
   }
