@@ -31,6 +31,7 @@
 
   let createUserData = async () => {
     createLabel = "Processing..."
+    errorResponse = ""
     response = await $auth.actor.createUserResult(handle)
     if (response["err"]) {
       errorResponse =
@@ -87,7 +88,7 @@
                 <!-- <div style="">
                   {market.shares} shares.
                 </div> -->
-                <div
+                <!-- <div
                   style="display:flex; align-items: center; align-content: center; justify-content: center; width: 80px"
                 >
                   <button
@@ -96,7 +97,7 @@
                       claimSeers(market.marketId)
                     }}>Claim</button
                   >
-                </div>
+                </div> -->
               </div>
             </a>
           {/each}

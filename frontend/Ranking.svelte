@@ -8,8 +8,8 @@
     response = (await $auth.actor.readAllUsers()).sort(function (a, b) {
       var keyA = a.seerBalance,
         keyB = b.seerBalance
-      if (keyA < keyB) return -1
-      if (keyA > keyB) return 1
+      if (keyA < keyB) return 1
+      if (keyA > keyB) return -1
       return 0
     })
   }
@@ -26,14 +26,14 @@
     <div class="row">
       <div>Position</div>
       <div>Handle</div>
-      <div># Markets</div>
+      <!-- <div># Markets</div> -->
       <div>Seers Balance</div>
     </div>
     {#each response as user, i}
       <div class="row">
         <div>#{i}</div>
         <div>{user.handle ? user.handle : user.id.slice(0, 11)}</div>
-        <div>{user.markets.length}</div>
+        <!-- <div>{user.markets.length}</div> -->
         <div>{user.seerBalance}</div>
       </div>
     {/each}
