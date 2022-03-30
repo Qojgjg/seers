@@ -26,10 +26,16 @@
 <div style="justify-content: center; display: flex;width: 100%">
   <div class="ranking">
     <div class="row">
-      <div style="width: 20%;margin: 3px">Position</div>
-      <div style="width: 70%;margin: 3px">Handle</div>
+      <div style="width: 20%;margin: 3px; font-size: 1.2em;margin-bottom: 1em">
+        Position
+      </div>
+      <div style="width: 70%;margin: 3px; font-size: 1.2em;margin-bottom: 1em">
+        Handle
+      </div>
       <!-- <div># Markets</div> -->
-      <div style="width: 10%;margin: 3px">&Sigma;</div>
+      <div style="width: 10%;margin: 3px; font-size: 1.2em;margin-bottom: 1em">
+        &Sigma;
+      </div>
     </div>
     {#each response as user, i}
       <div class="row">
