@@ -8,6 +8,7 @@
   let handle = ""
   let response = null
   let errorResponse = ""
+  let isGetting = false
 
   const splitCamelCaseToString = (s) => {
     return s
@@ -19,7 +20,9 @@
   }
 
   let getUserData = async () => {
+    isGetting = true
     user = await $auth.actor.getUserResult(principal)
+    isGetting = false
     if (user) {
       user = user[0]
     }
@@ -27,7 +30,7 @@
   }
 
   let createUserData = async () => {
-    createLabel = "Processing"
+    createLabel = "Processing..."
     response = await $auth.actor.createUserResult(handle)
     if (response["err"]) {
       errorResponse =
@@ -99,6 +102,8 @@
           {/each}
         </div>
       {/if}
+    {:else if isGetting}
+      Loading
     {:else}
       <div style="display: flex; align-items: center; flex-direction: column">
         <div style="padding: 10px; margin: 10px">Handle:</div>
@@ -124,7 +129,7 @@
   </div>
 </div>
 
-<style>
+<style global>
   .rowUser {
     display: flex;
     flex-wrap: wrap;
@@ -155,6 +160,7 @@
     cursor: pointer;
     color: white;
     max-width: 150px;
+    white-space: normal;
   }
 
   .demo-button:hover {
