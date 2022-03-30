@@ -107,11 +107,11 @@
           <h4 style="text-align:center; padding: 3px; margin: 3px">Details</h4>
 
           <li>Status: {Object.keys(market.state).toString()}</li>
-          <li>
+          <!-- <li>
             Starts: {new Date(
               parseInt(market.startDate) / 1_000_000,
             ).toDateString()}
-          </li>
+          </li> -->
           <li>
             Ends: {new Date(
               parseInt(market.endDate) / 1_000_000,
