@@ -54,22 +54,30 @@
         "Error: " +
         splitCamelCaseToString(Object.keys(response["err"]).toString())
     } else {
+      errorResponse = ""
       tokensEstimate = response["ok"]
     }
   }
 
   const doIt = async (marketId, amount) => {
+    errorResponse = ""
     buttonLabel = "Processing..."
     amount = parseInt(amount)
     console.log("Selected: " + selected)
 
     if (buyTokens) {
-      await $auth.actor.buyOption(marketId, amount, selected, true)
+      response = await $auth.actor.buyOption(marketId, amount, selected, true)
     } else {
-      await $auth.actor.sellOption(marketId, amount, selected, true)
+      response = await $auth.actor.sellOption(marketId, amount, selected, true)
     }
-    if (buyTokens) buttonLabel = "Buy " + selectedLabel
-    else buttonLabel = "Sell " + selectedLabel
+    if (response["err"]) {
+      errorResponse =
+        "Error: " +
+        splitCamelCaseToString(Object.keys(response["err"]).toString())
+    } else {
+      errorResponse = ""
+      tokensEstimate = response["ok"]
+    }
 
     readMarket()
   }
@@ -170,7 +178,7 @@
             <div class="OutcomeTitle">
               <input
                 bind:value={seerAmount}
-                on:change={() => dryRun(market.id, seerAmount)}
+                on:input={() => dryRun(market.id, seerAmount)}
                 style="width:100%; height: 30px"
               />
             </div>
