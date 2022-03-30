@@ -31,6 +31,8 @@ type User =
   };
 type UserId = Text;
 actor {
+  stable var handles :
+    {#branch : Branch<Text, UserId>; #empty; #leaf : Leaf<Text, UserId>};
   stable var markets :
     {
       #branch : Branch<MarketId, Market/1>;

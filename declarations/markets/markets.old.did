@@ -15,11 +15,11 @@ type UserId = text;
 type Url = text;
 type TradeError = 
  variant {
-   balanceNotEnough;
    callerIsAnon;
    marketClosed;
    marketMissing;
    newtonFailed;
+   notEnoughBalance;
  };
 type Title = text;
 type Time = int;
@@ -81,7 +81,7 @@ type CreateMarketError =
    descriptionMissing;
    endDateOld: Time;
    imageMissing;
-   liquidityNotEnough: Balance;
+   notEnoughLiquidity: Balance;
    optionsMissing;
    titleMissing;
  };

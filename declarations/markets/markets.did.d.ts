@@ -6,8 +6,11 @@ export type CreateMarketError = { 'callerIsAnon' : null } |
   { 'optionsMissing' : null } |
   { 'descriptionMissing' : null } |
   { 'titleMissing' : null } |
+  { 'userNotCreated' : null } |
   { 'endDateOld' : Time } |
   { 'notEnoughLiquidity' : Balance };
+export type CreateUserError = { 'userExist' : null } |
+  { 'userIsAnon' : null };
 export type Description = string;
 export interface Market {
   'approveMarket' : (arg_0: MarketId) => Promise<undefined>,
@@ -18,8 +21,8 @@ export interface Market {
       arg_3: boolean,
     ) => Promise<Result>,
   'claimTokens' : (arg_0: MarketId) => Promise<Balance>,
-  'createMarket' : (arg_0: MarketInitData) => Promise<Result_1>,
-  'createUserResult' : (arg_0: string) => Promise<UserResult>,
+  'createMarket' : (arg_0: MarketInitData) => Promise<Result_2>,
+  'createUserResult' : (arg_0: string) => Promise<Result_1>,
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteAllUsers' : () => Promise<undefined>,
   'deleteMarket' : (arg_0: MarketId) => Promise<boolean>,
@@ -73,7 +76,9 @@ export type MarketState = { 'resolved' : bigint } |
 export type Probability = number;
 export type Result = { 'ok' : Balance } |
   { 'err' : TradeError };
-export type Result_1 = { 'ok' : MarketResult } |
+export type Result_1 = { 'ok' : UserResult } |
+  { 'err' : CreateUserError };
+export type Result_2 = { 'ok' : MarketResult } |
   { 'err' : CreateMarketError };
 export type Shares = bigint;
 export type Time = bigint;
@@ -81,6 +86,7 @@ export type Title = string;
 export type TradeError = { 'callerIsAnon' : null } |
   { 'notEnoughBalance' : null } |
   { 'marketClosed' : null } |
+  { 'userNotCreated' : null } |
   { 'marketMissing' : null } |
   { 'newtonFailed' : null };
 export type Url = string;

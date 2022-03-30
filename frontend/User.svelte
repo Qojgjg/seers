@@ -3,8 +3,20 @@
   export let auth
   export let principal
 
-  let user
+  let user = null
+  let createLabel = "Create User"
   let handle = ""
+  let response = null
+  let errorResponse = ""
+
+  const splitCamelCaseToString = (s) => {
+    return s
+      .split(/(?=[A-Z])/)
+      .map((p) => {
+        return p[0].toUpperCase() + p.slice(1)
+      })
+      .join(" ")
+  }
 
   let getUserData = async () => {
     user = await $auth.actor.getUserResult(principal)
@@ -15,7 +27,16 @@
   }
 
   let createUserData = async () => {
-    user = await $auth.actor.createUserResult(handle)
+    createLabel = "Processing"
+    response = await $auth.actor.createUserResult(handle)
+    if (response["err"]) {
+      errorResponse =
+        "Error: " +
+        splitCamelCaseToString(Object.keys(response["err"]).toString())
+    } else {
+      user = response["ok"]
+    }
+    createLabel = "Create User"
     console.log(user)
   }
 
@@ -35,7 +56,7 @@
   <div class="rowUser">
     {#if user}
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        ID: {user.id}
+        Id: {user.id}
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
         Handle: {user.handle}
@@ -87,10 +108,15 @@
         />
         <button
           class="demo-button"
+          on:input={() => (errorResponse = "")}
           on:click={() => {
             createUserData()
-          }}>Create User</button
+          }}>{createLabel}</button
         >
+        <br />
+        <div style="text-align:center;color:red">
+          {errorResponse}
+        </div>
       </div>
     {/if}
   </div>

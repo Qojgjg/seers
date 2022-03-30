@@ -21,14 +21,20 @@ type TradeError =
    marketMissing;
    newtonFailed;
    notEnoughBalance;
+   userNotCreated;
  };
 type Title = text;
 type Time = int;
 type Shares = int;
-type Result_1 = 
+type Result_2 = 
  variant {
    err: CreateMarketError;
    ok: MarketResult;
+ };
+type Result_1 = 
+ variant {
+   err: CreateUserError;
+   ok: UserResult;
  };
 type Result = 
  variant {
@@ -80,8 +86,8 @@ type Market =
    approveMarket: (MarketId) -> ();
    buyOption: (MarketId, Balance, nat, bool) -> (Result);
    claimTokens: (MarketId) -> (Balance);
-   createMarket: (MarketInitData) -> (Result_1);
-   createUserResult: (text) -> (UserResult);
+   createMarket: (MarketInitData) -> (Result_2);
+   createUserResult: (text) -> (Result_1);
    deleteAllMarkets: () -> ();
    deleteAllUsers: () -> ();
    deleteMarket: (MarketId) -> (bool);
@@ -94,6 +100,11 @@ type Market =
    sellOption: (MarketId, Balance, nat, bool) -> (Result);
  };
 type Description = text;
+type CreateUserError = 
+ variant {
+   userExist;
+   userIsAnon;
+ };
 type CreateMarketError = 
  variant {
    callerIsAnon;
@@ -103,6 +114,7 @@ type CreateMarketError =
    notEnoughLiquidity: Balance;
    optionsMissing;
    titleMissing;
+   userNotCreated;
  };
 type Balance = float64;
 type Author = text;

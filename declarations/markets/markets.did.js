@@ -5,6 +5,7 @@ export const idlFactory = ({ IDL }) => {
     'callerIsAnon' : IDL.Null,
     'notEnoughBalance' : IDL.Null,
     'marketClosed' : IDL.Null,
+    'userNotCreated' : IDL.Null,
     'marketMissing' : IDL.Null,
     'newtonFailed' : IDL.Null,
   });
@@ -57,10 +58,11 @@ export const idlFactory = ({ IDL }) => {
     'optionsMissing' : IDL.Null,
     'descriptionMissing' : IDL.Null,
     'titleMissing' : IDL.Null,
+    'userNotCreated' : IDL.Null,
     'endDateOld' : Time,
     'notEnoughLiquidity' : Balance,
   });
-  const Result_1 = IDL.Variant({
+  const Result_2 = IDL.Variant({
     'ok' : MarketResult,
     'err' : CreateMarketError,
   });
@@ -77,6 +79,11 @@ export const idlFactory = ({ IDL }) => {
     'markets' : IDL.Vec(UserMarket),
     'handle' : IDL.Text,
   });
+  const CreateUserError = IDL.Variant({
+    'userExist' : IDL.Null,
+    'userIsAnon' : IDL.Null,
+  });
+  const Result_1 = IDL.Variant({ 'ok' : UserResult, 'err' : CreateUserError });
   const Market = IDL.Service({
     'approveMarket' : IDL.Func([MarketId], [], []),
     'buyOption' : IDL.Func(
@@ -85,8 +92,8 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'claimTokens' : IDL.Func([MarketId], [Balance], []),
-    'createMarket' : IDL.Func([MarketInitData], [Result_1], []),
-    'createUserResult' : IDL.Func([IDL.Text], [UserResult], []),
+    'createMarket' : IDL.Func([MarketInitData], [Result_2], []),
+    'createUserResult' : IDL.Func([IDL.Text], [Result_1], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteAllUsers' : IDL.Func([], [], []),
     'deleteMarket' : IDL.Func([MarketId], [IDL.Bool], []),

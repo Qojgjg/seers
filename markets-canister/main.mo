@@ -114,6 +114,7 @@ shared({ caller = initializer }) actor class Market() {
     private stable var nextMarketId: MarketId = 0;
     private stable var markets: Trie.Trie<MarketId, Market> = Trie.empty();
     private stable var users: Trie.Trie<UserId, User> = Trie.empty();
+    private stable var handles: Trie.Trie<Text, UserId> = Trie.empty();
 
     /* API */
 
@@ -209,6 +210,7 @@ shared({ caller = initializer }) actor class Market() {
 
     public type CreateMarketError = {
         #callerIsAnon;
+        #userNotCreated;
         #notEnoughLiquidity: Balance;
         #titleMissing;
         #descriptionMissing;
@@ -298,7 +300,14 @@ shared({ caller = initializer }) actor class Market() {
         };
 
         // Update provider.
-        var user = getOrCreateUser(author);
+        var user = switch (getUser(author)) {
+            case (null) {
+                return #err(#userNotCreated);
+            };
+            case (?user) {
+                user;
+            };
+        };
         
         let userMarket: UserMarket = {
             marketId = marketId;
@@ -373,6 +382,7 @@ shared({ caller = initializer }) actor class Market() {
 
     public type TradeError = {
         #callerIsAnon;
+        #userNotCreated;
         #notEnoughBalance;
         #marketMissing;
         #marketClosed;
@@ -404,7 +414,15 @@ shared({ caller = initializer }) actor class Market() {
                     return #err(#marketClosed);
                 };
 
-                var user = getOrCreateUser(caller);
+                var user = switch (getUser(caller)) {
+                    case (null) {
+                        return #err(#userNotCreated);
+                    };
+                    case (?user) {
+                        user;
+                    };
+                };
+        
                 var marketTokensOpt = Array.find(user.markets,
                     func (ut: UserMarket): Bool {
                         ut.marketId == market.id
@@ -528,7 +546,15 @@ shared({ caller = initializer }) actor class Market() {
         };
 
         let caller = Principal.toText(msg.caller);
-        var user = getOrCreateUser(caller);
+        
+        var user = switch (getUser(caller)) {
+            case (null) {
+                return #err(#userNotCreated);
+            };
+            case (?user) {
+                user;
+            };
+        };
 
         if (user.seerBalance < value) {
             return #err(#notEnoughBalance);
@@ -657,11 +683,21 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Create user.
-    public shared(msg) func createUserResult(handle: Text): async UserResult {
-        assert(not Principal.isAnonymous(msg.caller));
-        
-        let caller = Principal.toText(msg.caller);        
-        return userToUserResult(createUser(caller, handle));
+    public shared(msg) func createUserResult(handle: Text): async Result.Result<UserResult, CreateUserError> {
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err(#userIsAnon);
+        };
+
+        let caller = Principal.toText(msg.caller);
+
+        switch (createUser(caller, handle)) {
+            case (#err(e)) {
+                return #err(e);
+            };
+            case (#ok(user)) {
+                return #ok(userToUserResult(user))
+            };
+        };
     };
 
     /**
@@ -785,32 +821,41 @@ shared({ caller = initializer }) actor class Market() {
         Trie.find(users, userKey(userId), Text.equal)
     };
 
-    private func createUser(userId: UserId, handle: Text): User {
-        let user: User = {
-            var id = userId;
-            var seerBalance = 1000.0; // Airdrop
-            var handle = handle;
-            var markets = [];
-        };
-
-        users := Trie.replace(
-            users,
-            userKey(user.id),
-            Text.equal,
-            ?user,
-        ).0;
-
-        return user;
+    private type CreateUserError = {
+        #userExist;
+        #userIsAnon;
     };
 
-    private func getOrCreateUser(u: UserId): User {
-        let r = getUser(u);
-        switch (r) {
-            case null {
-                return createUser(u, "");
+    private func createUser(userId: UserId, handle: Text): Result.Result<User, CreateUserError> {
+        let exist = Trie.find(handles, userKey(handle), Text.equal);
+
+        switch (exist) {
+            case (null) {
+                let user: User = {
+                    var id = userId;
+                    var seerBalance = 1000.0; // Airdrop
+                    var handle = handle;
+                    var markets = [];
+                };
+
+                handles := Trie.replace(
+                    handles,
+                    userKey(handle),
+                    Text.equal,
+                    ?handle,
+                ).0;
+
+                users := Trie.replace(
+                    users,
+                    userKey(user.id),
+                    Text.equal,
+                    ?user,
+                ).0;
+
+                return #ok(user);
             };
-            case (?user) {
-                return user;
+            case (userId) {
+                return #err(#userExist);
             };
         };
     };
