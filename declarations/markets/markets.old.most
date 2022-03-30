@@ -9,7 +9,7 @@ type Market/1 =
     id : MarketId;
     var imageUrl : Url;
     images : [Text];
-    var k : Balance;
+    var kLast : Balance;
     labels : [Text];
     var liquidity : Balance;
     var probabilities : [Probability];
@@ -26,6 +26,7 @@ type User =
   {var id : UserId; var markets : [UserMarket]; var seerBalance : Balance};
 type UserId = Text;
 actor {
+  stable var anon : Text;
   stable var markets :
     {
       #branch : Branch<MarketId, Market/1>;

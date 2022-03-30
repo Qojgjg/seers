@@ -98,7 +98,7 @@
       </div> -->
       <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">End date:</div>
-        <div><input bind:value={endDate} size="20" maxlength="10" /></div>
+        <div><input bind:value={endDate} size="20" maxlength="30" /></div>
       </div>
       <div style="width: 100%;text-align:center; ">
         <button class="demo-button" on:click={createMarket}

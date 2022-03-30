@@ -13,28 +13,10 @@ type UserMarket =
  };
 type UserId = text;
 type Url = text;
-type TradeError = 
- variant {
-   callerIsAnon;
-   marketClosed;
-   marketMissing;
-   newtonFailed;
-   notEnoughBalance;
- };
 type Title = text;
 type Time = int;
 type Shares = int;
-type Result_1 = 
- variant {
-   err: CreateMarketError;
-   ok: MarketResult;
- };
-type Result = 
- variant {
-   err: TradeError;
-   ok: Balance;
- };
-type Probability = float64;
+type Probability = int;
 type MarketState = 
  variant {
    closed;
@@ -51,7 +33,7 @@ type MarketResult =
    id: MarketId;
    imageUrl: Url;
    images: vec text;
-   k: Balance;
+   kLast: Balance;
    labels: vec text;
    liquidity: Balance;
    probabilities: vec Probability;
@@ -71,27 +53,18 @@ type MarketInitData =
    images: vec text;
    labels: vec text;
    liquidity: Balance;
+   probabilities: vec Probability;
    title: Title;
  };
 type MarketId = nat32;
 type Description = text;
-type CreateMarketError = 
- variant {
-   callerIsAnon;
-   descriptionMissing;
-   endDateOld: Time;
-   imageMissing;
-   notEnoughLiquidity: Balance;
-   optionsMissing;
-   titleMissing;
- };
-type Balance = float64;
+type Balance = int;
 type Author = text;
 service : {
   approveMarket: (MarketId) -> ();
-  buyOption: (MarketId, Balance, nat, bool) -> (Result);
+  buyOption: (MarketId, Balance, nat, bool) -> (opt Balance);
   claimTokens: (MarketId) -> (Balance);
-  createMarket: (MarketInitData) -> (Result_1);
+  createMarket: (MarketInitData) -> (MarketId);
   createUserResult: () -> (UserResult);
   deleteAllMarkets: () -> ();
   deleteAllUsers: () -> ();
@@ -102,5 +75,5 @@ service : {
   readAllUsers: () -> (vec UserResult) query;
   readMarket: (MarketId) -> (opt MarketResult) query;
   resolveMarket: (MarketId, nat) -> (bool);
-  sellOption: (MarketId, Balance, nat, bool) -> (Result);
+  sellOption: (MarketId, Balance, nat, bool) -> (opt Balance);
 }
