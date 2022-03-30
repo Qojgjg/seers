@@ -30,7 +30,7 @@
         <div
           style="width: 20%;margin: 3px; font-size: 1.2em;margin-bottom: 1em"
         >
-          Position
+          #
         </div>
         <div
           style="width: 70%;margin: 3px; font-size: 1.2em;margin-bottom: 1em"
@@ -46,7 +46,7 @@
       </div>
       {#each response as user, i}
         <div class="row">
-          <div style="width: 20%;margin: 3px">#{i}</div>
+          <div style="width: 20%;margin: 3px">{i}</div>
           <div style="width: 70%;margin: 3px">
             {user.handle ? user.handle : user.id.slice(0, 11)}
           </div>
