@@ -6,6 +6,7 @@
   import ViewMarket from "./ViewMarket.svelte"
   import User from "./User.svelte"
   import CreateMarket from "./CreateMarket.svelte"
+  import Ranking from "./Ranking.svelte"
 
   let userPrincipal
   let marketIdSelected
@@ -23,6 +24,8 @@
       userPrincipal = path.slice(6)
     } else if (path.startsWith("/create/")) {
       page = "create"
+    } else if (path.startsWith("/ranking/")) {
+      page = "ranking"
     } else {
       window.location.hash = ""
     }
@@ -39,6 +42,8 @@
     <User {auth} principal={userPrincipal} />
   {:else if page === "create"}
     <CreateMarket {auth} />
+  {:else if page === "ranking"}
+    <Ranking {auth} />
   {:else}
     <ListMarkets {auth} />
   {/if}

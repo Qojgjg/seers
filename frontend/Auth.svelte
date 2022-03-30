@@ -91,6 +91,7 @@
     /></a
   >
   <a href="/" class="active" style="margin-top: 5px">Markets</a>
+  <a href="#/ranking/" class="active" style="margin-top: 5px">Ranking</a>
 
   {#if !signedIn && client}
     <button on:click={signIn} style="margin-top: 5px">Login</button>

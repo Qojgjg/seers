@@ -16,7 +16,7 @@
 </script>
 
 <div class="header">
-  <h2>Prediction Markets</h2>
+  <h3>Prediction Markets</h3>
 </div>
 <div class="rowList">
   {#each markets as market}
