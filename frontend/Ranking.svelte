@@ -54,7 +54,7 @@
     flex-wrap: wrap;
     padding: 1em;
     justify-content: start;
-    min-width: 200px;
+    min-width: 50%;
     max-width: 800px;
     background-color: rgb(25, 27, 31);
     border: 1px solid rgb(90, 58, 81);
