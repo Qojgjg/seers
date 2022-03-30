@@ -1,5 +1,6 @@
 type UserResult = 
  record {
+   handle: text;
    id: UserId;
    markets: vec UserMarket;
    seerBalance: Balance;
@@ -13,10 +14,34 @@ type UserMarket =
  };
 type UserId = text;
 type Url = text;
+type TradeError = 
+ variant {
+   callerIsAnon;
+   marketClosed;
+   marketMissing;
+   newtonFailed;
+   notEnoughBalance;
+   userNotCreated;
+ };
 type Title = text;
 type Time = int;
 type Shares = int;
-type Probability = int;
+type Result_2 = 
+ variant {
+   err: CreateMarketError;
+   ok: MarketResult;
+ };
+type Result_1 = 
+ variant {
+   err: CreateUserError;
+   ok: UserResult;
+ };
+type Result = 
+ variant {
+   err: TradeError;
+   ok: Balance;
+ };
+type Probability = float64;
 type MarketState = 
  variant {
    closed;
@@ -33,7 +58,7 @@ type MarketResult =
    id: MarketId;
    imageUrl: Url;
    images: vec text;
-   kLast: Balance;
+   k: Balance;
    labels: vec text;
    liquidity: Balance;
    probabilities: vec Probability;
@@ -53,19 +78,34 @@ type MarketInitData =
    images: vec text;
    labels: vec text;
    liquidity: Balance;
-   probabilities: vec Probability;
    title: Title;
  };
 type MarketId = nat32;
 type Description = text;
-type Balance = int;
+type CreateUserError = 
+ variant {
+   userExist;
+   userIsAnon;
+ };
+type CreateMarketError = 
+ variant {
+   callerIsAnon;
+   descriptionMissing;
+   endDateOld: Time;
+   imageMissing;
+   notEnoughLiquidity: Balance;
+   optionsMissing;
+   titleMissing;
+   userNotCreated;
+ };
+type Balance = float64;
 type Author = text;
 service : {
   approveMarket: (MarketId) -> ();
-  buyOption: (MarketId, Balance, nat, bool) -> (opt Balance);
+  buyOption: (MarketId, Balance, nat, bool) -> (Result);
   claimTokens: (MarketId) -> (Balance);
-  createMarket: (MarketInitData) -> (MarketId);
-  createUserResult: () -> (UserResult);
+  createMarket: (MarketInitData) -> (Result_2);
+  createUserResult: (text) -> (Result_1);
   deleteAllMarkets: () -> ();
   deleteAllUsers: () -> ();
   deleteMarket: (MarketId) -> (bool);
@@ -75,5 +115,5 @@ service : {
   readAllUsers: () -> (vec UserResult) query;
   readMarket: (MarketId) -> (opt MarketResult) query;
   resolveMarket: (MarketId, nat) -> (bool);
-  sellOption: (MarketId, Balance, nat, bool) -> (opt Balance);
+  sellOption: (MarketId, Balance, nat, bool) -> (Result);
 }

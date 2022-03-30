@@ -241,6 +241,7 @@
     height: 30px;
   }
   .header {
+    display: flex;
     text-align: center;
     justify-content: center;
     padding-top: 60px;
@@ -403,17 +404,18 @@
 
   @media only screen and (max-width: 600px) {
     .market {
-      padding: 2em;
-      background: rgb(220 218 224 / 10%);
-      margin: 0em 1em;
-      border-radius: 1em;
-      word-wrap: break-word;
-      overflow: auto;
+      margin: 1em;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      max-width: 234px;
-      margin-bottom: 1em;
+      width: 300px;
+      min-width: 0px;
+      max-width: 80%;
+    }
+
+    .market-controls {
+      margin: 1em;
+      width: 300px;
     }
   }
 
@@ -439,7 +441,6 @@
     overflow: auto;
     display: flex;
     justify-content: center;
-    width: 250px;
   }
   .MarketDetails {
     display: flex;
