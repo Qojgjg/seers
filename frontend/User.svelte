@@ -100,19 +100,21 @@
         </div>
       {/if}
     {:else}
-      <div style="display: flex; align-items: center">
+      <div style="display: flex; align-items: center; flex-direction: column">
         <div style="padding: 10px; margin: 10px">Handle:</div>
         <input
           bind:value={handle}
-          style="align-items: center; width:200px; height: 30px"
+          style="align-items: center; width:100%; height: 30px"
         />
-        <button
-          class="demo-button"
-          on:input={() => (errorResponse = "")}
-          on:click={() => {
-            createUserData()
-          }}>{createLabel}</button
-        >
+        <div style="width: 100%;display:flex; justify-content:center">
+          <button
+            class="demo-button"
+            on:input={() => (errorResponse = "")}
+            on:click={() => {
+              createUserData()
+            }}>{createLabel}</button
+          >
+        </div>
         <br />
         <div style="text-align:center;color:red">
           {errorResponse}
@@ -122,7 +124,7 @@
   </div>
 </div>
 
-<style global>
+<style>
   .rowUser {
     display: flex;
     flex-wrap: wrap;
@@ -130,6 +132,7 @@
     justify-content: start;
     min-width: 200px;
     max-width: 800px;
+    width: 80%;
     background-color: rgb(25, 27, 31);
     border: 1px solid rgb(90, 58, 81);
     box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
@@ -147,7 +150,6 @@
     margin: 1em;
     border-radius: 10px;
     font-size: 0.9em;
-    height: 35px;
     outline: 0;
     border: 0;
     cursor: pointer;
