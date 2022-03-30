@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { NullClass } from "@dfinity/candid/lib/cjs/idl"
+
   import { concat } from "@dfinity/candid/lib/cjs/utils/buffer"
   import { faImages } from "@fortawesome/free-solid-svg-icons"
   import { onMount, beforeUpdate } from "svelte"
@@ -18,6 +20,17 @@
   let buyTokens = true
   let buttonLabel
   let tokensEstimate = 0.0
+  let response = null
+  let errorResponse = ""
+
+  const splitCamelCaseToString = (s) => {
+    return s
+      .split(/(?=[A-Z])/)
+      .map((p) => {
+        return p[0].toUpperCase() + p.slice(1)
+      })
+      .join(" ")
+  }
 
   const readMarket = async () => {
     market = await $auth.actor.readMarket(parseInt(marketId))
@@ -31,19 +44,17 @@
     amount = parseInt(amount)
     console.log("Selected: " + selected)
     if (buyTokens) {
-      tokensEstimate = await $auth.actor.buyOption(
-        marketId,
-        amount,
-        selected,
-        false,
-      )
+      response = await $auth.actor.buyOption(marketId, amount, selected, false)
     } else {
-      tokensEstimate = await $auth.actor.sellOption(
-        marketId,
-        amount,
-        selected,
-        false,
-      )
+      response = await $auth.actor.sellOption(marketId, amount, selected, false)
+    }
+
+    if (response["err"]) {
+      errorResponse =
+        "Error: " +
+        splitCamelCaseToString(Object.keys(response["err"]).toString())
+    } else {
+      tokensEstimate = response["ok"]
     }
   }
 
@@ -69,7 +80,7 @@
 {#if market}
   <div class="rowView">
     <div class="market">
-      <h3 style="padding: 3px; margin: 3px">{market.title}</h3>
+      <h3 style="padding: 0px; margin: 15px">{market.title}</h3>
 
       {#if market.imageUrl}
         <img class="Image" src={market.imageUrl} alt="random" />
@@ -127,14 +138,14 @@
               }}>Sell</button
             >
           </div>
-          <div style="padding: 5px">Pick Outcome:</div>
-          {#if market.images[selected]}
+          <div class="OutcomeTitle">Pick Outcome:</div>
+          <!-- {#if market.images[selected]}
             <img
               class="Image"
               src={market.images[selected]}
               alt="image of {selectedLabel}"
             />
-          {/if}
+          {/if} -->
 
           <div class="ContentTab">
             <select
@@ -158,7 +169,7 @@
               <input
                 bind:value={seerAmount}
                 on:change={() => dryRun(market.id, seerAmount)}
-                style="width:100%"
+                style="width:100%; height: 30px"
               />
             </div>
             <div class="ControlData">
@@ -194,6 +205,9 @@
               >
                 {buttonLabel}
               </button>
+              <div style="width: 100%;text-align:center;color:red">
+                {errorResponse}
+              </div>
             {:else}
               <button class="demo-button" disabled> Please login </button>
             {/if}
@@ -212,6 +226,7 @@
     color: black;
     border-color: white;
     margin-top: 10px;
+    height: 30px;
   }
   .header {
     text-align: center;
@@ -296,24 +311,28 @@
   }
   .BuyOpt {
     width: 50%;
-    height: fit-content;
+    height: 30px;
     color: white;
+    border-radius: 5px 0 0 5px;
     background: rgb(220 218 224 / 25%);
   }
   .SellOpt {
     width: 50%;
-    height: fit-content;
+    height: 30px;
     color: white;
+    border-radius: 0 5px 5px 0;
     background: rgb(220 218 224 / 25%);
   }
   .BuyOptSelected {
     width: 50%;
-    height: fit-content;
+    height: 30px;
     color: black;
+    border-radius: 5px 0 0 5px;
   }
   .SellOptSelected {
     width: 50%;
-    height: fit-content;
+    height: 30px;
+    border-radius: 0 5px 5px 0;
     color: black;
   }
   .YesTabSelected {

@@ -7,7 +7,7 @@ export type CreateMarketError = { 'callerIsAnon' : null } |
   { 'descriptionMissing' : null } |
   { 'titleMissing' : null } |
   { 'endDateOld' : Time } |
-  { 'liquidityNotEnough' : Balance };
+  { 'notEnoughLiquidity' : Balance };
 export type Description = string;
 export interface Market {
   'approveMarket' : (arg_0: MarketId) => Promise<undefined>,
@@ -79,8 +79,8 @@ export type Shares = bigint;
 export type Time = bigint;
 export type Title = string;
 export type TradeError = { 'callerIsAnon' : null } |
+  { 'notEnoughBalance' : null } |
   { 'marketClosed' : null } |
-  { 'balanceNotEnough' : null } |
   { 'marketMissing' : null } |
   { 'newtonFailed' : null };
 export type Url = string;

@@ -66,7 +66,7 @@ type CreateMarketError =
  variant {
    callerIsAnon;
    descriptionMissing;
-   endDatePast: Time;
+   endDateOld: Time;
    imageMissing;
    liquidityNotEnough: Balance;
    optionsMissing;

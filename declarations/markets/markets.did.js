@@ -3,8 +3,8 @@ export const idlFactory = ({ IDL }) => {
   const Balance = IDL.Float64;
   const TradeError = IDL.Variant({
     'callerIsAnon' : IDL.Null,
+    'notEnoughBalance' : IDL.Null,
     'marketClosed' : IDL.Null,
-    'balanceNotEnough' : IDL.Null,
     'marketMissing' : IDL.Null,
     'newtonFailed' : IDL.Null,
   });
@@ -58,7 +58,7 @@ export const idlFactory = ({ IDL }) => {
     'descriptionMissing' : IDL.Null,
     'titleMissing' : IDL.Null,
     'endDateOld' : Time,
-    'liquidityNotEnough' : Balance,
+    'notEnoughLiquidity' : Balance,
   });
   const Result_1 = IDL.Variant({
     'ok' : MarketResult,

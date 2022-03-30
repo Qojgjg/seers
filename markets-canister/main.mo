@@ -207,7 +207,7 @@ shared({ caller = initializer }) actor class Market() {
 
     public type CreateMarketError = {
         #callerIsAnon;
-        #liquidityNotEnough: Balance;
+        #notEnoughLiquidity: Balance;
         #titleMissing;
         #descriptionMissing;
         #optionsMissing;
@@ -217,7 +217,7 @@ shared({ caller = initializer }) actor class Market() {
 
     private func checkMarketInitData(marketInitData: MarketInitData): Result.Result<(), CreateMarketError> {
         if (marketInitData.liquidity < 100) {
-            return #err(#liquidityNotEnough(100));
+            return #err(#notEnoughLiquidity(100));
         };
 
         if (marketInitData.title == "") {
@@ -371,7 +371,7 @@ shared({ caller = initializer }) actor class Market() {
 
     public type TradeError = {
         #callerIsAnon;
-        #balanceNotEnough;
+        #notEnoughBalance;
         #marketMissing;
         #marketClosed;
         #newtonFailed;
@@ -412,12 +412,12 @@ shared({ caller = initializer }) actor class Market() {
                 switch (marketTokensOpt) {
                     case null {
                         // No tokens to sell.
-                        return #err(#balanceNotEnough);
+                        return #err(#notEnoughBalance);
                     };
                     case (?marketTokens) {
                         if (marketTokens.balances[selected] < value) {
                             // No enought tokens to sell.
-                            return #err(#balanceNotEnough);
+                            return #err(#notEnoughBalance);
                         };
 
                         let optionsSize = market.reserves.size();
@@ -529,7 +529,7 @@ shared({ caller = initializer }) actor class Market() {
         var user = getOrCreateUser(caller);
 
         if (user.seerBalance < value) {
-            return #err(#balanceNotEnough);
+            return #err(#notEnoughBalance);
         };
         
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
