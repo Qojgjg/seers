@@ -4,6 +4,7 @@
   export let principal
 
   let user
+  let handle = ""
 
   let getUserData = async () => {
     user = await $auth.actor.getUserResult(principal)
@@ -14,7 +15,7 @@
   }
 
   let createUserData = async () => {
-    user = await $auth.actor.createUserResult()
+    user = await $auth.actor.createUserResult(handle)
     console.log(user)
   }
 
@@ -34,10 +35,13 @@
   <div class="rowUser">
     {#if user}
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        ID: {user.id}.
+        ID: {user.id}
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Balance: {user.seerBalance} Σ.
+        Handle: {user.handle}
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        Balance: {user.seerBalance} Σ
       </div>
       {#if user.markets.length}
         <div style="display:flex; flex-direction: column;width: 100%">
@@ -75,7 +79,12 @@
         </div>
       {/if}
     {:else}
-      <div class="rowUser">
+      <div style="display: flex; align-items: center">
+        <div style="padding: 10px; margin: 10px">Handle:</div>
+        <input
+          bind:value={handle}
+          style="align-items: center; width:200px; height: 30px"
+        />
         <button
           class="demo-button"
           on:click={() => {

@@ -45,12 +45,14 @@ shared({ caller = initializer }) actor class Market() {
 
     public type User = {
         var id: UserId; // Principal.
+        var handle: Text;
         var seerBalance: Balance;
         var markets: [UserMarket];
     };
 
     public type UserResult = {
         id: UserId; // Principal.
+        handle: Text;
         seerBalance: Balance;
         markets: [UserMarket];
     };
@@ -655,9 +657,11 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Create user.
-    public shared(msg) func createUserResult(): async UserResult {
+    public shared(msg) func createUserResult(handle: Text): async UserResult {
+        assert(not Principal.isAnonymous(msg.caller));
+        
         let caller = Principal.toText(msg.caller);        
-        return userToUserResult(createUser(caller));
+        return userToUserResult(createUser(caller, handle));
     };
 
     /**
@@ -760,6 +764,7 @@ shared({ caller = initializer }) actor class Market() {
     private func userResultToUser(u: UserResult): User {
         let user = {
             var id = u.id;
+            var handle = u.handle;
             var seerBalance = u.seerBalance;
             var markets = u.markets;
         };
@@ -769,6 +774,7 @@ shared({ caller = initializer }) actor class Market() {
     private func userToUserResult(u: User): UserResult {
         let userResult = {
             id = u.id;
+            handle = u.handle;
             seerBalance = u.seerBalance;
             markets = u.markets;
         };
@@ -779,10 +785,11 @@ shared({ caller = initializer }) actor class Market() {
         Trie.find(users, userKey(userId), Text.equal)
     };
 
-    private func createUser(userId: UserId): User {
+    private func createUser(userId: UserId, handle: Text): User {
         let user: User = {
             var id = userId;
             var seerBalance = 1000.0; // Airdrop
+            var handle = handle;
             var markets = [];
         };
 
@@ -800,7 +807,7 @@ shared({ caller = initializer }) actor class Market() {
         let r = getUser(u);
         switch (r) {
             case null {
-                return createUser(u);
+                return createUser(u, "");
             };
             case (?user) {
                 return user;

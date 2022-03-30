@@ -1,5 +1,6 @@
 type UserResult = 
  record {
+   handle: text;
    id: UserId;
    markets: vec UserMarket;
    seerBalance: Balance;
@@ -80,7 +81,7 @@ type Market =
    buyOption: (MarketId, Balance, nat, bool) -> (Result);
    claimTokens: (MarketId) -> (Balance);
    createMarket: (MarketInitData) -> (Result_1);
-   createUserResult: () -> (UserResult);
+   createUserResult: (text) -> (UserResult);
    deleteAllMarkets: () -> ();
    deleteAllUsers: () -> ();
    deleteMarket: (MarketId) -> (bool);

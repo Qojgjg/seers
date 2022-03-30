@@ -75,6 +75,7 @@ export const idlFactory = ({ IDL }) => {
     'id' : UserId,
     'seerBalance' : Balance,
     'markets' : IDL.Vec(UserMarket),
+    'handle' : IDL.Text,
   });
   const Market = IDL.Service({
     'approveMarket' : IDL.Func([MarketId], [], []),
@@ -85,7 +86,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'claimTokens' : IDL.Func([MarketId], [Balance], []),
     'createMarket' : IDL.Func([MarketInitData], [Result_1], []),
-    'createUserResult' : IDL.Func([], [UserResult], []),
+    'createUserResult' : IDL.Func([IDL.Text], [UserResult], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteAllUsers' : IDL.Func([], [], []),
     'deleteMarket' : IDL.Func([MarketId], [IDL.Bool], []),

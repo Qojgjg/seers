@@ -23,7 +23,12 @@ type Market/1 =
   };
 type MarketId = Nat32;
 type User =
-  {var id : UserId; var markets : [UserMarket]; var seerBalance : Balance};
+  {
+    var handle : Text;
+    var id : UserId;
+    var markets : [UserMarket];
+    var seerBalance : Balance
+  };
 type UserId = Text;
 actor {
   stable var markets :

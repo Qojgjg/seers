@@ -19,7 +19,7 @@ export interface Market {
     ) => Promise<Result>,
   'claimTokens' : (arg_0: MarketId) => Promise<Balance>,
   'createMarket' : (arg_0: MarketInitData) => Promise<Result_1>,
-  'createUserResult' : () => Promise<UserResult>,
+  'createUserResult' : (arg_0: string) => Promise<UserResult>,
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteAllUsers' : () => Promise<undefined>,
   'deleteMarket' : (arg_0: MarketId) => Promise<boolean>,
@@ -95,5 +95,6 @@ export interface UserResult {
   'id' : UserId,
   'seerBalance' : Balance,
   'markets' : Array<UserMarket>,
+  'handle' : string,
 }
 export interface _SERVICE extends Market {}
