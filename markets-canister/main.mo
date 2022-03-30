@@ -212,7 +212,7 @@ shared({ caller = initializer }) actor class Market() {
         #descriptionMissing;
         #optionsMissing;
         #imageMissing;
-        #endDatePast: Time.Time;
+        #endDateOld: Time.Time;
     };
 
     private func checkMarketInitData(marketInitData: MarketInitData): Result.Result<(), CreateMarketError> {
@@ -237,7 +237,7 @@ shared({ caller = initializer }) actor class Market() {
         };
 
         if (marketInitData.endDate < Time.now()) {
-            return #err(#endDatePast(marketInitData.endDate));
+            return #err(#endDateOld(marketInitData.endDate));
         };
 
         return #ok(());

@@ -1,41 +1,49 @@
 <script>
   export let auth
 
-  let labels
-  let images
+  let labels = "yes,no"
+  let images = ""
   let marketCreated = false
-  let newMarketTitle
-  let newMarketDesc
-  let endDate
-  let imageUrl
+  let newMarketTitle = ""
+  let newMarketDesc = ""
+  let endDate = "February 15, 2021 23:00:00"
+  let imageUrl = ""
   let buttonLabel = "Create"
+  let errorResponse = ""
+  let createResult = null
 
   let createMarket = async () => {
     const liquidity = 1000
     let probabilities = []
     let i = 0
 
-    labels = labels.split(",").map((s) => s.trim())
-    images = images.split(",").map((s) => s.trim())
+    let labelsA = labels.split(",").map((s) => s.trim())
+    let imagesA = images.split(",").map((s) => s.trim())
 
-    for (; i < labels.length; i++) {
-      probabilities.push(BigInt(Math.floor(1000 / labels.length)))
+    for (; i < labelsA.length; i++) {
+      probabilities.push(BigInt(Math.floor(1000 / labelsA.length)))
     }
 
     const marketInitData = {
       title: newMarketTitle,
       description: newMarketDesc,
-      labels: labels,
-      images: images,
+      labels: labelsA,
+      images: imagesA,
       probabilities: probabilities,
       liquidity: liquidity,
       endDate: Date.parse(endDate) * 1_000_000,
       imageUrl: imageUrl,
     }
     buttonLabel = "Processing..."
-    await $auth.actor.createMarket(marketInitData)
-    buttonLabel = "Create"
-    marketCreated = true
+    createResult = await $auth.actor.createMarket(marketInitData)
+
+    if (createResult["err"]) {
+      errorResponse = Object.keys(createResult["err"]).toString()
+      buttonLabel = "Error: " + errorResponse
+    } else {
+      buttonLabel = "Create"
+      marketCreated = true
+    }
   }
 </script>
 
@@ -66,17 +74,17 @@
         <div><input bind:value={imageUrl} size="40" maxlength="200" /></div>
       </div>
       <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
-        <div style="font-size: 1.5em">Options: (eg. 'yes,no')</div>
+        <div style="font-size: 1.5em">Options:</div>
         <div style="font-size: 1.5em">
           <input bind:value={labels} size="40" maxlength="1000" />
         </div>
       </div>
-      <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
+      <!-- <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">Options images: (optional)</div>
         <div style="font-size: 1.5em">
           <input bind:value={images} size="40" maxlength="1000" />
         </div>
-      </div>
+      </div> -->
       <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">End date:</div>
         <div><input bind:value={endDate} size="20" maxlength="10" /></div>

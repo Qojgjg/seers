@@ -49,7 +49,7 @@ export const idlFactory = ({ IDL }) => {
     'optionsMissing' : IDL.Null,
     'descriptionMissing' : IDL.Null,
     'titleMissing' : IDL.Null,
-    'endDatePast' : Time,
+    'endDateOld' : Time,
     'liquidityNotEnough' : Balance,
   });
   const Result = IDL.Variant({

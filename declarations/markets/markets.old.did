@@ -69,6 +69,7 @@ type CreateMarketError =
    endDatePast: Time;
    imageMissing;
    liquidityNotEnough: Balance;
+   optionsMissing;
    titleMissing;
  };
 type Balance = float64;

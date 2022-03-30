@@ -6,7 +6,7 @@ export type CreateMarketError = { 'callerIsAnon' : null } |
   { 'optionsMissing' : null } |
   { 'descriptionMissing' : null } |
   { 'titleMissing' : null } |
-  { 'endDatePast' : Time } |
+  { 'endDateOld' : Time } |
   { 'liquidityNotEnough' : Balance };
 export type Description = string;
 export interface Market {
