@@ -60,7 +60,7 @@
 
 {#if marketCreated}
   <div class="header">
-    <h3>Market created and waiting approval!</h3>
+    <h3>Market created and waiting for approval!</h3>
   </div>
   <div class="rowCreate" />
 {:else}

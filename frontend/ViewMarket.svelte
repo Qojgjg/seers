@@ -78,6 +78,8 @@
       errorResponse = ""
       tokensEstimate = response["ok"]
     }
+    if (buyTokens) buttonLabel = "Buy " + selectedLabel
+    else buttonLabel = "Sell " + selectedLabel
 
     readMarket()
   }
