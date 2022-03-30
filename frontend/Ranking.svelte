@@ -44,7 +44,9 @@
           {user.handle ? user.handle : user.id.slice(0, 11)}
         </div>
         <!-- <div>{user.markets.length}</div> -->
-        <div style="width: 10%;margin: 3px">{user.seerBalance}</div>
+        <div style="width: 10%;margin: 3px">
+          {Number(user.seerBalance).toFixed(2)}
+        </div>
       </div>
     {/each}
   </div>

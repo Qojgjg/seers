@@ -41,9 +41,11 @@
             <div
               style="width: 100%; display: flex; flex-direction: row; font-size: 1em; padding-top: 5px"
             >
-              <div style="width: 50%; ">Volume: {market.volume} &Sigma;</div>
+              <div style="width: 50%; ">
+                Volume: {Number(market.volume).toFixed(0)} &Sigma;
+              </div>
               <div style="width: 50%">
-                Liquidity: {market.liquidity} &Sigma;
+                Liquidity: {Number(market.liquidity).toFixed(0)} &Sigma;
               </div>
             </div>
           </div>

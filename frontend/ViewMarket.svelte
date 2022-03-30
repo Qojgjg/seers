@@ -120,9 +120,9 @@
               parseInt(market.endDate) / 1_000_000,
             ).toDateString()}
           </li>
-          <li>Volume: {market.volume} &Sigma;</li>
+          <li>Volume: {Number(market.volume).toFixed(2)} &Sigma;</li>
           <li>
-            Liquidity: {market.liquidity} &Sigma;
+            Liquidity: {Number(market.liquidity).toFixed(2)} &Sigma;
           </li>
         </ul>
       </div>

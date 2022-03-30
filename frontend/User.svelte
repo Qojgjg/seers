@@ -66,7 +66,7 @@
         Handle: {user.handle}
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Balance: {user.seerBalance} Σ
+        Balance: {Number(user.seerBalance).toFixed(2)} Σ
       </div>
       {#if user.markets.length}
         <div style="display:flex; flex-direction: column;width: 100%">
