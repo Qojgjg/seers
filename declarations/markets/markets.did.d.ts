@@ -16,9 +16,9 @@ export interface Market {
       arg_1: Balance,
       arg_2: bigint,
       arg_3: boolean,
-    ) => Promise<[] | [Balance]>,
+    ) => Promise<Result>,
   'claimTokens' : (arg_0: MarketId) => Promise<Balance>,
-  'createMarket' : (arg_0: MarketInitData) => Promise<Result>,
+  'createMarket' : (arg_0: MarketInitData) => Promise<Result_1>,
   'createUserResult' : () => Promise<UserResult>,
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteAllUsers' : () => Promise<undefined>,
@@ -34,7 +34,7 @@ export interface Market {
       arg_1: Balance,
       arg_2: bigint,
       arg_3: boolean,
-    ) => Promise<[] | [Balance]>,
+    ) => Promise<Result>,
 }
 export type MarketId = number;
 export interface MarketInitData {
@@ -71,11 +71,18 @@ export type MarketState = { 'resolved' : bigint } |
   { 'pending' : null } |
   { 'open' : null };
 export type Probability = number;
-export type Result = { 'ok' : MarketResult } |
+export type Result = { 'ok' : Balance } |
+  { 'err' : TradeError };
+export type Result_1 = { 'ok' : MarketResult } |
   { 'err' : CreateMarketError };
 export type Shares = bigint;
 export type Time = bigint;
 export type Title = string;
+export type TradeError = { 'callerIsAnon' : null } |
+  { 'marketClosed' : null } |
+  { 'balanceNotEnough' : null } |
+  { 'marketMissing' : null } |
+  { 'newtonFailed' : null };
 export type Url = string;
 export type UserId = string;
 export interface UserMarket {

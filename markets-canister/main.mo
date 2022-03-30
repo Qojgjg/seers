@@ -369,21 +369,37 @@ shared({ caller = initializer }) actor class Market() {
     };
 
 
+    public type TradeError = {
+        #callerIsAnon;
+        #balanceNotEnough;
+        #marketMissing;
+        #marketClosed;
+        #newtonFailed;
+    };
+
     // Sell tokens from caller back to the market.
-    public shared(msg) func sellOption(marketId: MarketId, value: Balance, selected: Nat, save: Bool): async ?Balance {
-        assert(not Principal.isAnonymous(msg.caller));
+    public shared(msg) func sellOption(
+        marketId: MarketId,
+        value: Balance,
+        selected: Nat,
+        save: Bool
+    ): async Result.Result<Balance, TradeError> {
+
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err(#callerIsAnon);
+        };
 
         let caller = Principal.toText(msg.caller);
         let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
         
         switch (marketOpt) {
             case null {
-                return null;
+                return #err(#marketMissing);
             };
             case (?market) {
                 if (market.endDate < Time.now()) {
                     market.state := #closed;
-                    return null;
+                    return #err(#marketClosed);
                 };
 
                 var user = getOrCreateUser(caller);
@@ -396,12 +412,12 @@ shared({ caller = initializer }) actor class Market() {
                 switch (marketTokensOpt) {
                     case null {
                         // No tokens to sell.
-                        return null;
+                        return #err(#balanceNotEnough);
                     };
                     case (?marketTokens) {
                         if (marketTokens.balances[selected] < value) {
                             // No enought tokens to sell.
-                            return null;
+                            return #err(#balanceNotEnough);
                         };
 
                         let optionsSize = market.reserves.size();
@@ -425,7 +441,7 @@ shared({ caller = initializer }) actor class Market() {
 
                         switch (rOpt) {
                             case (null) {
-                                return null;
+                                return #err(#newtonFailed);
                             };
                             case (?r) {
                                 for (i in Iter.range(0, optionsSize - 1)) {
@@ -435,7 +451,7 @@ shared({ caller = initializer }) actor class Market() {
                                 let liquidityOut: Balance = r;
 
                                 if (not save) {
-                                    return ?liquidityOut;
+                                    return #ok(liquidityOut);
                                 };
                                 
                                 market.volume := market.volume + liquidityOut;
@@ -489,34 +505,43 @@ shared({ caller = initializer }) actor class Market() {
 
                                 user.seerBalance := user.seerBalance + liquidityOut;
 
-                                return ?liquidityOut;
+                                return #ok(liquidityOut);
                             };
                         };
                     };
                 };
-
-                return null;
             };
         };
     };
 
-    public shared(msg) func buyOption(marketId: MarketId, value: Balance, selected: Nat, save: Bool): async ?Balance {
-        assert(not Principal.isAnonymous(msg.caller));
+    public shared(msg) func buyOption(
+            marketId: MarketId,
+            value: Balance,
+            selected: Nat,
+            save: Bool
+        ): async Result.Result<Balance, TradeError> {
+
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err(#callerIsAnon);
+        };
 
         let caller = Principal.toText(msg.caller);
-        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
         var user = getOrCreateUser(caller);
 
-        assert(user.seerBalance >= value);
+        if (user.seerBalance < value) {
+            return #err(#balanceNotEnough);
+        };
         
+        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+
         switch (marketOpt) {
             case null {
-                return null;
+                return #err(#marketMissing);
             };
             case (?market) {
                 if (market.endDate < Time.now()) {
                     market.state := #closed;
-                    return null;
+                    return #err(#marketClosed);
                 };
                 
                 let optionsSize = market.reserves.size();
@@ -532,7 +557,7 @@ shared({ caller = initializer }) actor class Market() {
                 let tokensOut = market.reserves[selected] - newSelectedReserve + value;
                 
                 if (not save) { // Dry run.
-                    return ?tokensOut;
+                    return #ok(tokensOut);
                 };
 
                 var newReserves: [var Balance] = Array.init(optionsSize, 0.0);
@@ -619,7 +644,7 @@ shared({ caller = initializer }) actor class Market() {
 
                 user.seerBalance := user.seerBalance - value;
 
-                return ?tokensOut;
+                return #ok(tokensOut);
             };
         };
     };

@@ -1,6 +1,14 @@
 export const idlFactory = ({ IDL }) => {
   const MarketId = IDL.Nat32;
   const Balance = IDL.Float64;
+  const TradeError = IDL.Variant({
+    'callerIsAnon' : IDL.Null,
+    'marketClosed' : IDL.Null,
+    'balanceNotEnough' : IDL.Null,
+    'marketMissing' : IDL.Null,
+    'newtonFailed' : IDL.Null,
+  });
+  const Result = IDL.Variant({ 'ok' : Balance, 'err' : TradeError });
   const Title = IDL.Text;
   const Time = IDL.Int;
   const Description = IDL.Text;
@@ -52,7 +60,7 @@ export const idlFactory = ({ IDL }) => {
     'endDateOld' : Time,
     'liquidityNotEnough' : Balance,
   });
-  const Result = IDL.Variant({
+  const Result_1 = IDL.Variant({
     'ok' : MarketResult,
     'err' : CreateMarketError,
   });
@@ -72,11 +80,11 @@ export const idlFactory = ({ IDL }) => {
     'approveMarket' : IDL.Func([MarketId], [], []),
     'buyOption' : IDL.Func(
         [MarketId, Balance, IDL.Nat, IDL.Bool],
-        [IDL.Opt(Balance)],
+        [Result],
         [],
       ),
     'claimTokens' : IDL.Func([MarketId], [Balance], []),
-    'createMarket' : IDL.Func([MarketInitData], [Result], []),
+    'createMarket' : IDL.Func([MarketInitData], [Result_1], []),
     'createUserResult' : IDL.Func([], [UserResult], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteAllUsers' : IDL.Func([], [], []),
@@ -89,7 +97,7 @@ export const idlFactory = ({ IDL }) => {
     'resolveMarket' : IDL.Func([MarketId, IDL.Nat], [IDL.Bool], []),
     'sellOption' : IDL.Func(
         [MarketId, Balance, IDL.Nat, IDL.Bool],
-        [IDL.Opt(Balance)],
+        [Result],
         [],
       ),
   });
