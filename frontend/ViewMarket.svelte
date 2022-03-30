@@ -78,10 +78,12 @@
 </script>
 
 {#if market}
+  <div class="header">
+    <h3>{market.title}</h3>
+  </div>
   <div class="rowView">
     <div class="market">
-      <h3 style="padding: 0px; margin: 15px">{market.title}</h3>
-
+      <!-- <h3 style="margin:5px; padding: 5px; text-align:center">Description</h3> -->
       {#if market.imageUrl}
         <img class="Image" src={market.imageUrl} alt="random" />
       {/if}
@@ -284,7 +286,7 @@
     border-radius: 8px;
     width: 150px;
     float: left;
-    padding: 10px;
+    padding: 0px 10px 10px 0px;
   }
 
   .ControlData {
@@ -372,7 +374,9 @@
 
     box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
     background-color: rgb(25, 27, 31);
-    border: 2px solid rgb(25, 27, 31);
+    border: 1px solid rgb(90, 58, 81);
+
+    /* border: 2px solid rgb(25, 27, 31); */
     border-radius: 16px;
     color: rgb(255, 255, 255);
     justify-content: space-between;
@@ -408,7 +412,9 @@
     margin-bottom: 1em;
     padding: 0.5em;
     background-color: rgb(25, 27, 31);
-    border: 2px solid rgb(25, 27, 31);
+    border: 1px solid rgb(90, 58, 81);
+
+    /* border: 2px solid rgb(25, 27, 31); */
     border-radius: 16px;
     justify-content: space-between;
     font-family: "Inter", sans-serif;

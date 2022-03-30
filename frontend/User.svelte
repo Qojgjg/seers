@@ -26,11 +26,12 @@
   onMount(getUserData)
 </script>
 
-<div
-  style="justify-content: center; display: flex; padding-top: 40px; margin-top: 20px; width: 100%"
->
+<div class="header">
+  <h3>User Data</h3>
+</div>
+
+<div style="justify-content: center; display: flex;width: 100%">
   <div class="rowUser">
-    <h3>User Data</h3>
     {#if user}
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
         ID: {user.id}.
@@ -95,7 +96,10 @@
     min-width: 200px;
     max-width: 800px;
     background-color: rgb(25, 27, 31);
-    border: 2px solid rgb(25, 27, 31);
+    border: 1px solid rgb(90, 58, 81);
+    box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
+
+    /* border: 2px solid rgb(25, 27, 31); */
     border-radius: 16px;
     justify-content: center;
     color: rgb(255, 255, 255);
