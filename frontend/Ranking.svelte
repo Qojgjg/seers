@@ -24,32 +24,42 @@
 </div>
 
 <div style="justify-content: center; display: flex;width: 100%">
-  <div class="ranking">
-    <div class="row">
-      <div style="width: 20%;margin: 3px; font-size: 1.2em;margin-bottom: 1em">
-        Position
-      </div>
-      <div style="width: 70%;margin: 3px; font-size: 1.2em;margin-bottom: 1em">
-        Handle
-      </div>
-      <!-- <div># Markets</div> -->
-      <div style="width: 10%;margin: 3px; font-size: 1.2em;margin-bottom: 1em">
-        &Sigma;
-      </div>
-    </div>
-    {#each response as user, i}
+  {#if response.length > 0}
+    <div class="ranking">
       <div class="row">
-        <div style="width: 20%;margin: 3px">#{i}</div>
-        <div style="width: 70%;margin: 3px">
-          {user.handle ? user.handle : user.id.slice(0, 11)}
+        <div
+          style="width: 20%;margin: 3px; font-size: 1.2em;margin-bottom: 1em"
+        >
+          Position
         </div>
-        <!-- <div>{user.markets.length}</div> -->
-        <div style="width: 10%;margin: 3px">
-          {Number(user.seerBalance).toFixed(2)}
+        <div
+          style="width: 70%;margin: 3px; font-size: 1.2em;margin-bottom: 1em"
+        >
+          Handle
+        </div>
+        <!-- <div># Markets</div> -->
+        <div
+          style="width: 10%;margin: 3px; font-size: 1.2em;margin-bottom: 1em"
+        >
+          &Sigma;
         </div>
       </div>
-    {/each}
-  </div>
+      {#each response as user, i}
+        <div class="row">
+          <div style="width: 20%;margin: 3px">#{i}</div>
+          <div style="width: 70%;margin: 3px">
+            {user.handle ? user.handle : user.id.slice(0, 11)}
+          </div>
+          <!-- <div>{user.markets.length}</div> -->
+          <div style="width: 10%;margin: 3px">
+            {Number(user.seerBalance).toFixed(0)}
+          </div>
+        </div>
+      {/each}
+    </div>
+  {:else}
+    Loading
+  {/if}
 </div>
 
 <style>

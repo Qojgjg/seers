@@ -341,11 +341,13 @@
     width: 50%;
     height: 30px;
     color: black;
+    background-color: white;
     border-radius: 5px 0 0 5px;
   }
   .SellOptSelected {
     width: 50%;
     height: 30px;
+    background-color: white;
     border-radius: 0 5px 5px 0;
     color: black;
   }
