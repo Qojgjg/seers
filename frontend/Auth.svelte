@@ -145,6 +145,7 @@
   .topnav .icon {
     display: none;
     color: white;
+    font-size: 1.2em;
   }
 
   @media screen and (max-width: 600px) {
