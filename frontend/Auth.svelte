@@ -21,10 +21,8 @@
     var classes = x.className.split(" ")
     console.log(classes)
     if (!classes.includes("responsive")) {
-      console.log("responsive")
       navClass = "topnav responsive"
     } else {
-      console.log("no responsive")
       navClass = "topnav"
     }
   }
@@ -53,6 +51,7 @@
   }
 
   const signIn = () => {
+    myFunction()
     client.login({
       // identityProvider: "http://rwlgt-iiaaa-aaaaa-aaaaa-cai.localhost:8000/",
       identityProvider: "https://identity.ic0.app/",
@@ -90,8 +89,15 @@
       style="width: 80px; align-content:center; text-align:center;"
     /></a
   >
-  <a href="/" class="active" style="margin-top: 5px">Markets</a>
-  <a href="#/ranking/" class="active" style="margin-top: 5px">Ranking</a>
+  <a href="/" class="active" on:click={myFunction} style="margin-top: 5px"
+    >Markets</a
+  >
+  <a
+    href="#/ranking/"
+    class="active"
+    on:click={myFunction}
+    style="margin-top: 5px">Ranking</a
+  >
 
   {#if !signedIn && client}
     <button on:click={signIn} style="margin-top: 5px">Login</button>

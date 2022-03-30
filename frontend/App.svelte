@@ -59,7 +59,7 @@
     />
   </div>
   <div style="width: 50%;display:flex; justify-content:center;">
-    Pense Technologies
+    <a href="https://twitter.com/SeerMarkets">Twitter</a>
   </div>
 </footer>
 
