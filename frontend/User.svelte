@@ -26,12 +26,11 @@
   onMount(getUserData)
 </script>
 
-<div class="header">
-  <h3>User Data</h3>
-</div>
-
-<div style="justify-content: center; display: flex">
+<div
+  style="justify-content: center; display: flex; padding-top: 40px; margin-top: 20px; width: 100%"
+>
   <div class="rowUser">
+    <h3>User Data</h3>
     {#if user}
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
         ID: {user.id}.

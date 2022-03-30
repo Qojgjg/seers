@@ -12,6 +12,15 @@
   let errorResponse = ""
   let createResult = null
 
+  const splitCamelCaseToString = (s) => {
+    return s
+      .split(/(?=[A-Z])/)
+      .map((p) => {
+        return p[0].toUpperCase() + p.slice(1)
+      })
+      .join(" ")
+  }
+
   let createMarket = async () => {
     const liquidity = 1000
     let probabilities = []
@@ -38,8 +47,10 @@
     createResult = await $auth.actor.createMarket(marketInitData)
 
     if (createResult["err"]) {
-      errorResponse = Object.keys(createResult["err"]).toString()
-      buttonLabel = "Error: " + errorResponse
+      errorResponse =
+        "Error: " +
+        splitCamelCaseToString(Object.keys(createResult["err"]).toString())
+      buttonLabel = "Create"
     } else {
       buttonLabel = "Create"
       marketCreated = true
@@ -93,6 +104,9 @@
         <button class="demo-button" on:click={createMarket}
           >{buttonLabel}</button
         >
+      </div>
+      <div style="width: 100%;text-align:center;color:red">
+        {errorResponse}
       </div>
     </div>
   </div>
