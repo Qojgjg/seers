@@ -31,16 +31,18 @@
 
 <svelte:window on:load={hashchange} on:hashchange={hashchange} />
 
-<Auth {auth} signedInF={(val) => (signedIn = val)} {createActor} />
-{#if page === "market"}
-  <ViewMarket {auth} {signedIn} marketId={marketIdSelected} />
-{:else if page === "user"}
-  <User {auth} principal={userPrincipal} />
-{:else if page === "create"}
-  <CreateMarket {auth} />
-{:else}
-  <ListMarkets {auth} />
-{/if}
+<div style="width: 100%; min-height: 80vh">
+  <Auth {auth} signedInF={(val) => (signedIn = val)} {createActor} />
+  {#if page === "market"}
+    <ViewMarket {auth} {signedIn} marketId={marketIdSelected} />
+  {:else if page === "user"}
+    <User {auth} principal={userPrincipal} />
+  {:else if page === "create"}
+    <CreateMarket {auth} />
+  {:else}
+    <ListMarkets {auth} />
+  {/if}
+</div>
 <footer
   style=" width: 100%; text-align: center; padding: 20px 0px; align-items:center; display: flex; flex-direction: column;justify-content: center; gap: 15px"
 >
@@ -48,7 +50,7 @@
     <img
       src={icLogo}
       alt="ic logo"
-      style="height: 30px; width: 80%; max-width: 200px"
+      style="height: 30px; width: 80%; max-width: 200px;"
     />
   </div>
   <div style="width: 50%;display:flex; justify-content:center;">

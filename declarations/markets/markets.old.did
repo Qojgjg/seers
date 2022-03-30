@@ -61,24 +61,6 @@ type MarketInitData =
    title: Title;
  };
 type MarketId = nat32;
-type Market = 
- service {
-   approveMarket: (MarketId) -> ();
-   buyOption: (MarketId, Balance, nat, bool) -> (opt Balance);
-   claimTokens: (MarketId) -> (Balance);
-   createMarket: (MarketInitData) -> (Result);
-   createUserResult: () -> (UserResult);
-   deleteAllMarkets: () -> ();
-   deleteAllUsers: () -> ();
-   deleteMarket: (MarketId) -> (bool);
-   getUserResult: (UserId) -> (opt UserResult) query;
-   readAllMarkets: () -> (vec MarketResult) query;
-   readAllOpenMarkets: () -> (vec MarketResult) query;
-   readAllUsers: () -> (vec UserResult) query;
-   readMarket: (MarketId) -> (opt MarketResult) query;
-   resolveMarket: (MarketId, nat) -> (bool);
-   sellOption: (MarketId, Balance, nat, bool) -> (opt Balance);
- };
 type Description = text;
 type CreateMarketError = 
  variant {
@@ -87,9 +69,24 @@ type CreateMarketError =
    endDatePast: Time;
    imageMissing;
    liquidityNotEnough: Balance;
-   optionsMissing;
    titleMissing;
  };
 type Balance = float64;
 type Author = text;
-service : () -> Market
+service : {
+  approveMarket: (MarketId) -> ();
+  buyOption: (MarketId, Balance, nat, bool) -> (opt Balance);
+  claimTokens: (MarketId) -> (Balance);
+  createMarket: (MarketInitData) -> (Result);
+  createUserResult: () -> (UserResult);
+  deleteAllMarkets: () -> ();
+  deleteAllUsers: () -> ();
+  deleteMarket: (MarketId) -> (bool);
+  getUserResult: (UserId) -> (opt UserResult) query;
+  readAllMarkets: () -> (vec MarketResult) query;
+  readAllOpenMarkets: () -> (vec MarketResult) query;
+  readAllUsers: () -> (vec UserResult) query;
+  readMarket: (MarketId) -> (opt MarketResult) query;
+  resolveMarket: (MarketId, nat) -> (bool);
+  sellOption: (MarketId, Balance, nat, bool) -> (opt Balance);
+}

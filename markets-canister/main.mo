@@ -14,6 +14,7 @@ import Option "mo:base/Option";
 import Array "mo:base/Array";
 import Hash "mo:base/Hash";
 import Iter "mo:base/Iter";
+import Result "mo:base/Result";
 
 shared({ caller = initializer }) actor class Market() {
     /* Types */
@@ -204,15 +205,56 @@ shared({ caller = initializer }) actor class Market() {
         return false;
     };
 
-    // Create a market.
-    public shared(msg) func createMarket(marketInitData: MarketInitData): async MarketId {
-        assert(not Principal.isAnonymous(msg.caller));
+    public type CreateMarketError = {
+        #callerIsAnon;
+        #liquidityNotEnough: Balance;
+        #titleMissing;
+        #descriptionMissing;
+        #optionsMissing;
+        #imageMissing;
+        #endDatePast: Time.Time;
+    };
 
-        assert(marketInitData.liquidity > 0);
-        assert(marketInitData.title != "");
-        assert(marketInitData.description != "");
-        assert(marketInitData.imageUrl != "");
-        assert(marketInitData.endDate > Time.now());
+    private func checkMarketInitData(marketInitData: MarketInitData): Result.Result<(), CreateMarketError> {
+        if (marketInitData.liquidity < 100) {
+            return #err(#liquidityNotEnough(100));
+        };
+
+        if (marketInitData.title == "") {
+            return #err(#titleMissing);
+        };
+
+        if (marketInitData.description == "") {
+            return #err(#descriptionMissing);
+        };
+
+        if (marketInitData.labels.size() == 0) {
+            return #err(#optionsMissing);
+        };
+
+        if (marketInitData.imageUrl == "") {
+            return #err(#imageMissing);
+        };
+
+        if (marketInitData.endDate < Time.now()) {
+            return #err(#endDatePast(marketInitData.endDate));
+        };
+
+        return #ok(());
+    };
+
+    // Create a new AMM market.
+    public shared(msg) func createMarket(marketInitData: MarketInitData): async Result.Result<MarketResult, CreateMarketError> {
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err(#callerIsAnon);
+        };
+
+        switch (checkMarketInitData(marketInitData)) {
+            case (#err(e)) {
+                return #err(e);
+            };
+            case (#ok(_)) { /* all good; continue */};
+        };
 
         let author = Principal.toText(msg.caller);        
         let optionsLength = marketInitData.labels.size();
@@ -280,7 +322,7 @@ shared({ caller = initializer }) actor class Market() {
             ?newMarket,
         ).0;
 
-        return marketId;
+        return #ok(marketToMarketResult(newMarket));
     };
 
     // Read a market.

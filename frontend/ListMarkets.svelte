@@ -69,6 +69,9 @@
   div.gallery {
     display: flex;
     padding: 2em;
+    /* box-shadow: 0 0 1.5px 0.75px #fff, 0 0 2.5px 1.5px #f0f,
+      0 0 3.5px 2.25px #0ff; */
+
     box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
     background-color: rgb(25, 27, 31);
     border: 2px solid rgb(25, 27, 31);
@@ -77,9 +80,7 @@
   }
 
   div.gallery:hover {
-    padding: 2em;
     background: rgb(33, 36, 41) !important;
-    border-radius: 20px;
   }
 
   div.gallery img {

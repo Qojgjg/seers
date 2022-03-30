@@ -1,6 +1,13 @@
 import type { Principal } from '@dfinity/principal';
 export type Author = string;
 export type Balance = number;
+export type CreateMarketError = { 'callerIsAnon' : null } |
+  { 'imageMissing' : null } |
+  { 'optionsMissing' : null } |
+  { 'descriptionMissing' : null } |
+  { 'titleMissing' : null } |
+  { 'endDatePast' : Time } |
+  { 'liquidityNotEnough' : Balance };
 export type Description = string;
 export interface Market {
   'approveMarket' : (arg_0: MarketId) => Promise<undefined>,
@@ -11,7 +18,7 @@ export interface Market {
       arg_3: boolean,
     ) => Promise<[] | [Balance]>,
   'claimTokens' : (arg_0: MarketId) => Promise<Balance>,
-  'createMarket' : (arg_0: MarketInitData) => Promise<MarketId>,
+  'createMarket' : (arg_0: MarketInitData) => Promise<Result>,
   'createUserResult' : () => Promise<UserResult>,
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteAllUsers' : () => Promise<undefined>,
@@ -64,6 +71,8 @@ export type MarketState = { 'resolved' : bigint } |
   { 'pending' : null } |
   { 'open' : null };
 export type Probability = number;
+export type Result = { 'ok' : MarketResult } |
+  { 'err' : CreateMarketError };
 export type Shares = bigint;
 export type Time = bigint;
 export type Title = string;

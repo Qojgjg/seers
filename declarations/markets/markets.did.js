@@ -14,19 +14,6 @@ export const idlFactory = ({ IDL }) => {
     'imageUrl' : Url,
     'images' : IDL.Vec(IDL.Text),
   });
-  const UserId = IDL.Text;
-  const Shares = IDL.Int;
-  const UserMarket = IDL.Record({
-    'shares' : Shares,
-    'marketId' : MarketId,
-    'balances' : IDL.Vec(Balance),
-    'marketTitle' : Title,
-  });
-  const UserResult = IDL.Record({
-    'id' : UserId,
-    'seerBalance' : Balance,
-    'markets' : IDL.Vec(UserMarket),
-  });
   const Probability = IDL.Float64;
   const Author = IDL.Text;
   const MarketState = IDL.Variant({
@@ -35,6 +22,7 @@ export const idlFactory = ({ IDL }) => {
     'pending' : IDL.Null,
     'open' : IDL.Null,
   });
+  const Shares = IDL.Int;
   const MarketResult = IDL.Record({
     'k' : Balance,
     'id' : MarketId,
@@ -55,6 +43,31 @@ export const idlFactory = ({ IDL }) => {
     'startDate' : Time,
     'images' : IDL.Vec(IDL.Text),
   });
+  const CreateMarketError = IDL.Variant({
+    'callerIsAnon' : IDL.Null,
+    'imageMissing' : IDL.Null,
+    'optionsMissing' : IDL.Null,
+    'descriptionMissing' : IDL.Null,
+    'titleMissing' : IDL.Null,
+    'endDatePast' : Time,
+    'liquidityNotEnough' : Balance,
+  });
+  const Result = IDL.Variant({
+    'ok' : MarketResult,
+    'err' : CreateMarketError,
+  });
+  const UserId = IDL.Text;
+  const UserMarket = IDL.Record({
+    'shares' : Shares,
+    'marketId' : MarketId,
+    'balances' : IDL.Vec(Balance),
+    'marketTitle' : Title,
+  });
+  const UserResult = IDL.Record({
+    'id' : UserId,
+    'seerBalance' : Balance,
+    'markets' : IDL.Vec(UserMarket),
+  });
   const Market = IDL.Service({
     'approveMarket' : IDL.Func([MarketId], [], []),
     'buyOption' : IDL.Func(
@@ -63,7 +76,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'claimTokens' : IDL.Func([MarketId], [Balance], []),
-    'createMarket' : IDL.Func([MarketInitData], [MarketId], []),
+    'createMarket' : IDL.Func([MarketInitData], [Result], []),
     'createUserResult' : IDL.Func([], [UserResult], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteAllUsers' : IDL.Func([], [], []),

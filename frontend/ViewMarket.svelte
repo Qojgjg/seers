@@ -69,7 +69,7 @@
 {#if market}
   <div class="rowView">
     <div class="market">
-      <h3>{market.title}</h3>
+      <h3 style="padding: 3px; margin: 3px">{market.title}</h3>
 
       {#if market.imageUrl}
         <img class="Image" src={market.imageUrl} alt="random" />
@@ -350,6 +350,7 @@
   }
   .market {
     padding: 2em;
+
     box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
     background-color: rgb(25, 27, 31);
     border: 2px solid rgb(25, 27, 31);

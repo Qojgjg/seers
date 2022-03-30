@@ -11,7 +11,7 @@
   let buttonLabel = "Create"
 
   let createMarket = async () => {
-    const liquidity = 100
+    const liquidity = 1000
     let probabilities = []
     let i = 0
 
