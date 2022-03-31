@@ -19,7 +19,6 @@
   function myFunction() {
     var x = document.getElementById("myTopnav")
     var classes = x.className.split(" ")
-    console.log(classes)
     if (!classes.includes("responsive")) {
       navClass = "topnav responsive"
     } else {
@@ -81,7 +80,7 @@
 <div class={navClass} id="myTopnav">
   <a
     href="/"
-    class="active"
+    class="left"
     style="margin: 0; padding: 0; margin-right: 20px; margin-left: 20px"
     ><img
       src={logo}
@@ -89,26 +88,17 @@
       style="width: 80px; align-content:center; text-align:center;"
     /></a
   >
-  <a href="/" class="active" on:click={myFunction} style="margin-top: 5px"
-    >Markets</a
-  >
-  <a
-    href="#/ranking/"
-    class="active"
-    on:click={myFunction}
-    style="margin-top: 5px">Ranking</a
-  >
+  <a href="/" class="right" on:click={myFunction}>Markets</a>
+  <a href="#/ranking/" class="right" on:click={myFunction}>Ranking</a>
 
   {#if !signedIn && client}
-    <button on:click={signIn} style="margin-top: 5px">Login</button>
+    <button on:click={signIn}>Login</button>
   {/if}
 
   {#if signedIn}
-    <a href="#/user/{principal}" on:click={myFunction} style="margin-top: 5px"
-      >Profile</a
-    >
-    <a href="#/create/" on:click={myFunction} style="margin-top: 5px">Create</a>
-    <button on:click={signOut} style="margin-top: 5px">Logout</button>
+    <a href="#/user/{principal}" on:click={myFunction} class="right">Profile</a>
+    <a href="#/create/" on:click={myFunction} class="right">Create</a>
+    <button on:click={signOut}>Logout</button>
   {/if}
   <a href="javascript:void(0);" class="icon" on:click={myFunction}>
     <Fa icon={faBars} />
@@ -148,6 +138,10 @@
     font-size: 1.2em;
   }
 
+  .topnav.right {
+    margin-top: 5px;
+  }
+
   @media screen and (max-width: 600px) {
     .topnav a:not(:first-child) {
       display: none;
@@ -169,15 +163,20 @@
       top: 0;
       color: white;
     }
-    .topnav.responsive a {
+    .topnav.responsive a.right {
+      text-align: right;
+      float: none;
+      display: block;
+    }
+    .topnav.responsive a.left {
       float: none;
       display: block;
       text-align: left;
     }
     .topnav.responsive button {
-      float: none;
+      float: right;
       display: block;
-      text-align: left;
+      text-align: right;
     }
   }
 </style>
