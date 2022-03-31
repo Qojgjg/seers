@@ -717,6 +717,25 @@ shared({ caller = initializer }) actor class Market() {
         return ?user.seerBalance;
     };
 
+    // Type an user
+    public shared(msg) func editMarketImage(marketId: MarketId, newImage: Text): async Bool {
+        assert(msg.caller == initializer); // Root call.
+
+        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+
+        switch (marketOpt) {
+            case null {
+                return false;
+            };
+            case (?market) {
+                market.imageUrl := newImage;
+                return true;
+            };
+        };
+
+        return false;
+    };
+
     /**
     * Utilities
     */
