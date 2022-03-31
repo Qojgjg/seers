@@ -109,6 +109,7 @@ service : {
   deleteAllMarkets: () -> ();
   deleteAllUsers: () -> ();
   deleteMarket: (MarketId) -> (bool);
+  editMarketImage: (MarketId, text) -> (bool);
   getUserResult: (UserId) -> (opt UserResult) query;
   readAllMarkets: () -> (vec MarketResult) query;
   readAllOpenMarkets: () -> (vec MarketResult) query;

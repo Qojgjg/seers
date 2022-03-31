@@ -25,6 +25,13 @@
     isGetting = false
     if (user) {
       user = user[0]
+      user.markets = user.markets.sort(function (a, b) {
+        var keyA = Number(a.marketId),
+          keyB = Number(b.marketId)
+        if (keyA < keyB) return -1
+        if (keyA > keyB) return 1
+        return 0
+      })
     }
     console.log(user)
   }
@@ -76,7 +83,7 @@
               <div
                 style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: row; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
               >
-                <div style="width: 20px;">
+                <div style="width: 30px;">
                   #{market.marketId}:
                 </div>
                 <div style="width: 50%">
