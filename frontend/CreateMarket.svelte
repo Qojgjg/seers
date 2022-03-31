@@ -1,7 +1,7 @@
 <script>
   export let auth
 
-  let labels = "yes,no"
+  let labels = "Yes,No"
   let images = ""
   let marketCreated = false
   let newMarketTitle = ""
