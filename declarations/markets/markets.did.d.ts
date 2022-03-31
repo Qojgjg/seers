@@ -38,6 +38,7 @@ export interface Market {
       arg_2: bigint,
       arg_3: boolean,
     ) => Promise<Result>,
+  'tip' : (arg_0: UserId, arg_1: Balance) => Promise<[] | [Balance]>,
 }
 export type MarketId = number;
 export interface MarketInitData {

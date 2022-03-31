@@ -700,6 +700,23 @@ shared({ caller = initializer }) actor class Market() {
         };
     };
 
+    // Type an user
+    public shared(msg) func tip(id: UserId, value: Balance): async ?Balance {
+        assert(msg.caller == initializer); // Root call.
+
+        var user = switch (getUser(id)) {
+            case (null) {
+                return null;
+            };
+            case (?user) {
+                user;
+            };
+        };
+        user.seerBalance := user.seerBalance + value;
+
+        return ?user.seerBalance;
+    };
+
     /**
     * Utilities
     */
