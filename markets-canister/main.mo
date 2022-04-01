@@ -47,6 +47,7 @@ shared({ caller = initializer }) actor class Market() {
         var id: UserId; // Principal.
         var handle: Text;
         var seerBalance: Balance;
+        var expSeerBalance: Balance;
         var markets: [UserMarket];
     };
 
@@ -54,6 +55,7 @@ shared({ caller = initializer }) actor class Market() {
         id: UserId; // Principal.
         handle: Text;
         seerBalance: Balance;
+        expSeerBalance: Balance;
         markets: [UserMarket];
     };
 
@@ -372,6 +374,64 @@ shared({ caller = initializer }) actor class Market() {
     public query func readAllOpenMarkets(): async [MarketResult] {
         let result = Trie.toArray(markets, getMarket);
         return Array.mapFilter(result, keepOpenMarkets);
+    };
+
+    private type RefreshUserError = {
+        #callerIsAnon;
+        #userNotCreated;
+    };
+
+    public shared(msg) func refreshUser(): async Result.Result<UserResult, RefreshUserError> {
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err(#callerIsAnon);
+        };
+
+        let caller = Principal.toText(msg.caller);
+        let userOpt = Trie.find(users, userKey(caller), Text.equal);
+
+        switch (userOpt) {
+            case (null) {
+                return #err(#userNotCreated);
+            };
+            case (?user) {
+                user.expSeerBalance := 0;
+                user.markets := Array.mapFilter(user.markets, 
+                    func (ut: UserMarket): ?UserMarket {
+                        
+                        let marketOpt = Trie.find(markets, marketKey(ut.marketId), Nat32.equal);
+                        
+                        switch (marketOpt) {
+                            case (null) {
+                                // Market was deleted so we delete its data from the user.
+                                return null;
+                            };
+                            case (?market) {
+                                switch (market.state) {
+                                    case (#resolved(i)) {
+                                        let reward = ut.balances[i];
+                                        // Give reward to user and delete market.
+                                        user.seerBalance := user.seerBalance + reward;
+                                        return null;
+                                    };
+                                    case _ {
+                                        // Market still open. Update expected balance.
+                                        let optionsSize = market.probabilities.size();
+
+                                        for (j in Iter.range(0, optionsSize - 1)) {
+                                            user.expSeerBalance := market.probabilities[j] * ut.balances[j] / 1000.0; 
+                                        };
+
+                                        return ?ut;
+                                    };
+                                };
+                            };
+                        };
+                    }
+                );
+
+                return #ok(userToUserResult(user));
+            };
+        };
     };
 
     // Delete a market.
@@ -907,6 +967,7 @@ shared({ caller = initializer }) actor class Market() {
             var id = u.id;
             var handle = u.handle;
             var seerBalance = u.seerBalance;
+            var expSeerBalance = u.expSeerBalance;
             var markets = u.markets;
         };
         return user;
@@ -917,6 +978,7 @@ shared({ caller = initializer }) actor class Market() {
             id = u.id;
             handle = u.handle;
             seerBalance = u.seerBalance;
+            expSeerBalance = u.expSeerBalance;
             markets = u.markets;
         };
         return userResult;
@@ -939,6 +1001,7 @@ shared({ caller = initializer }) actor class Market() {
                 let user: User = {
                     var id = userId;
                     var seerBalance = 1000.0; // Airdrop
+                    var expSeerBalance = 1000.0;
                     var handle = handle;
                     var markets = [];
                 };
