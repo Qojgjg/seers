@@ -87,6 +87,7 @@ export const idlFactory = ({ IDL }) => {
   });
   const Result_1 = IDL.Variant({ 'ok' : UserResult, 'err' : CreateUserError });
   const Market = IDL.Service({
+    'addCommentToMarket' : IDL.Func([MarketId, IDL.Text], [IDL.Bool], []),
     'approveMarket' : IDL.Func([MarketId], [], []),
     'buyOption' : IDL.Func(
         [MarketId, Balance, IDL.Nat, IDL.Bool],

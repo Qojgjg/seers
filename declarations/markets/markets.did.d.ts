@@ -14,6 +14,7 @@ export type CreateUserError = { 'userExist' : null } |
   { 'userIsAnon' : null };
 export type Description = string;
 export interface Market {
+  'addCommentToMarket' : (arg_0: MarketId, arg_1: string) => Promise<boolean>,
   'approveMarket' : (arg_0: MarketId) => Promise<undefined>,
   'buyOption' : (
       arg_0: MarketId,

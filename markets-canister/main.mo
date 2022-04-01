@@ -708,7 +708,7 @@ shared({ caller = initializer }) actor class Market() {
         };
     };
 
-    // Type an user
+    // Tip a user
     public shared(msg) func tip(id: UserId, value: Balance): async ?Balance {
         assert(msg.caller == initializer); // Root call.
 
@@ -725,7 +725,7 @@ shared({ caller = initializer }) actor class Market() {
         return ?user.seerBalance;
     };
 
-    // Type an user
+    // Edit market image.
     public shared(msg) func editMarketImage(marketId: MarketId, newImage: Text): async Bool {
         assert(msg.caller == initializer); // Root call.
 
@@ -742,6 +742,40 @@ shared({ caller = initializer }) actor class Market() {
         };
 
         return false;
+    };
+
+    // Add a comment to a market.
+    public shared(msg) func addCommentToMarket(marketId: MarketId, content: Text): async Bool {
+        if (Principal.isAnonymous(msg.caller)) {
+            return false;
+        };
+
+        let userId = Principal.toText(msg.caller);
+        let userOpt = Trie.find(users, userKey(userId), Text.equal);
+
+        switch (userOpt) {
+            case null {
+                return false;
+            };
+            case (?user) {
+                let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+
+                switch (marketOpt) {
+                    case null {
+                        return false;
+                    };
+                    case (?market) {
+                        let comment: Comment = {
+                            author = user.handle;
+                            content = content;
+                        };
+                        market.comments := Array.append(market.comments, [comment]);
+                        
+                        return true;
+                    };
+                };
+            };
+        };
     };
 
     /**
