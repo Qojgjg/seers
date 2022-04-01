@@ -103,7 +103,26 @@
           {market.description}
         </div>
       </div>
-      <div class="market">Comments:</div>
+      <div class="market">
+        <div style="margin: 5px 0px">
+          <div style="color:pink; padding: 5px 0px">ShadowySuperCoder</div>
+          <div>
+            Chances are that the Queen will be alive for two weeks more.
+          </div>
+        </div>
+        <div style="margin: 5px 0px">
+          <div style="color:pink; padding: 5px 0px">Dev0</div>
+          <div>Nah, she is already dead.</div>
+        </div>
+        <div style="margin: 25px 0px 5px 0px; width: 100%">
+          <input
+            type="text"
+            placeholder="Please share your insight"
+            value=""
+            style="width:100%;height: 3em; padding: 15px; border:hidden; border-radius: 20px"
+          />
+        </div>
+      </div>
     </div>
     <div class="v-container">
       <div class="market-controls">
@@ -237,6 +256,10 @@
 {/if}
 
 <style global>
+  textarea:focus,
+  input:focus {
+    outline: none;
+  }
   select {
     background-color: white;
     color: black;
