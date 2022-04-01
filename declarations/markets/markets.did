@@ -95,18 +95,12 @@ type Market =
    claimTokens: (MarketId) -> (Balance);
    createMarket: (MarketInitData) -> (Result_2);
    createUserResult: (text) -> (Result_1);
-   deleteAllMarkets: () -> ();
-   deleteAllUsers: () -> ();
-   deleteMarket: (MarketId) -> (bool);
-   editMarketImage: (MarketId, text) -> (bool);
    getUserResult: (UserId) -> (opt UserResult) query;
    readAllMarkets: () -> (vec MarketResult) query;
    readAllOpenMarkets: () -> (vec MarketResult) query;
    readAllUsers: () -> (vec UserResult) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
-   resolveMarket: (MarketId, nat) -> (bool);
    sellOption: (MarketId, Balance, nat, bool) -> (Result);
-   tip: (UserId, Balance) -> (opt Balance);
  };
 type Description = text;
 type CreateUserError = 

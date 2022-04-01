@@ -104,22 +104,16 @@ export const idlFactory = ({ IDL }) => {
     'claimTokens' : IDL.Func([MarketId], [Balance], []),
     'createMarket' : IDL.Func([MarketInitData], [Result_2], []),
     'createUserResult' : IDL.Func([IDL.Text], [Result_1], []),
-    'deleteAllMarkets' : IDL.Func([], [], []),
-    'deleteAllUsers' : IDL.Func([], [], []),
-    'deleteMarket' : IDL.Func([MarketId], [IDL.Bool], []),
-    'editMarketImage' : IDL.Func([MarketId, IDL.Text], [IDL.Bool], []),
     'getUserResult' : IDL.Func([UserId], [IDL.Opt(UserResult)], ['query']),
     'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
     'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
-    'resolveMarket' : IDL.Func([MarketId, IDL.Nat], [IDL.Bool], []),
     'sellOption' : IDL.Func(
         [MarketId, Balance, IDL.Nat, IDL.Bool],
         [Result],
         [],
       ),
-    'tip' : IDL.Func([UserId, Balance], [IDL.Opt(Balance)], []),
   });
   return Market;
 };

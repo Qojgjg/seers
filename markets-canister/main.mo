@@ -125,6 +125,18 @@ shared({ caller = initializer }) actor class Market() {
 
     /* API */
 
+    // Tip all users.
+    // public shared(msg) func tipAllUsers(): async () {
+    //     assert(msg.caller == initializer); // Root call.
+
+    //     users := Trie.mapFilter(users, func (id: UserId, user: User): ?User {
+    //         if (user.markets.size() > 0) {
+    //             user.seerBalance := user.seerBalance + 3000 - user.seerBalance;
+    //         };
+    //         return ?user;
+    //     });
+    // };
+
     // Read all users.
     public query func readAllUsers(): async [UserResult] {
         let result = Trie.toArray(users, func (id: UserId, u: User): UserResult {
@@ -134,11 +146,11 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Delete all users.
-    public shared(msg) func deleteAllUsers(): async () {
-        assert(msg.caller == initializer); // Root call.
+    // public shared(msg) func deleteAllUsers(): async () {
+    //     assert(msg.caller == initializer); // Root call.
        
-        users := Trie.empty();
-    };
+    //     users := Trie.empty();
+    // };
 
     // Approve a market.
     public shared(msg) func approveMarket(marketId: MarketId): async () {
@@ -199,21 +211,21 @@ shared({ caller = initializer }) actor class Market() {
         };
     };
 
-    public shared(msg) func resolveMarket(marketId: MarketId, option: Nat): async Bool {
-        assert(msg.caller == initializer); // Root call.
-        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
-        switch (marketOpt) {
-            case (null) {
-                return false;
-            };
-            case (?market) {
-                market.state := #resolved(option);
-                return true;
-            };
-        };
+    // public shared(msg) func resolveMarket(marketId: MarketId, option: Nat): async Bool {
+    //     assert(msg.caller == initializer); // Root call.
+    //     let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+    //     switch (marketOpt) {
+    //         case (null) {
+    //             return false;
+    //         };
+    //         case (?market) {
+    //             market.state := #resolved(option);
+    //             return true;
+    //         };
+    //     };
 
-        return false;
-    };
+    //     return false;
+    // };
 
     public type CreateMarketError = {
         #callerIsAnon;
@@ -363,29 +375,29 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Delete a market.
-    public shared(msg) func deleteMarket(marketId: MarketId): async Bool {
-        assert(msg.caller == initializer); // Root call.
+    // public shared(msg) func deleteMarket(marketId: MarketId): async Bool {
+    //     assert(msg.caller == initializer); // Root call.
         
-        let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
-        let exists = Option.isSome(result);
-        if (exists) {
-            markets := Trie.replace(
-                markets,
-                marketKey(marketId),
-                Nat32.equal,
-                null,
-            ).0;
-        };
-        return exists;
-    };
+    //     let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
+    //     let exists = Option.isSome(result);
+    //     if (exists) {
+    //         markets := Trie.replace(
+    //             markets,
+    //             marketKey(marketId),
+    //             Nat32.equal,
+    //             null,
+    //         ).0;
+    //     };
+    //     return exists;
+    // };
 
     // Delete all market.
-    public shared(msg) func deleteAllMarkets(): async () {
-        assert(msg.caller == initializer); // Root call.
+    // public shared(msg) func deleteAllMarkets(): async () {
+    //     assert(msg.caller == initializer); // Root call.
         
-        nextMarketId := 0;
-        markets := Trie.empty();
-    };
+    //     nextMarketId := 0;
+    //     markets := Trie.empty();
+    // };
 
 
     public type TradeError = {
@@ -709,40 +721,40 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Tip a user
-    public shared(msg) func tip(id: UserId, value: Balance): async ?Balance {
-        assert(msg.caller == initializer); // Root call.
+    // public shared(msg) func tip(id: UserId, value: Balance): async ?Balance {
+    //     assert(msg.caller == initializer); // Root call.
 
-        var user = switch (getUser(id)) {
-            case (null) {
-                return null;
-            };
-            case (?user) {
-                user;
-            };
-        };
-        user.seerBalance := user.seerBalance + value;
+    //     var user = switch (getUser(id)) {
+    //         case (null) {
+    //             return null;
+    //         };
+    //         case (?user) {
+    //             user;
+    //         };
+    //     };
+    //     user.seerBalance := user.seerBalance + value;
 
-        return ?user.seerBalance;
-    };
+    //     return ?user.seerBalance;
+    // };
 
     // Edit market image.
-    public shared(msg) func editMarketImage(marketId: MarketId, newImage: Text): async Bool {
-        assert(msg.caller == initializer); // Root call.
+    // public shared(msg) func editMarketImage(marketId: MarketId, newImage: Text): async Bool {
+    //     assert(msg.caller == initializer); // Root call.
 
-        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+    //     let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
 
-        switch (marketOpt) {
-            case null {
-                return false;
-            };
-            case (?market) {
-                market.imageUrl := newImage;
-                return true;
-            };
-        };
+    //     switch (marketOpt) {
+    //         case null {
+    //             return false;
+    //         };
+    //         case (?market) {
+    //             market.imageUrl := newImage;
+    //             return true;
+    //         };
+    //     };
 
-        return false;
-    };
+    //     return false;
+    // };
 
     private type AddCommentError = {
         #userIsAnon;
@@ -887,6 +899,7 @@ shared({ caller = initializer }) actor class Market() {
                 return null;
             };
         };
+        return null;
     };
 
     private func userResultToUser(u: UserResult): User {

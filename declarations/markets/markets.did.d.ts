@@ -29,23 +29,17 @@ export interface Market {
   'claimTokens' : (arg_0: MarketId) => Promise<Balance>,
   'createMarket' : (arg_0: MarketInitData) => Promise<Result_2>,
   'createUserResult' : (arg_0: string) => Promise<Result_1>,
-  'deleteAllMarkets' : () => Promise<undefined>,
-  'deleteAllUsers' : () => Promise<undefined>,
-  'deleteMarket' : (arg_0: MarketId) => Promise<boolean>,
-  'editMarketImage' : (arg_0: MarketId, arg_1: string) => Promise<boolean>,
   'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
   'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
   'readAllUsers' : () => Promise<Array<UserResult>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
-  'resolveMarket' : (arg_0: MarketId, arg_1: bigint) => Promise<boolean>,
   'sellOption' : (
       arg_0: MarketId,
       arg_1: Balance,
       arg_2: bigint,
       arg_3: boolean,
     ) => Promise<Result>,
-  'tip' : (arg_0: UserId, arg_1: Balance) => Promise<[] | [Balance]>,
 }
 export type MarketId = number;
 export interface MarketInitData {

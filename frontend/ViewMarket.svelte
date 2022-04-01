@@ -285,7 +285,6 @@
   .comment-container {
     margin: 25px 0px 5px 0px;
     width: 100%;
-    display: flex;
     align-items: center;
   }
   .comment-input {
@@ -511,6 +510,7 @@
 
     .comment-container {
       flex-direction: column;
+      display: flex;
     }
   }
 

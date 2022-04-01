@@ -1,6 +1,18 @@
+// Version: 1.0.0
+type AssocList<K, V> = List<(K, V)>;
+type AssocList__1<K, V> = AssocList<K, V>;
+type Author = Text;
+type Balance = Float;
 type Branch<K, V> = {left : Trie<K, V>; right : Trie<K, V>; size : Nat};
-type Leaf<K, V> = {keyvals : AssocList/1<Key<K>, V>; size : Nat};
-type Market/1 =
+type Comment = {author : Text; content : Text};
+type Description = Text;
+type Hash = Nat32;
+type Key<K> = {hash : Hash; key : K};
+type Leaf<K, V> = {keyvals : AssocList__1<Key<K>, V>; size : Nat};
+type List<T> = ?(T, List<T>);
+type MarketId = Nat32;
+type MarketState = {#closed; #open; #pending; #resolved : Nat};
+type Market__1 =
   {
     author : Author;
     var blockTimestampLast : Time;
@@ -22,7 +34,12 @@ type Market/1 =
     var totalShares : Shares;
     var volume : Balance
   };
-type MarketId = Nat32;
+type Probability = Float;
+type Shares = Int;
+type Time = Int;
+type Title = Text;
+type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
+type Url = Text;
 type User =
   {
     var handle : Text;
@@ -31,14 +48,21 @@ type User =
     var seerBalance : Balance
   };
 type UserId = Text;
+type UserMarket =
+  {
+    balances : [Balance];
+    marketId : MarketId;
+    marketTitle : Title;
+    shares : Shares
+  };
 actor {
   stable var handles :
     {#branch : Branch<Text, UserId>; #empty; #leaf : Leaf<Text, UserId>};
   stable var markets :
     {
-      #branch : Branch<MarketId, Market/1>;
+      #branch : Branch<MarketId, Market__1>;
       #empty;
-      #leaf : Leaf<MarketId, Market/1>
+      #leaf : Leaf<MarketId, Market__1>
     };
   stable var nextMarketId : Nat32;
   stable var users :
