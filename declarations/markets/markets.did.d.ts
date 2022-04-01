@@ -1,4 +1,8 @@
 import type { Principal } from '@dfinity/principal';
+export type AddCommentError = { 'userIsAnon' : null } |
+  { 'userNotCreated' : null } |
+  { 'marketMissing' : null } |
+  { 'commentIsEmpty' : null };
 export type Author = string;
 export type Balance = number;
 export interface Comment { 'content' : string, 'author' : string }
@@ -14,7 +18,7 @@ export type CreateUserError = { 'userExist' : null } |
   { 'userIsAnon' : null };
 export type Description = string;
 export interface Market {
-  'addCommentToMarket' : (arg_0: MarketId, arg_1: string) => Promise<boolean>,
+  'addCommentToMarket' : (arg_0: MarketId, arg_1: string) => Promise<Result_3>,
   'approveMarket' : (arg_0: MarketId) => Promise<undefined>,
   'buyOption' : (
       arg_0: MarketId,
@@ -85,6 +89,8 @@ export type Result_1 = { 'ok' : UserResult } |
   { 'err' : CreateUserError };
 export type Result_2 = { 'ok' : MarketResult } |
   { 'err' : CreateMarketError };
+export type Result_3 = { 'ok' : Comment } |
+  { 'err' : AddCommentError };
 export type Shares = bigint;
 export type Time = bigint;
 export type Title = string;

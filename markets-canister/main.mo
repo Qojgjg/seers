@@ -744,10 +744,21 @@ shared({ caller = initializer }) actor class Market() {
         return false;
     };
 
+    private type AddCommentError = {
+        #userIsAnon;
+        #userNotCreated;
+        #marketMissing;
+        #commentIsEmpty;
+    };
+
     // Add a comment to a market.
-    public shared(msg) func addCommentToMarket(marketId: MarketId, content: Text): async Bool {
+    public shared(msg) func addCommentToMarket(marketId: MarketId, content: Text): async Result.Result<Comment, AddCommentError> {
         if (Principal.isAnonymous(msg.caller)) {
-            return false;
+            return #err(#userIsAnon);
+        };
+
+        if (content == "") {
+            return #err(#commentIsEmpty);
         };
 
         let userId = Principal.toText(msg.caller);
@@ -755,14 +766,14 @@ shared({ caller = initializer }) actor class Market() {
 
         switch (userOpt) {
             case null {
-                return false;
+                return #err(#userNotCreated);
             };
             case (?user) {
                 let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
 
                 switch (marketOpt) {
                     case null {
-                        return false;
+                        return #err(#marketMissing);
                     };
                     case (?market) {
                         let comment: Comment = {
@@ -771,7 +782,7 @@ shared({ caller = initializer }) actor class Market() {
                         };
                         market.comments := Array.append(market.comments, [comment]);
                         
-                        return true;
+                        return #ok(comment);
                     };
                 };
             };

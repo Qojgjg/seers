@@ -4,6 +4,7 @@ type Market/1 =
   {
     author : Author;
     var blockTimestampLast : Time;
+    var comments : [Comment];
     description : Description;
     endDate : Time;
     id : MarketId;

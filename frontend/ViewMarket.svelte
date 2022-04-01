@@ -25,6 +25,7 @@
   let errorResponse = ""
   let comment = ""
   let commentLabel = "Comment"
+  let commentErrorResponse = ""
 
   const splitCamelCaseToString = (s) => {
     return s
@@ -42,6 +43,22 @@
     selected = 0
     buttonLabel = "Buy " + selectedLabel
     console.log(market)
+  }
+
+  const postComment = async () => {
+    commentLabel = "Processing..."
+    let response = await $auth.actor.addCommentToMarket(market.id, comment)
+
+    if (response["err"]) {
+      commentErrorResponse =
+        "Error: " +
+        splitCamelCaseToString(Object.keys(response["err"]).toString())
+    } else {
+      commentErrorResponse = ""
+      readMarket()
+      comment = ""
+    }
+    commentLabel = "Comment"
   }
 
   const dryRun = async (marketId, amount) => {
@@ -118,24 +135,18 @@
         <div class="comment-container">
           <input
             bind:value={comment}
+            maxlength="400"
+            minlength="20"
             type="text"
             placeholder="Please share your insight"
             class="comment-input"
           />
-          <button
-            class="demo-button"
-            on:click={async () => {
-              commentLabel = "Processing..."
-              let r = await $auth.actor.addCommentToMarket(market.id, comment)
-              if (r) {
-                readMarket()
-                comment = ""
-              }
-              commentLabel = "Comment"
-            }}
-          >
+          <button class="demo-button" on:click={postComment}>
             {commentLabel}
           </button>
+          <div style="width: 100%;text-align:center;color:red">
+            {commentErrorResponse}
+          </div>
         </div>
       </div>
     </div>

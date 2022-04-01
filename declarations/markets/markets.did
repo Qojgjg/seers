@@ -26,6 +26,11 @@ type TradeError =
 type Title = text;
 type Time = int;
 type Shares = int;
+type Result_3 = 
+ variant {
+   err: AddCommentError;
+   ok: Comment;
+ };
 type Result_2 = 
  variant {
    err: CreateMarketError;
@@ -84,7 +89,7 @@ type MarketInitData =
 type MarketId = nat32;
 type Market = 
  service {
-   addCommentToMarket: (MarketId, text) -> (bool);
+   addCommentToMarket: (MarketId, text) -> (Result_3);
    approveMarket: (MarketId) -> ();
    buyOption: (MarketId, Balance, nat, bool) -> (Result);
    claimTokens: (MarketId) -> (Balance);
@@ -127,4 +132,11 @@ type Comment =
  };
 type Balance = float64;
 type Author = text;
+type AddCommentError = 
+ variant {
+   commentIsEmpty;
+   marketMissing;
+   userIsAnon;
+   userNotCreated;
+ };
 service : () -> Market
