@@ -42,6 +42,7 @@ type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type Url = Text;
 type User =
   {
+    var expSeerBalance : Balance;
     var handle : Text;
     var id : UserId;
     var markets : [UserMarket];

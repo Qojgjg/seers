@@ -8,6 +8,8 @@
   let handle = ""
   let response = null
   let errorResponse = ""
+  let errorRefresh = ""
+  let refreshLabel = "Refresh"
   let isGetting = false
 
   const splitCamelCaseToString = (s) => {
@@ -56,6 +58,19 @@
     console.log("Tokens claimed: " + tokens)
   }
 
+  let refreshUser = async () => {
+    refreshLabel = "Processing..."
+    response = await $auth.actor.refreshUser()
+    if (response["err"]) {
+      errorRefresh =
+        "Error: " +
+        splitCamelCaseToString(Object.keys(response["err"]).toString())
+    } else {
+      user = response["ok"]
+    }
+    refreshLabel = "Refresh"
+  }
+
   onMount(getUserData)
 </script>
 
@@ -74,6 +89,17 @@
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
         Balance: {Number(user.seerBalance).toFixed(2)} Σ
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        Expected Balance: {Number(user.expSeerBalance).toFixed(2)} Σ
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        <button class="demo-button" on:click={refreshUser}
+          >{refreshLabel}</button
+        >
+        <div style="text-align:center;color:red">
+          {errorRefresh}
+        </div>
       </div>
       {#if user.markets.length}
         <div style="display:flex; flex-direction: column;width: 100%">

@@ -29,6 +29,7 @@ export interface Market {
   'claimTokens' : (arg_0: MarketId) => Promise<Balance>,
   'createMarket' : (arg_0: MarketInitData) => Promise<Result_3>,
   'createUserResult' : (arg_0: string) => Promise<Result_2>,
+  'deleteMarket' : (arg_0: MarketId) => Promise<boolean>,
   'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
   'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,

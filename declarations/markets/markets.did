@@ -106,6 +106,7 @@ type Market =
    claimTokens: (MarketId) -> (Balance);
    createMarket: (MarketInitData) -> (Result_3);
    createUserResult: (text) -> (Result_2);
+   deleteMarket: (MarketId) -> (bool);
    getUserResult: (UserId) -> (opt UserResult) query;
    readAllMarkets: () -> (vec MarketResult) query;
    readAllOpenMarkets: () -> (vec MarketResult) query;

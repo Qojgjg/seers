@@ -394,7 +394,7 @@ shared({ caller = initializer }) actor class Market() {
                 return #err(#userNotCreated);
             };
             case (?user) {
-                user.expSeerBalance := 0;
+                user.expSeerBalance := user.seerBalance;
                 user.markets := Array.mapFilter(user.markets, 
                     func (ut: UserMarket): ?UserMarket {
                         
@@ -418,7 +418,8 @@ shared({ caller = initializer }) actor class Market() {
                                         let optionsSize = market.probabilities.size();
 
                                         for (j in Iter.range(0, optionsSize - 1)) {
-                                            user.expSeerBalance := market.probabilities[j] * ut.balances[j] / 1000.0; 
+                                            user.expSeerBalance := user.expSeerBalance 
+                                                + market.probabilities[j] * ut.balances[j] / 1000.0; 
                                         };
 
                                         return ?ut;
@@ -428,7 +429,6 @@ shared({ caller = initializer }) actor class Market() {
                         };
                     }
                 );
-
                 return #ok(userToUserResult(user));
             };
         };

@@ -110,6 +110,7 @@ export const idlFactory = ({ IDL }) => {
     'claimTokens' : IDL.Func([MarketId], [Balance], []),
     'createMarket' : IDL.Func([MarketInitData], [Result_3], []),
     'createUserResult' : IDL.Func([IDL.Text], [Result_2], []),
+    'deleteMarket' : IDL.Func([MarketId], [IDL.Bool], []),
     'getUserResult' : IDL.Func([UserId], [IDL.Opt(UserResult)], ['query']),
     'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
