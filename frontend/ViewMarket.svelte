@@ -93,14 +93,17 @@
     <h3>{market.title}</h3>
   </div>
   <div class="rowView">
-    <div class="market">
-      <!-- <h3 style="margin:5px; padding: 5px; text-align:center">Description</h3> -->
-      {#if market.imageUrl}
-        <img class="Image" src={market.imageUrl} alt="random" />
-      {/if}
-      <div style="line-height: 1.6;">
-        {market.description}
+    <div class="market-comments">
+      <div class="market">
+        <!-- <h3 style="margin:5px; padding: 5px; text-align:center">Description</h3> -->
+        {#if market.imageUrl}
+          <img class="Image" src={market.imageUrl} alt="random" />
+        {/if}
+        <div style="line-height: 1.6;">
+          {market.description}
+        </div>
       </div>
+      <div class="market">Comments:</div>
     </div>
     <div class="v-container">
       <div class="market-controls">
@@ -383,6 +386,13 @@
     justify-content: start;
     margin: 0em 1em;
   }
+  .market-comments {
+    display: flex;
+    flex-direction: column;
+    max-width: 40%;
+    min-width: 400px;
+  }
+
   .market {
     padding: 2em;
 
@@ -401,7 +411,7 @@
     flex-direction: column;
     height: fit-content;
     min-width: 400px;
-    max-width: 40%;
+    max-width: 100%;
     margin-bottom: 1em;
   }
 
@@ -411,14 +421,20 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      width: 300px;
+      /* width: 300px;
       min-width: 0px;
-      max-width: 80%;
+      max-width: 80%; */
     }
 
     .market-controls {
       margin: 1em;
       width: 300px;
+    }
+
+    .market-comments {
+      width: 300px;
+      max-width: 80%;
+      min-width: 0px;
     }
   }
 

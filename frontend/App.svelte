@@ -51,19 +51,19 @@
 <footer
   style=" width: 100%; text-align: center; padding: 20px 0px; align-items:center; display: flex; flex-direction: column;justify-content: center; gap: 15px"
 >
-  <div style="width: 50%;display:flex; justify-content:center">
-    <img
-      src={icLogo}
-      alt="ic logo"
-      style="height: 30px; width: 80%; max-width: 200px;"
-    />
-  </div>
   <div style="width: 50%;display:flex; justify-content:center;">
-    <a href="https://twitter.com/SeerMarkets">Pense Technologies</a>
+    <a href="https://twitter.com/SeerMarkets" class="grey">Pense Technologies</a
+    >
+  </div>
+  <div style="width: 50%;display:flex; justify-content:center">
+    <img src={icLogo} alt="ic logo" style="max-width: 400px;" />
   </div>
 </footer>
 
 <style global>
+  .grey {
+    color: rgb(167, 165, 165);
+  }
   a {
     text-decoration: none;
     color: white;
