@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Actor } from "@dfinity/agent"
   import { NullClass } from "@dfinity/candid/lib/cjs/idl"
 
   import { concat } from "@dfinity/candid/lib/cjs/utils/buffer"
@@ -22,6 +23,8 @@
   let tokensEstimate = 0.0
   let response = null
   let errorResponse = ""
+  let comment = ""
+  let commentLabel = "Comment"
 
   const splitCamelCaseToString = (s) => {
     return s
@@ -104,23 +107,35 @@
         </div>
       </div>
       <div class="market">
-        <div style="margin: 5px 0px">
-          <div style="color:pink; padding: 5px 0px">ShadowySuperCoder</div>
-          <div>
-            Chances are that the Queen will be alive for two weeks more.
+        {#each market.comments as comment}
+          <div style="margin: 5px 0px">
+            <div style="color:pink; padding: 5px 0px">{comment.author}</div>
+            <div>
+              {comment.content}
+            </div>
           </div>
-        </div>
-        <div style="margin: 5px 0px">
-          <div style="color:pink; padding: 5px 0px">Dev0</div>
-          <div>Nah, she is already dead.</div>
-        </div>
-        <div style="margin: 25px 0px 5px 0px; width: 100%">
+        {/each}
+        <div class="comment-container">
           <input
+            bind:value={comment}
             type="text"
             placeholder="Please share your insight"
-            value=""
-            style="width:100%;height: 3em; padding: 15px; border:hidden; border-radius: 20px"
+            class="comment-input"
           />
+          <button
+            class="demo-button"
+            on:click={async () => {
+              commentLabel = "Processing..."
+              let r = await $auth.actor.addCommentToMarket(market.id, comment)
+              if (r) {
+                readMarket()
+                comment = ""
+              }
+              commentLabel = "Comment"
+            }}
+          >
+            {commentLabel}
+          </button>
         </div>
       </div>
     </div>
@@ -256,6 +271,21 @@
 {/if}
 
 <style global>
+  .comment-container {
+    margin: 25px 0px 5px 0px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .comment-input {
+    width: 100%;
+    height: 30px;
+    padding: 15px;
+    border: hidden;
+    border-radius: 20px;
+    min-width: 200px;
+  }
+
   textarea:focus,
   input:focus {
     outline: none;
@@ -414,6 +444,14 @@
     flex-direction: column;
     max-width: 40%;
     min-width: 400px;
+    margin-bottom: 1em;
+    overflow: auto;
+    flex-direction: column;
+    height: fit-content;
+    margin: 0em 1em;
+    /* padding: 2em; */
+    word-wrap: break-word;
+    justify-content: space-between;
   }
 
   .market {
@@ -430,11 +468,11 @@
     font-family: "Inter", sans-serif;
     margin: 0em 1em;
     word-wrap: break-word;
-    overflow: auto;
+    /* overflow: auto; */
     flex-direction: column;
     height: fit-content;
-    min-width: 400px;
-    max-width: 100%;
+    /* min-width: 400px;
+    max-width: 100%;*/
     margin-bottom: 1em;
   }
 
@@ -455,9 +493,13 @@
     }
 
     .market-comments {
-      width: 300px;
+      width: 330px;
       max-width: 80%;
       min-width: 0px;
+    }
+
+    .comment-container {
+      flex-direction: column;
     }
   }
 

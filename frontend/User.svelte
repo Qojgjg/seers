@@ -157,6 +157,7 @@
   }
 
   .demo-button {
+    height: 40px;
     background: rgb(33, 114, 229);
     box-shadow: rgb(0 0 0 / 8%) 0px 6px 10px;
     padding: 0 1em;
