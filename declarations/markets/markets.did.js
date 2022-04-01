@@ -31,6 +31,7 @@ export const idlFactory = ({ IDL }) => {
     'pending' : IDL.Null,
     'open' : IDL.Null,
   });
+  const Comment = IDL.Record({ 'content' : IDL.Text, 'author' : IDL.Text });
   const Shares = IDL.Int;
   const MarketResult = IDL.Record({
     'k' : Balance,
@@ -47,6 +48,7 @@ export const idlFactory = ({ IDL }) => {
     'state' : MarketState,
     'imageUrl' : Url,
     'providers' : IDL.Vec(IDL.Text),
+    'comments' : IDL.Vec(Comment),
     'totalShares' : Shares,
     'blockTimestampLast' : Time,
     'startDate' : Time,

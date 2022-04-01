@@ -53,6 +53,7 @@ type MarketResult =
  record {
    author: Author;
    blockTimestampLast: Time;
+   comments: vec Comment;
    description: Description;
    endDate: Time;
    id: MarketId;
@@ -117,6 +118,11 @@ type CreateMarketError =
    optionsMissing;
    titleMissing;
    userNotCreated;
+ };
+type Comment = 
+ record {
+   author: text;
+   content: text;
  };
 type Balance = float64;
 type Author = text;

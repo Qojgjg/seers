@@ -1,6 +1,7 @@
 import type { Principal } from '@dfinity/principal';
 export type Author = string;
 export type Balance = number;
+export interface Comment { 'content' : string, 'author' : string }
 export type CreateMarketError = { 'callerIsAnon' : null } |
   { 'imageMissing' : null } |
   { 'optionsMissing' : null } |
@@ -66,6 +67,7 @@ export interface MarketResult {
   'state' : MarketState,
   'imageUrl' : Url,
   'providers' : Array<string>,
+  'comments' : Array<Comment>,
   'totalShares' : Shares,
   'blockTimestampLast' : Time,
   'startDate' : Time,

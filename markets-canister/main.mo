@@ -67,6 +67,11 @@ shared({ caller = initializer }) actor class Market() {
         imageUrl: Url;
     };
 
+    public type Comment = {
+        author: Text; // handle.
+        content: Text;
+    };
+
     public type Market = {
         id: MarketId;    
         title: Title;
@@ -86,6 +91,7 @@ shared({ caller = initializer }) actor class Market() {
         var imageUrl: Url;
         var state: MarketState;
         var volume: Balance;
+        var comments: [Comment];
     };
 
     public type MarketResult = {
@@ -107,6 +113,7 @@ shared({ caller = initializer }) actor class Market() {
         imageUrl: Url;
         state: MarketState;
         volume: Balance;
+        comments: [Comment];
     };  
 
     /* State */
@@ -297,6 +304,7 @@ shared({ caller = initializer }) actor class Market() {
             var imageUrl = marketInitData.imageUrl;
             var state = #pending;
             var volume = 0;
+            var comments = [];
         };
 
         // Update provider.
@@ -772,6 +780,7 @@ shared({ caller = initializer }) actor class Market() {
             var imageUrl = m.imageUrl;
             var state = m.state;
             var volume = m.volume;
+            var comments = m.comments;
         };
 
         return market;
@@ -797,6 +806,7 @@ shared({ caller = initializer }) actor class Market() {
             imageUrl = m.imageUrl;
             state = m.state;
             volume = m.volume;
+            comments = m.comments;
         };
         return market;    
     };
@@ -824,6 +834,7 @@ shared({ caller = initializer }) actor class Market() {
                     imageUrl = m.imageUrl;
                     state = m.state;
                     volume = m.volume;
+                    comments = m.comments;
                 };
                 return ?market;
             };
