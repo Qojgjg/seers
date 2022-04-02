@@ -29,7 +29,9 @@
           </div>
           <div class="content">
             <h4 style="padding-top: 0;margin-top:0">{market.title}</h4>
-            <div style="margin-top: 10px; margin-bottom: 10px">
+            <div
+              style="margin-top: 10px; margin-bottom: 10px; max-height: 80px; overflow:hidden;"
+            >
               {#each market.labels as label, i}
                 <div style="width: 100%; display: flex; font-size: 1.2em;">
                   <div style="width: 50%">{label}</div>

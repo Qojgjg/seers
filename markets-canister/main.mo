@@ -865,21 +865,21 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Tip a user
-    // public shared(msg) func tip(id: UserId, value: Balance): async ?Balance {
-    //     assert(msg.caller == initializer); // Root call.
+    public shared(msg) func tip(id: UserId, value: Balance): async ?Balance {
+        assert(msg.caller == initializer); // Root call.
 
-    //     var user = switch (getUser(id)) {
-    //         case (null) {
-    //             return null;
-    //         };
-    //         case (?user) {
-    //             user;
-    //         };
-    //     };
-    //     user.seerBalance := user.seerBalance + value;
+        var user = switch (getUser(id)) {
+            case (null) {
+                return null;
+            };
+            case (?user) {
+                user;
+            };
+        };
+        user.seerBalance := user.seerBalance + value;
 
-    //     return ?user.seerBalance;
-    // };
+        return ?user.seerBalance;
+    };
 
     // Edit market image.
     // public shared(msg) func editMarketImage(marketId: MarketId, newImage: Text): async Bool {

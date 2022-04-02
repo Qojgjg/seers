@@ -120,6 +120,7 @@ export const idlFactory = ({ IDL }) => {
         [Result],
         [],
       ),
+    'tip' : IDL.Func([UserId, Balance], [IDL.Opt(Balance)], []),
   });
   return Market;
 };
