@@ -42,7 +42,7 @@
         <div
           style="width: 10%;margin: 3px; font-size: 1.2em;margin-bottom: 1em"
         >
-          E(&Sigma);
+          E(&Sigma)
         </div>
       </div>
       {#each response as user, i}

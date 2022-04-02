@@ -15,13 +15,27 @@ type UserMarket =
  };
 type UserId = text;
 type Url = text;
+type TradeError = 
+ variant {
+   callerIsAnon;
+   marketClosed;
+   marketMissing;
+   newtonFailed;
+   notEnoughBalance;
+   userNotCreated;
+ };
 type Title = text;
 type Time = int;
 type Shares = int;
-type Result_3 = 
+type Result_4 = 
  variant {
    err: AddCommentError;
    ok: Comment;
+ };
+type Result_3 = 
+ variant {
+   err: TradeError;
+   ok: Balance;
  };
 type Result_2 = 
  variant {
@@ -116,8 +130,9 @@ type AddCommentError =
    userNotCreated;
  };
 service : {
-  addCommentToMarket: (MarketId, text) -> (Result_3);
+  addCommentToMarket: (MarketId, text) -> (Result_4);
   approveMarket: (MarketId) -> ();
+  buyOption: (MarketId, Balance, nat, bool) -> (Result_3);
   createMarket: (MarketInitData) -> (Result_2);
   createUserResult: (text) -> (Result_1);
   getUserResult: (UserId) -> (opt UserResult) query;
