@@ -15,23 +15,42 @@ type UserMarket =
  };
 type UserId = text;
 type Url = text;
+type TradeError = 
+ variant {
+   callerIsAnon;
+   marketClosed;
+   marketMissing;
+   newtonFailed;
+   notEnoughBalance;
+   userNotCreated;
+ };
 type Title = text;
 type Time = int;
 type Shares = int;
-type Result_2 = 
+type Result_4 = 
+ variant {
+   err: AddCommentError;
+   ok: Comment;
+ };
+type Result_3 = 
  variant {
    err: CreateMarketError;
    ok: MarketResult;
  };
-type Result_1 = 
+type Result_2 = 
  variant {
    err: CreateUserError;
    ok: UserResult;
  };
-type Result = 
+type Result_1 = 
  variant {
    err: RefreshUserError;
    ok: UserResult;
+ };
+type Result = 
+ variant {
+   err: TradeError;
+   ok: Balance;
  };
 type RefreshUserError = 
  variant {
@@ -81,19 +100,18 @@ type MarketInitData =
 type MarketId = nat32;
 type Market = 
  service {
+   addCommentToMarket: (MarketId, text) -> (Result_4);
    approveMarket: (MarketId) -> ();
-   claimTokens: (MarketId) -> (Balance);
-   createMarket: (MarketInitData) -> (Result_2);
-   createUserResult: (text) -> (Result_1);
+   buyOption: (MarketId, Balance, nat, bool) -> (Result);
+   createMarket: (MarketInitData) -> (Result_3);
+   createUserResult: (text) -> (Result_2);
    getUserResult: (UserId) -> (opt UserResult) query;
-   readAllMarkets: () -> (vec record {
-                                MarketId;
-                                MarketResult;
-                              }) query;
+   readAllMarkets: () -> (vec MarketResult) query;
    readAllOpenMarkets: () -> (vec MarketResult) query;
    readAllUsers: () -> (vec UserResult) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
-   refreshUser: () -> (Result);
+   refreshUser: () -> (Result_1);
+   sellOption: (MarketId, Balance, nat, bool) -> (Result);
  };
 type Description = text;
 type CreateUserError = 
@@ -119,4 +137,11 @@ type Comment =
  };
 type Balance = float64;
 type Author = text;
+type AddCommentError = 
+ variant {
+   commentIsEmpty;
+   marketMissing;
+   userIsAnon;
+   userNotCreated;
+ };
 service : () -> Market

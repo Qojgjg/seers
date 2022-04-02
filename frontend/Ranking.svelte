@@ -8,8 +8,8 @@
 
   let getRanking = async () => {
     response = (await $auth.actor.readAllUsers()).sort(function (a, b) {
-      var keyA = a.seerBalance,
-        keyB = b.seerBalance
+      var keyA = a.expSeerBalance,
+        keyB = b.expSeerBalance
       if (keyA < keyB) return 1
       if (keyA > keyB) return -1
       return 0
@@ -42,7 +42,7 @@
         <div
           style="width: 10%;margin: 3px; font-size: 1.2em;margin-bottom: 1em"
         >
-          &Sigma;
+          E(&Sigma);
         </div>
       </div>
       {#each response as user, i}
@@ -53,7 +53,7 @@
           </div>
           <!-- <div>{user.markets.length}</div> -->
           <div style="width: 10%;margin: 3px">
-            {Number(user.seerBalance).toFixed(0)}
+            {Number(user.expSeerBalance).toFixed(0)}
           </div>
         </div>
       {/each}

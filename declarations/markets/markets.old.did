@@ -18,6 +18,11 @@ type Url = text;
 type Title = text;
 type Time = int;
 type Shares = int;
+type Result_3 = 
+ variant {
+   err: AddCommentError;
+   ok: Comment;
+ };
 type Result_2 = 
  variant {
    err: CreateMarketError;
@@ -103,16 +108,20 @@ type Comment =
  };
 type Balance = float64;
 type Author = text;
+type AddCommentError = 
+ variant {
+   commentIsEmpty;
+   marketMissing;
+   userIsAnon;
+   userNotCreated;
+ };
 service : {
+  addCommentToMarket: (MarketId, text) -> (Result_3);
   approveMarket: (MarketId) -> ();
-  claimTokens: (MarketId) -> (Balance);
   createMarket: (MarketInitData) -> (Result_2);
   createUserResult: (text) -> (Result_1);
   getUserResult: (UserId) -> (opt UserResult) query;
-  readAllMarkets: () -> (vec record {
-                               MarketId;
-                               MarketResult;
-                             }) query;
+  readAllMarkets: () -> (vec MarketResult) query;
   readAllOpenMarkets: () -> (vec MarketResult) query;
   readAllUsers: () -> (vec UserResult) query;
   readMarket: (MarketId) -> (opt MarketResult) query;
