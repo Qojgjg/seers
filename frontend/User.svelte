@@ -81,11 +81,11 @@
 <div style="justify-content: center; display: flex;width: 100%">
   <div class="rowUser">
     {#if user}
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+      <!-- <div style="margin-bottom: 10px; width: 100%; text-align:center">
         Id: {user.id}
-      </div>
+      </div> -->
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Handle: {user.handle}
+        Hello {user.handle}! ♡
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
         Balance: {Number(user.seerBalance).toFixed(2)} Σ

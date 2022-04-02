@@ -34,23 +34,23 @@ type Result_4 =
  };
 type Result_3 = 
  variant {
-   err: TradeError;
-   ok: Balance;
- };
-type Result_2 = 
- variant {
    err: CreateMarketError;
    ok: MarketResult;
  };
-type Result_1 = 
+type Result_2 = 
  variant {
    err: CreateUserError;
    ok: UserResult;
  };
-type Result = 
+type Result_1 = 
  variant {
    err: RefreshUserError;
    ok: UserResult;
+ };
+type Result = 
+ variant {
+   err: TradeError;
+   ok: Balance;
  };
 type RefreshUserError = 
  variant {
@@ -132,13 +132,14 @@ type AddCommentError =
 service : {
   addCommentToMarket: (MarketId, text) -> (Result_4);
   approveMarket: (MarketId) -> ();
-  buyOption: (MarketId, Balance, nat, bool) -> (Result_3);
-  createMarket: (MarketInitData) -> (Result_2);
-  createUserResult: (text) -> (Result_1);
+  buyOption: (MarketId, Balance, nat, bool) -> (Result);
+  createMarket: (MarketInitData) -> (Result_3);
+  createUserResult: (text) -> (Result_2);
   getUserResult: (UserId) -> (opt UserResult) query;
   readAllMarkets: () -> (vec MarketResult) query;
   readAllOpenMarkets: () -> (vec MarketResult) query;
   readAllUsers: () -> (vec UserResult) query;
   readMarket: (MarketId) -> (opt MarketResult) query;
-  refreshUser: () -> (Result);
+  refreshUser: () -> (Result_1);
+  sellOption: (MarketId, Balance, nat, bool) -> (Result);
 }
