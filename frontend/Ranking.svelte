@@ -68,6 +68,9 @@
     display: flex;
     width: 100%;
   }
+  .row:hover {
+    background-color: hotpink;
+  }
   .ranking {
     display: flex;
     flex-wrap: wrap;
