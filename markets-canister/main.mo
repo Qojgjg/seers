@@ -520,8 +520,266 @@ shared({ caller = initializer }) actor class Market() {
     };
     
     private var marketMap = do {
+        let m0: (MarketId, MarketResult) = (14, {
+            k = 1000000000;
+            id = 14;
+            title = "Champions League: Benfica vs Liverpool";
+            probabilities = [
+                627.9069767441861,
+                186.046511627907,
+                186.046511627907,
+            ];
+            endDate = 1_649_624_400_000_000_000;
+            labels = ["Benfica", "Liverpool", "Draw" ];
+            liquidity = 1500;
+            reserves = [
+                444.44444444444446,
+                1500,
+                1500,
+            ];
+            description = "SL Benfica is going head to head with Liverpool starting on 5 Apr 2022 at 19:00 UTC at Estadio do Sport Lisboa e Benfica stadium, Lisbon city, Portugal. The match is a part of the UEFA Champions League.";
+            volume = 500;
+            author = "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae";
+            state = #open;
+            imageUrl = "https://upload.wikimedia.org/wikipedia/nap/thumb/f/f3/Logo_UEFA_Champions_League.png/250px-Logo_UEFA_Champions_League.png";
+            providers = [
+                "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae",
+            ];
+            comments = [
+                {
+                    content = "No rational bet, I just love Lisbon and Benfica :)";
+                    author = "ShadowySuperCoder";
+                }
+            ];
+            totalShares = 0;
+            blockTimestampLast = 1_648_829_451_234_346_240;
+            startDate = 1_648_829_451_234_346_240;
+            images = [];
+        });
+
+        let m1: (MarketId, MarketResult) = (15, {
+            k = 1000000000;
+            id = 15;
+            title = "Champions League: Villarreal vs Bayern M.";
+            probabilities = [
+                333.3333333333333,
+                333.3333333333333,
+                333.3333333333333,
+            ];
+            endDate = 1_649_624_400_000_000_000;
+            labels = ["Villarreal", "Bayern", "Draw"];
+            liquidity = 1000;
+            reserves = [1000, 1000, 1000];
+            description = "Villarreal is going head to head with Bayern München starting on 6 Apr 2022 at 19:00 UTC at Estadio de la Ceramica stadium, Villarreal city, Spain. The match is a part of the UEFA Champions League.";
+            volume = 0;
+            author = "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae";
+            state = #open;
+            imageUrl = "https://upload.wikimedia.org/wikipedia/nap/thumb/f/f3/Logo_UEFA_Champions_League.png/250px-Logo_UEFA_Champions_League.png";
+            providers = [
+                "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae",
+            ];
+            comments = [];
+            totalShares = 0;
+            blockTimestampLast = 1_648_829_658_797_510_840;
+            startDate = 1_648_829_658_797_510_840;
+            images = [];
+        });
+
+        
+        let m2: (MarketId, MarketResult) = (16, {
+            k = 1000000000;
+            id = 16;
+            title = "Champions League: M. City vs Atl. Madrid";
+            probabilities = [
+                333.3333333333333,
+                333.3333333333333,
+                333.3333333333333,
+            ];
+            endDate = 1_649_624_400_000_000_000;
+            labels = ["M. City", "Atl. Madrid", "Draw" ];
+            liquidity = 1000;
+            reserves = [1000, 1000, 1000];
+            description = "Manchester City is going head to head with Atlético Madrid starting on 5 Apr 2022 at 19:00 UTC at Etihad Stadium stadium, Manchester city, England. The match is a part of the UEFA Champions League.";
+            volume = 0;
+            author = "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae";
+            state = #open;
+            imageUrl = "https://upload.wikimedia.org/wikipedia/nap/thumb/f/f3/Logo_UEFA_Champions_League.png/250px-Logo_UEFA_Champions_League.png";
+            providers = [
+                "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae"
+            ];
+            comments = [];
+            totalShares = 0;
+            blockTimestampLast = 1_648_829_862_423_293_816;
+            startDate = 1_648_829_862_423_293_816;
+            images = [];
+        });
+
+
+
+        let m3: (MarketId, MarketResult) = (17, {
+            k = 1000000000;
+            id = 17;
+            title = "Champions League: Chelsea vs Real Madrid";
+            probabilities = [
+                333.3333333333333,
+                333.3333333333333,
+                333.3333333333333,
+            ];
+            endDate = 1_649_624_400_000_000_000;
+            labels = ["Chelsea", "Real Madrid", "Draw"];
+            liquidity = 1000;
+            reserves = [1000, 1000, 1000];
+            description = "Chelsea is going head to head with Real Madrid starting on 6 Apr 2022 at 19:00 UTC at Stamford Bridge stadium, London city, England. The match is a part of the UEFA Champions League.";
+            volume = 0;
+            author = "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae";
+            state = #open;
+            imageUrl = "https://upload.wikimedia.org/wikipedia/nap/thumb/f/f3/Logo_UEFA_Champions_League.png/250px-Logo_UEFA_Champions_League.png";
+            providers = [
+                "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae"
+            ];
+            comments = [];
+            totalShares = 0;
+            blockTimestampLast = 1_648_829_978_192_965_591;
+            startDate = 1_648_829_978_192_965_591;
+            images = [];
+        });
+
+
+
+        let m4: (MarketId, MarketResult) = (18, {
+            k = 1000000000;
+            id = 18;
+            title = "ICP Price - End of April";
+            probabilities = [
+                15.151515151515152,
+                969.6969696969697,
+                15.151515151515152,
+            ];
+            endDate = 1_651_525_200_000_000_000;
+            labels = ["Less 20", "20 to 40", "More 40"];
+            liquidity = 4000;
+            reserves = [4000, 62.5, 4000];
+            description = "What would be the price of ICP by the end of April?";
+            volume = 3000;
+            author = "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae";
+            state = #open;
+            imageUrl = "https://cryptomode.com/wp-content/uploads/2021/08/CryptoMode-DFINITY-Internet-Computer-ICP.jpg";
+            providers = [
+                "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae"
+            ];
+            comments = [];
+            totalShares = 0;
+            blockTimestampLast = 1_648_830_325_723_878_200;
+            startDate = 1_648_830_325_723_878_200;
+            images = [];
+        });
+
+
+
+        let m5: (MarketId, MarketResult) = (19, {
+            k = 1000000000;
+            id = 19;
+            title = "Bitcoin Price - End of April";
+            probabilities = [
+                463.519313304721,
+                268.24034334763945,
+                268.24034334763945,
+            ];
+            endDate = 1_651_525_200_000_000_000;
+            labels = ["Less 40k", "40k to 50k", "More 50k"];
+            liquidity = 1200;
+            reserves = [
+                694.4444444444445,
+                1200,
+                1200,
+            ];
+            description = "What will be the price of Bitcoin BTC by the end of April?";
+            volume = 200;
+            author = "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae";
+            state = #open;
+            imageUrl = "https://www.dhresource.com/0x0/f2/albu/g9/M00/27/85/rBVaVVxO822ACwv4AALYau1h4a8355.jpg/500pcs-30mm-diameter-bitcoin-logo-label-sticker.jpg";
+            providers = [
+                "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae"
+            ];
+            comments = [];
+            totalShares = 0;
+            blockTimestampLast = 1_648_830_489_828_973_969;
+            startDate = 1_648_830_489_828_973_969;
+            images = [];
+        });
+
+
+
+
+        let m6: (MarketId, MarketResult) = (20, {
+            k = 1000000;
+            id = 20;
+            title = "Donald Trump could win the White House again in 2024";
+            probabilities = [500, 500];
+            endDate = 1_737_410_400_000_000_000;
+            labels = ["Yes", "No"];
+            liquidity = 1000;
+            reserves = [1000, 1000];
+            description = "It\'s January 20, 2025. Donald Trump places his hand on a Bible. He\'s president of the United States. Again.";
+            volume = 0;
+            author = "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae";
+            state = #open;
+            imageUrl = "https://i.ibb.co/BwqLg14/trump-7080.jpg";
+            providers = [
+                "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae"
+            ];
+            comments = [
+                {
+                    content = "Thanks Seersmarket! Very cool! ";
+                    author = "@emmanuel6milli";
+                }
+            ];
+            totalShares = 0;
+            blockTimestampLast = 1_648_831_059_983_825_606;
+            startDate = 1_648_831_059_983_825_606;
+            images = [];
+        });
+
+
+            
+        let m7: (MarketId, MarketResult) = (21, {
+            k = 1000000;
+            id = 21;
+            title = "Will Queen Elizabeth live to age 96?";
+            probabilities = [900, 99.99999999999999];
+            endDate = 1_650_574_800_000_000_000;
+            labels = ["Yes", "No"];
+            liquidity = 3000;
+            reserves = [333.3333333333333, 3000];
+            description = "Will the Queen of the United Kingdom and 14 Commonwealths live past her 96th birthday? You decide. The date is coming fast (April 21), so submit your bets with haste!";
+            volume = 2000;
+            author = "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae";
+            state = #open;
+            imageUrl = "https://i0.web.de/image/278/36722278,pd=1,f=responsive169-w950/queen-elizabeth-ii.jpg";
+            providers = [
+                "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae"
+            ];
+            comments = [
+                {
+                    content = "It\'s only 20 days, what could go wrong?";
+                    author = "Satoshi";
+                },
+                { content = "I hope so, got a big Yes bag."; author = "Dev0" }
+            ];
+            totalShares = 0;
+            blockTimestampLast = 1_648_831_319_092_948_610;
+            startDate = 1_648_831_319_092_948_610;
+            images = [];
+        });
+
+        let marketBack: [(MarketId, MarketResult)] = [
+            m0, m1, m2, m3, m4, m5, m6, m7
+        ];
+
+
         let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
-            stableMarkets.vals(), 
+            marketBack.vals(),
+            // stableMarkets.vals(), 
             func (e: (MarketId, MarketResult)): (MarketId, Market) {
                 return (e.0, marketResultToMarket(e.1));
             }
