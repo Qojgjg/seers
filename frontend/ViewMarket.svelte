@@ -221,7 +221,7 @@
               {#each market.labels as label, i}
                 <option value={i}>
                   {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
-                  - {label}
+                  - {label.slice(0, 20)}
                 </option>
               {/each}
             </select>

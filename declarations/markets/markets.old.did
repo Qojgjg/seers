@@ -142,4 +142,5 @@ service : {
   readMarket: (MarketId) -> (opt MarketResult) query;
   refreshUser: () -> (Result_1);
   sellOption: (MarketId, Balance, nat, bool) -> (Result);
+  tip: (UserId, Balance) -> (opt Balance);
 }
