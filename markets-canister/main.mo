@@ -504,8 +504,8 @@ shared({ caller = initializer }) actor class Market() {
         ];
 
         let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
-            // stableUsers.vals(), 
-            userBack.vals(),
+            stableUsers.vals(), 
+            // userBack.vals(),
             func (e: (UserId, UserResult)): (UserId, User) {
                 return (e.0, userResultToUser(e.1));
             }
@@ -778,8 +778,8 @@ shared({ caller = initializer }) actor class Market() {
 
 
         let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
-            marketBack.vals(),
-            // stableMarkets.vals(), 
+            // marketBack.vals(),
+            stableMarkets.vals(), 
             func (e: (MarketId, MarketResult)): (MarketId, Market) {
                 return (e.0, marketResultToMarket(e.1));
             }
@@ -795,22 +795,23 @@ shared({ caller = initializer }) actor class Market() {
 
     /* Update */
     system func preupgrade() {
-        // stableUsers := Trie.toArray<UserId, User, (UserId, UserResult)>(
-        //     users,
-        //     func (id: UserId, u: User): (UserId, UserResult) {
-        //         return (id, userToUserResult(u));
-        //     }
-        // );
-        // stableMarkets := Trie.toArray<MarketId, Market, (MarketId, MarketResult)>(
-        //     markets,
-        //     func (id: MarketId, m: Market): (MarketId, MarketResult) {
-        //         return (id, marketToMarketResult(m));
-        //     }
-        // );
+        stableUsers := Array.map<(UserId, User), (UserId, UserResult)>(
+            Iter.toArray(userMap.entries()), 
+            func (e: (UserId, User)): (UserId, UserResult) {
+                (e.0, userToUserResult(e.1))
+            }
+        );
+        stableMarkets := Array.map<(MarketId, Market), (MarketId, MarketResult)>(
+            Iter.toArray(marketMap.entries()), 
+            func (e: (MarketId, Market)): (MarketId, MarketResult) {
+                (e.0, marketToMarketResult(e.1))
+            }
+        );
     };
 
     system func postupgrade() {
-        Debug.print("upgraded");
+        stableUsers := [];
+        stableMarkets := [];
     };
 
     /* API */
@@ -828,13 +829,13 @@ shared({ caller = initializer }) actor class Market() {
     // };
 
     // Read all users.
-    public query func readAllUsers(): async [(UserId, UserResult)] {
-        return [];
-        // return Iter.toArray(userMap.entries());
-        // let result = Trie.toArray(users, func (id: UserId, u: User): UserResult {
-        //     return userToUserResult(u);
-        // });
-        // return result;
+    public query func readAllUsers(): async [UserResult] {
+        Array.map<(UserId, User), UserResult>(
+            Iter.toArray(userMap.entries()), 
+            func (e: (UserId, User)): UserResult {
+                userToUserResult(e.1)
+            }
+        )
     };
 
     // Delete all users.
@@ -1066,9 +1067,14 @@ shared({ caller = initializer }) actor class Market() {
 
     // Read all open markets.
     public query func readAllOpenMarkets(): async [MarketResult] {
-        // let array = Iter.toArray(marketMap.entries());
-        // return Array.mapFilter(array, keepOpenMarkets);
-        return [];
+        // return [];
+        let allMarkets = Array.map<(MarketId, Market), MarketResult>(
+            Iter.toArray(marketMap.entries()), 
+            func (e: (MarketId, Market)): MarketResult {
+                marketToMarketResult(e.1)
+            }
+        );
+        return Array.mapFilter(Iter.toArray(marketMap.entries()), keepOpenMarkets);
     };
 
     private type RefreshUserError = {
@@ -1572,7 +1578,8 @@ shared({ caller = initializer }) actor class Market() {
         return v;
     };
 
-    private func keepOpenMarkets(m: Market): ?MarketResult {
+    private func keepOpenMarkets(o: (MarketId, Market)): ?MarketResult {
+        let m = o.1;
         switch (m.state) {
             case (#open) {
                 let market = {
@@ -1606,8 +1613,7 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     private func getUser(userId: UserId): ?User {
-        null
-        // Trie.find(users, userKey(userId), Text.equal)
+        userMap.get(userId)
     };
 
     private type CreateUserError = {

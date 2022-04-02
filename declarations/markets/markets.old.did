@@ -114,10 +114,7 @@ service : {
                                MarketResult;
                              }) query;
   readAllOpenMarkets: () -> (vec MarketResult) query;
-  readAllUsers: () -> (vec record {
-                             UserId;
-                             UserResult;
-                           }) query;
+  readAllUsers: () -> (vec UserResult) query;
   readMarket: (MarketId) -> (opt MarketResult) query;
   refreshUser: () -> (Result);
 }

@@ -95,11 +95,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
-    'readAllUsers' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Tuple(UserId, UserResult))],
-        ['query'],
-      ),
+    'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
     'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
     'refreshUser' : IDL.Func([], [Result], []),
   });

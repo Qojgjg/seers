@@ -21,7 +21,7 @@ export interface Market {
   'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
   'readAllMarkets' : () => Promise<Array<[MarketId, MarketResult]>>,
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
-  'readAllUsers' : () => Promise<Array<[UserId, UserResult]>>,
+  'readAllUsers' : () => Promise<Array<UserResult>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'refreshUser' : () => Promise<Result>,
 }

@@ -14,6 +14,7 @@
       if (keyA > keyB) return -1
       return 0
     })
+    console.log(response)
   }
 
   onMount(getRanking)
