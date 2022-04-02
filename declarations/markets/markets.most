@@ -11,43 +11,35 @@ type Key<K> = {hash : Hash; key : K};
 type Leaf<K, V> = {keyvals : AssocList__1<Key<K>, V>; size : Nat};
 type List<T> = ?(T, List<T>);
 type MarketId = Nat32;
-type MarketState = {#closed; #open; #pending; #resolved : Nat};
-type Market__1 =
+type MarketResult =
   {
     author : Author;
-    var blockTimestampLast : Time;
-    var comments : [Comment];
+    blockTimestampLast : Time;
+    comments : [Comment];
     description : Description;
     endDate : Time;
     id : MarketId;
-    var imageUrl : Url;
+    imageUrl : Url;
     images : [Text];
-    var k : Balance;
+    k : Balance;
     labels : [Text];
-    var liquidity : Balance;
-    var probabilities : [Probability];
-    var providers : [Text];
-    var reserves : [Balance];
+    liquidity : Balance;
+    probabilities : [Probability];
+    providers : [Text];
+    reserves : [Balance];
     startDate : Time;
-    var state : MarketState;
+    state : MarketState;
     title : Title;
-    var totalShares : Shares;
-    var volume : Balance
+    totalShares : Shares;
+    volume : Balance
   };
+type MarketState = {#closed; #open; #pending; #resolved : Nat};
 type Probability = Float;
 type Shares = Int;
 type Time = Int;
 type Title = Text;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type Url = Text;
-type User =
-  {
-    var expSeerBalance : Balance;
-    var handle : Text;
-    var id : UserId;
-    var markets : [UserMarket];
-    var seerBalance : Balance
-  };
 type UserId = Text;
 type UserMarket =
   {
@@ -56,16 +48,18 @@ type UserMarket =
     marketTitle : Title;
     shares : Shares
   };
+type UserResult =
+  {
+    expSeerBalance : Balance;
+    handle : Text;
+    id : UserId;
+    markets : [UserMarket];
+    seerBalance : Balance
+  };
 actor {
   stable var handles :
     {#branch : Branch<Text, UserId>; #empty; #leaf : Leaf<Text, UserId>};
-  stable var markets :
-    {
-      #branch : Branch<MarketId, Market__1>;
-      #empty;
-      #leaf : Leaf<MarketId, Market__1>
-    };
   stable var nextMarketId : Nat32;
-  stable var users :
-    {#branch : Branch<UserId, User>; #empty; #leaf : Leaf<UserId, User>}
+  stable var stableMarkets : [(MarketId, MarketResult)];
+  stable var stableUsers : [(UserId, UserResult)]
 };

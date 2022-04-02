@@ -15,42 +15,23 @@ type UserMarket =
  };
 type UserId = text;
 type Url = text;
-type TradeError = 
- variant {
-   callerIsAnon;
-   marketClosed;
-   marketMissing;
-   newtonFailed;
-   notEnoughBalance;
-   userNotCreated;
- };
 type Title = text;
 type Time = int;
 type Shares = int;
-type Result_4 = 
- variant {
-   err: AddCommentError;
-   ok: Comment;
- };
-type Result_3 = 
+type Result_2 = 
  variant {
    err: CreateMarketError;
    ok: MarketResult;
  };
-type Result_2 = 
+type Result_1 = 
  variant {
    err: CreateUserError;
    ok: UserResult;
  };
-type Result_1 = 
+type Result = 
  variant {
    err: RefreshUserError;
    ok: UserResult;
- };
-type Result = 
- variant {
-   err: TradeError;
-   ok: Balance;
  };
 type RefreshUserError = 
  variant {
@@ -122,25 +103,21 @@ type Comment =
  };
 type Balance = float64;
 type Author = text;
-type AddCommentError = 
- variant {
-   commentIsEmpty;
-   marketMissing;
-   userIsAnon;
-   userNotCreated;
- };
 service : {
-  addCommentToMarket: (MarketId, text) -> (Result_4);
   approveMarket: (MarketId) -> ();
-  buyOption: (MarketId, Balance, nat, bool) -> (Result);
   claimTokens: (MarketId) -> (Balance);
-  createMarket: (MarketInitData) -> (Result_3);
-  createUserResult: (text) -> (Result_2);
+  createMarket: (MarketInitData) -> (Result_2);
+  createUserResult: (text) -> (Result_1);
   getUserResult: (UserId) -> (opt UserResult) query;
-  readAllMarkets: () -> (vec MarketResult) query;
+  readAllMarkets: () -> (vec record {
+                               MarketId;
+                               MarketResult;
+                             }) query;
   readAllOpenMarkets: () -> (vec MarketResult) query;
-  readAllUsers: () -> (vec UserResult) query;
+  readAllUsers: () -> (vec record {
+                             UserId;
+                             UserResult;
+                           }) query;
   readMarket: (MarketId) -> (opt MarketResult) query;
-  refreshUser: () -> (Result_1);
-  sellOption: (MarketId, Balance, nat, bool) -> (Result);
+  refreshUser: () -> (Result);
 }

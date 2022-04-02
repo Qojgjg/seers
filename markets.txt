@@ -149,16 +149,20 @@
       id = 19 : nat32;
       title = "Bitcoin Price - End of April";
       probabilities = vec {
-        333.3333333333333 : float64;
-        333.3333333333333 : float64;
-        333.3333333333333 : float64;
+        463.519313304721 : float64;
+        268.24034334763945 : float64;
+        268.24034334763945 : float64;
       };
       endDate = 1_651_525_200_000_000_000 : int;
       labels = vec { "Less 40k"; "40k to 50k"; "More 50k" };
-      liquidity = 1000 : float64;
-      reserves = vec { 1000 : float64; 1000 : float64; 1000 : float64 };
+      liquidity = 1200 : float64;
+      reserves = vec {
+        694.4444444444445 : float64;
+        1200 : float64;
+        1200 : float64;
+      };
       description = "What will be the price of Bitcoin BTC by the end of April?";
-      volume = 0 : float64;
+      volume = 200 : float64;
       author = "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae";
       state = variant { open };
       imageUrl = "https://www.dhresource.com/0x0/f2/albu/g9/M00/27/85/rBVaVVxO822ACwv4AALYau1h4a8355.jpg/500pcs-30mm-diameter-bitcoin-logo-label-sticker.jpg";

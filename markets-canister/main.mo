@@ -121,9 +121,369 @@ shared({ caller = initializer }) actor class Market() {
     /* State */
     
     private stable var nextMarketId: MarketId = 0;
-    private stable var markets: Trie.Trie<MarketId, Market> = Trie.empty();
-    private stable var users: Trie.Trie<UserId, User> = Trie.empty();
     private stable var handles: Trie.Trie<Text, UserId> = Trie.empty();
+    
+    stable var stableUsers: [(UserId, UserResult)] = [];
+    stable var stableMarkets: [(MarketId, MarketResult)] = [];
+
+
+    private func userResultToUser(u: UserResult): User {
+        let user = {
+            var id = u.id;
+            var handle = u.handle;
+            var seerBalance = u.seerBalance;
+            var expSeerBalance = u.expSeerBalance;
+            var markets = u.markets;
+        };
+        return user;
+    };
+
+    private func userToUserResult(u: User): UserResult {
+        let userResult = {
+            id = u.id;
+            handle = u.handle;
+            seerBalance = u.seerBalance;
+            expSeerBalance = u.expSeerBalance;
+            markets = u.markets;
+        };
+        return userResult;
+    };
+
+
+    private func marketResultToMarket(m: MarketResult): Market {
+        let market = {
+            id = m.id;    
+            title = m.title;
+            description = m.description;
+            startDate = m.startDate;
+            endDate = m.endDate;
+            author = m.author;
+            labels = m.labels;
+            images = m.images;
+            var probabilities = m.probabilities;
+            var liquidity = m.liquidity;
+            var reserves = m.reserves;
+            var k = m.k;
+            var blockTimestampLast = m.blockTimestampLast;
+            var totalShares = m.totalShares;
+            var providers = m.providers;
+            var imageUrl = m.imageUrl;
+            var state = m.state;
+            var volume = m.volume;
+            var comments = m.comments;
+        };
+
+        return market;
+    };
+
+    private func marketToMarketResult(m: Market): MarketResult {
+        let market = {
+            id = m.id;    
+            title = m.title;
+            description = m.description;
+            labels = m.labels;
+            images = m.images;
+            probabilities = m.probabilities;
+            liquidity = m.liquidity;
+            reserves = m.reserves;
+            k = m.k;
+            startDate = m.startDate;
+            endDate = m.endDate;
+            author = m.author;
+            blockTimestampLast = m.blockTimestampLast;
+            totalShares = m.totalShares;
+            providers = m.providers;
+            imageUrl = m.imageUrl;
+            state = m.state;
+            volume = m.volume;
+            comments = m.comments;
+        };
+        return market;    
+    };
+
+    private var userMap = do {
+        let u0: UserResult = {
+            id = "gt5em-5sb4t-2hqzi-mzi2a-7eup4-7ja4x-r7uhb-lap7m-f7tuy-meoyj-oae";
+            seerBalance = 1000;
+            expSeerBalance = 1000;
+            markets = [];
+            handle = "omsiva";
+        };
+
+        let u1: UserResult = {
+            id = "op2gv-bsww4-xbrzq-a7hyb-574a5-ajwkv-6jzdo-ajlid-taqht-rh6vk-cqe";
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "zantchinz.icp";
+        };
+
+        let u2: UserResult = {
+            id = "mk7oe-zv3sn-7kzi2-x7z3q-n2ril-mnwtt-epeib-eonvh-cfhna-4wpif-4qe";   
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "Quy_NCA97";
+        };
+
+        let u3: UserResult = {
+            id = "ymbga-tid7w-gbcp6-u7pff-7ffin-ga2hb-yuhyg-fcdjk-bfm46-4skqv-hae";   
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "Krim";
+        };
+
+
+        let u4: UserResult = {
+            id = "5wihw-3ikug-zgmlg-ebgi7-cwidg-w3fma-wvsv4-xdpl4-olwii-emcvk-uqe";
+            seerBalance = 1000;
+            expSeerBalance = 1000;
+            markets = []; 
+            handle = "flatdefi";
+        };
+
+        let u5: UserResult = {
+            id = "7msib-i3b2w-qa54f-6vcz4-phxfq-x7tqy-fmysp-d7ziz-iupdr-how76-4ae";
+            seerBalance = 3000;
+            expSeerBalance = 3000; 
+            markets = []; 
+            handle = "prateek";
+        };
+
+        let u6: UserResult = {
+            id = "iybfb-xvn6a-4gxtd-mdrwn-yxnm6-lfs2o-ubgnt-woywg-hmq5i-aq6ez-sae";
+            seerBalance = 1000;
+            expSeerBalance = 1000;
+            markets = []; 
+            handle = "yogi";
+        };
+
+        let u7: UserResult = {
+            id = "m6bw4-onqx2-zoks7-k6r47-3ip2e-kmcdx-pm5a4-pw2ox-jiz3y-xhhgr-6ae";
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "crypto";
+        };
+
+        let u8: UserResult = {
+            id = "3srra-6v6ls-4u6ov-evz5e-gnhdk-pfgh5-jvl5b-o2y5g-42bll-xcmxd-sae";
+            seerBalance = 1000;
+            expSeerBalance = 1000;
+            markets = []; 
+            handle = "Satoshi";
+        };
+
+        let u9: UserResult = {
+            id = "53r7a-ne5x5-ajjit-getbg-begdq-sm4qf-rixg7-ecpud-zg6ls-feurl-sqe";
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = []; 
+            handle = "Ben";
+        };
+
+        let u10: UserResult = {
+            id = "yfzu6-2bg44-iokgo-ya6gj-liri2-hpdm5-urdx3-rd2s3-5vfoj-pdwwb-fae";
+            seerBalance = 3000; 
+            expSeerBalance = 3000;
+            markets = []; 
+            handle = "dent";   
+        };
+
+        let u11: UserResult = {
+            id = "65kbu-nfzqf-hsgbn-2ghvq-5eqeo-mxzvl-wwl3g-pwlpr-o27ea-anbro-dqe";
+            seerBalance = 1000; 
+            expSeerBalance = 1000;
+            markets = [];
+            handle = "5irechain";
+        }; 
+
+        let u12: UserResult = { 
+            id = "ohn3m-eyegu-wmvwf-dalya-ga7yx-vmjt4-cgbx7-oaxmi-soofj-ntz4s-qae";
+            seerBalance = 3000; 
+            expSeerBalance = 3000;
+            markets = []; 
+            handle = "EarlyBird";
+        }; 
+    
+
+        let u13: UserResult = { 
+            id = "sf6py-i56md-qx7hb-wr3gv-xm7en-aqhqb-syaym-tsxvk-6clzr-ghpgk-pqe"; 
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "fiatcoin";
+        }; 
+
+        let u14: UserResult = { 
+            id = "b6rg2-hekdq-kq3cc-kczmd-hstmr-pptzh-pbvif-4riaz-kdl26-hiyuu-gqe";
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "Sal_Paradise";
+        }; 
+    
+
+        let u15: UserResult = {
+            id = "p5ijg-6qr7e-nhy3n-rddbt-k4spj-gniyd-fznyc-z67sk-36qwq-2sfgy-aae";
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "Dev0";
+        }; 
+    
+        let b: [Balance] = [0, 3937.5, 0];
+        let um: UserMarket = {
+            shares = 0;
+            marketId = 18;
+            balances = b;
+            marketTitle = "ICP Price - End of April";
+        };
+        let u16: UserResult = {
+            id = "zmrbi-3z3m2-dc55a-nrwmo-hy6gy-ksxns-wfhex-yac3r-ojjw2-kr2uo-sae";
+            seerBalance = 0;
+            expSeerBalance = 0;
+            markets = [um];
+            handle = "@emmanuel6milli";
+        }; 
+
+        let u17: UserResult = {
+            id = "s6scp-ye57s-7z54d-6ijdm-xyv4h-eye6f-luqa6-rjz24-3humv-molty-yae";
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "Rothschild.icp";
+        }; 
+    
+ 
+        let u18: UserResult = { 
+            id = "7aw4k-wruvn-ywdgz-cvy6p-lcavb-o2vqz-y73bt-va3j2-nj4vs-5lw2p-cae";
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "Lamriver";    
+        }; 
+
+        let u19: UserResult = {
+            id = "jurv6-zfnnt-v66uc-qjutu-axhnm-4hwog-ug3ci-mzoyr-qjria-otbtt-wqe";
+            seerBalance = 1000;
+            expSeerBalance = 1000;
+            markets = [];
+            handle = "nftview";
+        }; 
+
+        let u20: UserResult = {
+            id = "picru-kebxg-2kws3-rwrzn-uj3a4-w2fch-nnesj-zfh3f-m3fm4-iehk4-wqe";
+            seerBalance = 1000;
+            expSeerBalance = 1000;
+            markets = [];
+            handle = "unstop";
+        }; 
+    
+        let u21: UserResult = {
+            id = "2djls-afiaz-obvxu-khu45-allty-czp2c-6zlyz-dgphh-vchho-6hp3a-iae";
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "crowfound";
+        }; 
+
+        let um2: UserMarket = {
+            shares = 0;
+            marketId = 14;
+            balances: [Balance] = [1055.5555555555557, 0, 0];
+            marketTitle = "Champions League: Benfica vs Liverpool";
+        };
+
+        let u22: UserResult = {
+            id = "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae";
+            seerBalance = 2500;
+            expSeerBalance = 2500;
+            markets = [um2];
+            handle = "ShadowySuperCoder";
+        }; 
+    
+
+    
+
+        let userBack: [(UserId, UserResult)] = [
+            (u0.id, u0),
+            (u1.id, u1),
+            (u2.id, u2),
+            (u3.id, u3),
+            (u4.id, u4),
+            (u5.id, u5),
+            (u6.id, u6),
+            (u7.id, u7),
+            (u8.id, u8),
+            (u9.id, u9),
+            (u10.id, u10),
+            (u11.id, u11),
+            (u12.id, u12),
+            (u13.id, u13),
+            (u14.id, u14),
+            (u15.id, u15),
+            (u16.id, u16),
+            (u17.id, u17),
+            (u18.id, u18),
+            (u19.id, u19),
+            (u20.id, u20),
+            (u21.id, u21),
+            (u22.id, u22),
+        ];
+
+        let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
+            // stableUsers.vals(), 
+            userBack.vals(),
+            func (e: (UserId, UserResult)): (UserId, User) {
+                return (e.0, userResultToUser(e.1));
+            }
+        );
+        
+        Map.fromIter<UserId, User>(
+            usersIter,
+            10, 
+            Text.equal, 
+            Text.hash
+        )
+    };
+    
+    private var marketMap = do {
+        let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
+            stableMarkets.vals(), 
+            func (e: (MarketId, MarketResult)): (MarketId, Market) {
+                return (e.0, marketResultToMarket(e.1));
+            }
+        );
+        
+        Map.fromIter<MarketId, Market>(
+            marketIter,
+            10, 
+            Nat32.equal, 
+            func (x: Nat32): Nat32 { x } 
+        )
+    };
+
+    /* Update */
+    system func preupgrade() {
+        // stableUsers := Trie.toArray<UserId, User, (UserId, UserResult)>(
+        //     users,
+        //     func (id: UserId, u: User): (UserId, UserResult) {
+        //         return (id, userToUserResult(u));
+        //     }
+        // );
+        // stableMarkets := Trie.toArray<MarketId, Market, (MarketId, MarketResult)>(
+        //     markets,
+        //     func (id: MarketId, m: Market): (MarketId, MarketResult) {
+        //         return (id, marketToMarketResult(m));
+        //     }
+        // );
+    };
+
+    system func postupgrade() {
+        Debug.print("upgraded");
+    };
 
     /* API */
 
@@ -140,11 +500,13 @@ shared({ caller = initializer }) actor class Market() {
     // };
 
     // Read all users.
-    public query func readAllUsers(): async [UserResult] {
-        let result = Trie.toArray(users, func (id: UserId, u: User): UserResult {
-            return userToUserResult(u);
-        });
-        return result;
+    public query func readAllUsers(): async [(UserId, UserResult)] {
+        return [];
+        // return Iter.toArray(userMap.entries());
+        // let result = Trie.toArray(users, func (id: UserId, u: User): UserResult {
+        //     return userToUserResult(u);
+        // });
+        // return result;
     };
 
     // Delete all users.
@@ -158,8 +520,7 @@ shared({ caller = initializer }) actor class Market() {
     public shared(msg) func approveMarket(marketId: MarketId): async () {
         assert(msg.caller == initializer); // Root call.
 
-        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
-        switch (marketOpt) {
+        switch (marketMap.get(marketId)) {
             case (null) {
                 return;
             };
@@ -173,8 +534,8 @@ shared({ caller = initializer }) actor class Market() {
         assert(not Principal.isAnonymous(msg.caller));
 
         let userId = Principal.toText(msg.caller);        
-        let userOpt = Trie.find(users, userKey(userId), Text.equal);
-        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+        let userOpt = userMap.get(userId);
+        let marketOpt = marketMap.get(marketId);
 
         switch (marketOpt) {
             case (null) {
@@ -339,41 +700,47 @@ shared({ caller = initializer }) actor class Market() {
         };
 
         user.markets := Array.append(user.markets, [userMarket]);
-        users := Trie.replace(
-            users,
-            userKey(user.id),
-            Text.equal,
-            ?user,
-        ).0;
+        userMap.put(user.id, user);
+        // users := Trie.replace(
+        //     users,
+        //     userKey(user.id),
+        //     Text.equal,
+        //     ?user,
+        // ).0;
 
         nextMarketId += 1;
 
-        markets := Trie.replace(
-            markets,
-            marketKey(marketId),
-            Nat32.equal,
-            ?newMarket,
-        ).0;
+        marketMap.put(marketId, newMarket);
+
+        // markets := Trie.replace(
+        //     markets,
+        //     marketKey(marketId),
+        //     Nat32.equal,
+        //     ?newMarket,
+        // ).0;
 
         return #ok(marketToMarketResult(newMarket));
     };
 
     // Read a market.
     public query func readMarket(marketId: MarketId): async ?MarketResult {
-        let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
+        let result = marketMap.get(marketId);
         return Option.map(result, marketToMarketResult);        
     };
 
     // Read all markets.
-    public query func readAllMarkets(): async [MarketResult] {
-        let result = Trie.toArray(markets, getMarket);
-        return Array.map(result, marketToMarketResult);
+    public query func readAllMarkets(): async [(MarketId, MarketResult)] {
+        // let result = Trie.toArray(markets, getMarket);
+        // return Array.map(result, marketToMarketResult);
+        // Iter.toArray(marketMap.entries())
+        return [];
     };
 
     // Read all open markets.
     public query func readAllOpenMarkets(): async [MarketResult] {
-        let result = Trie.toArray(markets, getMarket);
-        return Array.mapFilter(result, keepOpenMarkets);
+        // let array = Iter.toArray(marketMap.entries());
+        // return Array.mapFilter(array, keepOpenMarkets);
+        return [];
     };
 
     private type RefreshUserError = {
@@ -387,7 +754,7 @@ shared({ caller = initializer }) actor class Market() {
         };
 
         let caller = Principal.toText(msg.caller);
-        let userOpt = Trie.find(users, userKey(caller), Text.equal);
+        let userOpt = userMap.get(caller);
 
         switch (userOpt) {
             case (null) {
@@ -398,7 +765,7 @@ shared({ caller = initializer }) actor class Market() {
                 user.markets := Array.mapFilter(user.markets, 
                     func (ut: UserMarket): ?UserMarket {
                         
-                        let marketOpt = Trie.find(markets, marketKey(ut.marketId), Nat32.equal);
+                        let marketOpt = marketMap.get(ut.marketId);
                         
                         switch (marketOpt) {
                             case (null) {
@@ -470,292 +837,292 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Sell tokens from caller back to the market.
-    public shared(msg) func sellOption(
-        marketId: MarketId,
-        value: Balance,
-        selected: Nat,
-        save: Bool
-    ): async Result.Result<Balance, TradeError> {
+    // public shared(msg) func sellOption(
+    //     marketId: MarketId,
+    //     value: Balance,
+    //     selected: Nat,
+    //     save: Bool
+    // ): async Result.Result<Balance, TradeError> {
 
-        if (Principal.isAnonymous(msg.caller)) {
-            return #err(#callerIsAnon);
-        };
+    //     if (Principal.isAnonymous(msg.caller)) {
+    //         return #err(#callerIsAnon);
+    //     };
 
-        let caller = Principal.toText(msg.caller);
-        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+    //     let caller = Principal.toText(msg.caller);
+    //     let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
         
-        switch (marketOpt) {
-            case null {
-                return #err(#marketMissing);
-            };
-            case (?market) {
-                if (market.endDate < Time.now()) {
-                    market.state := #closed;
-                    return #err(#marketClosed);
-                };
+    //     switch (marketOpt) {
+    //         case null {
+    //             return #err(#marketMissing);
+    //         };
+    //         case (?market) {
+    //             if (market.endDate < Time.now()) {
+    //                 market.state := #closed;
+    //                 return #err(#marketClosed);
+    //             };
 
-                var user = switch (getUser(caller)) {
-                    case (null) {
-                        return #err(#userNotCreated);
-                    };
-                    case (?user) {
-                        user;
-                    };
-                };
+    //             var user = switch (getUser(caller)) {
+    //                 case (null) {
+    //                     return #err(#userNotCreated);
+    //                 };
+    //                 case (?user) {
+    //                     user;
+    //                 };
+    //             };
         
-                var marketTokensOpt = Array.find(user.markets,
-                    func (ut: UserMarket): Bool {
-                        ut.marketId == market.id
-                    }
-                );
+    //             var marketTokensOpt = Array.find(user.markets,
+    //                 func (ut: UserMarket): Bool {
+    //                     ut.marketId == market.id
+    //                 }
+    //             );
 
-                switch (marketTokensOpt) {
-                    case null {
-                        // No tokens to sell.
-                        return #err(#notEnoughBalance);
-                    };
-                    case (?marketTokens) {
-                        if (marketTokens.balances[selected] < value) {
-                            // No enought tokens to sell.
-                            return #err(#notEnoughBalance);
-                        };
+    //             switch (marketTokensOpt) {
+    //                 case null {
+    //                     // No tokens to sell.
+    //                     return #err(#notEnoughBalance);
+    //                 };
+    //                 case (?marketTokens) {
+    //                     if (marketTokens.balances[selected] < value) {
+    //                         // No enought tokens to sell.
+    //                         return #err(#notEnoughBalance);
+    //                     };
 
-                        let optionsSize = market.reserves.size();
-                        var newReserves: [var Balance] = Array.init(optionsSize, 0.0);
+    //                     let optionsSize = market.reserves.size();
+    //                     var newReserves: [var Balance] = Array.init(optionsSize, 0.0);
                         
-                        for (i in Iter.range(0, optionsSize - 1)) {
-                            newReserves[i] := market.reserves[i];
-                        };
-                        newReserves[selected] := newReserves[selected] + value;
+    //                     for (i in Iter.range(0, optionsSize - 1)) {
+    //                         newReserves[i] := market.reserves[i];
+    //                     };
+    //                     newReserves[selected] := newReserves[selected] + value;
 
-                        let f = func (x: Float): Float {
-                            var calcK: Float = 1;
-                            for (i in Iter.range(0, optionsSize - 1)) {
-                                calcK := calcK * (newReserves[i] - x);
-                            };
+    //                     let f = func (x: Float): Float {
+    //                         var calcK: Float = 1;
+    //                         for (i in Iter.range(0, optionsSize - 1)) {
+    //                             calcK := calcK * (newReserves[i] - x);
+    //                         };
 
-                            return calcK - market.k;               
-                        };
+    //                         return calcK - market.k;               
+    //                     };
 
-                        var rOpt = newtonMethod(0.0, f);
+    //                     var rOpt = newtonMethod(0.0, f);
 
-                        switch (rOpt) {
-                            case (null) {
-                                return #err(#newtonFailed);
-                            };
-                            case (?r) {
-                                for (i in Iter.range(0, optionsSize - 1)) {
-                                    newReserves[i] := newReserves[i] - r;
-                                };
-                                let newLiquidity = market.liquidity - r;
-                                let liquidityOut: Balance = r;
+    //                     switch (rOpt) {
+    //                         case (null) {
+    //                             return #err(#newtonFailed);
+    //                         };
+    //                         case (?r) {
+    //                             for (i in Iter.range(0, optionsSize - 1)) {
+    //                                 newReserves[i] := newReserves[i] - r;
+    //                             };
+    //                             let newLiquidity = market.liquidity - r;
+    //                             let liquidityOut: Balance = r;
 
-                                if (not save) {
-                                    return #ok(liquidityOut);
-                                };
+    //                             if (not save) {
+    //                                 return #ok(liquidityOut);
+    //                             };
                                 
-                                market.volume := market.volume + liquidityOut;
-                                market.reserves := Array.freeze(newReserves);
+    //                             market.volume := market.volume + liquidityOut;
+    //                             market.reserves := Array.freeze(newReserves);
 
-                                let weight: [var Balance] = Array.init(optionsSize, 1.0); 
-                                let probabilities: [var Probability] = Array.init(optionsSize, 0.0);
-                                var weightSum: Balance  = 0.0;
+    //                             let weight: [var Balance] = Array.init(optionsSize, 1.0); 
+    //                             let probabilities: [var Probability] = Array.init(optionsSize, 0.0);
+    //                             var weightSum: Balance  = 0.0;
                                     
-                                for (i in Iter.range(0, optionsSize - 1)) {
-                                    for (j in Iter.range(0, optionsSize - 1)) {
-                                        if (i != j) {
-                                            weight[i] := weight[i] * market.reserves[j];
-                                        };
-                                    };
-                                    weightSum := weightSum + weight[i];
-                                };
+    //                             for (i in Iter.range(0, optionsSize - 1)) {
+    //                                 for (j in Iter.range(0, optionsSize - 1)) {
+    //                                     if (i != j) {
+    //                                         weight[i] := weight[i] * market.reserves[j];
+    //                                     };
+    //                                 };
+    //                                 weightSum := weightSum + weight[i];
+    //                             };
 
-                                for (i in Iter.range(0, optionsSize - 1)) {
-                                    probabilities[i] := weight[i] * 1000.0 / weightSum;
-                                };
+    //                             for (i in Iter.range(0, optionsSize - 1)) {
+    //                                 probabilities[i] := weight[i] * 1000.0 / weightSum;
+    //                             };
 
-                                market.probabilities := Array.freeze(probabilities);
+    //                             market.probabilities := Array.freeze(probabilities);
 
-                                user.markets := Array.mapFilter(user.markets, 
-                                    func (ut: UserMarket): ?UserMarket {
-                                        if (ut.marketId != market.id) {
-                                            return ?ut;
-                                        } else {
-                                            let newBalances = Array.mapEntries(ut.balances,
-                                                func (b: Balance, i: Nat): Balance {
-                                                    if (i == selected) {
-                                                        return b - value;
-                                                    } else {
-                                                        return b;
-                                                    };
-                                                }
-                                            );
+    //                             user.markets := Array.mapFilter(user.markets, 
+    //                                 func (ut: UserMarket): ?UserMarket {
+    //                                     if (ut.marketId != market.id) {
+    //                                         return ?ut;
+    //                                     } else {
+    //                                         let newBalances = Array.mapEntries(ut.balances,
+    //                                             func (b: Balance, i: Nat): Balance {
+    //                                                 if (i == selected) {
+    //                                                     return b - value;
+    //                                                 } else {
+    //                                                     return b;
+    //                                                 };
+    //                                             }
+    //                                         );
 
-                                            let newUserMarket: UserMarket = {
-                                                marketId = market.id;
-                                                marketTitle = market.title;
-                                                balances = newBalances;
-                                                shares = ut.shares;
-                                            };
+    //                                         let newUserMarket: UserMarket = {
+    //                                             marketId = market.id;
+    //                                             marketTitle = market.title;
+    //                                             balances = newBalances;
+    //                                             shares = ut.shares;
+    //                                         };
 
-                                            return ?newUserMarket;
-                                        };
-                                    }
-                                );
+    //                                         return ?newUserMarket;
+    //                                     };
+    //                                 }
+    //                             );
 
-                                user.seerBalance := user.seerBalance + liquidityOut;
+    //                             user.seerBalance := user.seerBalance + liquidityOut;
 
-                                return #ok(liquidityOut);
-                            };
-                        };
-                    };
-                };
-            };
-        };
-    };
+    //                             return #ok(liquidityOut);
+    //                         };
+    //                     };
+    //                 };
+    //             };
+    //         };
+    //     };
+    // };
 
-    public shared(msg) func buyOption(
-            marketId: MarketId,
-            value: Balance,
-            selected: Nat,
-            save: Bool
-        ): async Result.Result<Balance, TradeError> {
+    // public shared(msg) func buyOption(
+    //         marketId: MarketId,
+    //         value: Balance,
+    //         selected: Nat,
+    //         save: Bool
+    //     ): async Result.Result<Balance, TradeError> {
 
-        if (Principal.isAnonymous(msg.caller)) {
-            return #err(#callerIsAnon);
-        };
+    //     if (Principal.isAnonymous(msg.caller)) {
+    //         return #err(#callerIsAnon);
+    //     };
 
-        let caller = Principal.toText(msg.caller);
+    //     let caller = Principal.toText(msg.caller);
         
-        var user = switch (getUser(caller)) {
-            case (null) {
-                return #err(#userNotCreated);
-            };
-            case (?user) {
-                user;
-            };
-        };
+    //     var user = switch (getUser(caller)) {
+    //         case (null) {
+    //             return #err(#userNotCreated);
+    //         };
+    //         case (?user) {
+    //             user;
+    //         };
+    //     };
 
-        if (user.seerBalance < value) {
-            return #err(#notEnoughBalance);
-        };
+    //     if (user.seerBalance < value) {
+    //         return #err(#notEnoughBalance);
+    //     };
         
-        let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+    //     let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
 
-        switch (marketOpt) {
-            case null {
-                return #err(#marketMissing);
-            };
-            case (?market) {
-                if (market.endDate < Time.now()) {
-                    market.state := #closed;
-                    return #err(#marketClosed);
-                };
+    //     switch (marketOpt) {
+    //         case null {
+    //             return #err(#marketMissing);
+    //         };
+    //         case (?market) {
+    //             if (market.endDate < Time.now()) {
+    //                 market.state := #closed;
+    //                 return #err(#marketClosed);
+    //             };
                 
-                let optionsSize = market.reserves.size();
-                var semiK: Balance = 1.0;
+    //             let optionsSize = market.reserves.size();
+    //             var semiK: Balance = 1.0;
 
-                for (i in Iter.range(0, optionsSize - 1)) {
-                    if (i != selected) {
-                        semiK := semiK * (market.reserves[i] + value);
-                    };
-                };
+    //             for (i in Iter.range(0, optionsSize - 1)) {
+    //                 if (i != selected) {
+    //                     semiK := semiK * (market.reserves[i] + value);
+    //                 };
+    //             };
                 
-                let newSelectedReserve: Balance = market.k / semiK;
-                let tokensOut = market.reserves[selected] - newSelectedReserve + value;
+    //             let newSelectedReserve: Balance = market.k / semiK;
+    //             let tokensOut = market.reserves[selected] - newSelectedReserve + value;
                 
-                if (not save) { // Dry run.
-                    return #ok(tokensOut);
-                };
+    //             if (not save) { // Dry run.
+    //                 return #ok(tokensOut);
+    //             };
 
-                var newReserves: [var Balance] = Array.init(optionsSize, 0.0);
-                let newLiquidity = market.liquidity + value;
+    //             var newReserves: [var Balance] = Array.init(optionsSize, 0.0);
+    //             let newLiquidity = market.liquidity + value;
                
-                for (i in Iter.range(0, optionsSize - 1)) {
-                    if (i != selected) {
-                        newReserves[i] := market.reserves[i] + value;
-                    } else {
-                        newReserves[i] := newSelectedReserve;
-                    };
-                };
+    //             for (i in Iter.range(0, optionsSize - 1)) {
+    //                 if (i != selected) {
+    //                     newReserves[i] := market.reserves[i] + value;
+    //                 } else {
+    //                     newReserves[i] := newSelectedReserve;
+    //                 };
+    //             };
                 
-                market.reserves := Array.freeze(newReserves);
-                market.liquidity := newLiquidity;
-                market.volume := market.volume + value;
+    //             market.reserves := Array.freeze(newReserves);
+    //             market.liquidity := newLiquidity;
+    //             market.volume := market.volume + value;
 
-                let weight: [var Balance] = Array.init(optionsSize, 1.0); 
-                let probabilities: [var Probability] = Array.init(optionsSize, 0.0);
-                var weightSum: Balance  = 0.0;
+    //             let weight: [var Balance] = Array.init(optionsSize, 1.0); 
+    //             let probabilities: [var Probability] = Array.init(optionsSize, 0.0);
+    //             var weightSum: Balance  = 0.0;
                     
-                for (i in Iter.range(0, optionsSize - 1)) {
-                    for (j in Iter.range(0, optionsSize - 1)) {
-                        if (i != j) {
-                            weight[i] := weight[i] * market.reserves[j];
-                        };
-                    };
-                    weightSum := weightSum + weight[i];
-                };
+    //             for (i in Iter.range(0, optionsSize - 1)) {
+    //                 for (j in Iter.range(0, optionsSize - 1)) {
+    //                     if (i != j) {
+    //                         weight[i] := weight[i] * market.reserves[j];
+    //                     };
+    //                 };
+    //                 weightSum := weightSum + weight[i];
+    //             };
 
-                for (i in Iter.range(0, optionsSize - 1)) {
-                    probabilities[i] := weight[i] * 1000.0 / weightSum;
-                };
+    //             for (i in Iter.range(0, optionsSize - 1)) {
+    //                 probabilities[i] := weight[i] * 1000.0 / weightSum;
+    //             };
 
-                market.probabilities :=  Array.freeze(probabilities);
+    //             market.probabilities :=  Array.freeze(probabilities);
 
-                var marketTokensOpt = Array.find(user.markets,
-                    func (ut: UserMarket): Bool {
-                        ut.marketId == market.id
-                    }
-                );
+    //             var marketTokensOpt = Array.find(user.markets,
+    //                 func (ut: UserMarket): Bool {
+    //                     ut.marketId == market.id
+    //                 }
+    //             );
 
-                switch (marketTokensOpt) {
-                    case null {
-                        let balances: [var Balance] = Array.init(optionsSize, 0.0);
-                        balances[selected] := tokensOut;
+    //             switch (marketTokensOpt) {
+    //                 case null {
+    //                     let balances: [var Balance] = Array.init(optionsSize, 0.0);
+    //                     balances[selected] := tokensOut;
 
-                        let newUserMarket: UserMarket = {
-                            marketId = market.id;
-                            marketTitle = market.title;
-                            balances = Array.freeze(balances);
-                            shares = 0;
-                        };
-                        user.markets := Array.append(user.markets, [newUserMarket]);
-                    };
-                    case (?marketTokens) {
-                        user.markets := Array.mapFilter(user.markets, 
-                            func (ut: UserMarket): ?UserMarket {
-                                if (ut.marketId != market.id) {
-                                    return ?ut;
-                                } else {
-                                    let newBalances = Array.mapEntries(ut.balances,
-                                        func (b: Balance, i: Nat): Balance {
-                                            if (i == selected) {
-                                                return b + tokensOut;
-                                            } else {
-                                                return b;
-                                            };
-                                        }
-                                    );
+    //                     let newUserMarket: UserMarket = {
+    //                         marketId = market.id;
+    //                         marketTitle = market.title;
+    //                         balances = Array.freeze(balances);
+    //                         shares = 0;
+    //                     };
+    //                     user.markets := Array.append(user.markets, [newUserMarket]);
+    //                 };
+    //                 case (?marketTokens) {
+    //                     user.markets := Array.mapFilter(user.markets, 
+    //                         func (ut: UserMarket): ?UserMarket {
+    //                             if (ut.marketId != market.id) {
+    //                                 return ?ut;
+    //                             } else {
+    //                                 let newBalances = Array.mapEntries(ut.balances,
+    //                                     func (b: Balance, i: Nat): Balance {
+    //                                         if (i == selected) {
+    //                                             return b + tokensOut;
+    //                                         } else {
+    //                                             return b;
+    //                                         };
+    //                                     }
+    //                                 );
 
-                                    let newUserMarket: UserMarket = {
-                                        marketId = market.id;
-                                        marketTitle = market.title;
-                                        balances = newBalances;
-                                        shares = ut.shares;
-                                    };
-                                    return ?newUserMarket;
-                                };
-                            }
-                        );
-                    };
-                };
+    //                                 let newUserMarket: UserMarket = {
+    //                                     marketId = market.id;
+    //                                     marketTitle = market.title;
+    //                                     balances = newBalances;
+    //                                     shares = ut.shares;
+    //                                 };
+    //                                 return ?newUserMarket;
+    //                             };
+    //                         }
+    //                     );
+    //                 };
+    //             };
 
-                user.seerBalance := user.seerBalance - value;
+    //             user.seerBalance := user.seerBalance - value;
 
-                return #ok(tokensOut);
-            };
-        };
-    };
+    //             return #ok(tokensOut);
+    //         };
+    //     };
+    // };
 
     // Get user data.
     public query func getUserResult(userId: UserId): async ?UserResult {
@@ -824,42 +1191,42 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Add a comment to a market.
-    public shared(msg) func addCommentToMarket(marketId: MarketId, content: Text): async Result.Result<Comment, AddCommentError> {
-        if (Principal.isAnonymous(msg.caller)) {
-            return #err(#userIsAnon);
-        };
+    // public shared(msg) func addCommentToMarket(marketId: MarketId, content: Text): async Result.Result<Comment, AddCommentError> {
+    //     if (Principal.isAnonymous(msg.caller)) {
+    //         return #err(#userIsAnon);
+    //     };
 
-        if (content == "") {
-            return #err(#commentIsEmpty);
-        };
+    //     if (content == "") {
+    //         return #err(#commentIsEmpty);
+    //     };
 
-        let userId = Principal.toText(msg.caller);
-        let userOpt = Trie.find(users, userKey(userId), Text.equal);
+    //     let userId = Principal.toText(msg.caller);
+    //     let userOpt = Trie.find(users, userKey(userId), Text.equal);
 
-        switch (userOpt) {
-            case null {
-                return #err(#userNotCreated);
-            };
-            case (?user) {
-                let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+    //     switch (userOpt) {
+    //         case null {
+    //             return #err(#userNotCreated);
+    //         };
+    //         case (?user) {
+    //             let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
 
-                switch (marketOpt) {
-                    case null {
-                        return #err(#marketMissing);
-                    };
-                    case (?market) {
-                        let comment: Comment = {
-                            author = user.handle;
-                            content = content;
-                        };
-                        market.comments := Array.append(market.comments, [comment]);
+    //             switch (marketOpt) {
+    //                 case null {
+    //                     return #err(#marketMissing);
+    //                 };
+    //                 case (?market) {
+    //                     let comment: Comment = {
+    //                         author = user.handle;
+    //                         content = content;
+    //                     };
+    //                     market.comments := Array.append(market.comments, [comment]);
                         
-                        return #ok(comment);
-                    };
-                };
-            };
-        };
-    };
+    //                     return #ok(comment);
+    //                 };
+    //             };
+    //         };
+    //     };
+    // };
 
     /**
     * Utilities
@@ -876,58 +1243,6 @@ shared({ caller = initializer }) actor class Market() {
     private func getMarket(k: MarketId, v: Market): Market {
         return v;
     };
-
-    private func marketResultToMarket(m: MarketResult): Market {
-        let market = {
-            id = m.id;    
-            title = m.title;
-            description = m.description;
-            startDate = m.startDate;
-            endDate = m.endDate;
-            author = m.author;
-            labels = m.labels;
-            images = m.images;
-            var probabilities = m.probabilities;
-            var liquidity = m.liquidity;
-            var reserves = m.reserves;
-            var k = m.k;
-            var blockTimestampLast = m.blockTimestampLast;
-            var totalShares = m.totalShares;
-            var providers = m.providers;
-            var imageUrl = m.imageUrl;
-            var state = m.state;
-            var volume = m.volume;
-            var comments = m.comments;
-        };
-
-        return market;
-    };
-
-    private func marketToMarketResult(m: Market): MarketResult {
-        let market = {
-            id = m.id;    
-            title = m.title;
-            description = m.description;
-            labels = m.labels;
-            images = m.images;
-            probabilities = m.probabilities;
-            liquidity = m.liquidity;
-            reserves = m.reserves;
-            k = m.k;
-            startDate = m.startDate;
-            endDate = m.endDate;
-            author = m.author;
-            blockTimestampLast = m.blockTimestampLast;
-            totalShares = m.totalShares;
-            providers = m.providers;
-            imageUrl = m.imageUrl;
-            state = m.state;
-            volume = m.volume;
-            comments = m.comments;
-        };
-        return market;    
-    };
-
 
     private func keepOpenMarkets(m: Market): ?MarketResult {
         switch (m.state) {
@@ -955,37 +1270,16 @@ shared({ caller = initializer }) actor class Market() {
                 };
                 return ?market;
             };
-            case (_) {
+            case _ {
                 return null;
             };
         };
         return null;
     };
 
-    private func userResultToUser(u: UserResult): User {
-        let user = {
-            var id = u.id;
-            var handle = u.handle;
-            var seerBalance = u.seerBalance;
-            var expSeerBalance = u.expSeerBalance;
-            var markets = u.markets;
-        };
-        return user;
-    };
-
-    private func userToUserResult(u: User): UserResult {
-        let userResult = {
-            id = u.id;
-            handle = u.handle;
-            seerBalance = u.seerBalance;
-            expSeerBalance = u.expSeerBalance;
-            markets = u.markets;
-        };
-        return userResult;
-    };
-
     private func getUser(userId: UserId): ?User {
-        Trie.find(users, userKey(userId), Text.equal)
+        null
+        // Trie.find(users, userKey(userId), Text.equal)
     };
 
     private type CreateUserError = {
@@ -1013,12 +1307,14 @@ shared({ caller = initializer }) actor class Market() {
                     ?handle,
                 ).0;
 
-                users := Trie.replace(
-                    users,
-                    userKey(user.id),
-                    Text.equal,
-                    ?user,
-                ).0;
+                userMap.put(userId, user);
+
+                // users := Trie.replace(
+                //     users,
+                //     userKey(user.id),
+                //     Text.equal,
+                //     ?user,
+                // ).0;
 
                 return #ok(user);
             };

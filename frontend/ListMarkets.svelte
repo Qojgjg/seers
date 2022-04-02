@@ -10,6 +10,7 @@
 
   const refreshMarkets = async () => {
     markets = await $auth.actor.readAllOpenMarkets()
+    console.log(JSON.stringify(markets))
   }
 
   onMount(refreshMarkets)

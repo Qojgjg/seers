@@ -1,23 +1,6 @@
 export const idlFactory = ({ IDL }) => {
   const MarketId = IDL.Nat32;
-  const Comment = IDL.Record({ 'content' : IDL.Text, 'author' : IDL.Text });
-  const AddCommentError = IDL.Variant({
-    'userIsAnon' : IDL.Null,
-    'userNotCreated' : IDL.Null,
-    'marketMissing' : IDL.Null,
-    'commentIsEmpty' : IDL.Null,
-  });
-  const Result_4 = IDL.Variant({ 'ok' : Comment, 'err' : AddCommentError });
   const Balance = IDL.Float64;
-  const TradeError = IDL.Variant({
-    'callerIsAnon' : IDL.Null,
-    'notEnoughBalance' : IDL.Null,
-    'marketClosed' : IDL.Null,
-    'userNotCreated' : IDL.Null,
-    'marketMissing' : IDL.Null,
-    'newtonFailed' : IDL.Null,
-  });
-  const Result = IDL.Variant({ 'ok' : Balance, 'err' : TradeError });
   const Title = IDL.Text;
   const Time = IDL.Int;
   const Description = IDL.Text;
@@ -39,6 +22,7 @@ export const idlFactory = ({ IDL }) => {
     'pending' : IDL.Null,
     'open' : IDL.Null,
   });
+  const Comment = IDL.Record({ 'content' : IDL.Text, 'author' : IDL.Text });
   const Shares = IDL.Int;
   const MarketResult = IDL.Record({
     'k' : Balance,
@@ -71,7 +55,7 @@ export const idlFactory = ({ IDL }) => {
     'endDateOld' : Time,
     'notEnoughLiquidity' : Balance,
   });
-  const Result_3 = IDL.Variant({
+  const Result_2 = IDL.Variant({
     'ok' : MarketResult,
     'err' : CreateMarketError,
   });
@@ -93,35 +77,31 @@ export const idlFactory = ({ IDL }) => {
     'userExist' : IDL.Null,
     'userIsAnon' : IDL.Null,
   });
-  const Result_2 = IDL.Variant({ 'ok' : UserResult, 'err' : CreateUserError });
+  const Result_1 = IDL.Variant({ 'ok' : UserResult, 'err' : CreateUserError });
   const RefreshUserError = IDL.Variant({
     'callerIsAnon' : IDL.Null,
     'userNotCreated' : IDL.Null,
   });
-  const Result_1 = IDL.Variant({ 'ok' : UserResult, 'err' : RefreshUserError });
+  const Result = IDL.Variant({ 'ok' : UserResult, 'err' : RefreshUserError });
   const Market = IDL.Service({
-    'addCommentToMarket' : IDL.Func([MarketId, IDL.Text], [Result_4], []),
     'approveMarket' : IDL.Func([MarketId], [], []),
-    'buyOption' : IDL.Func(
-        [MarketId, Balance, IDL.Nat, IDL.Bool],
-        [Result],
-        [],
-      ),
     'claimTokens' : IDL.Func([MarketId], [Balance], []),
-    'createMarket' : IDL.Func([MarketInitData], [Result_3], []),
-    'createUserResult' : IDL.Func([IDL.Text], [Result_2], []),
-    'deleteMarket' : IDL.Func([MarketId], [IDL.Bool], []),
+    'createMarket' : IDL.Func([MarketInitData], [Result_2], []),
+    'createUserResult' : IDL.Func([IDL.Text], [Result_1], []),
     'getUserResult' : IDL.Func([UserId], [IDL.Opt(UserResult)], ['query']),
-    'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
-    'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
-    'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
-    'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
-    'refreshUser' : IDL.Func([], [Result_1], []),
-    'sellOption' : IDL.Func(
-        [MarketId, Balance, IDL.Nat, IDL.Bool],
-        [Result],
+    'readAllMarkets' : IDL.Func(
         [],
+        [IDL.Vec(IDL.Tuple(MarketId, MarketResult))],
+        ['query'],
       ),
+    'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
+    'readAllUsers' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Tuple(UserId, UserResult))],
+        ['query'],
+      ),
+    'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
+    'refreshUser' : IDL.Func([], [Result], []),
   });
   return Market;
 };
