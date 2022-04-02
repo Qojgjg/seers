@@ -43,10 +43,6 @@
 
     record { id = "picru-kebxg-2kws3-rwrzn-uj3a4-w2fch-nnesj-zfh3f-m3fm4-iehk4-wqe"; seerBalance = 1000 : float64; markets = vec {}; handle = "unstop";}; 
     
-
-
-
-
     record { id = "2djls-afiaz-obvxu-khu45-allty-czp2c-6zlyz-dgphh-vchho-6hp3a-iae"; seerBalance = 3000 : float64; markets = vec { record { shares = 0 : int; marketId = 7 : nat32; balances = vec { 1500 : float64; 0 : float64;}; marketTitle = "Donald Trump could win the White House again in 2024";};}; handle = "crowfound";}; 
     
     record { id = "q72gt-z7tep-4ud2j-myxw4-kaaun-do2el-bdniy-ecrbp-4iww7-jplbe-rae"; seerBalance = 2500 : float64; markets = vec { record { shares = 0 : int; marketId = 0 : nat32; balances = vec { 0 : float64; 273.55371900826447 : float64; 0 : float64;}; marketTitle = "Champions League: Villarreal vs Bayern M.";}; record { shares = 0 : int; marketId = 1 : nat32; balances = vec { 273.55371900826447 : float64; 0 : float64; 0 : float64;}; marketTitle = "Champions League: Benfica vs Liverpool";}; record { shares = 0 : int; marketId = 2 : nat32; balances = vec { 0 : float64; 0 : float64; 0 : float64;}; marketTitle = "ICP Price - End of April";}; record { shares = 0 : int; marketId = 3 : nat32; balances = vec { 0 : float64; 0 : float64; 0 : float64;}; marketTitle = "ICP Price - End of April";}; record { shares = 0 : int; marketId = 4 : nat32; balances = vec { 0 : float64; 0 : float64; 273.55371900826447 : float64;}; marketTitle = "ICP Price End of April";}; record { shares = 0 : int; marketId = 5 : nat32; balances = vec { 0 : float64; 273.55371900826447 : float64; 0 : float64;}; marketTitle = "Bitcoin Price - End of April";}; record { shares = 0 : int; marketId = 6 : nat32; balances = vec { 278.43137254901956 : float64; 0 : float64;}; marketTitle = "Will Queen Elizabeth live to age 96? ";}; record { shares = 0 : int; marketId = 9 : nat32; balances = vec { 0 : float64; 0 : float64; 0 : float64;}; marketTitle = "Champions League";}; record { shares = 0 : int; marketId = 10 : nat32; balances = vec { 505.55555555555554 : float64; 0 : float64; 0 : float64;}; marketTitle = "Champions League: Man. City vs Atl. Madrid";}; record { shares = 0 : int; marketId = 11 : nat32; balances = vec { 505.55555555555554 : float64; 0 : float64; 0 : float64;}; marketTitle = "Champions League: Chelsea vs Real Madrid";}; record { shares = 0 : int; marketId = 12 : nat32; balances = vec { 0 : float64; 0 : float64;}; marketTitle = "Will Vladimir Putin remain President of Russia through 2022?";}; record { shares = 0 : int; marketId = 13 : nat32; balances = vec { 0 : float64; 0 : float64;}; marketTitle = "Test";}; record { shares = 0 : int; marketId = 14 : nat32; balances = vec { 1055.5555555555557 : float64; 0 : float64; 0 : float64;}; marketTitle = "Champions League: Benfica vs Liverpool";}; record { shares = 0 : int; marketId = 15 : nat32; balances = vec { 0 : float64; 0 : float64; 0 : float64;}; marketTitle = "Champions League: Villarreal vs Bayern M.";}; record { shares = 0 : int; marketId = 16 : nat32; balances = vec { 0 : float64; 0 : float64; 0 : float64;}; marketTitle = "Champions League: M. City vs Atl. Madrid";}; record { shares = 0 : int; marketId = 17 : nat32; balances = vec { 0 : float64; 0 : float64; 0 : float64;}; marketTitle = "Champions League: Chelsea vs Real Madrid";}; record { shares = 0 : int; marketId = 18 : nat32; balances = vec { 0 : float64; 0 : float64; 0 : float64;}; marketTitle = "ICP Price - End of April";}; record { shares = 0 : int; marketId = 19 : nat32; balances = vec { 0 : float64; 0 : float64; 0 : float64;}; marketTitle = "Bitcoin Price - End of April";}; record { shares = 0 : int; marketId = 20 : nat32; balances = vec { 0 : float64; 0 : float64;}; marketTitle = "Donald Trump could win the White House again in 2024";}; record { shares = 0 : int; marketId = 21 : nat32; balances = vec { 0 : float64; 0 : float64;}; marketTitle = "Will Queen Elizabeth live to age 96?";};}; handle = "ShadowySuperCoder";}; 
@@ -59,7 +55,14 @@
     
     record { id = "dqebi-uzw4a-nbsdn-6ap5p-gdfxr-527ij-uc2dt-cvytr-6mlun-iw534-qae"; seerBalance = 1000 : float64; markets = vec {}; handle = "turtlesea";}; 
     
+
+
+
+
     record { id = "sypmr-e6iqm-g3d5a-a3nn3-aswme-3a5vq-2un3k-jbpg6-5c2pc-ho2gn-jae"; seerBalance = 1000 : float64; markets = vec {}; handle = "minhanh";}; 
+    
+
+
     
     record { id = "5ynee-3ch7c-5oofm-vhx3y-r4kae-rs3ao-uodm2-5psdj-k7dw5-ft6zw-iae"; seerBalance = 3000 : float64; markets = vec { record { shares = 0 : int; marketId = 4 : nat32; balances = vec { 0 : float64; 330.92969997707894 : float64; 0 : float64;}; marketTitle = "ICP Price End of April";}; record { shares = 0 : int; marketId = 1 : nat32; balances = vec { 3124.3069446465506 : float64; 0 : float64; 0 : float64;}; marketTitle = "Champions League: Benfica vs Liverpool";};}; handle = "Prime";}; 
     

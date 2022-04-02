@@ -404,9 +404,71 @@ shared({ caller = initializer }) actor class Market() {
             handle = "ShadowySuperCoder";
         }; 
     
-
+        let u23: UserResult = {
+            id = "w6gib-7lkv2-rdndx-z6dfu-nsxvp-xfcr5-jsi7v-5yysk-bsu4y-4kynh-6qe";
+            seerBalance = 1000;
+            expSeerBalance = 1000;
+            markets = [];
+            handle = "cipoto";
+        }; 
     
+        let u24: UserResult = {
+            id = "omm3v-nhtgc-76xri-kaa23-4hu32-3ucit-pntkv-gspql-r4b4a-qnxvo-uae"; 
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "1957999";
+        }; 
+    
+        let u25: UserResult = {
+            id = "7f6zt-35giu-byd4s-fc7yq-taavl-w5lvp-mvemt-km7tj-ee5vq-4x4zj-vqe";
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "MLAF";
+        }; 
+    
+        let u26: UserResult = {
+            id = "dqebi-uzw4a-nbsdn-6ap5p-gdfxr-527ij-uc2dt-cvytr-6mlun-iw534-qae";
+            seerBalance = 1000;
+            expSeerBalance = 1000;
+            markets = [];
+            handle = "turtlesea";
+        }; 
 
+        let u27: UserResult = {
+            id = "sypmr-e6iqm-g3d5a-a3nn3-aswme-3a5vq-2un3k-jbpg6-5c2pc-ho2gn-jae";
+            seerBalance = 1000;
+            expSeerBalance = 1000;
+            markets = [];
+            handle = "minhanh";
+        };
+
+
+        let u28: UserResult = {
+            id = "5ynee-3ch7c-5oofm-vhx3y-r4kae-rs3ao-uodm2-5psdj-k7dw5-ft6zw-iae";
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "Prime";
+        }; 
+    
+        let u29: UserResult = {
+            id = "azrha-kjlrz-hrv7e-l2nrw-pzfzg-lgyz5-wwj2g-fxykg-q5kva-w7cjj-sae";
+            seerBalance = 3000;
+            expSeerBalance = 3000;
+            markets = [];
+            handle = "Galactic";
+        }; 
+    
+        let u30: UserResult = {
+            id = "mfypp-abbts-vnlqc-uwocf-ejaxm-3ikew-y35r2-mn7c3-ha74k-53rhh-4ae";
+            seerBalance = 1000;
+            expSeerBalance = 1000;
+            markets = [];
+            handle = "Dice";
+        };
+    
         let userBack: [(UserId, UserResult)] = [
             (u0.id, u0),
             (u1.id, u1),
@@ -431,6 +493,14 @@ shared({ caller = initializer }) actor class Market() {
             (u20.id, u20),
             (u21.id, u21),
             (u22.id, u22),
+            (u23.id, u23),
+            (u24.id, u24),
+            (u25.id, u25),
+            (u26.id, u26),
+            (u27.id, u27),
+            (u28.id, u28),
+            (u29.id, u29),
+            (u30.id, u30),
         ];
 
         let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
