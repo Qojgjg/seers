@@ -239,7 +239,7 @@
             <div class="OutcomeTitle">
               <input
                 bind:value={seerAmount}
-                on:keyup={() => debounce(market.id, seerAmount, 1000)}
+                on:keyup={() => debounce(market.id, seerAmount, 500)}
                 style="width:100%; height: 30px"
               />
             </div>
