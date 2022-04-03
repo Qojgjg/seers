@@ -61,6 +61,16 @@
     commentLabel = "Comment"
   }
 
+  let typingTimer //timer identifier
+
+  const debounce = (id, a, ms) => {
+    tokensEstimate = 0
+    clearTimeout(typingTimer)
+    if (seerAmount) {
+      typingTimer = setTimeout(() => dryRun(id, a), ms)
+    }
+  }
+
   const dryRun = async (marketId, amount) => {
     amount = parseInt(amount)
     console.log("Selected: " + selected)
@@ -229,7 +239,7 @@
             <div class="OutcomeTitle">
               <input
                 bind:value={seerAmount}
-                on:input={() => dryRun(market.id, seerAmount)}
+                on:keyup={() => debounce(market.id, seerAmount, 1000)}
                 style="width:100%; height: 30px"
               />
             </div>
