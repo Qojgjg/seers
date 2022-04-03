@@ -519,21 +519,19 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Delete a market.
-    // public shared(msg) func deleteMarket(marketId: MarketId): async Bool {
-    //     assert(msg.caller == initializer); // Root call.
+    public shared(msg) func deleteMarket(marketId: MarketId): async ?MarketResult {
+        assert(msg.caller == initializer); // Root call.
         
-    //     let result = Trie.find(markets, marketKey(marketId), Nat32.equal);
-    //     let exists = Option.isSome(result);
-    //     if (exists) {
-    //         markets := Trie.replace(
-    //             markets,
-    //             marketKey(marketId),
-    //             Nat32.equal,
-    //             null,
-    //         ).0;
-    //     };
-    //     return exists;
-    // };
+        let r = marketMap.remove(marketId);
+        switch (r) {
+            case (null) {
+                return null;
+            };
+            case (?m) {
+                return ?marketToMarketResult(m);
+            }
+        }
+    };
 
     // Delete all market.
     // public shared(msg) func deleteAllMarkets(): async () {

@@ -105,6 +105,7 @@ type Market =
    buyOption: (MarketId, Balance, nat, bool) -> (Result);
    createMarket: (MarketInitData) -> (Result_3);
    createUserResult: (text) -> (Result_2);
+   deleteMarket: (MarketId) -> (opt MarketResult);
    getUserResult: (UserId) -> (opt UserResult) query;
    readAllMarkets: () -> (vec MarketResult) query;
    readAllOpenMarkets: () -> (vec MarketResult) query;
