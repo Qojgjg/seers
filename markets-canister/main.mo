@@ -34,8 +34,8 @@ shared({ caller = initializer }) actor class Market() {
         #open: ();
         #closed: ();
         #resolved: Nat;
-        #old: ();
     };
+
 
     public type UserMarket = {
         marketId: MarketId;
@@ -60,7 +60,6 @@ shared({ caller = initializer }) actor class Market() {
         var seerBalance: Balance;
         var expSeerBalance: Balance;
         var markets: [UserMarket];
-        var transactions: [UserTx];
     };
 
     public type UserResult = {
@@ -69,7 +68,6 @@ shared({ caller = initializer }) actor class Market() {
         seerBalance: Balance;
         expSeerBalance: Balance;
         markets: [UserMarket];
-        transactions: [UserTx];
     };
 
     public type MarketInitData = {
@@ -138,7 +136,6 @@ shared({ caller = initializer }) actor class Market() {
             var seerBalance = u.seerBalance;
             var expSeerBalance = u.expSeerBalance;
             var markets = u.markets;
-            var transactions: [UserTx] = u.transactions;
         };
         return user;
     };
@@ -150,7 +147,6 @@ shared({ caller = initializer }) actor class Market() {
             seerBalance = u.seerBalance;
             expSeerBalance = u.expSeerBalance;
             markets = u.markets;
-            transactions = u.transactions;
         };
         return userResult;
     };
@@ -209,15 +205,14 @@ shared({ caller = initializer }) actor class Market() {
     
     /* State */
 
-    public type State2 = ([(UserId, UserResult)], [(MarketId, MarketResult)]);  
+    public type State = ([(UserId, UserResult)], [(MarketId, MarketResult)]);  
 
     private stable var nextMarketId: MarketId = 0;
     private stable var handles: Trie.Trie<Text, UserId> = Trie.empty();
     
     private stable var stableUsers: [(UserId, UserResult)] = [];
     private stable var stableMarkets: [(MarketId, MarketResult)] = [];
-    private stable var state: State2 = ([], []);
-    private stable var backupState: State2 = ([], []);
+    private stable var backupState: State = ([], []);
     
 
     private var userMap: Map.HashMap<UserId, User> = do {
@@ -255,50 +250,50 @@ shared({ caller = initializer }) actor class Market() {
     /* Upgrade */
 
     system func preupgrade() {
-        stableUsers := Array.map<(UserId, User), (UserId, UserResult)>(
-            Iter.toArray(userMap.entries()), 
-            func (e: (UserId, User)): (UserId, UserResult) {
-                (e.0, userToUserResult(e.1))
-            }
-        );
-        stableMarkets := Array.map<(MarketId, Market), (MarketId, MarketResult)>(
-            Iter.toArray(marketMap.entries()), 
-            func (e: (MarketId, Market)): (MarketId, MarketResult) {
-                (e.0, marketToMarketResult(e.1))
-            }
-        );
+        // stableUsers := Array.map<(UserId, User), (UserId, UserResult)>(
+        //     Iter.toArray(userMap.entries()), 
+        //     func (e: (UserId, User)): (UserId, UserResult) {
+        //         (e.0, userToUserResult(e.1))
+        //     }
+        // );
+        // stableMarkets := Array.map<(MarketId, Market), (MarketId, MarketResult)>(
+        //     Iter.toArray(marketMap.entries()), 
+        //     func (e: (MarketId, Market)): (MarketId, MarketResult) {
+        //         (e.0, marketToMarketResult(e.1))
+        //     }
+        // );
 
-        state := (stableUsers, stableMarkets);
+        // state := (stableUsers, stableMarkets);
     };
 
     system func postupgrade() {
-        let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
-            stableMarkets.vals(), 
-            func (e: (MarketId, MarketResult)): (MarketId, Market) {
-                return (e.0, marketResultToMarket(e.1));
-            }
-        );
+        // let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
+        //     stableMarkets.vals(), 
+        //     func (e: (MarketId, MarketResult)): (MarketId, Market) {
+        //         return (e.0, marketResultToMarket(e.1));
+        //     }
+        // );
         
-        marketMap := Map.fromIter<MarketId, Market>(
-            marketIter,
-            10, 
-            Nat32.equal, 
-            func (x: Nat32): Nat32 { x } 
-        );
+        // marketMap := Map.fromIter<MarketId, Market>(
+        //     marketIter,
+        //     10, 
+        //     Nat32.equal, 
+        //     func (x: Nat32): Nat32 { x } 
+        // );
 
-        let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
-            stableUsers.vals(), 
-            func (e: (UserId, UserResult)): (UserId, User) {
-                return (e.0, userResultToUser(e.1));
-            }
-        );
+        // let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
+        //     stableUsers.vals(), 
+        //     func (e: (UserId, UserResult)): (UserId, User) {
+        //         return (e.0, userResultToUser(e.1));
+        //     }
+        // );
         
-        userMap := Map.fromIter<UserId, User>(
-            usersIter,
-            10, 
-            Text.equal, 
-            Text.hash
-        );
+        // userMap := Map.fromIter<UserId, User>(
+        //     usersIter,
+        //     10, 
+        //     Text.equal, 
+        //     Text.hash
+        // );
     };
 
     
@@ -324,6 +319,27 @@ shared({ caller = initializer }) actor class Market() {
                 userToUserResult(e.1)
             }
         )
+    };
+
+    public shared(msg) func importUsers(users: [UserResult]): () {
+        assert(msg.caller == initializer); // Root call.
+        stableUsers := Array.map<UserResult, (UserId, UserResult)>(
+            users, 
+            func (u: UserResult): (UserId, UserResult) {
+                (u.id, u)
+            }
+        );
+    };
+
+
+    public shared(msg) func importMarkets(markets: [MarketResult]): () {
+        assert(msg.caller == initializer); // Root call.
+        stableMarkets := Array.map<MarketResult, (MarketId, MarketResult)>(
+            markets, 
+            func (u: MarketResult): (MarketId, MarketResult) {
+                (u.id, u)
+            }
+        );
     };
 
     public shared(msg) func backup(): async () {
@@ -523,6 +539,7 @@ shared({ caller = initializer }) actor class Market() {
             marketTitle = marketInitData.title;
             balances = Array.freeze(Array.init<Balance>(optionsLength, 0));
             shares = shares;
+            old = false;
         };
 
         user.markets := Array.append(user.markets, [userMarket]);
@@ -604,12 +621,25 @@ shared({ caller = initializer }) actor class Market() {
                             case (?market) {
                                 switch (market.state) {
                                     case (#resolved(i)) {
-                                        let reward = ut.balances[i];
-                                        // Give reward to user and delete market.
-                                        user.seerBalance := user.seerBalance + reward;
-                                        return null;
+                                        // if (not ut.old) {
+                                        //     let reward = ut.balances[i];
+                                        //     // Give reward to user and set market to old.
+                                        //     user.seerBalance := user.seerBalance + reward;
+
+                                        //     let oldMarket: UserMarket = {
+                                        //         marketId = ut.marketId;
+                                        //         marketTitle = ut.marketTitle;
+                                        //         balances = ut.balances;
+                                        //         shares = ut.shares;
+                                        //         old = true;
+                                        //     };
+
+                                        //     return ?oldMarket;
+                                        // };
+
+                                        return ?ut;
                                     };
-                                    case _ {
+                                    case (#open) {
                                         // Market still open. Update expected balance.
                                         let optionsSize = market.probabilities.size();
 
@@ -618,6 +648,9 @@ shared({ caller = initializer }) actor class Market() {
                                                 + market.probabilities[j] * ut.balances[j] / 1000.0; 
                                         };
 
+                                        return ?ut;
+                                    };
+                                    case _ {
                                         return ?ut;
                                     };
                                 };
@@ -794,6 +827,7 @@ shared({ caller = initializer }) actor class Market() {
                                                 marketTitle = market.title;
                                                 balances = newBalances;
                                                 shares = ut.shares;
+                                                // old = ut.old;
                                             };
 
                                             return ?newUserMarket;
@@ -916,6 +950,7 @@ shared({ caller = initializer }) actor class Market() {
                             marketTitle = market.title;
                             balances = Array.freeze(balances);
                             shares = 0;
+                            old = false;
                         };
                         user.markets := Array.append(user.markets, [newUserMarket]);
                     };
@@ -940,6 +975,7 @@ shared({ caller = initializer }) actor class Market() {
                                         marketTitle = market.title;
                                         balances = newBalances;
                                         shares = ut.shares;
+                                        // old = ut.old;
                                     };
                                     return ?newUserMarket;
                                 };

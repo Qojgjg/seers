@@ -33,7 +33,7 @@ type MarketResult =
     totalShares : Shares;
     volume : Balance
   };
-type MarketState = {#closed; #old; #open; #pending; #resolved : Nat};
+type MarketState = {#closed; #open; #pending; #resolved : Nat};
 type Probability = Float;
 type Shares = Int;
 type Time = Int;
@@ -54,18 +54,7 @@ type UserResult =
     handle : Text;
     id : UserId;
     markets : [UserMarket];
-    seerBalance : Balance;
-    transactions : [UserTx]
-  };
-type UserTx =
-  {
-    dest : Nat;
-    fee : Balance;
-    marketId : MarketId;
-    seerRecv : Balance;
-    seerSent : Balance;
-    src : Nat;
-    timestamp : Time
+    seerBalance : Balance
   };
 actor {
   stable var backupState :
@@ -74,6 +63,5 @@ actor {
     {#branch : Branch<Text, UserId>; #empty; #leaf : Leaf<Text, UserId>};
   stable var nextMarketId : Nat32;
   stable var stableMarkets : [(MarketId, MarketResult)];
-  stable var stableUsers : [(UserId, UserResult)];
-  stable var state : ([(UserId, UserResult)], [(MarketId, MarketResult)])
+  stable var stableUsers : [(UserId, UserResult)]
 };

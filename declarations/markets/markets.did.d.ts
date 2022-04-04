@@ -33,6 +33,8 @@ export interface Market {
   'deleteMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'editMarketImage' : (arg_0: MarketId, arg_1: string) => Promise<boolean>,
   'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
+  'importMarkets' : (arg_0: Array<MarketResult>) => Promise<undefined>,
+  'importUsers' : (arg_0: Array<UserResult>) => Promise<undefined>,
   'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
   'readAllPendingMarkets' : () => Promise<Array<MarketResult>>,
@@ -80,8 +82,7 @@ export interface MarketResult {
   'startDate' : Time,
   'images' : Array<string>,
 }
-export type MarketState = { 'old' : null } |
-  { 'resolved' : bigint } |
+export type MarketState = { 'resolved' : bigint } |
   { 'closed' : null } |
   { 'pending' : null } |
   { 'open' : null };
@@ -121,15 +122,5 @@ export interface UserResult {
   'markets' : Array<UserMarket>,
   'expSeerBalance' : Balance,
   'handle' : string,
-  'transactions' : Array<UserTx>,
-}
-export interface UserTx {
-  'fee' : Balance,
-  'src' : bigint,
-  'dest' : bigint,
-  'seerRecv' : Balance,
-  'seerSent' : Balance,
-  'marketId' : MarketId,
-  'timestamp' : Time,
 }
 export interface _SERVICE extends Market {}
