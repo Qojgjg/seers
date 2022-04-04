@@ -64,5 +64,5 @@ actor {
   stable var nextMarketId : Nat32;
   stable var stableMarkets : [(MarketId, MarketResult)];
   stable var stableUsers : [(UserId, UserResult)];
-  stable var state : ([(UserId, UserResult)], [(MarketId, MarketResult)])
+  stable var updating : Bool
 };

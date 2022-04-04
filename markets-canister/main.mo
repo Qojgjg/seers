@@ -44,6 +44,14 @@ shared({ caller = initializer }) actor class Market() {
         shares: Shares;
     };
 
+    public type UserMarket2 = {
+        marketId: MarketId;
+        marketTitle: Title;
+        balances: [Balance];
+        shares: Shares;
+        used: Bool;
+    };
+
     public type UserTx = {
         marketId: MarketId;
         src: Nat;
@@ -62,12 +70,28 @@ shared({ caller = initializer }) actor class Market() {
         var markets: [UserMarket];
     };
 
+    public type User2 = {
+        var id: UserId; // Principal.
+        var handle: Text;
+        var seerBalance: Balance;
+        var expSeerBalance: Balance;
+        var markets: [UserMarket2];
+    };
+
     public type UserResult = {
         id: UserId; // Principal.
         handle: Text;
         seerBalance: Balance;
         expSeerBalance: Balance;
         markets: [UserMarket];
+    };
+
+    public type UserResult2 = {
+        id: UserId; // Principal.
+        handle: Text;
+        seerBalance: Balance;
+        expSeerBalance: Balance;
+        markets: [UserMarket2];
     };
 
     public type MarketInitData = {
@@ -152,6 +176,38 @@ shared({ caller = initializer }) actor class Market() {
     };
 
 
+    private func userResultToUser2(u: UserResult): User2 {
+        let user = {
+            var id = u.id;
+            var handle = u.handle;
+            var seerBalance = u.seerBalance;
+            var expSeerBalance = u.expSeerBalance;
+            var markets = Array.map(u.markets, func (m: UserMarket): UserMarket2 {
+                let m2: UserMarket2 =  {
+                    marketId = m.marketId;
+                    marketTitle = m.marketTitle;
+                    balances = m.balances;
+                    shares = m.shares;
+                    used = false;
+                };
+                return m2;
+            });
+        };
+        return user;
+    };
+
+    private func userToUserResult2(u: User2): UserResult2 {
+        let userResult = {
+            id = u.id;
+            handle = u.handle;
+            seerBalance = u.seerBalance;
+            expSeerBalance = u.expSeerBalance;
+            markets = u.markets;
+        };
+        return userResult;
+    };
+
+
     private func marketResultToMarket(m: MarketResult): Market {
         let market = {
             id = m.id;    
@@ -217,15 +273,15 @@ shared({ caller = initializer }) actor class Market() {
     private stable var backupState: State = ([], []);
     
 
-    private var userMap: Map.HashMap<UserId, User> = do {
-        let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
+    private var userMap: Map.HashMap<UserId, User2> = do {
+        let usersIter = Iter.map<(UserId, UserResult), (UserId, User2)>(
             stableUsers.vals(), 
-            func (e: (UserId, UserResult)): (UserId, User) {
-                return (e.0, userResultToUser(e.1));
+            func (e: (UserId, UserResult)): (UserId, User2) {
+                return (e.0, userResultToUser2(e.1));
             }
         );
         
-        Map.fromIter<UserId, User>(
+        Map.fromIter<UserId, User2>(
             usersIter,
             10, 
             Text.equal, 
@@ -314,11 +370,11 @@ shared({ caller = initializer }) actor class Market() {
     // };
 
     // Read all users.
-    public query func readAllUsers(): async [UserResult] {
-        Array.map<(UserId, User), UserResult>(
+    public query func readAllUsers(): async [UserResult2] {
+        Array.map<(UserId, User2), UserResult2>(
             Iter.toArray(userMap.entries()), 
-            func (e: (UserId, User)): UserResult {
-                userToUserResult(e.1)
+            func (e: (UserId, User2)): UserResult2 {
+                userToUserResult2(e.1)
             }
         )
     };
@@ -351,54 +407,54 @@ shared({ caller = initializer }) actor class Market() {
 
     public shared(msg) func backup(): async () {
         assert(msg.caller == initializer); // Root call.
-        stableUsers := Array.map<(UserId, User), (UserId, UserResult)>(
-            Iter.toArray(userMap.entries()), 
-            func (e: (UserId, User)): (UserId, UserResult) {
-                (e.0, userToUserResult(e.1))
-            }
-        );
-        stableMarkets := Array.map<(MarketId, Market), (MarketId, MarketResult)>(
-            Iter.toArray(marketMap.entries()), 
-            func (e: (MarketId, Market)): (MarketId, MarketResult) {
-                (e.0, marketToMarketResult(e.1))
-            }
-        );
+        // stableUsers := Array.map<(UserId, User), (UserId, UserResult)>(
+        //     Iter.toArray(userMap.entries()), 
+        //     func (e: (UserId, User)): (UserId, UserResult) {
+        //         (e.0, userToUserResult(e.1))
+        //     }
+        // );
+        // stableMarkets := Array.map<(MarketId, Market), (MarketId, MarketResult)>(
+        //     Iter.toArray(marketMap.entries()), 
+        //     func (e: (MarketId, Market)): (MarketId, MarketResult) {
+        //         (e.0, marketToMarketResult(e.1))
+        //     }
+        // );
 
-        backupState := (stableUsers, stableMarkets);
+        // backupState := (stableUsers, stableMarkets);
     };
 
     public shared(msg) func restore(): async () {
         assert(msg.caller == initializer); // Root call.
-        let users = backupState.0;
-        let markets = backupState.1;
+        // let users = backupState.0;
+        // let markets = backupState.1;
 
-        let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
-            markets.vals(), 
-            func (e: (MarketId, MarketResult)): (MarketId, Market) {
-                return (e.0, marketResultToMarket(e.1));
-            }
-        );
+        // let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
+        //     markets.vals(), 
+        //     func (e: (MarketId, MarketResult)): (MarketId, Market) {
+        //         return (e.0, marketResultToMarket(e.1));
+        //     }
+        // );
         
-        marketMap := Map.fromIter<MarketId, Market>(
-            marketIter,
-            10, 
-            Nat32.equal, 
-            func (x: Nat32): Nat32 { x } 
-        );
+        // marketMap := Map.fromIter<MarketId, Market>(
+        //     marketIter,
+        //     10, 
+        //     Nat32.equal, 
+        //     func (x: Nat32): Nat32 { x } 
+        // );
 
-        let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
-            users.vals(), 
-            func (e: (UserId, UserResult)): (UserId, User) {
-                return (e.0, userResultToUser(e.1));
-            }
-        );
+        // let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
+        //     users.vals(), 
+        //     func (e: (UserId, UserResult)): (UserId, User) {
+        //         return (e.0, userResultToUser(e.1));
+        //     }
+        // );
         
-        userMap := Map.fromIter<UserId, User>(
-            usersIter,
-            10, 
-            Text.equal, 
-            Text.hash
-        );
+        // userMap := Map.fromIter<UserId, User>(
+        //     usersIter,
+        //     10, 
+        //     Text.equal, 
+        //     Text.hash
+        // );
     };
 
 
@@ -543,12 +599,12 @@ shared({ caller = initializer }) actor class Market() {
             };
         };
         
-        let userMarket: UserMarket = {
+        let userMarket: UserMarket2 = {
             marketId = marketId;
             marketTitle = marketInitData.title;
             balances = Array.freeze(Array.init<Balance>(optionsLength, 0));
             shares = shares;
-            old = false;
+            used = false;
         };
 
         user.markets := Array.append(user.markets, [userMarket]);
@@ -603,7 +659,7 @@ shared({ caller = initializer }) actor class Market() {
         #userNotCreated;
     };
 
-    public shared(msg) func refreshUser(): async Result.Result<UserResult, RefreshUserError> {
+    public shared(msg) func refreshUser(): async Result.Result<UserResult2, RefreshUserError> {
         assert(not updating);
         
         if (Principal.isAnonymous(msg.caller)) {
@@ -620,7 +676,7 @@ shared({ caller = initializer }) actor class Market() {
             case (?user) {
                 user.expSeerBalance := user.seerBalance;
                 user.markets := Array.mapFilter(user.markets, 
-                    func (ut: UserMarket): ?UserMarket {
+                    func (ut: UserMarket2): ?UserMarket2 {
                         
                         let marketOpt = marketMap.get(ut.marketId);
                         
@@ -632,21 +688,21 @@ shared({ caller = initializer }) actor class Market() {
                             case (?market) {
                                 switch (market.state) {
                                     case (#resolved(i)) {
-                                        // if (not ut.old) {
-                                        //     let reward = ut.balances[i];
-                                        //     // Give reward to user and set market to old.
-                                        //     user.seerBalance := user.seerBalance + reward;
+                                        if (not ut.used) {
+                                            let reward = ut.balances[i];
+                                            // Give reward to user and set market to old.
+                                            user.seerBalance := user.seerBalance + reward;
 
-                                        //     let oldMarket: UserMarket = {
-                                        //         marketId = ut.marketId;
-                                        //         marketTitle = ut.marketTitle;
-                                        //         balances = ut.balances;
-                                        //         shares = ut.shares;
-                                        //         old = true;
-                                        //     };
+                                            let oldMarket: UserMarket2 = {
+                                                marketId = ut.marketId;
+                                                marketTitle = ut.marketTitle;
+                                                balances = ut.balances;
+                                                shares = ut.shares;
+                                                used = true;
+                                            };
 
-                                        //     return ?oldMarket;
-                                        // };
+                                            return ?oldMarket;
+                                        };
 
                                         return ?ut;
                                     };
@@ -669,7 +725,7 @@ shared({ caller = initializer }) actor class Market() {
                         };
                     }
                 );
-                return #ok(userToUserResult(user));
+                return #ok(userToUserResult2(user));
             };
         };
     };
@@ -820,7 +876,7 @@ shared({ caller = initializer }) actor class Market() {
                                 market.probabilities := Array.freeze(probabilities);
 
                                 user.markets := Array.mapFilter(user.markets, 
-                                    func (ut: UserMarket): ?UserMarket {
+                                    func (ut: UserMarket2): ?UserMarket2 {
                                         if (ut.marketId != market.id) {
                                             return ?ut;
                                         } else {
@@ -834,12 +890,12 @@ shared({ caller = initializer }) actor class Market() {
                                                 }
                                             );
 
-                                            let newUserMarket: UserMarket = {
+                                            let newUserMarket: UserMarket2 = {
                                                 marketId = market.id;
                                                 marketTitle = market.title;
                                                 balances = newBalances;
                                                 shares = ut.shares;
-                                                // old = ut.old;
+                                                used = ut.used;
                                             };
 
                                             return ?newUserMarket;
@@ -958,18 +1014,18 @@ shared({ caller = initializer }) actor class Market() {
                         let balances: [var Balance] = Array.init(optionsSize, 0.0);
                         balances[selected] := tokensOut;
 
-                        let newUserMarket: UserMarket = {
+                        let newUserMarket: UserMarket2 = {
                             marketId = market.id;
                             marketTitle = market.title;
                             balances = Array.freeze(balances);
                             shares = 0;
-                            old = false;
+                            used = false;
                         };
                         user.markets := Array.append(user.markets, [newUserMarket]);
                     };
                     case (?marketTokens) {
                         user.markets := Array.mapFilter(user.markets, 
-                            func (ut: UserMarket): ?UserMarket {
+                            func (ut: UserMarket2): ?UserMarket2 {
                                 if (ut.marketId != market.id) {
                                     return ?ut;
                                 } else {
@@ -983,12 +1039,12 @@ shared({ caller = initializer }) actor class Market() {
                                         }
                                     );
 
-                                    let newUserMarket: UserMarket = {
+                                    let newUserMarket: UserMarket2 = {
                                         marketId = market.id;
                                         marketTitle = market.title;
                                         balances = newBalances;
                                         shares = ut.shares;
-                                        // old = ut.old;
+                                        used = ut.used;
                                     };
                                     return ?newUserMarket;
                                 };
@@ -1005,12 +1061,12 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Get user data.
-    public query func getUserResult(userId: UserId): async ?UserResult {
-        return Option.map(getUser(userId), userToUserResult);
+    public query func getUserResult(userId: UserId): async ?UserResult2 {
+        return Option.map(getUser(userId), userToUserResult2);
     };
 
     // Create user.
-    public shared(msg) func createUserResult(handle: Text): async Result.Result<UserResult, CreateUserError> {
+    public shared(msg) func createUserResult(handle: Text): async Result.Result<UserResult2, CreateUserError> {
         assert(not updating);
         
         if (Principal.isAnonymous(msg.caller)) {
@@ -1024,7 +1080,7 @@ shared({ caller = initializer }) actor class Market() {
                 return #err(e);
             };
             case (#ok(user)) {
-                return #ok(userToUserResult(user))
+                return #ok(userToUserResult2(user))
             };
         };
     };
@@ -1196,7 +1252,7 @@ shared({ caller = initializer }) actor class Market() {
         return null;
     };
 
-    private func getUser(userId: UserId): ?User {
+    private func getUser(userId: UserId): ?User2 {
         userMap.get(userId)
     };
 
@@ -1205,18 +1261,17 @@ shared({ caller = initializer }) actor class Market() {
         #userIsAnon;
     };
 
-    private func createUser(userId: UserId, handle: Text): Result.Result<User, CreateUserError> {
+    private func createUser(userId: UserId, handle: Text): Result.Result<User2, CreateUserError> {
         let exist = Trie.find(handles, userKey(handle), Text.equal);
 
         switch (exist) {
             case (null) {
-                let user: User = {
+                let user: User2 = {
                     var id = userId;
                     var seerBalance = 1000.0; // Airdrop
                     var expSeerBalance = 1000.0;
                     var handle = handle;
                     var markets = [];
-                    var transactions = [];
                 };
 
                 handles := Trie.replace(

@@ -32,13 +32,13 @@ export interface Market {
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'editMarketImage' : (arg_0: MarketId, arg_1: string) => Promise<boolean>,
-  'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
+  'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult2]>,
   'importMarkets' : (arg_0: Array<MarketResult>) => Promise<undefined>,
   'importUsers' : (arg_0: Array<UserResult>) => Promise<undefined>,
   'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
   'readAllPendingMarkets' : () => Promise<Array<MarketResult>>,
-  'readAllUsers' : () => Promise<Array<UserResult>>,
+  'readAllUsers' : () => Promise<Array<UserResult2>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'refreshUser' : () => Promise<Result_1>,
   'resolveMarket' : (arg_0: MarketId, arg_1: bigint) => Promise<boolean>,
@@ -92,9 +92,9 @@ export type RefreshUserError = { 'callerIsAnon' : null } |
   { 'userNotCreated' : null };
 export type Result = { 'ok' : Balance } |
   { 'err' : TradeError };
-export type Result_1 = { 'ok' : UserResult } |
+export type Result_1 = { 'ok' : UserResult2 } |
   { 'err' : RefreshUserError };
-export type Result_2 = { 'ok' : UserResult } |
+export type Result_2 = { 'ok' : UserResult2 } |
   { 'err' : CreateUserError };
 export type Result_3 = { 'ok' : MarketResult } |
   { 'err' : CreateMarketError };
@@ -117,10 +117,24 @@ export interface UserMarket {
   'balances' : Array<Balance>,
   'marketTitle' : Title,
 }
+export interface UserMarket2 {
+  'shares' : Shares,
+  'used' : boolean,
+  'marketId' : MarketId,
+  'balances' : Array<Balance>,
+  'marketTitle' : Title,
+}
 export interface UserResult {
   'id' : UserId,
   'seerBalance' : Balance,
   'markets' : Array<UserMarket>,
+  'expSeerBalance' : Balance,
+  'handle' : string,
+}
+export interface UserResult2 {
+  'id' : UserId,
+  'seerBalance' : Balance,
+  'markets' : Array<UserMarket2>,
   'expSeerBalance' : Balance,
   'handle' : string,
 }

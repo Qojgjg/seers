@@ -151,5 +151,6 @@ service : {
   resolveMarket: (MarketId, nat) -> (bool);
   restore: () -> ();
   sellOption: (MarketId, Balance, nat, bool) -> (Result);
+  setUpdating: (bool) -> () oneway;
   tip: (UserId, Balance) -> (opt Balance);
 }
