@@ -264,37 +264,41 @@ shared({ caller = initializer }) actor class Market() {
             }
         );
 
-        // state := #v1(stableUsers, stableMarkets);
+        state := #v1(stableUsers, stableMarkets);
     };
 
     system func postupgrade() {
-        let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
-            stableMarkets.vals(), 
-            func (e: (MarketId, MarketResult)): (MarketId, Market) {
-                return (e.0, marketResultToMarket(e.1));
-            }
-        );
-        
-        marketMap := Map.fromIter<MarketId, Market>(
-            marketIter,
-            10, 
-            Nat32.equal, 
-            func (x: Nat32): Nat32 { x } 
-        );
+        switch (state) {
+            case (#v1(users, markets)) {
+                let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
+                    stableMarkets.vals(), 
+                    func (e: (MarketId, MarketResult)): (MarketId, Market) {
+                        return (e.0, marketResultToMarket(e.1));
+                    }
+                );
+                
+                marketMap := Map.fromIter<MarketId, Market>(
+                    marketIter,
+                    10, 
+                    Nat32.equal, 
+                    func (x: Nat32): Nat32 { x } 
+                );
 
-        let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
-            stableUsers.vals(), 
-            func (e: (UserId, UserResult)): (UserId, User) {
-                return (e.0, userResultToUser(e.1));
-            }
-        );
-        
-        userMap := Map.fromIter<UserId, User>(
-            usersIter,
-            10, 
-            Text.equal, 
-            Text.hash
-        );
+                let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
+                    stableUsers.vals(), 
+                    func (e: (UserId, UserResult)): (UserId, User) {
+                        return (e.0, userResultToUser(e.1));
+                    }
+                );
+                
+                userMap := Map.fromIter<UserId, User>(
+                    usersIter,
+                    10, 
+                    Text.equal, 
+                    Text.hash
+                );
+            };
+        };
     };
 
     
