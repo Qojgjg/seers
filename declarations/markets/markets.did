@@ -121,6 +121,7 @@ type Market =
    resolveMarket: (MarketId, nat) -> (bool);
    restore: () -> ();
    sellOption: (MarketId, Balance, nat, bool) -> (Result);
+   setUpdating: (bool) -> () oneway;
    tip: (UserId, Balance) -> (opt Balance);
  };
 type Description = text;

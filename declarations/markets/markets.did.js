@@ -129,6 +129,7 @@ export const idlFactory = ({ IDL }) => {
         [Result],
         [],
       ),
+    'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),
     'tip' : IDL.Func([UserId, Balance], [IDL.Opt(Balance)], []),
   });
   return Market;

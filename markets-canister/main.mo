@@ -207,6 +207,8 @@ shared({ caller = initializer }) actor class Market() {
 
     public type State = ([(UserId, UserResult)], [(MarketId, MarketResult)]);  
 
+
+    private stable var updating: Bool = false;
     private stable var nextMarketId: MarketId = 0;
     private stable var handles: Trie.Trie<Text, UserId> = Trie.empty();
     
@@ -319,6 +321,11 @@ shared({ caller = initializer }) actor class Market() {
                 userToUserResult(e.1)
             }
         )
+    };
+
+    public shared(msg) func setUpdating(status: Bool): () {
+        assert(msg.caller == initializer); // Root call.
+        updating := status;
     };
 
     public shared(msg) func importUsers(users: [UserResult]): () {
@@ -473,6 +480,8 @@ shared({ caller = initializer }) actor class Market() {
 
     // Create a new AMM market.
     public shared(msg) func createMarket(marketInitData: MarketInitData): async Result.Result<MarketResult, CreateMarketError> {
+        assert(not updating);
+        
         if (Principal.isAnonymous(msg.caller)) {
             return #err(#callerIsAnon);
         };
@@ -595,6 +604,8 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     public shared(msg) func refreshUser(): async Result.Result<UserResult, RefreshUserError> {
+        assert(not updating);
+        
         if (Principal.isAnonymous(msg.caller)) {
             return #err(#callerIsAnon);
         };
@@ -707,6 +718,7 @@ shared({ caller = initializer }) actor class Market() {
         selected: Nat,
         save: Bool
     ): async Result.Result<Balance, TradeError> {
+        assert(not updating);
 
         if (Principal.isAnonymous(msg.caller)) {
             return #err(#callerIsAnon);
@@ -852,6 +864,7 @@ shared({ caller = initializer }) actor class Market() {
             selected: Nat,
             save: Bool
         ): async Result.Result<Balance, TradeError> {
+        assert(not updating);
 
         if (Principal.isAnonymous(msg.caller)) {
             return #err(#callerIsAnon);
@@ -998,6 +1011,8 @@ shared({ caller = initializer }) actor class Market() {
 
     // Create user.
     public shared(msg) func createUserResult(handle: Text): async Result.Result<UserResult, CreateUserError> {
+        assert(not updating);
+        
         if (Principal.isAnonymous(msg.caller)) {
             return #err(#userIsAnon);
         };
@@ -1059,6 +1074,8 @@ shared({ caller = initializer }) actor class Market() {
 
     // Add a comment to a market.
     public shared(msg) func addCommentToMarket(marketId: MarketId, content: Text): async Result.Result<Comment, AddCommentError> {
+        assert(not updating);
+        
         if (Principal.isAnonymous(msg.caller)) {
             return #err(#userIsAnon);
         };

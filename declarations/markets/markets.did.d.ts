@@ -49,6 +49,7 @@ export interface Market {
       arg_2: bigint,
       arg_3: boolean,
     ) => Promise<Result>,
+  'setUpdating' : (arg_0: boolean) => Promise<undefined>,
   'tip' : (arg_0: UserId, arg_1: Balance) => Promise<[] | [Balance]>,
 }
 export type MarketId = number;
