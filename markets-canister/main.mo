@@ -205,6 +205,8 @@ shared({ caller = initializer }) actor class Market() {
     private stable var stableUsers: [(UserId, UserResult)] = [];
     private stable var stableMarkets: [(MarketId, MarketResult)] = [];
     private stable var state: State = #v1([], []);
+    private stable var backupState: State = #v1([], []);
+    
 
     private var userMap: Map.HashMap<UserId, User> = do {
         switch (state) {
@@ -335,38 +337,43 @@ shared({ caller = initializer }) actor class Market() {
             }
         );
 
-        state := #v1(stableUsers, stableMarkets);
+        backupState := #v1(stableUsers, stableMarkets);
     };
 
     public shared(msg) func restore(): async () {
         assert(msg.caller == initializer); // Root call.
-        let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
-            stableMarkets.vals(), 
-            func (e: (MarketId, MarketResult)): (MarketId, Market) {
-                return (e.0, marketResultToMarket(e.1));
-            }
-        );
-        
-        marketMap := Map.fromIter<MarketId, Market>(
-            marketIter,
-            10, 
-            Nat32.equal, 
-            func (x: Nat32): Nat32 { x } 
-        );
 
-        let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
-            stableUsers.vals(), 
-            func (e: (UserId, UserResult)): (UserId, User) {
-                return (e.0, userResultToUser(e.1));
-            }
-        );
-        
-        userMap := Map.fromIter<UserId, User>(
-            usersIter,
-            10, 
-            Text.equal, 
-            Text.hash
-        );
+        switch (backupState) {
+            case (#v1(users, markets)) {
+                let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
+                    markets.vals(), 
+                    func (e: (MarketId, MarketResult)): (MarketId, Market) {
+                        return (e.0, marketResultToMarket(e.1));
+                    }
+                );
+                
+                marketMap := Map.fromIter<MarketId, Market>(
+                    marketIter,
+                    10, 
+                    Nat32.equal, 
+                    func (x: Nat32): Nat32 { x } 
+                );
+
+                let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
+                    users.vals(), 
+                    func (e: (UserId, UserResult)): (UserId, User) {
+                        return (e.0, userResultToUser(e.1));
+                    }
+                );
+                
+                userMap := Map.fromIter<UserId, User>(
+                    usersIter,
+                    10, 
+                    Text.equal, 
+                    Text.hash
+                );
+            };
+        };
     };
 
 
