@@ -31,9 +31,11 @@ export interface Market {
   'createUserResult' : (arg_0: string) => Promise<Result_2>,
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
+  'editMarketImage' : (arg_0: MarketId, arg_1: string) => Promise<boolean>,
   'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
   'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
+  'readAllPendingMarkets' : () => Promise<Array<MarketResult>>,
   'readAllUsers' : () => Promise<Array<UserResult>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'refreshUser' : () => Promise<Result_1>,
@@ -78,7 +80,8 @@ export interface MarketResult {
   'startDate' : Time,
   'images' : Array<string>,
 }
-export type MarketState = { 'resolved' : bigint } |
+export type MarketState = { 'old' : null } |
+  { 'resolved' : bigint } |
   { 'closed' : null } |
   { 'pending' : null } |
   { 'open' : null };

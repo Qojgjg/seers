@@ -34,6 +34,7 @@ shared({ caller = initializer }) actor class Market() {
         #open: ();
         #closed: ();
         #resolved: Nat;
+        #old: ();
     };
 
     public type UserMarket = {
@@ -560,6 +561,17 @@ shared({ caller = initializer }) actor class Market() {
         return Array.mapFilter(Iter.toArray(marketMap.entries()), keepOpenMarkets);
     };
 
+    // Read all pending markets.
+    public query func readAllPendingMarkets(): async [MarketResult] {
+        let allMarkets = Array.map<(MarketId, Market), MarketResult>(
+            Iter.toArray(marketMap.entries()), 
+            func (e: (MarketId, Market)): MarketResult {
+                marketToMarketResult(e.1)
+            }
+        );
+        return Array.mapFilter(Iter.toArray(marketMap.entries()), keepPendingMarkets);
+    };
+
     private type RefreshUserError = {
         #callerIsAnon;
         #userNotCreated;
@@ -984,23 +996,23 @@ shared({ caller = initializer }) actor class Market() {
     };
 
     // Edit market image.
-    // public shared(msg) func editMarketImage(marketId: MarketId, newImage: Text): async Bool {
-    //     assert(msg.caller == initializer); // Root call.
+    public shared(msg) func editMarketImage(marketId: MarketId, newImage: Text): async Bool {
+        assert(msg.caller == initializer); // Root call.
 
-    //     let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
+        let marketOpt = marketMap.get(marketId);
 
-    //     switch (marketOpt) {
-    //         case null {
-    //             return false;
-    //         };
-    //         case (?market) {
-    //             market.imageUrl := newImage;
-    //             return true;
-    //         };
-    //     };
+        switch (marketOpt) {
+            case null {
+                return false;
+            };
+            case (?market) {
+                market.imageUrl := newImage;
+                return true;
+            };
+        };
 
-    //     return false;
-    // };
+        return false;
+    };
 
     private type AddCommentError = {
         #userIsAnon;
@@ -1067,6 +1079,40 @@ shared({ caller = initializer }) actor class Market() {
         let m = o.1;
         switch (m.state) {
             case (#open) {
+                let market = {
+                    id = m.id;    
+                    title = m.title;
+                    description = m.description;
+                    labels = m.labels;
+                    images = m.images;
+                    probabilities = m.probabilities;
+                    liquidity = m.liquidity;
+                    reserves = m.reserves;
+                    k = m.k;
+                    startDate = m.startDate;
+                    endDate = m.endDate;
+                    author = m.author;
+                    blockTimestampLast = m.blockTimestampLast;
+                    totalShares = m.totalShares;
+                    providers = m.providers;
+                    imageUrl = m.imageUrl;
+                    state = m.state;
+                    volume = m.volume;
+                    comments = m.comments;
+                };
+                return ?market;
+            };
+            case _ {
+                return null;
+            };
+        };
+        return null;
+    };
+
+    private func keepPendingMarkets(o: (MarketId, Market)): ?MarketResult {
+        let m = o.1;
+        switch (m.state) {
+            case (#pending) {
                 let market = {
                     id = m.id;    
                     title = m.title;

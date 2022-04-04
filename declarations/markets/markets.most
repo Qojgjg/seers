@@ -33,7 +33,7 @@ type MarketResult =
     totalShares : Shares;
     volume : Balance
   };
-type MarketState = {#closed; #open; #pending; #resolved : Nat};
+type MarketState = {#closed; #old; #open; #pending; #resolved : Nat};
 type Probability = Float;
 type Shares = Int;
 type Time = Int;

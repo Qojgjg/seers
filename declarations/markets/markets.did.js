@@ -34,6 +34,7 @@ export const idlFactory = ({ IDL }) => {
   const Probability = IDL.Float64;
   const Author = IDL.Text;
   const MarketState = IDL.Variant({
+    'old' : IDL.Null,
     'resolved' : IDL.Nat,
     'closed' : IDL.Null,
     'pending' : IDL.Null,
@@ -122,9 +123,11 @@ export const idlFactory = ({ IDL }) => {
     'createUserResult' : IDL.Func([IDL.Text], [Result_2], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], []),
+    'editMarketImage' : IDL.Func([MarketId, IDL.Text], [IDL.Bool], []),
     'getUserResult' : IDL.Func([UserId], [IDL.Opt(UserResult)], ['query']),
     'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
+    'readAllPendingMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
     'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
     'refreshUser' : IDL.Func([], [Result_1], []),

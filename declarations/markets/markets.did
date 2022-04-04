@@ -72,6 +72,7 @@ type Probability = float64;
 type MarketState = 
  variant {
    closed;
+   old;
    open;
    pending;
    resolved: nat;
@@ -119,9 +120,11 @@ type Market =
    createUserResult: (text) -> (Result_2);
    deleteAllMarkets: () -> ();
    deleteMarket: (MarketId) -> (opt MarketResult);
+   editMarketImage: (MarketId, text) -> (bool);
    getUserResult: (UserId) -> (opt UserResult) query;
    readAllMarkets: () -> (vec MarketResult) query;
    readAllOpenMarkets: () -> (vec MarketResult) query;
+   readAllPendingMarkets: () -> (vec MarketResult) query;
    readAllUsers: () -> (vec UserResult) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
    refreshUser: () -> (Result_1);

@@ -72,6 +72,7 @@ type Probability = float64;
 type MarketState = 
  variant {
    closed;
+   old;
    open;
    pending;
    resolved: nat;
@@ -155,6 +156,7 @@ service : {
   readAllUsers: () -> (vec UserResult) query;
   readMarket: (MarketId) -> (opt MarketResult) query;
   refreshUser: () -> (Result_1);
+  resolveMarket: (MarketId, nat) -> (bool);
   restore: () -> ();
   sellOption: (MarketId, Balance, nat, bool) -> (Result);
   tip: (UserId, Balance) -> (opt Balance);
