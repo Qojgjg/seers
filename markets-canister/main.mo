@@ -690,6 +690,7 @@ shared({ caller = initializer }) actor class Market() {
                                             let reward = ut.balances[i];
                                             // Give reward to user and set market to old.
                                             user.seerBalance := user.seerBalance + reward;
+                                            user.expSeerBalance := user.expSeerBalance + reward;
 
                                             let oldMarket: UserMarket2 = {
                                                 marketId = ut.marketId;
