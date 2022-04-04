@@ -34,7 +34,7 @@ export interface Market {
   'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
   'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
-  'readAllUsers' : () => Promise<Array<UserResult>>,
+  'readAllUsers' : () => Promise<Array<UserResult2>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'refreshUser' : () => Promise<Result_1>,
   'restore' : () => Promise<undefined>,
@@ -117,5 +117,22 @@ export interface UserResult {
   'markets' : Array<UserMarket>,
   'expSeerBalance' : Balance,
   'handle' : string,
+}
+export interface UserResult2 {
+  'id' : UserId,
+  'seerBalance' : Balance,
+  'markets' : Array<UserMarket>,
+  'expSeerBalance' : Balance,
+  'handle' : string,
+  'transactions' : Array<UserTx>,
+}
+export interface UserTx {
+  'fee' : Balance,
+  'src' : bigint,
+  'dest' : bigint,
+  'seerRecv' : Balance,
+  'seerSent' : Balance,
+  'marketId' : MarketId,
+  'timestamp' : Time,
 }
 export interface _SERVICE extends Market {}

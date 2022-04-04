@@ -1,3 +1,22 @@
+type UserTx = 
+ record {
+   dest: nat;
+   fee: Balance;
+   marketId: MarketId;
+   seerRecv: Balance;
+   seerSent: Balance;
+   src: nat;
+   timestamp: Time;
+ };
+type UserResult2 = 
+ record {
+   expSeerBalance: Balance;
+   handle: text;
+   id: UserId;
+   markets: vec UserMarket;
+   seerBalance: Balance;
+   transactions: vec UserTx;
+ };
 type UserResult = 
  record {
    expSeerBalance: Balance;
@@ -111,7 +130,7 @@ type Market =
    getUserResult: (UserId) -> (opt UserResult) query;
    readAllMarkets: () -> (vec MarketResult) query;
    readAllOpenMarkets: () -> (vec MarketResult) query;
-   readAllUsers: () -> (vec UserResult) query;
+   readAllUsers: () -> (vec UserResult2) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
    refreshUser: () -> (Result_1);
    restore: () -> ();
