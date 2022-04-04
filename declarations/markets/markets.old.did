@@ -8,7 +8,7 @@ type UserTx =
    src: nat;
    timestamp: Time;
  };
-type UserResult2 = 
+type UserResult = 
  record {
    expSeerBalance: Balance;
    handle: text;
@@ -51,12 +51,12 @@ type Result_3 =
 type Result_2 = 
  variant {
    err: CreateUserError;
-   ok: UserResult2;
+   ok: UserResult;
  };
 type Result_1 = 
  variant {
    err: RefreshUserError;
-   ok: UserResult2;
+   ok: UserResult;
  };
 type Result = 
  variant {
@@ -149,10 +149,10 @@ service : {
   createUserResult: (text) -> (Result_2);
   deleteAllMarkets: () -> ();
   deleteMarket: (MarketId) -> (opt MarketResult);
-  getUserResult: (UserId) -> (opt UserResult2) query;
+  getUserResult: (UserId) -> (opt UserResult) query;
   readAllMarkets: () -> (vec MarketResult) query;
   readAllOpenMarkets: () -> (vec MarketResult) query;
-  readAllUsers: () -> (vec UserResult2) query;
+  readAllUsers: () -> (vec UserResult) query;
   readMarket: (MarketId) -> (opt MarketResult) query;
   refreshUser: () -> (Result_1);
   restore: () -> ();

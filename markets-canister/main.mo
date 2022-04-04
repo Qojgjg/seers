@@ -399,21 +399,21 @@ shared({ caller = initializer }) actor class Market() {
         };
     }; 
 
-    // public shared(msg) func resolveMarket(marketId: MarketId, option: Nat): async Bool {
-    //     assert(msg.caller == initializer); // Root call.
-    //     let marketOpt = Trie.find(markets, marketKey(marketId), Nat32.equal);
-    //     switch (marketOpt) {
-    //         case (null) {
-    //             return false;
-    //         };
-    //         case (?market) {
-    //             market.state := #resolved(option);
-    //             return true;
-    //         };
-    //     };
+    public shared(msg) func resolveMarket(marketId: MarketId, option: Nat): async Bool {
+        assert(msg.caller == initializer); // Root call.
+        let marketOpt = marketMap.get(marketId);
+        switch (marketOpt) {
+            case (null) {
+                return false;
+            };
+            case (?market) {
+                market.state := #resolved(option);
+                return true;
+            };
+        };
 
-    //     return false;
-    // };
+        return false;
+    };
 
     public type CreateMarketError = {
         #callerIsAnon;

@@ -125,6 +125,7 @@ type Market =
    readAllUsers: () -> (vec UserResult) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
    refreshUser: () -> (Result_1);
+   resolveMarket: (MarketId, nat) -> (bool);
    restore: () -> ();
    sellOption: (MarketId, Balance, nat, bool) -> (Result);
    tip: (UserId, Balance) -> (opt Balance);
