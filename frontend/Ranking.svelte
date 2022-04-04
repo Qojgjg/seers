@@ -21,7 +21,7 @@
 </script>
 
 <div class="header">
-  <h3>Top Forecasters</h3>
+  <h3>Leaderboard</h3>
 </div>
 
 <div style="justify-content: center; display: flex;width: 100%">

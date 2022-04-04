@@ -102,20 +102,19 @@ type Market =
  service {
    addCommentToMarket: (MarketId, text) -> (Result_4);
    approveMarket: (MarketId) -> ();
+   backup: () -> ();
    buyOption: (MarketId, Balance, nat, bool) -> (Result);
    createMarket: (MarketInitData) -> (Result_3);
    createUserResult: (text) -> (Result_2);
    deleteAllMarkets: () -> ();
    deleteMarket: (MarketId) -> (opt MarketResult);
    getUserResult: (UserId) -> (opt UserResult) query;
-   moveMarketsBackup: () -> ();
    readAllMarkets: () -> (vec MarketResult) query;
    readAllOpenMarkets: () -> (vec MarketResult) query;
    readAllUsers: () -> (vec UserResult) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
-   readMarketsBackup: (vec MarketResult) -> ();
-   readStableMarkets: () -> (vec MarketResult) query;
    refreshUser: () -> (Result_1);
+   restore: () -> ();
    sellOption: (MarketId, Balance, nat, bool) -> (Result);
    tip: (UserId, Balance) -> (opt Balance);
  };

@@ -20,6 +20,7 @@ export type Description = string;
 export interface Market {
   'addCommentToMarket' : (arg_0: MarketId, arg_1: string) => Promise<Result_4>,
   'approveMarket' : (arg_0: MarketId) => Promise<undefined>,
+  'backup' : () => Promise<undefined>,
   'buyOption' : (
       arg_0: MarketId,
       arg_1: Balance,
@@ -31,14 +32,12 @@ export interface Market {
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
-  'moveMarketsBackup' : () => Promise<undefined>,
   'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
   'readAllUsers' : () => Promise<Array<UserResult>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
-  'readMarketsBackup' : (arg_0: Array<MarketResult>) => Promise<undefined>,
-  'readStableMarkets' : () => Promise<Array<MarketResult>>,
   'refreshUser' : () => Promise<Result_1>,
+  'restore' : () => Promise<undefined>,
   'sellOption' : (
       arg_0: MarketId,
       arg_1: Balance,

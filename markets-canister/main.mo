@@ -206,9 +206,9 @@ shared({ caller = initializer }) actor class Market() {
     private stable var stableMarkets: [(MarketId, MarketResult)] = [];
     private stable var state: State = #v1([], []);
 
-    private var userMap = do {
-        // switch (state) {
-        //     case (#v1(users, markets)) {
+    private var userMap: Map.HashMap<UserId, User> = do {
+        switch (state) {
+            case (#v1(users, markets)) {
                 let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
                     stableUsers.vals(), 
                     func (e: (UserId, UserResult)): (UserId, User) {
@@ -222,13 +222,13 @@ shared({ caller = initializer }) actor class Market() {
                     Text.equal, 
                     Text.hash
                 )
-        //     };
-        // };
+            }
+        }
     };
     
-    private var marketMap = do {
-        // switch (state) {
-        //     case (#v1(users, markets)) {
+    private var marketMap: Map.HashMap<MarketId, Market> = do {
+        switch (state) {
+            case (#v1(users, markets)) {
                 let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
                     stableMarkets.vals(), 
                     func (e: (MarketId, MarketResult)): (MarketId, Market) {
@@ -242,32 +242,57 @@ shared({ caller = initializer }) actor class Market() {
                     Nat32.equal, 
                     func (x: Nat32): Nat32 { x } 
                 )
-        //     };
-        // };
+            }
+        }
     };
 
     /* Upgrade */
 
     system func preupgrade() {
-        // stableUsers := Array.map<(UserId, User), (UserId, UserResult)>(
-        //     Iter.toArray(userMap.entries()), 
-        //     func (e: (UserId, User)): (UserId, UserResult) {
-        //         (e.0, userToUserResult(e.1))
-        //     }
-        // );
-        // stableMarkets := Array.map<(MarketId, Market), (MarketId, MarketResult)>(
-        //     Iter.toArray(marketMap.entries()), 
-        //     func (e: (MarketId, Market)): (MarketId, MarketResult) {
-        //         (e.0, marketToMarketResult(e.1))
-        //     }
-        // );
+        stableUsers := Array.map<(UserId, User), (UserId, UserResult)>(
+            Iter.toArray(userMap.entries()), 
+            func (e: (UserId, User)): (UserId, UserResult) {
+                (e.0, userToUserResult(e.1))
+            }
+        );
+        stableMarkets := Array.map<(MarketId, Market), (MarketId, MarketResult)>(
+            Iter.toArray(marketMap.entries()), 
+            func (e: (MarketId, Market)): (MarketId, MarketResult) {
+                (e.0, marketToMarketResult(e.1))
+            }
+        );
 
         // state := #v1(stableUsers, stableMarkets);
     };
 
     system func postupgrade() {
-        // stableUsers := [];
-        // stableMarkets := [];
+        let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
+            stableMarkets.vals(), 
+            func (e: (MarketId, MarketResult)): (MarketId, Market) {
+                return (e.0, marketResultToMarket(e.1));
+            }
+        );
+        
+        marketMap := Map.fromIter<MarketId, Market>(
+            marketIter,
+            10, 
+            Nat32.equal, 
+            func (x: Nat32): Nat32 { x } 
+        );
+
+        let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
+            stableUsers.vals(), 
+            func (e: (UserId, UserResult)): (UserId, User) {
+                return (e.0, userResultToUser(e.1));
+            }
+        );
+        
+        userMap := Map.fromIter<UserId, User>(
+            usersIter,
+            10, 
+            Text.equal, 
+            Text.hash
+        );
     };
 
     
@@ -287,12 +312,6 @@ shared({ caller = initializer }) actor class Market() {
 
     // Read all users.
     public query func readAllUsers(): async [UserResult] {
-        // switch (state) {
-        //     case (#v1(users, markets)) {
-        //         return markets;
-        //     }
-        // };
-        // return stableUsers;
         Array.map<(UserId, User), UserResult>(
             Iter.toArray(userMap.entries()), 
             func (e: (UserId, User)): UserResult {
@@ -301,18 +320,26 @@ shared({ caller = initializer }) actor class Market() {
         )
     };
 
-    public func readMarketsBackup(markets: [MarketResult]): async () {
-        stableMarkets := Array.map<MarketResult, (MarketId, MarketResult)>(
-            markets, 
-            func (u: MarketResult): (MarketId, MarketResult) {
-                (u.id, u)
+    public shared(msg) func backup(): async () {
+        assert(msg.caller == initializer); // Root call.
+        stableUsers := Array.map<(UserId, User), (UserId, UserResult)>(
+            Iter.toArray(userMap.entries()), 
+            func (e: (UserId, User)): (UserId, UserResult) {
+                (e.0, userToUserResult(e.1))
             }
-        )
-        // Debug.print(debug_show(users))
-        // stableUsers := stableUsers
+        );
+        stableMarkets := Array.map<(MarketId, Market), (MarketId, MarketResult)>(
+            Iter.toArray(marketMap.entries()), 
+            func (e: (MarketId, Market)): (MarketId, MarketResult) {
+                (e.0, marketToMarketResult(e.1))
+            }
+        );
+
+        state := #v1(stableUsers, stableMarkets);
     };
 
-    public func moveMarketsBackup(): async () {
+    public shared(msg) func restore(): async () {
+        assert(msg.caller == initializer); // Root call.
         let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
             stableMarkets.vals(), 
             func (e: (MarketId, MarketResult)): (MarketId, Market) {
@@ -325,17 +352,23 @@ shared({ caller = initializer }) actor class Market() {
             10, 
             Nat32.equal, 
             func (x: Nat32): Nat32 { x } 
-        )
+        );
+
+        let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
+            stableUsers.vals(), 
+            func (e: (UserId, UserResult)): (UserId, User) {
+                return (e.0, userResultToUser(e.1));
+            }
+        );
+        
+        userMap := Map.fromIter<UserId, User>(
+            usersIter,
+            10, 
+            Text.equal, 
+            Text.hash
+        );
     };
 
-    public query func readStableMarkets(): async [MarketResult] {
-        Array.map<(MarketId, MarketResult), MarketResult>(
-            stableMarkets, 
-            func (e: (MarketId, MarketResult)): MarketResult {
-                e.1
-            }
-        )
-    };
 
     // Delete all users.
     // public shared(msg) func deleteAllUsers(): async () {

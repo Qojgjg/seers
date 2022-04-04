@@ -102,6 +102,7 @@ export const idlFactory = ({ IDL }) => {
   const Market = IDL.Service({
     'addCommentToMarket' : IDL.Func([MarketId, IDL.Text], [Result_4], []),
     'approveMarket' : IDL.Func([MarketId], [], []),
+    'backup' : IDL.Func([], [], []),
     'buyOption' : IDL.Func(
         [MarketId, Balance, IDL.Nat, IDL.Bool],
         [Result],
@@ -112,14 +113,12 @@ export const idlFactory = ({ IDL }) => {
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], []),
     'getUserResult' : IDL.Func([UserId], [IDL.Opt(UserResult)], ['query']),
-    'moveMarketsBackup' : IDL.Func([], [], []),
     'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
     'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
-    'readMarketsBackup' : IDL.Func([IDL.Vec(MarketResult)], [], []),
-    'readStableMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'refreshUser' : IDL.Func([], [Result_1], []),
+    'restore' : IDL.Func([], [], []),
     'sellOption' : IDL.Func(
         [MarketId, Balance, IDL.Nat, IDL.Bool],
         [Result],
