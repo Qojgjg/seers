@@ -61,5 +61,7 @@ actor {
     {#branch : Branch<Text, UserId>; #empty; #leaf : Leaf<Text, UserId>};
   stable var nextMarketId : Nat32;
   stable var stableMarkets : [(MarketId, MarketResult)];
-  stable var stableUsers : [(UserId, UserResult)]
+  stable var stableUsers : [(UserId, UserResult)];
+  stable var state :
+    {#v1 : ([(UserId, UserResult)], [(MarketId, MarketResult)])}
 };
