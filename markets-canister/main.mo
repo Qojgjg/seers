@@ -43,12 +43,23 @@ shared({ caller = initializer }) actor class Market() {
         shares: Shares;
     };
 
+    public type UserTx = {
+        marketId: MarketId;
+        src: Nat;
+        dest: Nat;
+        seerSent: Balance;
+        seerRecv: Balance;
+        fee: Balance;
+        timestamp: Time.Time;
+    };
+
     public type User = {
         var id: UserId; // Principal.
         var handle: Text;
         var seerBalance: Balance;
         var expSeerBalance: Balance;
         var markets: [UserMarket];
+        var transactions: [UserTx];
     };
 
     public type UserResult = {
@@ -126,6 +137,7 @@ shared({ caller = initializer }) actor class Market() {
             var seerBalance = u.seerBalance;
             var expSeerBalance = u.expSeerBalance;
             var markets = u.markets;
+            var transactions: [UserTx] = [];
         };
         return user;
     };
@@ -137,6 +149,7 @@ shared({ caller = initializer }) actor class Market() {
             seerBalance = u.seerBalance;
             expSeerBalance = u.expSeerBalance;
             markets = u.markets;
+            transactions = u.transactions;
         };
         return userResult;
     };
@@ -1120,6 +1133,7 @@ shared({ caller = initializer }) actor class Market() {
                     var expSeerBalance = 1000.0;
                     var handle = handle;
                     var markets = [];
+                    var transactions = [];
                 };
 
                 handles := Trie.replace(
