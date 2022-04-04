@@ -1,10 +1,21 @@
-type UserResult = 
+type UserTx = 
+ record {
+   dest: nat;
+   fee: Balance;
+   marketId: MarketId;
+   seerRecv: Balance;
+   seerSent: Balance;
+   src: nat;
+   timestamp: Time;
+ };
+type UserResult2 = 
  record {
    expSeerBalance: Balance;
    handle: text;
    id: UserId;
    markets: vec UserMarket;
    seerBalance: Balance;
+   transactions: vec UserTx;
  };
 type UserMarket = 
  record {
@@ -40,12 +51,12 @@ type Result_3 =
 type Result_2 = 
  variant {
    err: CreateUserError;
-   ok: UserResult;
+   ok: UserResult2;
  };
 type Result_1 = 
  variant {
    err: RefreshUserError;
-   ok: UserResult;
+   ok: UserResult2;
  };
 type Result = 
  variant {
@@ -138,10 +149,10 @@ service : {
   createUserResult: (text) -> (Result_2);
   deleteAllMarkets: () -> ();
   deleteMarket: (MarketId) -> (opt MarketResult);
-  getUserResult: (UserId) -> (opt UserResult) query;
+  getUserResult: (UserId) -> (opt UserResult2) query;
   readAllMarkets: () -> (vec MarketResult) query;
   readAllOpenMarkets: () -> (vec MarketResult) query;
-  readAllUsers: () -> (vec UserResult) query;
+  readAllUsers: () -> (vec UserResult2) query;
   readMarket: (MarketId) -> (opt MarketResult) query;
   refreshUser: () -> (Result_1);
   restore: () -> ();

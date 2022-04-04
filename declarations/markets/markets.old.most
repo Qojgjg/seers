@@ -48,14 +48,6 @@ type UserMarket =
     marketTitle : Title;
     shares : Shares
   };
-type UserResult =
-  {
-    expSeerBalance : Balance;
-    handle : Text;
-    id : UserId;
-    markets : [UserMarket];
-    seerBalance : Balance
-  };
 type UserResult2 =
   {
     expSeerBalance : Balance;
@@ -77,18 +69,11 @@ type UserTx =
   };
 actor {
   stable var backupState :
-    {
-      #v1 : ([(UserId, UserResult)], [(MarketId, MarketResult)]);
-      #v2 : ([(UserId, UserResult2)], [(MarketId, MarketResult)])
-    };
+    ([(UserId, UserResult2)], [(MarketId, MarketResult)]);
   stable var handles :
     {#branch : Branch<Text, UserId>; #empty; #leaf : Leaf<Text, UserId>};
   stable var nextMarketId : Nat32;
   stable var stableMarkets : [(MarketId, MarketResult)];
   stable var stableUsers : [(UserId, UserResult2)];
-  stable var state :
-    {
-      #v1 : ([(UserId, UserResult)], [(MarketId, MarketResult)]);
-      #v2 : ([(UserId, UserResult2)], [(MarketId, MarketResult)])
-    }
+  stable var state : ([(UserId, UserResult2)], [(MarketId, MarketResult)])
 };
