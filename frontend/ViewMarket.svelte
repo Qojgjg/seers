@@ -143,14 +143,20 @@
           </div>
         {/each}
         <div class="comment-container">
-          <input
+          <textarea
+            bind:value={comment}
+            rows="10"
+            style="height: auto; width: 100%"
+            placeholder="Please share your insight"
+          />
+          <!-- <input
             bind:value={comment}
             maxlength="400"
             minlength="20"
             type="text"
             placeholder="Please share your insight"
             class="comment-input"
-          />
+          /> -->
           <button class="demo-button" on:click={postComment}>
             {commentLabel}
           </button>
