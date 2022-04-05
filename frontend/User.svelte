@@ -75,7 +75,7 @@
 </script>
 
 <div class="header">
-  <h3>User Data</h3>
+  <h3>Profile</h3>
 </div>
 
 <div style="justify-content: center; display: flex;width: 100%">
@@ -107,16 +107,19 @@
           {#each user.markets as market}
             <a href="#/market/{market.marketId}">
               <div
-                style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: row; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
+                style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: column; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
               >
-                <div style="width: 30px;">
-                  #{market.marketId}:
+                <div style="width: 100%; display: flex">
+                  <div style="width:fit-content; margin-right: 10px">
+                    #{market.marketId}:
+                  </div>
+                  <div style="width: auto">
+                    {market.marketTitle}
+                  </div>
                 </div>
-                <div style="width: 50%">
-                  {market.marketTitle}
-                </div>
-                <div style="width: auto">
-                  ({market.balances.map((a) => Number(a).toFixed(2))}) tokens.
+                <div style="width: 100%">
+                  {market.balances.map((a) => " " + Number(a).toFixed(2))}
+                  tokens.
                 </div>
                 <!-- <div style="">
                   {market.shares} shares.

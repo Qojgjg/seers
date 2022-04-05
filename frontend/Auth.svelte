@@ -89,7 +89,7 @@
     /></a
   >
   <a href="/" class="right" on:click={myFunction}>Markets</a>
-  <a href="#/ranking/" class="right" on:click={myFunction}>Ranking</a>
+  <a href="#/ranking/" class="right" on:click={myFunction}>Leaderboard</a>
 
   {#if !signedIn && client}
     <button on:click={signIn}>Login</button>
