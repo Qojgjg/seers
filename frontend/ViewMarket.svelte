@@ -312,6 +312,7 @@
     min-width: 200px;
   }
 
+  select:focus,
   textarea:focus,
   input:focus {
     outline: none;

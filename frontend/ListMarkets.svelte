@@ -20,6 +20,18 @@
   <h3>Prediction Markets</h3>
 </div>
 <div class="rowList">
+  <!-- <select
+    style="background: black; color: white; border: grey; width: 200px; padding: 5px;"
+  >
+    <option value="all">All</option>
+    <option value="crypto">Crypto</option>
+    <option value="sports">Sports</option>
+    <option value="politics">Politics</option>
+    <option value="entertainment">Entertainment</option>
+    <option value="science">Science</option>
+    <option value="business">Business</option>
+    <option value="finance">Finance</option>
+  </select> -->
   {#each markets as market}
     <div class="responsiveItem">
       <a href="#/market/{market.id}">
