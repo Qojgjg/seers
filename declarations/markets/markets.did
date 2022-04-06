@@ -132,6 +132,7 @@ type Market =
    approveMarket: (MarketId) -> ();
    backup: () -> ();
    buyOption: (MarketId, Balance, nat, bool) -> (Result);
+   cleanTxs: (UserId) -> ();
    createMarket: (MarketInitData) -> (Result_3);
    createUserResult: (text) -> (Result_2);
    deleteAllMarkets: () -> ();

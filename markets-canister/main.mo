@@ -1109,7 +1109,7 @@ shared({ caller = initializer }) actor class Market() {
                     src = null;
                     dest = ?selected;
                     seerSent = value;
-                    seerRecv = 0.0;
+                    seerRecv = tokensOut;
                     fee = 0.0;
                     timestamp = Time.now();
                 };
@@ -1125,7 +1125,18 @@ shared({ caller = initializer }) actor class Market() {
         return Option.map(getUser(userId), userToUserResult);
     };
 
-    
+    public shared(msg) func cleanTxs(userId: UserId): async () {
+        assert(msg.caller == initializer); // Root call.
+        switch (userMap.get(userId)) {
+            case (null) {
+
+            };
+            case (?user) {
+                user.txs := [];
+            };
+        };
+    };
+
     // Create user.
     public shared(msg) func createUserResult(handle: Text): async Result.Result<UserResult, CreateUserError> {
         assert(not updating);

@@ -27,6 +27,7 @@ export interface Market {
       arg_2: bigint,
       arg_3: boolean,
     ) => Promise<Result>,
+  'cleanTxs' : (arg_0: UserId) => Promise<undefined>,
   'createMarket' : (arg_0: MarketInitData) => Promise<Result_3>,
   'createUserResult' : (arg_0: string) => Promise<Result_2>,
   'deleteAllMarkets' : () => Promise<undefined>,

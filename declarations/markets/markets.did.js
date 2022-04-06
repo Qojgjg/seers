@@ -18,6 +18,7 @@ export const idlFactory = ({ IDL }) => {
     'newtonFailed' : IDL.Null,
   });
   const Result = IDL.Variant({ 'ok' : Balance, 'err' : TradeError });
+  const UserId = IDL.Text;
   const Title = IDL.Text;
   const Time = IDL.Int;
   const Description = IDL.Text;
@@ -75,7 +76,6 @@ export const idlFactory = ({ IDL }) => {
     'ok' : MarketResult,
     'err' : CreateMarketError,
   });
-  const UserId = IDL.Text;
   const UserTx = IDL.Record({
     'fee' : Balance,
     'src' : IDL.Opt(IDL.Nat),
@@ -133,6 +133,7 @@ export const idlFactory = ({ IDL }) => {
         [Result],
         [],
       ),
+    'cleanTxs' : IDL.Func([UserId], [], []),
     'createMarket' : IDL.Func([MarketInitData], [Result_3], []),
     'createUserResult' : IDL.Func([IDL.Text], [Result_2], []),
     'deleteAllMarkets' : IDL.Func([], [], []),

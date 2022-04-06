@@ -162,6 +162,7 @@ service : {
   approveMarket: (MarketId) -> ();
   backup: () -> ();
   buyOption: (MarketId, Balance, nat, bool) -> (Result);
+  cleanTxs: (UserId) -> ();
   createMarket: (MarketInitData) -> (Result_3);
   createUserResult: (text) -> (Result_2);
   deleteAllMarkets: () -> ();
@@ -171,6 +172,7 @@ service : {
   getUserResult: (UserId) -> (opt UserResult) query;
   importMarkets: (vec MarketResult) -> () oneway;
   importUsers: (vec OldUserResult) -> () oneway;
+  moveStables: () -> ();
   readAllMarkets: () -> (vec MarketResult) query;
   readAllOpenMarkets: () -> (vec MarketResult) query;
   readAllPendingMarkets: () -> (vec MarketResult) query;

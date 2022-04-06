@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { faBreadSlice } from "@fortawesome/free-solid-svg-icons"
+
   import { onMount } from "svelte"
-  import { text } from "svelte/internal"
+  import { identity, text } from "svelte/internal"
   import ListMarkets from "./ListMarkets.svelte"
   import ViewMarket from "./ViewMarket.svelte"
   export let auth
@@ -22,6 +24,11 @@
         return p[0].toUpperCase() + p.slice(1)
       })
       .join(" ")
+  }
+
+  const getMarketLabel = (id, idx) => {
+    let market = user.markets.find((m) => m.marketId == id)
+    return market.labels[idx]
   }
 
   let getUserData = async () => {
@@ -129,33 +136,43 @@
         </div>
       {/if}
       {#if user.txs.length}
-        <div style="display:flex; flex-direction: column;width: 100%">
+        <div
+          style="display:flex; flex-direction: column;width: 100%; margin-top: 20px"
+        >
           Transactions:
           {#each user.txs as tx, i}
             <div
               style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: column; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
             >
-              <div style="width: 100%; display: flex">
+              <div style="width: 100%; display: flex; flex-wrap: wrap">
                 <div style="width:fit-content; margin-right: 10px">
                   #{i}:
                 </div>
-                <div style="width: auto">
-                  market {tx.marketId}
+                <div style="width: auto; margin-right: 10px;">
+                  Market {tx.marketId}
                 </div>
-                <div style="width: auto">
-                  from {tx.src}
+                <div
+                  style="width: auto;margin-right: 10px; text-transform:capitalize"
+                >
+                  From {tx.src.length > 0
+                    ? getMarketLabel(tx.marketId, tx.src).slice(0, 30)
+                    : "seers"}
                 </div>
-                <div style="width: auto">
-                  to {tx.dest}
+                <div
+                  style="width: auto;margin-right: 10px;text-transform:capitalize"
+                >
+                  To {tx.dest.length > 0
+                    ? getMarketLabel(tx.marketId, tx.dest).slice(0, 30)
+                    : "seers"}
                 </div>
-                <div style="width: auto">
-                  fee {tx.fee}
+                <div style="width: auto;margin-right: 10px;">
+                  Fee {tx.fee.toFixed(2)}
                 </div>
-                <div style="width: auto">
-                  recv {tx.seerRecv}
+                <div style="width: auto;margin-right: 10px;">
+                  Received {tx.seerRecv.toFixed(2)}
                 </div>
-                <div style="width: auto">
-                  sent {tx.seerSent}
+                <div style="width: auto;margin-right: 10px;">
+                  Spent {tx.seerSent.toFixed(2)}
                 </div>
               </div>
             </div>
