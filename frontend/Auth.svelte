@@ -61,6 +61,8 @@
   const signOut = async () => {
     myFunction()
     await client.logout()
+    signedInF(false)
+    signedIn = false
     auth.update(() => ({
       loggedIn: false,
       actor: createActor({

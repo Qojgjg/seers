@@ -176,6 +176,11 @@
                 <div style="width: auto;margin-right: 10px;">
                   Fee {tx.fee.toFixed(2)}
                 </div>
+                <div style="width: auto;margin-right: 10px;">
+                  Date {new Date(
+                    parseInt(tx.timestamp) / 1_000_000,
+                  ).toLocaleDateString()}
+                </div>
               </div>
             </div>
           {/each}
