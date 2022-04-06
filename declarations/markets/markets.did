@@ -1,21 +1,12 @@
 type UserTx = 
  record {
-   dest: nat;
+   dest: opt nat;
    fee: Balance;
    marketId: MarketId;
    seerRecv: Balance;
    seerSent: Balance;
-   src: nat;
+   src: opt nat;
    timestamp: Time;
- };
-type UserResult2 = 
- record {
-   expSeerBalance: Balance;
-   handle: text;
-   id: UserId;
-   markets: vec UserMarket;
-   seerBalance: Balance;
-   txs: vec UserTx;
  };
 type UserResult = 
  record {
@@ -24,6 +15,7 @@ type UserResult =
    id: UserId;
    markets: vec UserMarket;
    seerBalance: Balance;
+   txs: vec UserTx;
  };
 type UserMarket = 
  record {
@@ -35,6 +27,11 @@ type UserMarket =
    used: bool;
  };
 type UserId = text;
+type UserError = 
+ variant {
+   callerIsAnon;
+   userNotCreated;
+ };
 type Url = text;
 type TradeError = 
  variant {
@@ -65,7 +62,7 @@ type Result_2 =
  };
 type Result_1 = 
  variant {
-   err: RefreshUserError;
+   err: UserError;
    ok: UserResult;
  };
 type Result = 
@@ -73,12 +70,22 @@ type Result =
    err: TradeError;
    ok: Balance;
  };
-type RefreshUserError = 
- variant {
-   callerIsAnon;
-   userNotCreated;
- };
 type Probability = float64;
+type OldUserResult = 
+ record {
+   expSeerBalance: Balance;
+   handle: text;
+   id: UserId;
+   markets: vec OldUserMarket;
+   seerBalance: Balance;
+ };
+type OldUserMarket = 
+ record {
+   balances: vec Balance;
+   marketId: MarketId;
+   marketTitle: Title;
+   shares: Shares;
+ };
 type MarketState = 
  variant {
    closed;
@@ -133,10 +140,12 @@ type Market =
    editMarketProbs: (MarketId, vec Balance) -> (bool);
    getUserResult: (UserId) -> (opt UserResult) query;
    importMarkets: (vec MarketResult) -> () oneway;
+   importUsers: (vec OldUserResult) -> () oneway;
+   moveStables: () -> ();
    readAllMarkets: () -> (vec MarketResult) query;
    readAllOpenMarkets: () -> (vec MarketResult) query;
    readAllPendingMarkets: () -> (vec MarketResult) query;
-   readAllUsers: () -> (vec UserResult2) query;
+   readAllUsers: () -> (vec UserResult) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
    readNewUsers: () -> (vec record {
                               UserId;

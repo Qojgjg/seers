@@ -56,25 +56,17 @@ type UserResult =
     handle : Text;
     id : UserId;
     markets : [UserMarket];
-    seerBalance : Balance
-  };
-type UserResult2 =
-  {
-    expSeerBalance : Balance;
-    handle : Text;
-    id : UserId;
-    markets : [UserMarket];
     seerBalance : Balance;
     txs : [UserTx]
   };
 type UserTx =
   {
-    dest : Nat;
+    dest : ?Nat;
     fee : Balance;
     marketId : MarketId;
     seerRecv : Balance;
     seerSent : Balance;
-    src : Nat;
+    src : ?Nat;
     timestamp : Time
   };
 actor {
@@ -85,6 +77,5 @@ actor {
   stable var nextMarketId : Nat32;
   stable var stableMarkets : [(MarketId, MarketResult)];
   stable var stableUsers : [(UserId, UserResult)];
-  stable var stableUsers2 : [(UserId, UserResult2)];
   stable var updating : Bool
 };

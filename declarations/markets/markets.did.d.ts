@@ -37,10 +37,12 @@ export interface Market {
     >,
   'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
   'importMarkets' : (arg_0: Array<MarketResult>) => Promise<undefined>,
+  'importUsers' : (arg_0: Array<OldUserResult>) => Promise<undefined>,
+  'moveStables' : () => Promise<undefined>,
   'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
   'readAllPendingMarkets' : () => Promise<Array<MarketResult>>,
-  'readAllUsers' : () => Promise<Array<UserResult2>>,
+  'readAllUsers' : () => Promise<Array<UserResult>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'readNewUsers' : () => Promise<Array<[UserId, UserResult]>>,
   'refreshUser' : () => Promise<Result_1>,
@@ -90,13 +92,24 @@ export type MarketState = { 'resolved' : bigint } |
   { 'closed' : null } |
   { 'pending' : null } |
   { 'open' : null };
+export interface OldUserMarket {
+  'shares' : Shares,
+  'marketId' : MarketId,
+  'balances' : Array<Balance>,
+  'marketTitle' : Title,
+}
+export interface OldUserResult {
+  'id' : UserId,
+  'seerBalance' : Balance,
+  'markets' : Array<OldUserMarket>,
+  'expSeerBalance' : Balance,
+  'handle' : string,
+}
 export type Probability = number;
-export type RefreshUserError = { 'callerIsAnon' : null } |
-  { 'userNotCreated' : null };
 export type Result = { 'ok' : Balance } |
   { 'err' : TradeError };
 export type Result_1 = { 'ok' : UserResult } |
-  { 'err' : RefreshUserError };
+  { 'err' : UserError };
 export type Result_2 = { 'ok' : UserResult } |
   { 'err' : CreateUserError };
 export type Result_3 = { 'ok' : MarketResult } |
@@ -113,6 +126,8 @@ export type TradeError = { 'callerIsAnon' : null } |
   { 'marketMissing' : null } |
   { 'newtonFailed' : null };
 export type Url = string;
+export type UserError = { 'callerIsAnon' : null } |
+  { 'userNotCreated' : null };
 export type UserId = string;
 export interface UserMarket {
   'shares' : Shares,
@@ -124,13 +139,6 @@ export interface UserMarket {
 }
 export interface UserResult {
   'id' : UserId,
-  'seerBalance' : Balance,
-  'markets' : Array<UserMarket>,
-  'expSeerBalance' : Balance,
-  'handle' : string,
-}
-export interface UserResult2 {
-  'id' : UserId,
   'txs' : Array<UserTx>,
   'seerBalance' : Balance,
   'markets' : Array<UserMarket>,
@@ -139,8 +147,8 @@ export interface UserResult2 {
 }
 export interface UserTx {
   'fee' : Balance,
-  'src' : bigint,
-  'dest' : bigint,
+  'src' : [] | [bigint],
+  'dest' : [] | [bigint],
   'seerRecv' : Balance,
   'seerSent' : Balance,
   'marketId' : MarketId,

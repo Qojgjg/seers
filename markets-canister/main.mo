@@ -37,6 +37,16 @@ shared({ caller = initializer }) actor class Market() {
     };
 
 
+    public type OldUserMarket = {
+        marketId: MarketId;
+        marketTitle: Title;
+        // labels: [Text];
+        balances: [Balance];
+        shares: Shares;
+        // used: Bool;
+    };
+
+
     public type UserMarket = {
         marketId: MarketId;
         marketTitle: Title;
@@ -46,11 +56,10 @@ shared({ caller = initializer }) actor class Market() {
         used: Bool;
     };
 
-
     public type UserTx = {
         marketId: MarketId;
-        src: Nat;
-        dest: Nat;
+        src: ?Nat;
+        dest: ?Nat;
         seerSent: Balance;
         seerRecv: Balance;
         fee: Balance;
@@ -63,26 +72,21 @@ shared({ caller = initializer }) actor class Market() {
         var seerBalance: Balance;
         var expSeerBalance: Balance;
         var markets: [UserMarket];
-    };
-
-    public type User2 = {
-        var id: UserId; // Principal.
-        var handle: Text;
-        var seerBalance: Balance;
-        var expSeerBalance: Balance;
-        var markets: [UserMarket];
         var txs: [UserTx];
     };
 
-    public type UserResult = {
+
+    public type OldUserResult = {
         id: UserId; // Principal.
         handle: Text;
         seerBalance: Balance;
         expSeerBalance: Balance;
-        markets: [UserMarket];
+        markets: [OldUserMarket];
+        // txs: [UserTx];
     };
 
-    public type UserResult2 = {
+    
+    public type UserResult = {
         id: UserId; // Principal.
         handle: Text;
         seerBalance: Balance;
@@ -157,34 +161,12 @@ shared({ caller = initializer }) actor class Market() {
             seerBalance = u.seerBalance;
             expSeerBalance = u.expSeerBalance;
             markets = u.markets;
+            txs = u.txs;
         };
         return userResult;
     };
 
     private func userResultToUser(u: UserResult): User {
-        let user = {
-            var id = u.id;
-            var handle = u.handle;
-            var seerBalance = u.seerBalance;
-            var expSeerBalance = u.expSeerBalance;
-            var markets = u.markets;
-        };
-        return user;
-    };
-
-    private func userToUserResult2(u: User): UserResult2 {
-        let userResult = {
-            id = u.id;
-            handle = u.handle;
-            seerBalance = u.seerBalance;
-            expSeerBalance = u.expSeerBalance;
-            markets = u.markets;
-            txs = [];
-        };
-        return userResult;
-    };
-
-    private func userResultToUser2(u: UserResult2): User2 {
         let user = {
             var id = u.id;
             var handle = u.handle;
@@ -257,7 +239,6 @@ shared({ caller = initializer }) actor class Market() {
     private stable var handles: Trie.Trie<Text, UserId> = Trie.empty();
     
     private stable var stableUsers: [(UserId, UserResult)] = [];
-    private stable var stableUsers2: [(UserId, UserResult2)] = [];
     private stable var stableMarkets: [(MarketId, MarketResult)] = [];
     private stable var backupState: State = ([], []);
     
@@ -276,23 +257,6 @@ shared({ caller = initializer }) actor class Market() {
             Text.hash
         )
     };
-
-    private var userMap2: Map.HashMap<UserId, User2> = do {
-        let usersIter = Iter.map<(UserId, UserResult2), (UserId, User2)>(
-            stableUsers2.vals(), 
-            func (e: (UserId, UserResult2)): (UserId, User2) {
-                return (e.0, userResultToUser2(e.1));
-            }
-        );
-        
-        Map.fromIter<UserId, User2>(
-            usersIter,
-            50, 
-            Text.equal, 
-            Text.hash
-        )
-    };
-    
     private var marketMap: Map.HashMap<MarketId, Market> = do {
         let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
             stableMarkets.vals(), 
@@ -316,12 +280,6 @@ shared({ caller = initializer }) actor class Market() {
             Iter.toArray(userMap.entries()), 
             func (e: (UserId, User)): (UserId, UserResult) {
                 (e.0, userToUserResult(e.1))
-            }
-        );
-        stableUsers2 := Array.map<(UserId, User), (UserId, UserResult2)>(
-            Iter.toArray(userMap.entries()), 
-            func (e: (UserId, User)): (UserId, UserResult2) {
-                (e.0, userToUserResult2(e.1))
             }
         );
         stableMarkets := Array.map<(MarketId, Market), (MarketId, MarketResult)>(
@@ -377,12 +335,42 @@ shared({ caller = initializer }) actor class Market() {
     //     });
     // };
 
+    public shared(msg) func moveStables(): async () {
+        let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
+            stableMarkets.vals(), 
+            func (e: (MarketId, MarketResult)): (MarketId, Market) {
+                return (e.0, marketResultToMarket(e.1));
+            }
+        );
+        
+        marketMap := Map.fromIter<MarketId, Market>(
+            marketIter,
+            10, 
+            Nat32.equal, 
+            func (x: Nat32): Nat32 { x } 
+        );
+
+        let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
+            stableUsers.vals(), 
+            func (e: (UserId, UserResult)): (UserId, User) {
+                return (e.0, userResultToUser(e.1));
+            }
+        );
+        
+        userMap := Map.fromIter<UserId, User>(
+            usersIter,
+            10, 
+            Text.equal, 
+            Text.hash
+        );
+    };
+
     // Read all users.
-    public query func readAllUsers(): async [UserResult2] {
-        Array.map<(UserId, User2), UserResult2>(
-            Iter.toArray(userMap2.entries()), 
-            func (e: (UserId, User2)): UserResult2 {
-                userToUserResult2(e.1)
+    public query func readAllUsers(): async [UserResult] {
+        Array.map<(UserId, User), UserResult>(
+            Iter.toArray(userMap.entries()), 
+            func (e: (UserId, User)): UserResult {
+                userToUserResult(e.1)
             }
         )
     };
@@ -392,48 +380,49 @@ shared({ caller = initializer }) actor class Market() {
         updating := status;
     };
 
-    // public shared(msg) func importUsers(users: [OldUserResult]): () {
-    //     assert(msg.caller == initializer); // Root call.
-    //     stableUsers := Array.map<OldUserResult, (UserId, UserResult)>(
-    //         users, 
-    //         func (u: OldUserResult): (UserId, UserResult) {
-    //             let newUserResult: UserResult = {
-    //                 id = u.id; // Principal.
-    //                 handle = u.handle;
-    //                 seerBalance = u.seerBalance;
-    //                 expSeerBalance = u.expSeerBalance;
-    //                 markets = Array.map(u.markets, func (om: OldUserMarket): UserMarket {
-    //                     switch (marketMap.get(om.marketId)) {
-    //                         case (null) {
-    //                             let newMarket: UserMarket = {
-    //                                 marketId = om.marketId;
-    //                                 marketTitle = om.marketTitle;
-    //                                 labels = [];
-    //                                 balances = om.balances;
-    //                                 shares = om.shares;
-    //                                 used = false;
-    //                             };
-    //                             return newMarket;
-    //                         };
-    //                         case (?market) {
-    //                             let newMarket: UserMarket = {
-    //                                 marketId = om.marketId;
-    //                                 marketTitle = om.marketTitle;
-    //                                 labels = market.labels;
-    //                                 balances = om.balances;
-    //                                 shares = om.shares;
-    //                                 used = false;
-    //                             };
-    //                             return newMarket;
-    //                         };
-    //                     };
-    //                 });
-    //             };
+    public shared(msg) func importUsers(users: [OldUserResult]): () {
+        assert(msg.caller == initializer); // Root call.
+        stableUsers := Array.map<OldUserResult, (UserId, UserResult)>(
+            users, 
+            func (u: OldUserResult): (UserId, UserResult) {
+                let newUserResult: UserResult = {
+                    id = u.id; // Principal.
+                    handle = u.handle;
+                    seerBalance = u.seerBalance;
+                    expSeerBalance = u.expSeerBalance;
+                    txs = [];
+                    markets = Array.map(u.markets, func (om: OldUserMarket): UserMarket {
+                        switch (marketMap.get(om.marketId)) {
+                            case (null) {
+                                let newMarket: UserMarket = {
+                                    marketId = om.marketId;
+                                    marketTitle = om.marketTitle;
+                                    labels = [];
+                                    balances = om.balances;
+                                    shares = om.shares;
+                                    used = false;
+                                };
+                                return newMarket;
+                            };
+                            case (?market) {
+                                let newMarket: UserMarket = {
+                                    marketId = om.marketId;
+                                    marketTitle = om.marketTitle;
+                                    labels = market.labels;
+                                    balances = om.balances;
+                                    shares = om.shares;
+                                    used = false;
+                                };
+                                return newMarket;
+                            };
+                        };
+                    });
+                };
 
-    //             (u.id, newUserResult)
-    //         }
-    //     );
-    // };
+                (u.id, newUserResult)
+            }
+        );
+    };
 
 
     public shared(msg) func importMarkets(markets: [MarketResult]): () {
@@ -471,8 +460,8 @@ shared({ caller = initializer }) actor class Market() {
 
     public shared(msg) func restore(): async () {
         assert(msg.caller == initializer); // Root call.
-        let users = stableUsers;
-        let markets = stableMarkets;
+        let users = backupState.0;
+        let markets = backupState.1;
 
         let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
             markets.vals(), 
@@ -701,12 +690,12 @@ shared({ caller = initializer }) actor class Market() {
         return Array.mapFilter(Iter.toArray(marketMap.entries()), keepPendingMarkets);
     };
 
-    private type RefreshUserError = {
+    private type UserError = {
         #callerIsAnon;
         #userNotCreated;
     };
 
-    public shared(msg) func refreshUser(): async Result.Result<UserResult, RefreshUserError> {
+    public shared(msg) func refreshUser(): async Result.Result<UserResult, UserError> {
         assert(not updating);
         
         if (Principal.isAnonymous(msg.caller)) {
@@ -1115,6 +1104,16 @@ shared({ caller = initializer }) actor class Market() {
                 };
 
                 user.seerBalance := user.seerBalance - value;
+                let newTx: UserTx = {
+                    marketId = market.id;
+                    src = null;
+                    dest = ?selected;
+                    seerSent = value;
+                    seerRecv = 0.0;
+                    fee = 0.0;
+                    timestamp = Time.now();
+                };
+                user.txs := Array.append(user.txs, [newTx]);
 
                 return #ok(tokensOut);
             };
@@ -1355,6 +1354,7 @@ shared({ caller = initializer }) actor class Market() {
                     var expSeerBalance = 1000.0;
                     var handle = handle;
                     var markets = [];
+                    var txs = [];
                };
 
                 handles := Trie.replace(
