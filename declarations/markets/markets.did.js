@@ -130,6 +130,7 @@ export const idlFactory = ({ IDL }) => {
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], []),
     'editMarketImage' : IDL.Func([MarketId, IDL.Text], [IDL.Bool], []),
+    'editMarketProbs' : IDL.Func([MarketId, IDL.Vec(Balance)], [IDL.Bool], []),
     'getUserResult' : IDL.Func([UserId], [IDL.Opt(UserResult2)], ['query']),
     'importMarkets' : IDL.Func([IDL.Vec(MarketResult)], [], ['oneway']),
     'importUsers' : IDL.Func([IDL.Vec(UserResult)], [], ['oneway']),

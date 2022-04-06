@@ -787,6 +787,11 @@ shared({ caller = initializer }) actor class Market() {
                 return #err(#marketMissing);
             };
             case (?market) {
+                
+                if (market.state != #open) {
+                    return #err(#marketClosed);
+                };
+
                 if (market.endDate < Time.now()) {
                     market.state := #closed;
                     return #err(#marketClosed);
@@ -947,7 +952,11 @@ shared({ caller = initializer }) actor class Market() {
                 return #err(#marketMissing);
             };
             case (?market) {
-                if (market.endDate < Time.now()) {
+                if (market.state != #open) { 
+                    return #err(#marketClosed);
+                };
+
+                if (market.endDate < Time.now()) { 
                     market.state := #closed;
                     return #err(#marketClosed);
                 };
@@ -1113,6 +1122,25 @@ shared({ caller = initializer }) actor class Market() {
             };
             case (?market) {
                 market.imageUrl := newImage;
+                return true;
+            };
+        };
+
+        return false;
+    };
+
+    // Edit market probabilities.
+    public shared(msg) func editMarketProbs(marketId: MarketId, newProbs: [Balance]): async Bool {
+        assert(msg.caller == initializer); // Root call.
+
+        let marketOpt = marketMap.get(marketId);
+
+        switch (marketOpt) {
+            case null {
+                return false;
+            };
+            case (?market) {
+                market.probabilities := newProbs;
                 return true;
             };
         };

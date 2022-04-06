@@ -125,6 +125,7 @@ type Market =
    deleteAllMarkets: () -> ();
    deleteMarket: (MarketId) -> (opt MarketResult);
    editMarketImage: (MarketId, text) -> (bool);
+   editMarketProbs: (MarketId, vec Balance) -> (bool);
    getUserResult: (UserId) -> (opt UserResult2) query;
    importMarkets: (vec MarketResult) -> () oneway;
    importUsers: (vec UserResult) -> () oneway;

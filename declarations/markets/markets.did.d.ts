@@ -32,6 +32,9 @@ export interface Market {
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'editMarketImage' : (arg_0: MarketId, arg_1: string) => Promise<boolean>,
+  'editMarketProbs' : (arg_0: MarketId, arg_1: Array<Balance>) => Promise<
+      boolean
+    >,
   'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult2]>,
   'importMarkets' : (arg_0: Array<MarketResult>) => Promise<undefined>,
   'importUsers' : (arg_0: Array<UserResult>) => Promise<undefined>,

@@ -9,7 +9,7 @@
   let markets = []
 
   const refreshMarkets = async () => {
-    markets = await $auth.actor.readAllOpenMarkets()
+    markets = await $auth.actor.readAllMarkets()
     console.log(JSON.stringify(markets))
   }
 
