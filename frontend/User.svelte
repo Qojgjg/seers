@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte"
+  import { text } from "svelte/internal"
   import ListMarkets from "./ListMarkets.svelte"
   import ViewMarket from "./ViewMarket.svelte"
   export let auth
@@ -122,21 +123,42 @@
                       "  "}
                   {/each}
                 </div>
-                <!-- <div style="">
-                  {market.shares} shares.
-                </div> -->
-                <!-- <div
-                  style="display:flex; align-items: center; align-content: center; justify-content: center; width: 80px"
-                >
-                  <button
-                    class="demo-button"
-                    on:click={() => {
-                      claimSeers(market.marketId)
-                    }}>Claim</button
-                  >
-                </div> -->
               </div>
             </a>
+          {/each}
+        </div>
+      {/if}
+      {#if user.txs.length}
+        <div style="display:flex; flex-direction: column;width: 100%">
+          Transactions:
+          {#each user.txs as tx, i}
+            <div
+              style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: column; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
+            >
+              <div style="width: 100%; display: flex">
+                <div style="width:fit-content; margin-right: 10px">
+                  #{i}:
+                </div>
+                <div style="width: auto">
+                  market {tx.marketId}
+                </div>
+                <div style="width: auto">
+                  from {tx.src}
+                </div>
+                <div style="width: auto">
+                  to {tx.dest}
+                </div>
+                <div style="width: auto">
+                  fee {tx.fee}
+                </div>
+                <div style="width: auto">
+                  recv {tx.seerRecv}
+                </div>
+                <div style="width: auto">
+                  sent {tx.seerSent}
+                </div>
+              </div>
+            </div>
           {/each}
         </div>
       {/if}
