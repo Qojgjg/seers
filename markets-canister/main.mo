@@ -46,6 +46,15 @@ shared({ caller = initializer }) actor class Market() {
         used: Bool;
     };
 
+    public type OldUserMarket = {
+        marketId: MarketId;
+        marketTitle: Title;
+        // labels: [Text];
+        balances: [Balance];
+        shares: Shares;
+        // used: Bool;
+    };
+
 
     public type UserTx = {
         marketId: MarketId;
@@ -63,6 +72,14 @@ shared({ caller = initializer }) actor class Market() {
         var seerBalance: Balance;
         var expSeerBalance: Balance;
         var markets: [UserMarket];
+    };
+
+    public type OldUserResult = {
+        id: UserId; // Principal.
+        handle: Text;
+        seerBalance: Balance;
+        expSeerBalance: Balance;
+        markets: [OldUserMarket];
     };
 
     public type UserResult = {
@@ -327,12 +344,45 @@ shared({ caller = initializer }) actor class Market() {
         updating := status;
     };
 
-    public shared(msg) func importUsers(users: [UserResult]): () {
+    public shared(msg) func importUsers(users: [OldUserResult]): () {
         assert(msg.caller == initializer); // Root call.
-        stableUsers := Array.map<UserResult, (UserId, UserResult)>(
+        stableUsers := Array.map<OldUserResult, (UserId, UserResult)>(
             users, 
-            func (u: UserResult): (UserId, UserResult) {
-                (u.id, u)
+            func (u: OldUserResult): (UserId, UserResult) {
+                let newUserResult: UserResult = {
+                    id = u.id; // Principal.
+                    handle = u.handle;
+                    seerBalance = u.seerBalance;
+                    expSeerBalance = u.expSeerBalance;
+                    markets = Array.map(u.markets, func (om: OldUserMarket): UserMarket {
+                        switch (marketMap.get(om.marketId)) {
+                            case (null) {
+                                let newMarket: UserMarket = {
+                                    marketId = om.marketId;
+                                    marketTitle = om.marketTitle;
+                                    labels = [];
+                                    balances = om.balances;
+                                    shares = om.shares;
+                                    used = false;
+                                };
+                                return newMarket;
+                            };
+                            case (?market) {
+                                let newMarket: UserMarket = {
+                                    marketId = om.marketId;
+                                    marketTitle = om.marketTitle;
+                                    labels = market.labels;
+                                    balances = om.balances;
+                                    shares = om.shares;
+                                    used = false;
+                                };
+                                return newMarket;
+                            };
+                        };
+                    });
+                };
+
+                (u.id, newUserResult)
             }
         );
     };
@@ -373,8 +423,8 @@ shared({ caller = initializer }) actor class Market() {
 
     public shared(msg) func restore(): async () {
         assert(msg.caller == initializer); // Root call.
-        let users = backupState.0;
-        let markets = backupState.1;
+        let users = stableUsers;
+        let markets = stableMarkets;
 
         let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
             markets.vals(), 

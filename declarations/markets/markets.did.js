@@ -96,6 +96,19 @@ export const idlFactory = ({ IDL }) => {
     'userIsAnon' : IDL.Null,
   });
   const Result_2 = IDL.Variant({ 'ok' : UserResult, 'err' : CreateUserError });
+  const OldUserMarket = IDL.Record({
+    'shares' : Shares,
+    'marketId' : MarketId,
+    'balances' : IDL.Vec(Balance),
+    'marketTitle' : Title,
+  });
+  const OldUserResult = IDL.Record({
+    'id' : UserId,
+    'seerBalance' : Balance,
+    'markets' : IDL.Vec(OldUserMarket),
+    'expSeerBalance' : Balance,
+    'handle' : IDL.Text,
+  });
   const RefreshUserError = IDL.Variant({
     'callerIsAnon' : IDL.Null,
     'userNotCreated' : IDL.Null,
@@ -118,7 +131,7 @@ export const idlFactory = ({ IDL }) => {
     'editMarketProbs' : IDL.Func([MarketId, IDL.Vec(Balance)], [IDL.Bool], []),
     'getUserResult' : IDL.Func([UserId], [IDL.Opt(UserResult)], ['query']),
     'importMarkets' : IDL.Func([IDL.Vec(MarketResult)], [], ['oneway']),
-    'importUsers' : IDL.Func([IDL.Vec(UserResult)], [], ['oneway']),
+    'importUsers' : IDL.Func([IDL.Vec(OldUserResult)], [], ['oneway']),
     'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllPendingMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
