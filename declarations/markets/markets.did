@@ -6,22 +6,6 @@ type UserResult3 =
    markets: vec UserMarket3;
    seerBalance: Balance;
  };
-type UserResult2 = 
- record {
-   expSeerBalance: Balance;
-   handle: text;
-   id: UserId;
-   markets: vec UserMarket2;
-   seerBalance: Balance;
- };
-type UserResult = 
- record {
-   expSeerBalance: Balance;
-   handle: text;
-   id: UserId;
-   markets: vec UserMarket;
-   seerBalance: Balance;
- };
 type UserMarket3 = 
  record {
    balances: vec Balance;
@@ -30,21 +14,6 @@ type UserMarket3 =
    marketTitle: Title;
    shares: Shares;
    used: bool;
- };
-type UserMarket2 = 
- record {
-   balances: vec Balance;
-   marketId: MarketId;
-   marketTitle: Title;
-   shares: Shares;
-   used: bool;
- };
-type UserMarket = 
- record {
-   balances: vec Balance;
-   marketId: MarketId;
-   marketTitle: Title;
-   shares: Shares;
  };
 type UserId = text;
 type Url = text;
@@ -60,20 +29,15 @@ type TradeError =
 type Title = text;
 type Time = int;
 type Shares = int;
-type Result_5 = 
+type Result_4 = 
  variant {
    err: AddCommentError;
    ok: Comment;
  };
-type Result_4 = 
+type Result_3 = 
  variant {
    err: CreateMarketError;
    ok: MarketResult;
- };
-type Result_3 = 
- variant {
-   err: CreateUserError;
-   ok: UserResult2;
  };
 type Result_2 = 
  variant {
@@ -138,21 +102,19 @@ type MarketInitData =
 type MarketId = nat32;
 type Market = 
  service {
-   addCommentToMarket: (MarketId, text) -> (Result_5);
+   addCommentToMarket: (MarketId, text) -> (Result_4);
    approveMarket: (MarketId) -> ();
    backup: () -> ();
    buyOption: (MarketId, Balance, nat, bool) -> (Result);
-   createMarket: (MarketInitData) -> (Result_4);
-   createUserResult: (text) -> (Result_3);
+   createMarket: (MarketInitData) -> (Result_3);
    createUserResult3: (text) -> (Result_2);
    deleteAllMarkets: () -> ();
    deleteMarket: (MarketId) -> (opt MarketResult);
    editMarketImage: (MarketId, text) -> (bool);
    editMarketProbs: (MarketId, vec Balance) -> (bool);
-   getUserResult: (UserId) -> (opt UserResult2) query;
    getUserResult3: (UserId) -> (opt UserResult3) query;
    importMarkets: (vec MarketResult) -> () oneway;
-   importUsers: (vec UserResult) -> () oneway;
+   importUsers: (vec UserResult3) -> () oneway;
    readAllMarkets: () -> (vec MarketResult) query;
    readAllOpenMarkets: () -> (vec MarketResult) query;
    readAllPendingMarkets: () -> (vec MarketResult) query;

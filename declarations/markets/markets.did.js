@@ -7,7 +7,7 @@ export const idlFactory = ({ IDL }) => {
     'marketMissing' : IDL.Null,
     'commentIsEmpty' : IDL.Null,
   });
-  const Result_5 = IDL.Variant({ 'ok' : Comment, 'err' : AddCommentError });
+  const Result_4 = IDL.Variant({ 'ok' : Comment, 'err' : AddCommentError });
   const Balance = IDL.Float64;
   const TradeError = IDL.Variant({
     'callerIsAnon' : IDL.Null,
@@ -71,30 +71,11 @@ export const idlFactory = ({ IDL }) => {
     'endDateOld' : Time,
     'notEnoughLiquidity' : Balance,
   });
-  const Result_4 = IDL.Variant({
+  const Result_3 = IDL.Variant({
     'ok' : MarketResult,
     'err' : CreateMarketError,
   });
   const UserId = IDL.Text;
-  const UserMarket2 = IDL.Record({
-    'shares' : Shares,
-    'used' : IDL.Bool,
-    'marketId' : MarketId,
-    'balances' : IDL.Vec(Balance),
-    'marketTitle' : Title,
-  });
-  const UserResult2 = IDL.Record({
-    'id' : UserId,
-    'seerBalance' : Balance,
-    'markets' : IDL.Vec(UserMarket2),
-    'expSeerBalance' : Balance,
-    'handle' : IDL.Text,
-  });
-  const CreateUserError = IDL.Variant({
-    'userExist' : IDL.Null,
-    'userIsAnon' : IDL.Null,
-  });
-  const Result_3 = IDL.Variant({ 'ok' : UserResult2, 'err' : CreateUserError });
   const UserMarket3 = IDL.Record({
     'shares' : Shares,
     'labels' : IDL.Vec(IDL.Text),
@@ -110,20 +91,11 @@ export const idlFactory = ({ IDL }) => {
     'expSeerBalance' : Balance,
     'handle' : IDL.Text,
   });
+  const CreateUserError = IDL.Variant({
+    'userExist' : IDL.Null,
+    'userIsAnon' : IDL.Null,
+  });
   const Result_2 = IDL.Variant({ 'ok' : UserResult3, 'err' : CreateUserError });
-  const UserMarket = IDL.Record({
-    'shares' : Shares,
-    'marketId' : MarketId,
-    'balances' : IDL.Vec(Balance),
-    'marketTitle' : Title,
-  });
-  const UserResult = IDL.Record({
-    'id' : UserId,
-    'seerBalance' : Balance,
-    'markets' : IDL.Vec(UserMarket),
-    'expSeerBalance' : Balance,
-    'handle' : IDL.Text,
-  });
   const RefreshUserError = IDL.Variant({
     'callerIsAnon' : IDL.Null,
     'userNotCreated' : IDL.Null,
@@ -133,7 +105,7 @@ export const idlFactory = ({ IDL }) => {
     'err' : RefreshUserError,
   });
   const Market = IDL.Service({
-    'addCommentToMarket' : IDL.Func([MarketId, IDL.Text], [Result_5], []),
+    'addCommentToMarket' : IDL.Func([MarketId, IDL.Text], [Result_4], []),
     'approveMarket' : IDL.Func([MarketId], [], []),
     'backup' : IDL.Func([], [], []),
     'buyOption' : IDL.Func(
@@ -141,17 +113,15 @@ export const idlFactory = ({ IDL }) => {
         [Result],
         [],
       ),
-    'createMarket' : IDL.Func([MarketInitData], [Result_4], []),
-    'createUserResult' : IDL.Func([IDL.Text], [Result_3], []),
+    'createMarket' : IDL.Func([MarketInitData], [Result_3], []),
     'createUserResult3' : IDL.Func([IDL.Text], [Result_2], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], []),
     'editMarketImage' : IDL.Func([MarketId, IDL.Text], [IDL.Bool], []),
     'editMarketProbs' : IDL.Func([MarketId, IDL.Vec(Balance)], [IDL.Bool], []),
-    'getUserResult' : IDL.Func([UserId], [IDL.Opt(UserResult2)], ['query']),
     'getUserResult3' : IDL.Func([UserId], [IDL.Opt(UserResult3)], ['query']),
     'importMarkets' : IDL.Func([IDL.Vec(MarketResult)], [], ['oneway']),
-    'importUsers' : IDL.Func([IDL.Vec(UserResult)], [], ['oneway']),
+    'importUsers' : IDL.Func([IDL.Vec(UserResult3)], [], ['oneway']),
     'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllPendingMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
