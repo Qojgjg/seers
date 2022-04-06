@@ -86,9 +86,6 @@
 <div style="justify-content: center; display: flex;width: 100%">
   <div class="rowUser">
     {#if user}
-      <!-- <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Id: {user.id}
-      </div> -->
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
         Welcome {user.handle}! ♡
       </div>
@@ -108,7 +105,7 @@
       </div>
       {#if user.markets.length}
         <div style="display:flex; flex-direction: column;width: 100%">
-          Markets:
+          Portfolio:
           {#each user.markets as market}
             <a href="#/market/{market.marketId}">
               <div
@@ -124,10 +121,12 @@
                 </div>
                 <div style="width: 100%">
                   {#each market.labels as label, i}
-                    {label +
-                      ": " +
-                      Number(market.balances[i]).toFixed(2) +
-                      "  "}
+                    {#if market.balances[i] > 0.0}
+                      {label +
+                        ": " +
+                        Number(market.balances[i]).toFixed(2) +
+                        "  "}
+                    {/if}
                   {/each}
                 </div>
               </div>
