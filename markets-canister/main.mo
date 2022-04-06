@@ -947,6 +947,17 @@ shared({ caller = initializer }) actor class Market() {
                                     }
                                 );
 
+                                let newTx: UserTx = {
+                                    marketId = market.id;
+                                    src = ?selected;
+                                    dest = null;
+                                    seerSent = value;
+                                    seerRecv = liquidityOut;
+                                    fee = 0.0;
+                                    timestamp = Time.now();
+                                };
+                                user.txs := Array.append(user.txs, [newTx]);
+
                                 user.seerBalance := user.seerBalance + liquidityOut;
 
                                 return #ok(liquidityOut);
