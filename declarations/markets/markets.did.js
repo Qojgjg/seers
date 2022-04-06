@@ -96,6 +96,23 @@ export const idlFactory = ({ IDL }) => {
     'userIsAnon' : IDL.Null,
   });
   const Result_2 = IDL.Variant({ 'ok' : UserResult, 'err' : CreateUserError });
+  const UserTx = IDL.Record({
+    'fee' : Balance,
+    'src' : IDL.Nat,
+    'dest' : IDL.Nat,
+    'seerRecv' : Balance,
+    'seerSent' : Balance,
+    'marketId' : MarketId,
+    'timestamp' : Time,
+  });
+  const UserResult2 = IDL.Record({
+    'id' : UserId,
+    'txs' : IDL.Vec(UserTx),
+    'seerBalance' : Balance,
+    'markets' : IDL.Vec(UserMarket),
+    'expSeerBalance' : Balance,
+    'handle' : IDL.Text,
+  });
   const RefreshUserError = IDL.Variant({
     'callerIsAnon' : IDL.Null,
     'userNotCreated' : IDL.Null,
@@ -121,7 +138,7 @@ export const idlFactory = ({ IDL }) => {
     'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllPendingMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
-    'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
+    'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult2)], ['query']),
     'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
     'readNewUsers' : IDL.Func([], [IDL.Vec(IDL.Tuple(UserId, UserResult))], []),
     'refreshUser' : IDL.Func([], [Result_1], []),

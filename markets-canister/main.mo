@@ -378,11 +378,11 @@ shared({ caller = initializer }) actor class Market() {
     // };
 
     // Read all users.
-    public query func readAllUsers(): async [UserResult] {
-        Array.map<(UserId, User), UserResult>(
-            Iter.toArray(userMap.entries()), 
-            func (e: (UserId, User)): UserResult {
-                userToUserResult(e.1)
+    public query func readAllUsers(): async [UserResult2] {
+        Array.map<(UserId, User2), UserResult2>(
+            Iter.toArray(userMap2.entries()), 
+            func (e: (UserId, User2)): UserResult2 {
+                userToUserResult2(e.1)
             }
         )
     };
