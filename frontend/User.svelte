@@ -25,7 +25,7 @@
 
   let getUserData = async () => {
     isGetting = true
-    user = await $auth.actor.getUserResult3(principal)
+    user = await $auth.actor.getUserResult(principal)
     isGetting = false
     if (user) {
       user = user[0]
@@ -43,7 +43,7 @@
   let createUserData = async () => {
     createLabel = "Processing..."
     errorResponse = ""
-    response = await $auth.actor.createUserResult3(handle)
+    response = await $auth.actor.createUserResult(handle)
     if (response["err"]) {
       errorResponse =
         "Error: " +

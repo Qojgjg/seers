@@ -76,7 +76,7 @@ export const idlFactory = ({ IDL }) => {
     'err' : CreateMarketError,
   });
   const UserId = IDL.Text;
-  const UserMarket3 = IDL.Record({
+  const UserMarket = IDL.Record({
     'shares' : Shares,
     'labels' : IDL.Vec(IDL.Text),
     'used' : IDL.Bool,
@@ -84,10 +84,10 @@ export const idlFactory = ({ IDL }) => {
     'balances' : IDL.Vec(Balance),
     'marketTitle' : Title,
   });
-  const UserResult3 = IDL.Record({
+  const UserResult = IDL.Record({
     'id' : UserId,
     'seerBalance' : Balance,
-    'markets' : IDL.Vec(UserMarket3),
+    'markets' : IDL.Vec(UserMarket),
     'expSeerBalance' : Balance,
     'handle' : IDL.Text,
   });
@@ -95,15 +95,12 @@ export const idlFactory = ({ IDL }) => {
     'userExist' : IDL.Null,
     'userIsAnon' : IDL.Null,
   });
-  const Result_2 = IDL.Variant({ 'ok' : UserResult3, 'err' : CreateUserError });
+  const Result_2 = IDL.Variant({ 'ok' : UserResult, 'err' : CreateUserError });
   const RefreshUserError = IDL.Variant({
     'callerIsAnon' : IDL.Null,
     'userNotCreated' : IDL.Null,
   });
-  const Result_1 = IDL.Variant({
-    'ok' : UserResult3,
-    'err' : RefreshUserError,
-  });
+  const Result_1 = IDL.Variant({ 'ok' : UserResult, 'err' : RefreshUserError });
   const Market = IDL.Service({
     'addCommentToMarket' : IDL.Func([MarketId, IDL.Text], [Result_4], []),
     'approveMarket' : IDL.Func([MarketId], [], []),
@@ -114,24 +111,20 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'createMarket' : IDL.Func([MarketInitData], [Result_3], []),
-    'createUserResult3' : IDL.Func([IDL.Text], [Result_2], []),
+    'createUserResult' : IDL.Func([IDL.Text], [Result_2], []),
     'deleteAllMarkets' : IDL.Func([], [], []),
     'deleteMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], []),
     'editMarketImage' : IDL.Func([MarketId, IDL.Text], [IDL.Bool], []),
     'editMarketProbs' : IDL.Func([MarketId, IDL.Vec(Balance)], [IDL.Bool], []),
-    'getUserResult3' : IDL.Func([UserId], [IDL.Opt(UserResult3)], ['query']),
+    'getUserResult' : IDL.Func([UserId], [IDL.Opt(UserResult)], ['query']),
     'importMarkets' : IDL.Func([IDL.Vec(MarketResult)], [], ['oneway']),
-    'importUsers' : IDL.Func([IDL.Vec(UserResult3)], [], ['oneway']),
+    'importUsers' : IDL.Func([IDL.Vec(UserResult)], [], ['oneway']),
     'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllPendingMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
-    'readAllUsers3' : IDL.Func([], [IDL.Vec(UserResult3)], ['query']),
+    'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
     'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
-    'readNewUsers' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Tuple(UserId, UserResult3))],
-        [],
-      ),
+    'readNewUsers' : IDL.Func([], [IDL.Vec(IDL.Tuple(UserId, UserResult))], []),
     'refreshUser' : IDL.Func([], [Result_1], []),
     'resolveMarket' : IDL.Func([MarketId, IDL.Nat], [IDL.Bool], []),
     'restore' : IDL.Func([], [], []),

@@ -28,22 +28,22 @@ export interface Market {
       arg_3: boolean,
     ) => Promise<Result>,
   'createMarket' : (arg_0: MarketInitData) => Promise<Result_3>,
-  'createUserResult3' : (arg_0: string) => Promise<Result_2>,
+  'createUserResult' : (arg_0: string) => Promise<Result_2>,
   'deleteAllMarkets' : () => Promise<undefined>,
   'deleteMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'editMarketImage' : (arg_0: MarketId, arg_1: string) => Promise<boolean>,
   'editMarketProbs' : (arg_0: MarketId, arg_1: Array<Balance>) => Promise<
       boolean
     >,
-  'getUserResult3' : (arg_0: UserId) => Promise<[] | [UserResult3]>,
+  'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
   'importMarkets' : (arg_0: Array<MarketResult>) => Promise<undefined>,
-  'importUsers' : (arg_0: Array<UserResult3>) => Promise<undefined>,
+  'importUsers' : (arg_0: Array<UserResult>) => Promise<undefined>,
   'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
   'readAllPendingMarkets' : () => Promise<Array<MarketResult>>,
-  'readAllUsers3' : () => Promise<Array<UserResult3>>,
+  'readAllUsers' : () => Promise<Array<UserResult>>,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
-  'readNewUsers' : () => Promise<Array<[UserId, UserResult3]>>,
+  'readNewUsers' : () => Promise<Array<[UserId, UserResult]>>,
   'refreshUser' : () => Promise<Result_1>,
   'resolveMarket' : (arg_0: MarketId, arg_1: bigint) => Promise<boolean>,
   'restore' : () => Promise<undefined>,
@@ -96,9 +96,9 @@ export type RefreshUserError = { 'callerIsAnon' : null } |
   { 'userNotCreated' : null };
 export type Result = { 'ok' : Balance } |
   { 'err' : TradeError };
-export type Result_1 = { 'ok' : UserResult3 } |
+export type Result_1 = { 'ok' : UserResult } |
   { 'err' : RefreshUserError };
-export type Result_2 = { 'ok' : UserResult3 } |
+export type Result_2 = { 'ok' : UserResult } |
   { 'err' : CreateUserError };
 export type Result_3 = { 'ok' : MarketResult } |
   { 'err' : CreateMarketError };
@@ -115,7 +115,7 @@ export type TradeError = { 'callerIsAnon' : null } |
   { 'newtonFailed' : null };
 export type Url = string;
 export type UserId = string;
-export interface UserMarket3 {
+export interface UserMarket {
   'shares' : Shares,
   'labels' : Array<string>,
   'used' : boolean,
@@ -123,10 +123,10 @@ export interface UserMarket3 {
   'balances' : Array<Balance>,
   'marketTitle' : Title,
 }
-export interface UserResult3 {
+export interface UserResult {
   'id' : UserId,
   'seerBalance' : Balance,
-  'markets' : Array<UserMarket3>,
+  'markets' : Array<UserMarket>,
   'expSeerBalance' : Balance,
   'handle' : string,
 }

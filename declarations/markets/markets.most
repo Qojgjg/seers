@@ -41,7 +41,7 @@ type Title = Text;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type Url = Text;
 type UserId = Text;
-type UserMarket3 =
+type UserMarket =
   {
     balances : [Balance];
     labels : [Text];
@@ -50,21 +50,21 @@ type UserMarket3 =
     shares : Shares;
     used : Bool
   };
-type UserResult3 =
+type UserResult =
   {
     expSeerBalance : Balance;
     handle : Text;
     id : UserId;
-    markets : [UserMarket3];
+    markets : [UserMarket];
     seerBalance : Balance
   };
 actor {
   stable var backupState :
-    ([(UserId, UserResult3)], [(MarketId, MarketResult)]);
+    ([(UserId, UserResult)], [(MarketId, MarketResult)]);
   stable var handles :
     {#branch : Branch<Text, UserId>; #empty; #leaf : Leaf<Text, UserId>};
   stable var nextMarketId : Nat32;
   stable var stableMarkets : [(MarketId, MarketResult)];
-  stable var stableUsers3 : [(UserId, UserResult3)];
+  stable var stableUsers : [(UserId, UserResult)];
   stable var updating : Bool
 };

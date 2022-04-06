@@ -1,12 +1,12 @@
-type UserResult3 = 
+type UserResult = 
  record {
    expSeerBalance: Balance;
    handle: text;
    id: UserId;
-   markets: vec UserMarket3;
+   markets: vec UserMarket;
    seerBalance: Balance;
  };
-type UserMarket3 = 
+type UserMarket = 
  record {
    balances: vec Balance;
    labels: vec text;
@@ -42,12 +42,12 @@ type Result_3 =
 type Result_2 = 
  variant {
    err: CreateUserError;
-   ok: UserResult3;
+   ok: UserResult;
  };
 type Result_1 = 
  variant {
    err: RefreshUserError;
-   ok: UserResult3;
+   ok: UserResult;
  };
 type Result = 
  variant {
@@ -107,22 +107,22 @@ type Market =
    backup: () -> ();
    buyOption: (MarketId, Balance, nat, bool) -> (Result);
    createMarket: (MarketInitData) -> (Result_3);
-   createUserResult3: (text) -> (Result_2);
+   createUserResult: (text) -> (Result_2);
    deleteAllMarkets: () -> ();
    deleteMarket: (MarketId) -> (opt MarketResult);
    editMarketImage: (MarketId, text) -> (bool);
    editMarketProbs: (MarketId, vec Balance) -> (bool);
-   getUserResult3: (UserId) -> (opt UserResult3) query;
+   getUserResult: (UserId) -> (opt UserResult) query;
    importMarkets: (vec MarketResult) -> () oneway;
-   importUsers: (vec UserResult3) -> () oneway;
+   importUsers: (vec UserResult) -> () oneway;
    readAllMarkets: () -> (vec MarketResult) query;
    readAllOpenMarkets: () -> (vec MarketResult) query;
    readAllPendingMarkets: () -> (vec MarketResult) query;
-   readAllUsers3: () -> (vec UserResult3) query;
+   readAllUsers: () -> (vec UserResult) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
    readNewUsers: () -> (vec record {
                               UserId;
-                              UserResult3;
+                              UserResult;
                             });
    refreshUser: () -> (Result_1);
    resolveMarket: (MarketId, nat) -> (bool);

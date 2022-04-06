@@ -7,7 +7,7 @@
   let response = []
 
   let getRanking = async () => {
-    response = (await $auth.actor.readAllUsers3()).sort(function (a, b) {
+    response = (await $auth.actor.readAllUsers()).sort(function (a, b) {
       var keyA = a.expSeerBalance,
         keyB = b.expSeerBalance
       if (keyA < keyB) return 1
