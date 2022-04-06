@@ -37,7 +37,6 @@ export interface Market {
     >,
   'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
   'importMarkets' : (arg_0: Array<MarketResult>) => Promise<undefined>,
-  'importUsers' : (arg_0: Array<OldUserResult>) => Promise<undefined>,
   'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
   'readAllPendingMarkets' : () => Promise<Array<MarketResult>>,
@@ -91,19 +90,6 @@ export type MarketState = { 'resolved' : bigint } |
   { 'closed' : null } |
   { 'pending' : null } |
   { 'open' : null };
-export interface OldUserMarket {
-  'shares' : Shares,
-  'marketId' : MarketId,
-  'balances' : Array<Balance>,
-  'marketTitle' : Title,
-}
-export interface OldUserResult {
-  'id' : UserId,
-  'seerBalance' : Balance,
-  'markets' : Array<OldUserMarket>,
-  'expSeerBalance' : Balance,
-  'handle' : string,
-}
 export type Probability = number;
 export type RefreshUserError = { 'callerIsAnon' : null } |
   { 'userNotCreated' : null };

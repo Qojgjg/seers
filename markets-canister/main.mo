@@ -46,15 +46,6 @@ shared({ caller = initializer }) actor class Market() {
         used: Bool;
     };
 
-    public type OldUserMarket = {
-        marketId: MarketId;
-        marketTitle: Title;
-        // labels: [Text];
-        balances: [Balance];
-        shares: Shares;
-        // used: Bool;
-    };
-
 
     public type UserTx = {
         marketId: MarketId;
@@ -74,12 +65,13 @@ shared({ caller = initializer }) actor class Market() {
         var markets: [UserMarket];
     };
 
-    public type OldUserResult = {
-        id: UserId; // Principal.
-        handle: Text;
-        seerBalance: Balance;
-        expSeerBalance: Balance;
-        markets: [OldUserMarket];
+    public type User2 = {
+        var id: UserId; // Principal.
+        var handle: Text;
+        var seerBalance: Balance;
+        var expSeerBalance: Balance;
+        var markets: [UserMarket];
+        var txs: [UserTx];
     };
 
     public type UserResult = {
@@ -88,6 +80,15 @@ shared({ caller = initializer }) actor class Market() {
         seerBalance: Balance;
         expSeerBalance: Balance;
         markets: [UserMarket];
+    };
+
+    public type UserResult2 = {
+        id: UserId; // Principal.
+        handle: Text;
+        seerBalance: Balance;
+        expSeerBalance: Balance;
+        markets: [UserMarket];
+        txs: [UserTx];
     };
 
     public type MarketInitData = {
@@ -171,6 +172,30 @@ shared({ caller = initializer }) actor class Market() {
         return user;
     };
 
+    private func userToUserResult2(u: User): UserResult2 {
+        let userResult = {
+            id = u.id;
+            handle = u.handle;
+            seerBalance = u.seerBalance;
+            expSeerBalance = u.expSeerBalance;
+            markets = u.markets;
+            txs = [];
+        };
+        return userResult;
+    };
+
+    private func userResultToUser2(u: UserResult2): User2 {
+        let user = {
+            var id = u.id;
+            var handle = u.handle;
+            var seerBalance = u.seerBalance;
+            var expSeerBalance = u.expSeerBalance;
+            var markets = u.markets;
+            var txs = u.txs;
+        };
+        return user;
+    };
+
     private func marketResultToMarket(m: MarketResult): Market {
         let market = {
             id = m.id;    
@@ -232,6 +257,7 @@ shared({ caller = initializer }) actor class Market() {
     private stable var handles: Trie.Trie<Text, UserId> = Trie.empty();
     
     private stable var stableUsers: [(UserId, UserResult)] = [];
+    private stable var stableUsers2: [(UserId, UserResult2)] = [];
     private stable var stableMarkets: [(MarketId, MarketResult)] = [];
     private stable var backupState: State = ([], []);
     
@@ -244,6 +270,22 @@ shared({ caller = initializer }) actor class Market() {
         );
         
         Map.fromIter<UserId, User>(
+            usersIter,
+            50, 
+            Text.equal, 
+            Text.hash
+        )
+    };
+
+    private var userMap2: Map.HashMap<UserId, User2> = do {
+        let usersIter = Iter.map<(UserId, UserResult2), (UserId, User2)>(
+            stableUsers2.vals(), 
+            func (e: (UserId, UserResult2)): (UserId, User2) {
+                return (e.0, userResultToUser2(e.1));
+            }
+        );
+        
+        Map.fromIter<UserId, User2>(
             usersIter,
             50, 
             Text.equal, 
@@ -274,6 +316,12 @@ shared({ caller = initializer }) actor class Market() {
             Iter.toArray(userMap.entries()), 
             func (e: (UserId, User)): (UserId, UserResult) {
                 (e.0, userToUserResult(e.1))
+            }
+        );
+        stableUsers2 := Array.map<(UserId, User), (UserId, UserResult2)>(
+            Iter.toArray(userMap.entries()), 
+            func (e: (UserId, User)): (UserId, UserResult2) {
+                (e.0, userToUserResult2(e.1))
             }
         );
         stableMarkets := Array.map<(MarketId, Market), (MarketId, MarketResult)>(
@@ -344,48 +392,48 @@ shared({ caller = initializer }) actor class Market() {
         updating := status;
     };
 
-    public shared(msg) func importUsers(users: [OldUserResult]): () {
-        assert(msg.caller == initializer); // Root call.
-        stableUsers := Array.map<OldUserResult, (UserId, UserResult)>(
-            users, 
-            func (u: OldUserResult): (UserId, UserResult) {
-                let newUserResult: UserResult = {
-                    id = u.id; // Principal.
-                    handle = u.handle;
-                    seerBalance = u.seerBalance;
-                    expSeerBalance = u.expSeerBalance;
-                    markets = Array.map(u.markets, func (om: OldUserMarket): UserMarket {
-                        switch (marketMap.get(om.marketId)) {
-                            case (null) {
-                                let newMarket: UserMarket = {
-                                    marketId = om.marketId;
-                                    marketTitle = om.marketTitle;
-                                    labels = [];
-                                    balances = om.balances;
-                                    shares = om.shares;
-                                    used = false;
-                                };
-                                return newMarket;
-                            };
-                            case (?market) {
-                                let newMarket: UserMarket = {
-                                    marketId = om.marketId;
-                                    marketTitle = om.marketTitle;
-                                    labels = market.labels;
-                                    balances = om.balances;
-                                    shares = om.shares;
-                                    used = false;
-                                };
-                                return newMarket;
-                            };
-                        };
-                    });
-                };
+    // public shared(msg) func importUsers(users: [OldUserResult]): () {
+    //     assert(msg.caller == initializer); // Root call.
+    //     stableUsers := Array.map<OldUserResult, (UserId, UserResult)>(
+    //         users, 
+    //         func (u: OldUserResult): (UserId, UserResult) {
+    //             let newUserResult: UserResult = {
+    //                 id = u.id; // Principal.
+    //                 handle = u.handle;
+    //                 seerBalance = u.seerBalance;
+    //                 expSeerBalance = u.expSeerBalance;
+    //                 markets = Array.map(u.markets, func (om: OldUserMarket): UserMarket {
+    //                     switch (marketMap.get(om.marketId)) {
+    //                         case (null) {
+    //                             let newMarket: UserMarket = {
+    //                                 marketId = om.marketId;
+    //                                 marketTitle = om.marketTitle;
+    //                                 labels = [];
+    //                                 balances = om.balances;
+    //                                 shares = om.shares;
+    //                                 used = false;
+    //                             };
+    //                             return newMarket;
+    //                         };
+    //                         case (?market) {
+    //                             let newMarket: UserMarket = {
+    //                                 marketId = om.marketId;
+    //                                 marketTitle = om.marketTitle;
+    //                                 labels = market.labels;
+    //                                 balances = om.balances;
+    //                                 shares = om.shares;
+    //                                 used = false;
+    //                             };
+    //                             return newMarket;
+    //                         };
+    //                     };
+    //                 });
+    //             };
 
-                (u.id, newUserResult)
-            }
-        );
-    };
+    //             (u.id, newUserResult)
+    //         }
+    //     );
+    // };
 
 
     public shared(msg) func importMarkets(markets: [MarketResult]): () {

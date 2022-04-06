@@ -60,21 +60,6 @@ type RefreshUserError =
    userNotCreated;
  };
 type Probability = float64;
-type OldUserResult = 
- record {
-   expSeerBalance: Balance;
-   handle: text;
-   id: UserId;
-   markets: vec OldUserMarket;
-   seerBalance: Balance;
- };
-type OldUserMarket = 
- record {
-   balances: vec Balance;
-   marketId: MarketId;
-   marketTitle: Title;
-   shares: Shares;
- };
 type MarketState = 
  variant {
    closed;
@@ -159,7 +144,6 @@ service : {
   editMarketProbs: (MarketId, vec Balance) -> (bool);
   getUserResult: (UserId) -> (opt UserResult) query;
   importMarkets: (vec MarketResult) -> () oneway;
-  importUsers: (vec OldUserResult) -> () oneway;
   readAllMarkets: () -> (vec MarketResult) query;
   readAllOpenMarkets: () -> (vec MarketResult) query;
   readAllPendingMarkets: () -> (vec MarketResult) query;
