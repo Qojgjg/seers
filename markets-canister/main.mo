@@ -52,6 +52,16 @@ shared({ caller = initializer }) actor class Market() {
         used: Bool;
     };
 
+    public type UserMarket3 = {
+        marketId: MarketId;
+        marketTitle: Title;
+        labels: [Text];
+        balances: [Balance];
+        shares: Shares;
+        used: Bool;
+    };
+
+
     public type UserTx = {
         marketId: MarketId;
         src: Nat;
@@ -78,12 +88,28 @@ shared({ caller = initializer }) actor class Market() {
         var markets: [UserMarket2];
     };
 
+    public type User3 = {
+        var id: UserId; // Principal.
+        var handle: Text;
+        var seerBalance: Balance;
+        var expSeerBalance: Balance;
+        var markets: [UserMarket3];
+    };
+
     public type UserResult = {
         id: UserId; // Principal.
         handle: Text;
         seerBalance: Balance;
         expSeerBalance: Balance;
         markets: [UserMarket];
+    };
+
+    public type UserResult3 = {
+        id: UserId; // Principal.
+        handle: Text;
+        seerBalance: Balance;
+        expSeerBalance: Balance;
+        markets: [UserMarket3];
     };
 
     public type UserResult2 = {
@@ -175,6 +201,16 @@ shared({ caller = initializer }) actor class Market() {
         return userResult;
     };
 
+    private func userToUserResult3(u: User3): UserResult3 {
+        let userResult = {
+            id = u.id;
+            handle = u.handle;
+            seerBalance = u.seerBalance;
+            expSeerBalance = u.expSeerBalance;
+            markets = u.markets;
+        };
+        return userResult;
+    };
 
     private func userResultToUser2(u: UserResult): User2 {
         let user = {
@@ -192,6 +228,17 @@ shared({ caller = initializer }) actor class Market() {
                 };
                 return m2;
             });
+        };
+        return user;
+    };
+
+    private func userResultToUser3(u: UserResult3): User3 {
+        let user = {
+            var id = u.id;
+            var handle = u.handle;
+            var seerBalance = u.seerBalance;
+            var expSeerBalance = u.expSeerBalance;
+            var markets = u.markets;
         };
         return user;
     };
@@ -269,6 +316,7 @@ shared({ caller = initializer }) actor class Market() {
     private stable var handles: Trie.Trie<Text, UserId> = Trie.empty();
     
     private stable var stableUsers: [(UserId, UserResult)] = [];
+    private stable var stableUsers3: [(UserId, UserResult3)] = [];
     private stable var stableMarkets: [(MarketId, MarketResult)] = [];
     private stable var backupState: State = ([], []);
     
@@ -284,6 +332,22 @@ shared({ caller = initializer }) actor class Market() {
         Map.fromIter<UserId, User2>(
             usersIter,
             10, 
+            Text.equal, 
+            Text.hash
+        )
+    };
+
+    private var userMap3: Map.HashMap<UserId, User3> = do {
+        let usersIter = Iter.map<(UserId, UserResult3), (UserId, User3)>(
+            stableUsers3.vals(), 
+            func (e: (UserId, UserResult3)): (UserId, User3) {
+                return (e.0, userResultToUser3(e.1));
+            }
+        );
+        
+        Map.fromIter<UserId, User3>(
+            usersIter,
+            50, 
             Text.equal, 
             Text.hash
         )
@@ -368,11 +432,11 @@ shared({ caller = initializer }) actor class Market() {
     // };
 
     // Read all users.
-    public query func readAllUsers(): async [UserResult2] {
-        Array.map<(UserId, User2), UserResult2>(
-            Iter.toArray(userMap.entries()), 
-            func (e: (UserId, User2)): UserResult2 {
-                userToUserResult2(e.1)
+    public query func readAllUsers3(): async [UserResult3] {
+        Array.map<(UserId, User3), UserResult3>(
+            Iter.toArray(userMap3.entries()), 
+            func (e: (UserId, User3)): UserResult3 {
+                userToUserResult3(e.1)
             }
         )
     };
@@ -419,6 +483,11 @@ shared({ caller = initializer }) actor class Market() {
         );
 
         backupState := (users, markets);
+    };
+
+    public shared(msg) func readNewUsers(): async [(UserId, UserResult3)] {
+        assert(msg.caller == initializer); // Root call.
+        return stableUsers3;
     };
 
     public shared(msg) func restore(): async () {
@@ -588,7 +657,7 @@ shared({ caller = initializer }) actor class Market() {
         };
 
         // Update provider.
-        var user = switch (getUser(author)) {
+        var user = switch (getUser3(author)) {
             case (null) {
                 return #err(#userNotCreated);
             };
@@ -597,16 +666,17 @@ shared({ caller = initializer }) actor class Market() {
             };
         };
         
-        let userMarket: UserMarket2 = {
+        let userMarket: UserMarket3 = {
             marketId = marketId;
             marketTitle = marketInitData.title;
+            labels = marketInitData.labels;
             balances = Array.freeze(Array.init<Balance>(optionsLength, 0));
             shares = shares;
             used = false;
         };
 
         user.markets := Array.append(user.markets, [userMarket]);
-        userMap.put(user.id, user);
+        userMap3.put(user.id, user);
         
         nextMarketId += 1;
         marketMap.put(marketId, newMarket);
@@ -657,7 +727,7 @@ shared({ caller = initializer }) actor class Market() {
         #userNotCreated;
     };
 
-    public shared(msg) func refreshUser(): async Result.Result<UserResult2, RefreshUserError> {
+    public shared(msg) func refreshUser(): async Result.Result<UserResult3, RefreshUserError> {
         assert(not updating);
         
         if (Principal.isAnonymous(msg.caller)) {
@@ -665,7 +735,7 @@ shared({ caller = initializer }) actor class Market() {
         };
 
         let caller = Principal.toText(msg.caller);
-        let userOpt = userMap.get(caller);
+        let userOpt = userMap3.get(caller);
 
         switch (userOpt) {
             case (null) {
@@ -674,7 +744,7 @@ shared({ caller = initializer }) actor class Market() {
             case (?user) {
                 user.expSeerBalance := user.seerBalance;
                 user.markets := Array.mapFilter(user.markets, 
-                    func (ut: UserMarket2): ?UserMarket2 {
+                    func (ut: UserMarket3): ?UserMarket3 {
                         
                         let marketOpt = marketMap.get(ut.marketId);
                         
@@ -692,10 +762,11 @@ shared({ caller = initializer }) actor class Market() {
                                             user.seerBalance := user.seerBalance + reward;
                                             user.expSeerBalance := user.expSeerBalance + reward;
 
-                                            let oldMarket: UserMarket2 = {
+                                            let oldMarket: UserMarket3 = {
                                                 marketId = ut.marketId;
                                                 marketTitle = ut.marketTitle;
                                                 balances = ut.balances;
+                                                labels = ut.labels;
                                                 shares = ut.shares;
                                                 used = true;
                                             };
@@ -724,7 +795,7 @@ shared({ caller = initializer }) actor class Market() {
                         };
                     }
                 );
-                return #ok(userToUserResult2(user));
+                return #ok(userToUserResult3(user));
             };
         };
     };
@@ -1073,6 +1144,11 @@ shared({ caller = initializer }) actor class Market() {
         return Option.map(getUser(userId), userToUserResult2);
     };
 
+    // Get user data.
+    public query func getUserResult3(userId: UserId): async ?UserResult3 {
+        return Option.map(getUser3(userId), userToUserResult3);
+    };
+
     // Create user.
     public shared(msg) func createUserResult(handle: Text): async Result.Result<UserResult2, CreateUserError> {
         assert(not updating);
@@ -1092,6 +1168,27 @@ shared({ caller = initializer }) actor class Market() {
             };
         };
     };
+
+    // Create user.
+    public shared(msg) func createUserResult3(handle: Text): async Result.Result<UserResult3, CreateUserError> {
+        assert(not updating);
+        
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err(#userIsAnon);
+        };
+
+        let caller = Principal.toText(msg.caller);
+
+        switch (createUser3(caller, handle)) {
+            case (#err(e)) {
+                return #err(e);
+            };
+            case (#ok(user)) {
+                return #ok(userToUserResult3(user))
+            };
+        };
+    };
+
 
     // Tip a user
     public shared(msg) func tip(id: UserId, value: Balance): async ?Balance {
@@ -1168,7 +1265,7 @@ shared({ caller = initializer }) actor class Market() {
         };
 
         let userId = Principal.toText(msg.caller);
-        let userOpt = userMap.get(userId);
+        let userOpt = userMap3.get(userId);
 
         switch (userOpt) {
             case null {
@@ -1283,6 +1380,10 @@ shared({ caller = initializer }) actor class Market() {
         userMap.get(userId)
     };
 
+    private func getUser3(userId: UserId): ?User3 {
+        userMap3.get(userId)
+    };
+
     private type CreateUserError = {
         #userExist;
         #userIsAnon;
@@ -1317,6 +1418,38 @@ shared({ caller = initializer }) actor class Market() {
             };
         };
     };
+
+
+    private func createUser3(userId: UserId, handle: Text): Result.Result<User3, CreateUserError> {
+        let exist = Trie.find(handles, userKey(handle), Text.equal);
+
+        switch (exist) {
+            case (null) {
+                let user: User3 = {
+                    var id = userId;
+                    var seerBalance = 1000.0; // Airdrop
+                    var expSeerBalance = 1000.0;
+                    var handle = handle;
+                    var markets = [];
+               };
+
+                handles := Trie.replace(
+                    handles,
+                    userKey(handle),
+                    Text.equal,
+                    ?handle,
+                ).0;
+
+                userMap3.put(userId, user);
+
+                return #ok(user);
+            };
+            case (userId) {
+                return #err(#userExist);
+            };
+        };
+    };
+
 
     private func newtonMethod(x0: Float, f: Float -> Float): ?Float {
         let tolerance = 1e-7;

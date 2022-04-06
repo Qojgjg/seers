@@ -1,5 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte"
+  import ListMarkets from "./ListMarkets.svelte"
+  import ViewMarket from "./ViewMarket.svelte"
   export let auth
   export let principal
 
@@ -23,7 +25,7 @@
 
   let getUserData = async () => {
     isGetting = true
-    user = await $auth.actor.getUserResult(principal)
+    user = await $auth.actor.getUserResult3(principal)
     isGetting = false
     if (user) {
       user = user[0]
@@ -41,7 +43,7 @@
   let createUserData = async () => {
     createLabel = "Processing..."
     errorResponse = ""
-    response = await $auth.actor.createUserResult(handle)
+    response = await $auth.actor.createUserResult3(handle)
     if (response["err"]) {
       errorResponse =
         "Error: " +
@@ -51,11 +53,6 @@
     }
     createLabel = "Create User"
     console.log(user)
-  }
-
-  let claimSeers = async (marketId) => {
-    let tokens = await $auth.actor.claimTokens(marketId)
-    console.log("Tokens claimed: " + tokens)
   }
 
   let refreshUser = async () => {
@@ -85,7 +82,7 @@
         Id: {user.id}
       </div> -->
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Hello {user.handle}! ♡
+        Welcome {user.handle}! ♡
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
         Balance: {Number(user.seerBalance).toFixed(2)} Σ
@@ -118,8 +115,12 @@
                   </div>
                 </div>
                 <div style="width: 100%">
-                  {market.balances.map((a) => " " + Number(a).toFixed(2))}
-                  tokens.
+                  {#each market.labels as label, i}
+                    {label +
+                      ": " +
+                      Number(market.balances[i]).toFixed(2) +
+                      "  "}
+                  {/each}
                 </div>
                 <!-- <div style="">
                   {market.shares} shares.
