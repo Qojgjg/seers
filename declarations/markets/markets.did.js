@@ -143,6 +143,7 @@ export const idlFactory = ({ IDL }) => {
     'getUserResult' : IDL.Func([UserId], [IDL.Opt(UserResult)], ['query']),
     'importMarkets' : IDL.Func([IDL.Vec(MarketResult)], [], ['oneway']),
     'importUsers' : IDL.Func([IDL.Vec(OldUserResult)], [], ['oneway']),
+    'increaseMarketCounter' : IDL.Func([MarketId], [MarketId], []),
     'moveStables' : IDL.Func([], [], []),
     'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
     'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),

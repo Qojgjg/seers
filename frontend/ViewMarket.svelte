@@ -173,7 +173,11 @@
         >
           <h4 style="text-align:center; padding: 3px; margin: 3px">Details</h4>
 
-          <li>Status: {Object.keys(market.state).toString()}</li>
+          <li>
+            <div style="margin:0;padding:0;text-transform:capitalize">
+              Status: {Object.keys(market.state).toString()}
+            </div>
+          </li>
           <!-- <li>
             Starts: {new Date(
               parseInt(market.startDate) / 1_000_000,

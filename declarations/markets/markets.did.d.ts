@@ -39,6 +39,7 @@ export interface Market {
   'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
   'importMarkets' : (arg_0: Array<MarketResult>) => Promise<undefined>,
   'importUsers' : (arg_0: Array<OldUserResult>) => Promise<undefined>,
+  'increaseMarketCounter' : (arg_0: MarketId) => Promise<MarketId>,
   'moveStables' : () => Promise<undefined>,
   'readAllMarkets' : () => Promise<Array<MarketResult>>,
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,

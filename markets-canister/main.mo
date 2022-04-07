@@ -335,6 +335,12 @@ shared({ caller = initializer }) actor class Market() {
     //     });
     // };
 
+    public shared(msg) func increaseMarketCounter(nextId: MarketId): async MarketId {
+        assert(msg.caller == initializer); // Root call.
+        nextMarketId := nextId;
+        return nextMarketId;
+    };
+
     public shared(msg) func moveStables(): async () {
         let marketIter = Iter.map<(MarketId, MarketResult), (MarketId, Market)>(
             stableMarkets.vals(), 

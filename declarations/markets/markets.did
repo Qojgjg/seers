@@ -142,6 +142,7 @@ type Market =
    getUserResult: (UserId) -> (opt UserResult) query;
    importMarkets: (vec MarketResult) -> () oneway;
    importUsers: (vec OldUserResult) -> () oneway;
+   increaseMarketCounter: (MarketId) -> (MarketId);
    moveStables: () -> ();
    readAllMarkets: () -> (vec MarketResult) query;
    readAllOpenMarkets: () -> (vec MarketResult) query;
