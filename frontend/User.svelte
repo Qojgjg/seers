@@ -44,6 +44,7 @@
         if (keyA > keyB) return 1
         return 0
       })
+      user.txs = user.txs.reverse()
     }
     console.log(user)
   }
@@ -71,6 +72,7 @@
         "Error: " +
         splitCamelCaseToString(Object.keys(response["err"]).toString())
     } else {
+      errorRefresh = ""
       user = response["ok"]
     }
     refreshLabel = "Refresh"
@@ -147,7 +149,7 @@
             >
               <div style="width: 100%; display: flex; flex-wrap: wrap">
                 <div style="width:fit-content; margin-right: 10px">
-                  #{i}:
+                  #{user.txs.length - i}:
                 </div>
                 <div style="width: auto; margin-right: 10px;">
                   Market {tx.marketId}

@@ -92,7 +92,7 @@
   >
 
   <a href="/" class="right" on:click={myFunction}>Markets</a>
-  <a href="#/ranking/" class="right" on:click={myFunction}>Leaderboard</a>
+  <a href="#/ranking/" class="right" on:click={myFunction}>Ranking</a>
   <a href="https://forms.gle/fYmc9iTc9P46upm47" class="right">Bugs</a>
 
   {#if !signedIn && client}
