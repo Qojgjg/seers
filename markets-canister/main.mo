@@ -16,7 +16,24 @@ import Hash "mo:base/Hash";
 import Iter "mo:base/Iter";
 import Result "mo:base/Result";
 
+// import Array "mo:base/Array";
+// import Binary "mo:encoding/Binary";
+// import Blob "mo:base/Blob";
+// import CRC32 "mo:hash/CRC32";
+// import Float "mo:base/Float";
+// import Nat64 "mo:base/Nat64";
+// import Principal "mo:base/Principal";
+// import AccountIdentifier "mo:principal/blob/AccountIdentifier";
+
+import Ledger "Ledger";
+// import LedgerC "LedgerCandid";
+// import XDR "XDR";
+
+
 shared({ caller = initializer }) actor class Market() {
+    private let ledger: Ledger.Interface  = actor(Ledger.CANISTER_ID);
+
+
     /* Types */
 
     public type Title = Text;

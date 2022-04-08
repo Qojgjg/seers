@@ -1,7 +1,14 @@
 {
   "canisters": {
     "markets": {
+      "dependencies": [
+        "ledger"
+      ],
       "main": "markets-canister/main.mo",
+      "type": "motoko"
+    },
+    "ledger": {
+      "main": "markets-canister/Ledger.mo",
       "type": "motoko"
     },
     "assets": {
