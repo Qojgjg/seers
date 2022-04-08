@@ -194,6 +194,11 @@
       margin-left: 0;
       margin-top: 15px;
     }
+
+    .content-resolved {
+      margin-left: 0;
+      margin-top: 15px;
+    }
   }
 
   .clearfix:after {
