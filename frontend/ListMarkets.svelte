@@ -7,10 +7,13 @@
   export let auth
 
   let markets = []
+  let openMarkets = []
+  let resolvedMarkets = []
 
   const refreshMarkets = async () => {
-    markets = await $auth.actor.readAllOpenMarkets()
-    console.log(JSON.stringify(markets))
+    markets = await $auth.actor.readAllMarkets()
+    openMarkets = markets.filter((m) => "open" in m.state)
+    resolvedMarkets = markets.filter((m) => "resolved" in m.state)
   }
 
   onMount(refreshMarkets)
@@ -32,7 +35,7 @@
     <option value="business">Business</option>
     <option value="finance">Finance</option>
   </select> -->
-  {#each markets as market}
+  {#each openMarkets as market}
     <div class="responsiveItem">
       <a href="#/market/{market.id}">
         <div class="gallery">
@@ -40,7 +43,57 @@
             <img src={market.imageUrl} alt="random" />
           </div>
           <div class="content">
-            <h4 style="padding-top: 0;margin-top:0">{market.title}</h4>
+            <h4 style="padding-top: 0;margin-top:0">
+              {market.title}
+            </h4>
+            <div
+              style="margin-top: 10px; margin-bottom: 10px; max-height: 80px; overflow:hidden;"
+            >
+              {#each market.labels as label, i}
+                <div style="width: 100%; display: flex; font-size: 1.2em;">
+                  <div style="width: 50%">{label}</div>
+                  <div style="width: 50%">
+                    {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
+                  </div>
+                </div>
+              {/each}
+            </div>
+            <div
+              style="width: 100%; display: flex; flex-direction: row; font-size: 1em; padding-top: 5px"
+            >
+              <div style="width: 50%; ">
+                Volume: {Number(market.volume).toFixed(0)} &Sigma;
+              </div>
+              <div style="width: 50%">
+                Liquidity: {Number(market.liquidity).toFixed(0)} &Sigma;
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  {/each}
+  {#each resolvedMarkets as market}
+    <div class="responsiveItem">
+      <a href="#/market/{market.id}">
+        <div class="gallery">
+          <div>
+            <img
+              src={market.imageUrl}
+              alt="random"
+              style="filter: brightness(50%);"
+            />
+          </div>
+          <div class="content-resolved">
+            <h4 style="padding-top: 0;margin-top:0">
+              {market.title}
+              <span style="color: red;">
+                Resolved to {market.labels[market.state["resolved"]].slice(
+                  0,
+                  20,
+                )}
+              </span>
+            </h4>
             <div
               style="margin-top: 10px; margin-bottom: 10px; max-height: 80px; overflow:hidden;"
             >
@@ -76,6 +129,12 @@
     width: 100%;
     min-height: 170px;
   }
+  .content-resolved {
+    margin-left: 15px;
+    width: 100%;
+    color: grey;
+    min-height: 170px;
+  }
 
   .rowList {
     display: flex;
@@ -102,7 +161,7 @@
     background: rgb(33, 36, 41) !important;
   }
 
-  div.gallery img {
+  img {
     max-width: 150px;
     height: auto;
   }
