@@ -6,6 +6,7 @@
   import { faImages } from "@fortawesome/free-solid-svg-icons"
   import { onMount, beforeUpdate } from "svelte"
   import { identity, select_multiple_value } from "svelte/internal"
+  import SvelteMarkdown from "svelte-markdown"
 
   export let auth
   export let marketId
@@ -137,9 +138,7 @@
         {#each market.comments as comment}
           <div style="margin: 5px 0px">
             <div style="color:pink; padding: 5px 0px">{comment.author}</div>
-            <div>
-              {comment.content}
-            </div>
+            <SvelteMarkdown source={comment.content} />
           </div>
         {/each}
         <div class="comment-container">

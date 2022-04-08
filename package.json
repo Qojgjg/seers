@@ -19,7 +19,8 @@
     "@fortawesome/fontawesome-svg-core": "^6.1.0",
     "@fortawesome/free-solid-svg-icons": "^6.1.0",
     "fontawesome-svelte": "^2.0.1",
-    "svelte-fa": "^2.4.0"
+    "svelte-fa": "^2.4.0",
+    "svelte-markdown": "^0.2.2"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "next",

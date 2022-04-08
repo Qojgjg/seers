@@ -25,13 +25,13 @@ import Result "mo:base/Result";
 // import Principal "mo:base/Principal";
 // import AccountIdentifier "mo:principal/blob/AccountIdentifier";
 
-import Ledger "Ledger";
+// import Ledger "Ledger";
 // import LedgerC "LedgerCandid";
 // import XDR "XDR";
 
 
 shared({ caller = initializer }) actor class Market() {
-    private let ledger: Ledger.Interface  = actor(Ledger.CANISTER_ID);
+    // private let ledger: Ledger.Interface  = actor(Ledger.CANISTER_ID);
 
 
     /* Types */
