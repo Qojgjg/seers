@@ -28,7 +28,11 @@
 
   const getMarketLabel = (id, idx) => {
     let market = user.markets.find((m) => m.marketId == id)
-    return market.labels[idx]
+    if (market) {
+      return market.labels[idx]
+    } else {
+      return "Null"
+    }
   }
 
   let getUserData = async () => {

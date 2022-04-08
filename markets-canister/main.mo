@@ -681,6 +681,41 @@ shared({ caller = initializer }) actor class Market() {
         return Option.map(result, marketToMarketResult);        
     };
 
+    // Read user.
+    public query func readUser(userId: UserId): async ?UserResult {
+        let result = userMap.get(userId);
+        return Option.map(result, userToUserResult);        
+    };
+
+    // Read all bets of some market.
+    public query func readBetsOfMarket(marketId: MarketId): async [(UserId, Text, [UserTx])] {
+        let result = marketMap.get(marketId);
+        switch (result) {
+            case (null) {
+                return [];
+            };
+            case (?market) {
+                return Array.mapFilter<(UserId, User), (UserId, Text, [UserTx])>(
+                    Iter.toArray(userMap.entries()), 
+                    func (u: (UserId, User)): ?(UserId, Text, [UserTx]) {
+                        let txs = Array.mapFilter(u.1.txs, func (tx: UserTx): ?UserTx {
+                            if (tx.marketId == market.id) {
+                                return ?tx;
+                            };
+                            return null;
+                        });
+                        if (txs.size() > 0) {
+                            return ?(u.1.id, u.1.handle, txs);
+                        } else {
+                            return null;
+                        };
+                    }
+                );
+            };
+        };     
+    };
+
+
     // Read all markets.
     public query func readAllMarkets(): async [MarketResult] {
         Array.map<(MarketId, Market), MarketResult>(

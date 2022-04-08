@@ -148,11 +148,18 @@ type Market =
    readAllOpenMarkets: () -> (vec MarketResult) query;
    readAllPendingMarkets: () -> (vec MarketResult) query;
    readAllUsers: () -> (vec UserResult) query;
+   readBetsOfMarket: (MarketId) ->
+    (vec record {
+           UserId;
+           text;
+           vec UserTx;
+         }) query;
    readMarket: (MarketId) -> (opt MarketResult) query;
    readNewUsers: () -> (vec record {
                               UserId;
                               UserResult;
                             });
+   readUser: (UserId) -> (opt UserResult) query;
    refreshUser: () -> (Result_1);
    resolveMarket: (MarketId, nat) -> (bool);
    restore: () -> ();

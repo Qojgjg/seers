@@ -45,8 +45,12 @@ export interface Market {
   'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
   'readAllPendingMarkets' : () => Promise<Array<MarketResult>>,
   'readAllUsers' : () => Promise<Array<UserResult>>,
+  'readBetsOfMarket' : (arg_0: MarketId) => Promise<
+      Array<[UserId, string, Array<UserTx>]>
+    >,
   'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
   'readNewUsers' : () => Promise<Array<[UserId, UserResult]>>,
+  'readUser' : (arg_0: UserId) => Promise<[] | [UserResult]>,
   'refreshUser' : () => Promise<Result_1>,
   'resolveMarket' : (arg_0: MarketId, arg_1: bigint) => Promise<boolean>,
   'restore' : () => Promise<undefined>,

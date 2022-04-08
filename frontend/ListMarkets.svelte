@@ -16,6 +16,14 @@
     resolvedMarkets = markets.filter((m) => "resolved" in m.state)
   }
 
+  const printFloat = (x) => {
+    if (x > 10000) {
+      return (Number(x) / 1000.0).toFixed(0) + "k"
+    } else {
+      return Number(x).toFixed(0)
+    }
+  }
+
   onMount(refreshMarkets)
 </script>
 
@@ -62,10 +70,10 @@
               style="width: 100%; display: flex; flex-direction: row; font-size: 1em; padding-top: 5px"
             >
               <div style="width: 50%; ">
-                Volume: {Number(market.volume).toFixed(0)} &Sigma;
+                Volume: {printFloat(market.volume)} &Sigma;
               </div>
               <div style="width: 50%">
-                Liquidity: {Number(market.liquidity).toFixed(0)} &Sigma;
+                Liquidity: {printFloat(market.liquidity)} &Sigma;
               </div>
             </div>
           </div>
@@ -110,10 +118,10 @@
               style="width: 100%; display: flex; flex-direction: row; font-size: 1em; padding-top: 5px"
             >
               <div style="width: 50%; ">
-                Volume: {Number(market.volume).toFixed(0)} &Sigma;
+                Volume: {printFloat(market.volume)} &Sigma;
               </div>
               <div style="width: 50%">
-                Liquidity: {Number(market.liquidity).toFixed(0)} &Sigma;
+                Liquidity: {printFloat(market.liquidity)} &Sigma;
               </div>
             </div>
           </div>
