@@ -1,4 +1,5 @@
 import type { Principal } from '@dfinity/principal';
+export type AccountIdentifier = Array<number>;
 export type AddCommentError = { 'userIsAnon' : null } |
   { 'userNotCreated' : null } |
   { 'marketMissing' : null } |
@@ -17,6 +18,7 @@ export type CreateMarketError = { 'callerIsAnon' : null } |
 export type CreateUserError = { 'userExist' : null } |
   { 'userIsAnon' : null };
 export type Description = string;
+export interface ICP { 'e8s' : bigint }
 export interface Market {
   'addCommentToMarket' : (arg_0: MarketId, arg_1: string) => Promise<Result_4>,
   'approveMarket' : (arg_0: MarketId) => Promise<undefined>,
@@ -27,6 +29,8 @@ export interface Market {
       arg_2: bigint,
       arg_3: boolean,
     ) => Promise<Result>,
+  'canisterAccount' : () => Promise<AccountIdentifier>,
+  'canisterBalance' : () => Promise<ICP>,
   'cleanTxs' : (arg_0: UserId) => Promise<undefined>,
   'createMarket' : (arg_0: MarketInitData) => Promise<Result_3>,
   'createUserResult' : (arg_0: string) => Promise<Result_2>,

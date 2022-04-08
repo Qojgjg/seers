@@ -23,18 +23,32 @@ import Result "mo:base/Result";
 // import Float "mo:base/Float";
 // import Nat64 "mo:base/Nat64";
 // import Principal "mo:base/Principal";
-// import AccountIdentifier "mo:principal/blob/AccountIdentifier";
+import Account "Account";
 
-// import Ledger "Ledger";
+import Ledger "Ledger";
 // import LedgerC "LedgerCandid";
 // import XDR "XDR";
 
 
-shared({ caller = initializer }) actor class Market() {
-    // private let ledger: Ledger.Interface  = actor(Ledger.CANISTER_ID);
+shared({ caller = initializer }) actor class Market() = this {
+    private let ledger: Ledger.Interface  = actor(Ledger.CANISTER_ID);
 
+    // Returns the default account identifier of this canister.
+    func myAccountId() : Account.AccountIdentifier {
+        Account.accountIdentifier(Principal.fromActor(this), Account.defaultSubaccount())
+    };
+
+    // Returns current balance on the default account of this canister.
+    public func canisterBalance() : async Ledger.ICP {
+        await ledger.account_balance({ account = myAccountId() })
+    };
 
     /* Types */
+
+    // Returns canister's default account identifier as a blob.
+    public query func canisterAccount() : async Account.AccountIdentifier {
+        myAccountId()
+    };
 
     public type Title = Text;
     public type Description = Text;

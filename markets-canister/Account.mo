@@ -1,4 +1,4 @@
-import Ledger    "canister:ledger";
+import Ledger    "Ledger";
 
 import Array     "mo:base/Array";
 import Blob      "mo:base/Blob";

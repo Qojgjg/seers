@@ -18,6 +18,8 @@ export const idlFactory = ({ IDL }) => {
     'newtonFailed' : IDL.Null,
   });
   const Result = IDL.Variant({ 'ok' : Balance, 'err' : TradeError });
+  const AccountIdentifier = IDL.Vec(IDL.Nat8);
+  const ICP = IDL.Record({ 'e8s' : IDL.Nat64 });
   const UserId = IDL.Text;
   const Title = IDL.Text;
   const Time = IDL.Int;
@@ -133,6 +135,8 @@ export const idlFactory = ({ IDL }) => {
         [Result],
         [],
       ),
+    'canisterAccount' : IDL.Func([], [AccountIdentifier], ['query']),
+    'canisterBalance' : IDL.Func([], [ICP], []),
     'cleanTxs' : IDL.Func([UserId], [], []),
     'createMarket' : IDL.Func([MarketInitData], [Result_3], []),
     'createUserResult' : IDL.Func([IDL.Text], [Result_2], []),

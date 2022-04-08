@@ -131,7 +131,7 @@
           <img class="Image" src={market.imageUrl} alt="random" />
         {/if}
         <div style="line-height: 1.6;">
-          {market.description}
+          <SvelteMarkdown source={market.description} />
         </div>
       </div>
       <div class="market">
