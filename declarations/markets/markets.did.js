@@ -135,6 +135,7 @@ export const idlFactory = ({ IDL }) => {
         [Result],
         [],
       ),
+    'callerAccount' : IDL.Func([], [AccountIdentifier], []),
     'canisterAccount' : IDL.Func([], [AccountIdentifier], ['query']),
     'canisterBalance' : IDL.Func([], [ICP], []),
     'cleanTxs' : IDL.Func([UserId], [], []),

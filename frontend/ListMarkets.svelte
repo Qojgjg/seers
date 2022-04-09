@@ -95,7 +95,7 @@
           <div class="content-resolved">
             <h4 style="padding-top: 0;margin-top:0">
               {market.title}
-              <span style="color: red;">
+              <span style="color: hotpink;">
                 Resolved to {market.labels[market.state["resolved"]].slice(
                   0,
                   20,

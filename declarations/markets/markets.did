@@ -132,6 +132,7 @@ type Market =
    approveMarket: (MarketId) -> ();
    backup: () -> ();
    buyOption: (MarketId, Balance, nat, bool) -> (Result);
+   callerAccount: () -> (AccountIdentifier);
    canisterAccount: () -> (AccountIdentifier) query;
    canisterBalance: () -> (ICP);
    cleanTxs: (UserId) -> ();

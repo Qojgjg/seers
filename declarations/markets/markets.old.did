@@ -126,6 +126,7 @@ type MarketInitData =
    title: Title;
  };
 type MarketId = nat32;
+type ICP = record {e8s: nat64;};
 type Description = text;
 type CreateUserError = 
  variant {
@@ -157,11 +158,14 @@ type AddCommentError =
    userIsAnon;
    userNotCreated;
  };
+type AccountIdentifier = blob;
 service : {
   addCommentToMarket: (MarketId, text) -> (Result_4);
   approveMarket: (MarketId) -> ();
   backup: () -> ();
   buyOption: (MarketId, Balance, nat, bool) -> (Result);
+  canisterAccount: () -> (AccountIdentifier) query;
+  canisterBalance: () -> (ICP);
   cleanTxs: (UserId) -> ();
   createMarket: (MarketInitData) -> (Result_3);
   createUserResult: (text) -> (Result_2);

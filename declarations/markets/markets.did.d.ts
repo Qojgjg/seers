@@ -29,6 +29,7 @@ export interface Market {
       arg_2: bigint,
       arg_3: boolean,
     ) => Promise<Result>,
+  'callerAccount' : () => Promise<AccountIdentifier>,
   'canisterAccount' : () => Promise<AccountIdentifier>,
   'canisterBalance' : () => Promise<ICP>,
   'cleanTxs' : (arg_0: UserId) => Promise<undefined>,

@@ -50,6 +50,12 @@ shared({ caller = initializer }) actor class Market() = this {
         myAccountId()
     };
 
+    // Returns canister's default account identifier as a blob.
+    public shared(msg) func callerAccount() : async Account.AccountIdentifier {
+        let principal = msg.caller;
+        return Account.accountIdentifier(principal, Account.defaultSubaccount());
+    };
+
     public type Title = Text;
     public type Description = Text;
     public type Url = Text;
