@@ -70,6 +70,7 @@ type UserTx =
     timestamp : Time
   };
 actor {
+  stable var anon : Text;
   stable var backupState :
     ([(UserId, UserResult)], [(MarketId, MarketResult)]);
   stable var handles :

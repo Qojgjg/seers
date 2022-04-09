@@ -30,7 +30,7 @@ export interface Market {
       arg_3: boolean,
     ) => Promise<Result>,
   'callerAccount' : () => Promise<AccountIdentifier>,
-  'canisterAccount' : () => Promise<AccountIdentifier>,
+  'canisterAccount' : () => Promise<string>,
   'canisterBalance' : () => Promise<ICP>,
   'cleanTxs' : (arg_0: UserId) => Promise<undefined>,
   'createMarket' : (arg_0: MarketInitData) => Promise<Result_3>,

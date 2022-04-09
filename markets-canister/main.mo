@@ -32,6 +32,7 @@ import Ledger "Ledger";
 
 shared({ caller = initializer }) actor class Market() = this {
     private let ledger: Ledger.Interface  = actor(Ledger.CANISTER_ID);
+    private stable var anon: Text = "2vxsx-fae";
 
     // Returns the default account identifier of this canister.
     func myAccountId() : Account.AccountIdentifier {
@@ -45,9 +46,9 @@ shared({ caller = initializer }) actor class Market() = this {
 
     /* Types */
 
-    // Returns canister's default account identifier as a blob.
-    public query func canisterAccount() : async Account.AccountIdentifier {
-        myAccountId()
+    // Returns canister's default account identifier as text.
+    public query func canisterAccount() : async Text {
+        Account.toText(myAccountId())
     };
 
     // Returns canister's default account identifier as a blob.
@@ -615,8 +616,9 @@ shared({ caller = initializer }) actor class Market() = this {
     // Create a new AMM market.
     public shared(msg) func createMarket(marketInitData: MarketInitData): async Result.Result<MarketResult, CreateMarketError> {
         assert(not updating);
+        let author = Principal.toText(msg.caller);        
         
-        if (Principal.isAnonymous(msg.caller)) {
+        if (author == anon) {
             return #err(#callerIsAnon);
         };
 
@@ -627,7 +629,6 @@ shared({ caller = initializer }) actor class Market() = this {
             case (#ok(_)) { /* all good; continue */};
         };
 
-        let author = Principal.toText(msg.caller);        
         let optionsLength = marketInitData.labels.size();
         let marketId = nextMarketId;
         let liquidity = marketInitData.liquidity;
@@ -775,12 +776,12 @@ shared({ caller = initializer }) actor class Market() = this {
 
     public shared(msg) func refreshUser(): async Result.Result<UserResult, UserError> {
         assert(not updating);
+        let caller = Principal.toText(msg.caller);
         
-        if (Principal.isAnonymous(msg.caller)) {
+        if (caller == anon) {
             return #err(#callerIsAnon);
         };
 
-        let caller = Principal.toText(msg.caller);
         let userOpt = userMap.get(caller);
 
         switch (userOpt) {
@@ -891,12 +892,12 @@ shared({ caller = initializer }) actor class Market() = this {
         save: Bool
     ): async Result.Result<Balance, TradeError> {
         assert(not updating);
-
-        if (Principal.isAnonymous(msg.caller)) {
+        let caller = Principal.toText(msg.caller);
+        
+        if (caller == anon) {
             return #err(#callerIsAnon);
         };
 
-        let caller = Principal.toText(msg.caller);
         let marketOpt = marketMap.get(marketId);
         
         switch (marketOpt) {
@@ -1055,12 +1056,12 @@ shared({ caller = initializer }) actor class Market() = this {
         ): async Result.Result<Balance, TradeError> {
         assert(not updating);
 
-        if (Principal.isAnonymous(msg.caller)) {
+        let caller = Principal.toText(msg.caller);
+        
+        if (caller == anon) {
             return #err(#callerIsAnon);
         };
 
-        let caller = Principal.toText(msg.caller);
-        
         var user = switch (getUser(caller)) {
             case (null) {
                 return #err(#userNotCreated);
@@ -1229,13 +1230,13 @@ shared({ caller = initializer }) actor class Market() = this {
     // Create user.
     public shared(msg) func createUserResult(handle: Text): async Result.Result<UserResult, CreateUserError> {
         assert(not updating);
-        
-        if (Principal.isAnonymous(msg.caller)) {
-            return #err(#userIsAnon);
-        };
 
         let caller = Principal.toText(msg.caller);
 
+        if (caller == anon) {
+            return #err(#userIsAnon);
+        };
+        
         switch (createUser(caller, handle)) {
             case (#err(e)) {
                 return #err(e);
@@ -1313,7 +1314,9 @@ shared({ caller = initializer }) actor class Market() = this {
     public shared(msg) func addCommentToMarket(marketId: MarketId, content: Text): async Result.Result<Comment, AddCommentError> {
         assert(not updating);
         
-        if (Principal.isAnonymous(msg.caller)) {
+        let userId = Principal.toText(msg.caller);
+        
+        if (userId == anon) {
             return #err(#userIsAnon);
         };
 
@@ -1321,7 +1324,6 @@ shared({ caller = initializer }) actor class Market() = this {
             return #err(#commentIsEmpty);
         };
 
-        let userId = Principal.toText(msg.caller);
         let userOpt = userMap.get(userId);
 
         switch (userOpt) {
