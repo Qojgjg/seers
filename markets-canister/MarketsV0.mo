@@ -161,13 +161,13 @@ module {
         var liquidity: Float;
         var reserves: [Float];
         var k: Float;
-        var providers: [Text];
-        var bettors: [Text];
+        var providers: Buffer.Buffer<Text>;
+        var bettors: Buffer.Buffer<Text>;
         var blockTimestampLast: Time.Time;
         var totalShares: Float;
         var imageUrl: Float;
         var state: MarketState;
         var volume: Float;
-        var comments: [Comment];
+        var comments: Buffer.Buffer<Comment>;
     };
 }
