@@ -1,0 +1,44 @@
+import Float "mo:base/Float";
+
+module {
+    public func newtonMethod(x0: Float, f: Float -> Float): ?Float {
+        let tolerance = 1e-7;
+        let epsylon = 2.220446049250313e-16;
+        let h = 1e-4;
+        let hr = 1/h;
+        let maxIter = 100;
+        
+        var iter = 0;
+        var prev = x0;
+        
+        while (iter < maxIter) {
+            // Compute the value of the function.
+            let y = f(prev);
+
+            // Use numerica derivatives.
+            let yph = f(prev + h);
+            let ymh = f(prev - h);
+            let yp2h = f(prev + 2 * h);
+            let ym2h = f(prev - 2 * h);
+
+            let yp = ((ym2h - yp2h) + 8 * (yph - ymh)) * hr / 12;
+
+            if (Float.abs(yp) <= epsylon * Float.abs(y)) {
+                return null;
+            };
+
+            // Update the guess.
+            let next = prev - y / yp;
+
+            // Check for convergence:
+            if (Float.abs(next - prev) <= tolerance * Float.abs(next)) {
+                return ?next;
+            };
+
+            prev := next;
+            iter := iter + 1;
+        };
+
+        return null;
+    };
+}
