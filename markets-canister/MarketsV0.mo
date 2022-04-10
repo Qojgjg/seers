@@ -3,6 +3,28 @@ import Time "mo:base/Time";
 import Buffer "mo:base/Buffer";
 
 module {
+    public type MarketError = {
+        #callerIsAnon;
+        #userNotCreated;
+        #notEnoughLiquidity: Float;
+        #titleMissing;
+        #descriptionMissing;
+        #optionsMissing;
+        #imageMissing;
+        #startDateOld;
+        #endDateOld;
+        #endDateOlderThanStartDate;
+
+        #notEnoughBalance;
+        #marketMissing;
+        #marketNotOpen;
+        #newtonFailed;
+
+        #commentIsEmpty;
+
+        #userAlreadyExist;
+    };
+
     public type MarketState = {
         #pending: ();
         #approved: ();
