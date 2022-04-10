@@ -15,6 +15,7 @@ import Array "mo:base/Array";
 import Hash "mo:base/Hash";
 import Iter "mo:base/Iter";
 import Result "mo:base/Result";
+import MarketType "MarketsV0";
 
 // import Array "mo:base/Array";
 // import Binary "mo:encoding/Binary";
