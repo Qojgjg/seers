@@ -82,31 +82,94 @@ module {
         #post: Post;
     };
 
-    public type User = {
-        var id: Text;
-        var handle: Text;
-        var picture: Text;
-        var twitter: Text;
-        var discord: Text;
-        var bio: Text;
-        var feed: Buffer.Buffer<FeedItem>;
-        var seerBalance: Float;
-        var expSeerBalance: Float;
-        var icpBalance: Float;
-        var expIcpBalance: Float;
-        var cyclesBalance: Float;
-        var expCyclesBalance: Float;
-        var cyclesDepositAddr: Text;
-        var icpDepositAddr: Text;        
-        var markets: Buffer.Buffer<UserMarket>;
-        var txs: Buffer.Buffer<UserTx>;
-        var comments: Buffer.Buffer<Comment>;
-        var posts: Buffer.Buffer<Post>;
-        var followers: Buffer.Buffer<Follower>;
-        var followees: Buffer.Buffer<Followee>;
-        var createdAt: Time.Time;
-        var lastSeenAt: Time.Time;
-        var modifiedAt: Time.Time;
+    public type UserInitData = {
+        id: Text;
+        handle: Text;
+        picture: Text;
+        twitter: Text;
+        discord: Text;
+        bio: Text;
+    };
+
+    public type Balances = {
+        seers: Float;
+        icp: Float;
+        cycles: Float;
+        btc: Float;
+    };
+
+    public type ExpBalances = {
+        expSeers: Float;
+        expIcp: Float;
+        expCycles: Float;
+        expBtc: Float;
+    };
+
+    public type DepositAddrs = {
+        icp: ?Text;
+        cycles: ?Text;
+        btc: ?Text;
+    };
+
+    class User (initData: UserInitData) = {
+        var id: Text = initData.id;
+        var handle: Text = initData.handle;
+        var picture: Text = initData.picture;
+        var twitter: Text = initData.twitter;
+        var discord: Text = initData.discord;
+        var bio: Text = initData.bio;
+        var feed: Buffer.Buffer<FeedItem> = Buffer.Buffer<FeedItem>(5);
+        var balances: Balances = {
+            seers = 500.0;
+            icp = 0.0;
+            cycles = 0.0;
+            btc = 0.0;
+        };
+        var expBalances: ExpBalances = {
+            expSeers = 500.0;
+            expIcp = 0.0;
+            expCycles = 0.0;
+            expBtc = 0.0;    
+        };
+        var depositAddrs: DepositAddrs = {
+            icp = null;
+            cycles = null;
+            btc = null;
+        };
+        var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
+        var txs: Buffer.Buffer<UserTx> = Buffer.Buffer<UserTx>(5);
+        var comments: Buffer.Buffer<Comment> = Buffer.Buffer<Comment>(5);
+        var posts: Buffer.Buffer<Post> = Buffer.Buffer<Post>(5);
+        var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
+        var followees: Buffer.Buffer<Followee> = Buffer.Buffer<Followee>(5);
+        var createdAt: Time.Time = Time.now();
+        var lastSeenAt: Time.Time = Time.now();
+        var modifiedAt: Time.Time = Time.now();
+
+        public func freeze(): UserStable {
+            let stableUser: UserStable = {  
+                id = id;
+                handle = handle;
+                picture = picture;
+                twitter = twitter;
+                discord = discord;
+                bio = bio;
+                feed = feed.toArray();
+                balances = balances;
+                expBalances = expBalances;
+                depositAddrs = depositAddrs;
+                markets = markets.toArray();
+                txs = txs.toArray();
+                comments = comments.toArray();
+                posts = posts.toArray();
+                followers = followers.toArray();
+                followees = followees.toArray();
+                createdAt = createdAt;
+                lastSeenAt = lastSeenAt;
+                modifiedAt = modifiedAt;
+            };
+            return stableUser;
+        }
     };
 
     public type UserData = {
@@ -262,14 +325,9 @@ module {
         discord: Text;
         bio: Text;
         feed: [FeedItem];
-        seerBalance: Float;
-        expSeerBalance: Float;
-        icpBalance: Float;
-        expIcpBalance: Float;
-        cyclesBalance: Float;
-        expCyclesBalance: Float;
-        cyclesDepositAddr: Text;
-        icpDepositAddr: Text;        
+        balances: Balances;
+        expBalances: ExpBalances;
+        depositAddrs: DepositAddrs;  
         markets: [UserMarket];
         txs: [UserTx];
         comments: [Comment];
