@@ -15,7 +15,7 @@ import Array "mo:base/Array";
 import Hash "mo:base/Hash";
 import Iter "mo:base/Iter";
 import Result "mo:base/Result";
-import MarketType "MarketsV0";
+import MarketsV1 "MarketsV1";
 import Utils "Utils";
 
 // import Array "mo:base/Array";
@@ -280,8 +280,55 @@ shared({ caller = initializer }) actor class Market() = this {
     
     private stable var stableUsers: [(UserId, UserResult)] = [];
     private stable var stableMarkets: [(MarketId, MarketResult)] = [];
+    
+    private stable var stableUsers2: [(Text, MarketsV1.UserStable)] = [];
+    private stable var stableMarkets2: [(Nat32, MarketsV1.MarketStable)] = [];
+    
     private stable var backupState: State = ([], []);
     
+    public type MarketV = {
+        #v0: Market;
+        #v1: MarketsV1.Market;
+    };
+
+    public type UserV = {
+        #v0: User;
+        #v1: MarketsV1.User;
+    };
+
+    private var userMap2: Map.HashMap<Text, UserV> = do {
+        let usersIter = Iter.map<(Text, MarketsV1.UserStable), (Text, UserV)>(
+            stableUsers2.vals(), 
+            func (e: (Text, MarketsV1.UserStable)): (Text, UserV) {
+                let v = #v1(MarketsV1.unFreezeUser(e.1));
+                return (e.0, v);
+            }
+        );
+        
+        Map.fromIter<Text, UserV>(
+            usersIter,
+            50, 
+            Text.equal, 
+            Text.hash
+        )
+    };
+    private var marketMap2: Map.HashMap<Nat32, MarketV> = do {
+        let marketIter = Iter.map<(Nat32, MarketsV1.MarketStable), (Nat32, MarketV)>(
+            stableMarkets2.vals(), 
+            func (e: (Nat32, MarketsV1.MarketStable)): (Nat32, MarketV) {
+                let v = #v1(MarketsV1.unFreezeMarket(e.1));
+                return (e.0, v);
+            }
+        );
+        
+        Map.fromIter<Nat32, MarketV>(
+            marketIter,
+            10, 
+            Nat32.equal, 
+            func (x: Nat32): Nat32 { x } 
+        )
+    };
+
     private var userMap: Map.HashMap<UserId, User> = do {
         let usersIter = Iter.map<(UserId, UserResult), (UserId, User)>(
             stableUsers.vals(), 

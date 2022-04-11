@@ -3,13 +3,54 @@ type AssocList<K, V> = List<(K, V)>;
 type AssocList__1<K, V> = AssocList<K, V>;
 type Author = Text;
 type Balance = Float;
+type Balances = {btc : Float; cycles : Float; icp : Float; seers : Float};
+type Bet = {comment : Comment; tx : UserTx};
 type Branch<K, V> = {left : Trie<K, V>; right : Trie<K, V>; size : Nat};
+type BrierScore = {createdAt : Time; score : Float};
+type CollateralType = {#cycles; #icp; #seers};
+type Comment =
+  {
+    content : Text;
+    createdAt : Time;
+    id : Nat32;
+    likes : [Like];
+    user : UserData
+  };
 type Comment__1 = {author : Text; content : Text};
+type DepositAddrs = {btc : ?Text; cycles : ?Text; icp : ?Text};
 type Description = Text;
+type ExpBalances =
+  {expBtc : Float; expCycles : Float; expIcp : Float; expSeers : Float};
+type FeedItem =
+  {#bet : Bet; #comment : Comment; #market : MarketStable; #post : Post};
+type Followee = {createdAt : Time; user : UserData};
+type Follower = {createdAt : Time; user : UserData};
 type Hash = Nat32;
+type HistPoint =
+  {createdAt : Time; liquidity : Float; probabilities : [Float]};
 type Key<K> = {hash : Hash; key : K};
 type Leaf<K, V> = {keyvals : AssocList__1<Key<K>, V>; size : Nat};
+type Like =
+  {
+    authorHandle : Text;
+    authorPicture : Text;
+    authorPrincipal : Text;
+    createdAt : Time;
+    stars : Nat32
+  };
 type List<T> = ?(T, List<T>);
+type MarketCategory =
+  {
+    #business;
+    #crypto;
+    #dfinity;
+    #entertainment;
+    #financial;
+    #politics;
+    #science;
+    #seers;
+    #sports
+  };
 type MarketId = Nat32;
 type MarketResult =
   {
@@ -33,14 +74,66 @@ type MarketResult =
     totalShares : Shares;
     volume : Balance
   };
+type MarketStable =
+  {
+    author : UserData;
+    bettors : [Text];
+    category : MarketCategory;
+    collateralType : CollateralType;
+    comments : [Comment];
+    createdAt : Time;
+    description : Text;
+    endDate : Time;
+    histPrices : [HistPoint];
+    id : Nat32;
+    imageUrl : Text;
+    images : [Text];
+    k : Float;
+    labels : [Text];
+    liquidity : Float;
+    modifiedAt : Time;
+    probabilities : [Float];
+    providers : [Text];
+    reserves : [Float];
+    startDate : Time;
+    state : MarketState;
+    title : Text;
+    totalShares : Float;
+    volume : Float
+  };
+type MarketState =
+  {#approved; #closed; #invalid; #open; #pending; #resolved : Nat};
 type MarketState__1 = {#closed; #open; #pending; #resolved : Nat};
+type Post =
+  {
+    author : UserData;
+    comments : [Comment];
+    content : Text;
+    createdAt : Time;
+    id : Nat32;
+    likes : [Like]
+  };
 type Probability = Float;
 type Shares = Int;
 type Time = Int;
 type Title = Text;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type Url = Text;
+type UserData = {handle : Text; picture : Text; principal : Text};
 type UserId = Text;
+type UserMarket =
+  {
+    balances : [Float];
+    brierScores : [BrierScore];
+    createdAt : Time;
+    labels : [Text];
+    marketId : Nat32;
+    modifiedAt : Time;
+    redeemed : Bool;
+    shares : Float;
+    spent : Float;
+    title : Text
+  };
 type UserMarket__1 =
   {
     balances : [Balance];
@@ -58,6 +151,40 @@ type UserResult =
     markets : [UserMarket__1];
     seerBalance : Balance;
     txs : [UserTx__1]
+  };
+type UserStable =
+  {
+    balances : Balances;
+    bio : Text;
+    comments : [Comment];
+    createdAt : Time;
+    depositAddrs : DepositAddrs;
+    discord : Text;
+    expBalances : ExpBalances;
+    feed : [FeedItem];
+    followees : [Followee];
+    followers : [Follower];
+    handle : Text;
+    id : Text;
+    lastSeenAt : Time;
+    markets : [UserMarket];
+    modifiedAt : Time;
+    picture : Text;
+    posts : [Post];
+    twitter : Text;
+    txs : [UserTx]
+  };
+type UserTx =
+  {
+    createdAt : Time;
+    dest : ?Nat;
+    fee : Float;
+    id : Nat32;
+    marketId : Nat32;
+    price : Float;
+    recv : Float;
+    sent : Float;
+    src : ?Nat
   };
 type UserTx__1 =
   {
@@ -77,6 +204,8 @@ actor {
     {#branch : Branch<Text, UserId>; #empty; #leaf : Leaf<Text, UserId>};
   stable var nextMarketId : Nat32;
   stable var stableMarkets : [(MarketId, MarketResult)];
+  stable var stableMarkets2 : [(Nat32, MarketStable)];
   stable var stableUsers : [(UserId, UserResult)];
+  stable var stableUsers2 : [(Text, UserStable)];
   stable var updating : Bool
 };
