@@ -110,6 +110,12 @@ module {
         var modifiedAt: Time.Time;
     };
 
+    public type AuthorData = {
+        principal: Text;
+        handle: Text;
+        picture: Text;
+    };
+
     public type MarketCategory = {
         #crypto;
         #science;
@@ -154,9 +160,7 @@ module {
         id: Nat32;
         marketId: Nat32;
         txId: ?Nat32;
-        authorHandle: Text;
-        authorPrincipal: Text;
-        authorPicture: Text;
+        authorData: AuthorData;
         content: Text;
         replies: Buffer.Buffer<Comment>;
         likes: Buffer.Buffer<Like>;
@@ -166,9 +170,7 @@ module {
     public type Post = {
         id: Nat32;
         marketId: ?Nat32;
-        authorHandle: Text;
-        authorPrincipal: Text;
-        authorPicture: Text;
+        authorData: AuthorData;
         content: Text;
         likes: Buffer.Buffer<Like>;
         createdAt: Time.Time;
@@ -186,9 +188,7 @@ module {
         description: Text;
         startDate: Time.Time;
         endDate: Time.Time;
-        authorPrincipal: Text;
-        authorHandle: Text;
-        authorPicture: Text;
+        authorData: AuthorData;
         labels: [Text];
         images: [Text];
         var probabilities: [Float];
