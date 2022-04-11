@@ -65,16 +65,12 @@ module {
     };
 
     public type Follower = {
-        principal: Text;
-        handle: Text;
-        picture: Text;
+        user: UserData;
         createdAt: Time.Time;
     };
 
     public type Followee = {
-        principal: Text;
-        handle: Text;
-        picture: Text;
+        user: UserData;
         createdAt: Time.Time;
     };
 
@@ -110,7 +106,7 @@ module {
         var modifiedAt: Time.Time;
     };
 
-    public type AuthorData = {
+    public type UserData = {
         principal: Text;
         handle: Text;
         picture: Text;
@@ -160,7 +156,7 @@ module {
         id: Nat32;
         marketId: Nat32;
         txId: ?Nat32;
-        authorData: AuthorData;
+        user: UserData;
         content: Text;
         replies: Buffer.Buffer<Comment>;
         likes: Buffer.Buffer<Like>;
@@ -170,7 +166,7 @@ module {
     public type Post = {
         id: Nat32;
         marketId: ?Nat32;
-        authorData: AuthorData;
+        author: UserData;
         content: Text;
         likes: Buffer.Buffer<Like>;
         createdAt: Time.Time;
@@ -188,7 +184,7 @@ module {
         description: Text;
         startDate: Time.Time;
         endDate: Time.Time;
-        authorData: AuthorData;
+        author: UserData;
         labels: [Text];
         images: [Text];
         var probabilities: [Float];
