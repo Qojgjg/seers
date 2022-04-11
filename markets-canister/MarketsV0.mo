@@ -80,6 +80,13 @@ module {
     public type FeedItem = {
         #comment: Comment;
         #post: Post;
+        #bet: Bet;
+        #market: MarketStable;
+    };
+
+    public type Bet = {
+        tx: UserTx;
+        comment: Comment;
     };
 
     public type UserInitData = {
