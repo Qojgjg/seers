@@ -5,6 +5,8 @@ import Iter "mo:base/Iter";
 import Float "mo:base/Float";
 import Array "mo:base/Array";
 
+import Utils "Utils";
+
 module {
     public type MarketError = {
         #callerIsAnon;
@@ -118,64 +120,43 @@ module {
         btc: ?Text;
     };
 
-    class User (initData: UserInitData) = {
-        var id: Text = initData.id;
-        var handle: Text = initData.handle;
-        var picture: Text = initData.picture;
-        var twitter: Text = initData.twitter;
-        var discord: Text = initData.discord;
-        var bio: Text = initData.bio;
-        var feed: Buffer.Buffer<FeedItem> = Buffer.Buffer<FeedItem>(5);
-        var balances: Balances = {
+    class User (initData: UserInitData) = this {
+        public var id: Text = initData.id;
+        public var handle: Text = initData.handle;
+        public var picture: Text = initData.picture;
+        public var twitter: Text = initData.twitter;
+        public var discord: Text = initData.discord;
+        public var bio: Text = initData.bio;
+        public var feed: Buffer.Buffer<FeedItem> = Buffer.Buffer<FeedItem>(5);
+        public var balances: Balances = {
             seers = 500.0;
             icp = 0.0;
             cycles = 0.0;
             btc = 0.0;
         };
-        var expBalances: ExpBalances = {
+        public var expBalances: ExpBalances = {
             expSeers = 500.0;
             expIcp = 0.0;
             expCycles = 0.0;
             expBtc = 0.0;    
         };
-        var depositAddrs: DepositAddrs = {
+        public var depositAddrs: DepositAddrs = {
             icp = null;
             cycles = null;
             btc = null;
         };
-        var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
-        var txs: Buffer.Buffer<UserTx> = Buffer.Buffer<UserTx>(5);
-        var comments: Buffer.Buffer<Comment> = Buffer.Buffer<Comment>(5);
-        var posts: Buffer.Buffer<Post> = Buffer.Buffer<Post>(5);
-        var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
-        var followees: Buffer.Buffer<Followee> = Buffer.Buffer<Followee>(5);
-        var createdAt: Time.Time = Time.now();
-        var lastSeenAt: Time.Time = Time.now();
-        var modifiedAt: Time.Time = Time.now();
+        public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
+        public var txs: Buffer.Buffer<UserTx> = Buffer.Buffer<UserTx>(5);
+        public var comments: Buffer.Buffer<Comment> = Buffer.Buffer<Comment>(5);
+        public var posts: Buffer.Buffer<Post> = Buffer.Buffer<Post>(5);
+        public var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
+        public var followees: Buffer.Buffer<Followee> = Buffer.Buffer<Followee>(5);
+        public var createdAt: Time.Time = Time.now();
+        public var lastSeenAt: Time.Time = Time.now();
+        public var modifiedAt: Time.Time = Time.now();
 
         public func freeze(): UserStable {
-            let stableUser: UserStable = {  
-                id = id;
-                handle = handle;
-                picture = picture;
-                twitter = twitter;
-                discord = discord;
-                bio = bio;
-                feed = feed.toArray();
-                balances = balances;
-                expBalances = expBalances;
-                depositAddrs = depositAddrs;
-                markets = markets.toArray();
-                txs = txs.toArray();
-                comments = comments.toArray();
-                posts = posts.toArray();
-                followers = followers.toArray();
-                followees = followees.toArray();
-                createdAt = createdAt;
-                lastSeenAt = lastSeenAt;
-                modifiedAt = modifiedAt;
-            };
-            return stableUser;
+            return UserStable(this);
         }
     };
 
@@ -324,26 +305,53 @@ module {
         }
     };
 
-    public type UserStable = {
-        id: Text;
-        handle: Text;
-        picture: Text;
-        twitter: Text;
-        discord: Text;
-        bio: Text;
-        feed: [FeedItem];
-        balances: Balances;
-        expBalances: ExpBalances;
-        depositAddrs: DepositAddrs;  
-        markets: [UserMarket];
-        txs: [UserTx];
-        comments: [Comment];
-        posts: [Post];
-        followers: [Follower];
-        followees: [Followee];
-        createdAt: Time.Time;
-        lastSeenAt: Time.Time;
-        modifiedAt: Time.Time;
+    class UserStable(user: User) {
+        let id: Text = user.id;
+        let handle: Text = user.handle;
+        let picture: Text = user.picture;
+        let twitter: Text = user.twitter;
+        let discord: Text = user.discord;
+        let bio: Text = user.bio;
+        let feed: [FeedItem] = user.feed.toArray();
+        let balances: Balances = user.balances;
+        let expBalances: ExpBalances = user.expBalances;
+        let depositAddrs: DepositAddrs = user.depositAddrs;  
+        let markets: [UserMarket] = user.markets.toArray();
+        let txs: [UserTx] = user.txs.toArray();
+        let comments: [Comment] = user.comments.toArray();
+        let posts: [Post] = user.posts.toArray();
+        let followers: [Follower] = user.followers.toArray();
+        let followees: [Followee] = user.followees.toArray();
+        let createdAt: Time.Time = user.createdAt;
+        let lastSeenAt: Time.Time = user.lastSeenAt;
+        let modifiedAt: Time.Time = user.modifiedAt;
+
+        public func unFreeze(): User {
+            let initData: UserInitData = {
+                id = id;
+                handle = handle;
+                picture = picture;
+                twitter = twitter;
+                discord = discord;
+                bio = bio;
+            };
+            var user: User = User(initData);
+            user.feed := Utils.bufferFromArray(feed);
+            user.balances := balances;
+            user.expBalances := expBalances;
+            user.depositAddrs := depositAddrs;
+            user.markets := Utils.bufferFromArray(markets);
+            user.txs := Utils.bufferFromArray(txs);
+            user.comments := Utils.bufferFromArray(comments);
+            user.posts := Utils.bufferFromArray(posts);
+            user.followers := Utils.bufferFromArray(followers);
+            user.followees := Utils.bufferFromArray(followees);
+            user.createdAt := createdAt;
+            user.lastSeenAt := lastSeenAt;
+            user.modifiedAt := modifiedAt;
+
+            return user;
+        }
     };
 
     public type MarketStable = {
@@ -369,5 +377,5 @@ module {
         histPrices: [HistPoint];
         createdAt: Time.Time;
         modifiedAt: Time.Time;
-    };
+    }
 }

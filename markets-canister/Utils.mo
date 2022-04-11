@@ -1,6 +1,16 @@
 import Float "mo:base/Float";
+import Buffer "mo:base/Buffer";
+import Array "mo:base/Array";
 
 module {
+    public func bufferFromArray<X>(a: [X]): Buffer.Buffer<X> {
+        var buf: Buffer.Buffer<X> = Buffer.Buffer<X>(a.size());
+        for (e in a.vals()) {
+            buf.add(e);
+        };
+        return buf;
+    };
+
     public func newtonMethod(x0: Float, f: Float -> Float): ?Float {
         let tolerance = 1e-7;
         let epsylon = 2.220446049250313e-16;
