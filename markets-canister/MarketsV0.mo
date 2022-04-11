@@ -34,11 +34,17 @@ module {
         #resolved: Nat;
     };
 
+    public type BrierScore = {
+        score: Float;
+        createdAt: Time.Time;
+    };
+
     public type UserMarket = {
         marketId: Nat32;
         title: Text;
         labels: [Text];
         balances: [Float];
+        brierScores: [BrierScore];
         shares: Float;
         spent: Float;
         redeemed: Bool;
