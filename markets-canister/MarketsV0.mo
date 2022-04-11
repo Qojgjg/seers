@@ -234,18 +234,20 @@ module {
         createdAt: Time.Time;
     };
 
-    class Market (initData: MarketInitData) {
-        let id: Nat32 = initData.nextId;    
-        var title: Text = initData.title;
-        var description: Text = initData.description;
-        var startDate: Time.Time = initData.startDate;
-        var endDate: Time.Time = initData.endDate;
-        var author: UserData = initData.author;
-        var labels: [Text] = initData.labels;
-        var images: [Text] = initData.images;
-        var probabilities: [Float] = initData.probabilities;
-        var liquidity: Float = initData.liquidity;
-        var reserves: [Float] = do {
+    class Market (initData: MarketInitData) = this {
+        public let id: Nat32 = initData.nextId;    
+        public var title: Text = initData.title;
+        public var description: Text = initData.description;
+        public var startDate: Time.Time = initData.startDate;
+        public var endDate: Time.Time = initData.endDate;
+        public var author: UserData = initData.author;
+        public var labels: [Text] = initData.labels;
+        public var images: [Text] = initData.images;
+        public var category: MarketCategory = initData.category;
+        public var collateralType: CollateralType = initData.collateralType;
+        public var probabilities: [Float] = initData.probabilities;
+        public var liquidity: Float = initData.liquidity;
+        public var reserves: [Float] = do {
             let size = initData.labels.size();
             var reserves: [Float] = [];
             for (i in Iter.range(0, size - 1)) {
@@ -253,7 +255,7 @@ module {
             };
             reserves
         };
-        var k: Float = do {
+        public var k: Float = do {
             let size = initData.labels.size();
             var k: Float = 1.0;
             for (i in Iter.range(0, size - 1)) {
@@ -261,47 +263,23 @@ module {
             };
             k
         };
-        var providers: Buffer.Buffer<Text> = do {
+        public var providers: Buffer.Buffer<Text> = do {
             var providers = Buffer.Buffer<Text>(1);
             providers.add(initData.author.principal);
             providers
         };
-        var bettors: Buffer.Buffer<Text> = Buffer.Buffer<Text>(10);
-        var totalShares: Float = Float.sqrt(k);
-        var imageUrl: Text = initData.imageUrl;
-        var state: MarketState = #pending;
-        var volume: Float = 0.0;
-        var comments: Buffer.Buffer<Comment> = Buffer.Buffer<Comment>(10);
-        var histPrices: Buffer.Buffer<HistPoint> = Buffer.Buffer<HistPoint>(10);
-        var createdAt: Time.Time = Time.now();
-        var modifiedAt: Time.Time = Time.now();
+        public var bettors: Buffer.Buffer<Text> = Buffer.Buffer<Text>(10);
+        public var totalShares: Float = Float.sqrt(k);
+        public var imageUrl: Text = initData.imageUrl;
+        public var state: MarketState = #pending;
+        public var volume: Float = 0.0;
+        public var comments: Buffer.Buffer<Comment> = Buffer.Buffer<Comment>(10);
+        public var histPrices: Buffer.Buffer<HistPoint> = Buffer.Buffer<HistPoint>(10);
+        public var createdAt: Time.Time = Time.now();
+        public var modifiedAt: Time.Time = Time.now();
 
         public func freeze(): MarketStable {
-            let stableMarket: MarketStable = {
-                id = id;    
-                title = title;
-                description = description;
-                startDate = startDate;
-                endDate = endDate;
-                author = author;
-                labels = labels;
-                images = images;
-                probabilities = probabilities;
-                liquidity = liquidity;
-                reserves = reserves;
-                k = k;
-                providers = providers.toArray();
-                bettors = bettors.toArray();
-                totalShares = totalShares;
-                imageUrl = imageUrl;
-                state = state;
-                volume = volume;
-                comments = comments.toArray();
-                histPrices = histPrices.toArray();
-                createdAt = createdAt;
-                modifiedAt = modifiedAt;
-            };
-            return stableMarket;
+            return MarketStable(this);
         }
     };
 
@@ -354,28 +332,62 @@ module {
         }
     };
 
-    public type MarketStable = {
-        id: Nat32;    
-        title: Text;
-        description: Text;
-        startDate: Time.Time;
-        endDate: Time.Time;
-        author: UserData;
-        labels: [Text];
-        images: [Text];
-        probabilities: [Float];
-        liquidity: Float;
-        reserves: [Float];
-        k: Float;
-        providers: [Text];
-        bettors: [Text];
-        totalShares: Float;
-        imageUrl: Text;
-        state: MarketState;
-        volume: Float;
-        comments: [Comment];
-        histPrices: [HistPoint];
-        createdAt: Time.Time;
-        modifiedAt: Time.Time;
+    class MarketStable (market: Market) = {
+        let id: Nat32 = market.id;    
+        let title: Text = market.title;
+        let description: Text = market.description;
+        let startDate: Time.Time = market.startDate;
+        let endDate: Time.Time = market.endDate;
+        let author: UserData = market.author;
+        let labels: [Text] = market.labels;
+        let images: [Text] = market.images;
+        let probabilities: [Float] = market.probabilities;
+        let liquidity: Float = market.liquidity;
+        let reserves: [Float] = market.reserves;
+        let category: MarketCategory = market.category;
+        let collateralType: CollateralType = market.collateralType;
+        let k: Float = market.k;
+        let providers: [Text] = market.providers.toArray();
+        let bettors: [Text] = market.bettors.toArray();
+        let totalShares: Float = market.totalShares;
+        let imageUrl: Text = market.imageUrl;
+        let state: MarketState = market.state;
+        let volume: Float = market.volume;
+        let comments: [Comment] = market.comments.toArray();
+        let histPrices: [HistPoint] = market.histPrices.toArray();
+        let createdAt: Time.Time = market.createdAt;
+        let modifiedAt: Time.Time = market.modifiedAt;
+
+        public func unFreeze(): Market {
+            let initData: MarketInitData = {
+                nextId = id;
+                title = title;
+                description = description;
+                startDate = startDate;
+                endDate = endDate;
+                author = author;
+                labels = labels;
+                images = images;
+                probabilities = probabilities;
+                liquidity = liquidity;
+                imageUrl = imageUrl;
+                category = category;
+                collateralType = collateralType;
+            };
+            var market: Market = Market(initData);
+            market.reserves := reserves;
+            market.k := k;
+            market.providers := Utils.bufferFromArray(providers);
+            market.bettors := Utils.bufferFromArray(bettors);
+            market.totalShares := totalShares;
+            market.state := state;
+            market.volume := volume;
+            market.comments := Utils.bufferFromArray(comments);
+            market.histPrices := Utils.bufferFromArray(histPrices);
+            market.createdAt := createdAt;
+            market.modifiedAt := modifiedAt;
+
+            return market;
+        }
     }
 }
