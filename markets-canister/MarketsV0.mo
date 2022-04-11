@@ -168,6 +168,12 @@ module {
         createdAt: Time.Time;
     };
 
+    public type HistPoint = {
+        probabilities: [Float];
+        liquidity: Float;
+        createdAt: Time.Time;
+    };
+
     public type Market = {
         id: Nat32;    
         title: Text;
@@ -185,11 +191,13 @@ module {
         var k: Float;
         var providers: Buffer.Buffer<Text>;
         var bettors: Buffer.Buffer<Text>;
-        var blockTimestampLast: Time.Time;
         var totalShares: Float;
         var imageUrl: Float;
         var state: MarketState;
         var volume: Float;
         var comments: Buffer.Buffer<Comment>;
+        var histPrices: Buffer.Buffer<HistPoint>;
+        var createdAt: Time.Time;
+        var modifiedAt: Time.Time;
     };
 }
