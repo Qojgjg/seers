@@ -1,6 +1,9 @@
 
 import Time "mo:base/Time";
 import Buffer "mo:base/Buffer";
+import Iter "mo:base/Iter";
+import Float "mo:base/Float";
+import Array "mo:base/Array";
 
 module {
     public type MarketError = {
@@ -130,7 +133,8 @@ module {
         #cycles;
     };
 
-    public type MarketInputData = {
+    public type MarketInitData = {
+        nextId: Nat32;
         title: Text;
         description: Text;
         labels: [Text];
@@ -142,6 +146,7 @@ module {
         startDate: Time.Time;
         endDate: Time.Time;
         imageUrl: Text;
+        author: UserData;
     };
 
     public type Like = {
@@ -178,7 +183,105 @@ module {
         createdAt: Time.Time;
     };
 
-    public type Market = {
+    class Market (initData: MarketInitData) {
+        let id: Nat32 = initData.nextId;    
+        var title: Text = initData.title;
+        var description: Text = initData.description;
+        var startDate: Time.Time = initData.startDate;
+        var endDate: Time.Time = initData.endDate;
+        var author: UserData = initData.author;
+        var labels: [Text] = initData.labels;
+        var images: [Text] = initData.images;
+        var probabilities: [Float] = initData.probabilities;
+        var liquidity: Float = initData.liquidity;
+        var reserves: [Float] = do {
+            let size = initData.labels.size();
+            var reserves: [Float] = [];
+            for (i in Iter.range(0, size - 1)) {
+                reserves := Array.append(reserves, [initData.liquidity]);
+            };
+            reserves
+        };
+        var k: Float = do {
+            let size = initData.labels.size();
+            var k: Float = 1.0;
+            for (i in Iter.range(0, size - 1)) {
+                k := k * reserves[i];
+            };
+            k
+        };
+        var providers: Buffer.Buffer<Text> = do {
+            var providers = Buffer.Buffer<Text>(1);
+            providers.add(initData.author.principal);
+            providers
+        };
+        var bettors: Buffer.Buffer<Text> = Buffer.Buffer<Text>(10);
+        var totalShares: Float = Float.sqrt(k);
+        var imageUrl: Text = initData.imageUrl;
+        var state: MarketState = #pending;
+        var volume: Float = 0.0;
+        var comments: Buffer.Buffer<Comment> = Buffer.Buffer<Comment>(10);
+        var histPrices: Buffer.Buffer<HistPoint> = Buffer.Buffer<HistPoint>(10);
+        var createdAt: Time.Time = Time.now();
+        var modifiedAt: Time.Time = Time.now();
+
+        public func freeze(): MarketStable {
+            let stableMarket: MarketStable = {
+                id = id;    
+                title = title;
+                description = description;
+                startDate = startDate;
+                endDate = endDate;
+                author = author;
+                labels = labels;
+                images = images;
+                probabilities = probabilities;
+                liquidity = liquidity;
+                reserves = reserves;
+                k = k;
+                providers = providers.toArray();
+                bettors = bettors.toArray();
+                totalShares = totalShares;
+                imageUrl = imageUrl;
+                state = state;
+                volume = volume;
+                comments = comments.toArray();
+                histPrices = histPrices.toArray();
+                createdAt = createdAt;
+                modifiedAt = modifiedAt;
+            };
+            return stableMarket;
+        }
+    };
+
+    public type UserStable = {
+        id: Text;
+        handle: Text;
+        picture: Text;
+        twitter: Text;
+        discord: Text;
+        bio: Text;
+        feed: [FeedItem];
+        seerBalance: Float;
+        expSeerBalance: Float;
+        icpBalance: Float;
+        expIcpBalance: Float;
+        cyclesBalance: Float;
+        expCyclesBalance: Float;
+        cyclesDepositAddr: Text;
+        icpDepositAddr: Text;        
+        markets: [UserMarket];
+        txs: [UserTx];
+        comments: [Comment];
+        posts: [Post];
+        followers: [Follower];
+        followees: [Followee];
+        createdAt: Time.Time;
+        lastSeenAt: Time.Time;
+        modifiedAt: Time.Time;
+    };
+
+    public type MarketStable = {
         id: Nat32;    
         title: Text;
         description: Text;
@@ -187,19 +290,19 @@ module {
         author: UserData;
         labels: [Text];
         images: [Text];
-        var probabilities: [Float];
-        var liquidity: Float;
-        var reserves: [Float];
-        var k: Float;
-        var providers: Buffer.Buffer<Text>;
-        var bettors: Buffer.Buffer<Text>;
-        var totalShares: Float;
-        var imageUrl: Float;
-        var state: MarketState;
-        var volume: Float;
-        var comments: Buffer.Buffer<Comment>;
-        var histPrices: Buffer.Buffer<HistPoint>;
-        var createdAt: Time.Time;
-        var modifiedAt: Time.Time;
+        probabilities: [Float];
+        liquidity: Float;
+        reserves: [Float];
+        k: Float;
+        providers: [Text];
+        bettors: [Text];
+        totalShares: Float;
+        imageUrl: Text;
+        state: MarketState;
+        volume: Float;
+        comments: [Comment];
+        histPrices: [HistPoint];
+        createdAt: Time.Time;
+        modifiedAt: Time.Time;
     };
 }
