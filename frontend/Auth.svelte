@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte"
+  import { Router, Route, Link } from "svelte-navigator"
   import { AuthClient } from "@dfinity/auth-client"
   import Fa from "svelte-fa"
   import { faBars } from "@fortawesome/free-solid-svg-icons"
@@ -16,12 +17,12 @@
   let principal = ""
   let navClass = "topnav"
 
-  function myFunction() {
+  function updateResponsive() {
     var x = document.getElementById("myTopnav")
     var classes = x.className.split(" ")
-    if (!classes.includes("responsive")) {
-      navClass = "topnav responsive"
-    } else {
+    if (classes.includes("responsive")) {
+      //   navClass = "topnav responsive"
+      // } else {
       navClass = "topnav"
     }
   }
@@ -33,6 +34,7 @@
   }
 
   function handleAuth() {
+    updateResponsive()
     auth.update(() => ({
       loggedIn: true,
       actor: createActor({
@@ -50,16 +52,14 @@
   }
 
   const signIn = () => {
-    myFunction()
     client.login({
-      // identityProvider: "http://rkp4c-7iaaa-aaaaa-aaaca-cai.localhost:8000/",
-      identityProvider: "https://identity.ic0.app/",
+      identityProvider: "http://rwlgt-iiaaa-aaaaa-aaaaa-cai.localhost:8000/",
+      // identityProvider: "https://identity.ic0.app/",
       onSuccess: handleAuth,
     })
   }
 
   const signOut = async () => {
-    myFunction()
     await client.logout()
     signedInF(false)
     signedIn = false
@@ -74,6 +74,20 @@
         },
       }),
     }))
+  }
+
+  function getProps({ location, href, isPartiallyCurrent, isCurrent }) {
+    // const isActive = href === "/" ? isCurrent : isPartiallyCurrent || isCurrent
+
+    // The object returned here is spread on the anchor element's attributes
+    // if (isActive) {
+    //   return { class: "active" }
+    // }
+    return { style: "padding: 5px" }
+  }
+
+  function getProps2({ location, href, isPartiallyCurrent, isCurrent }) {
+    return { style: "padding: 5px", target: "_blank" }
   }
 
   onMount(initAuth)
@@ -91,45 +105,46 @@
     /></a
   >
 
-  <a href="/" class="right" on:click={myFunction}>Markets</a>
-  <a href="#/ranking/" class="right" on:click={myFunction}>Ranking</a>
-  <a href="https://forms.gle/fYmc9iTc9P46upm47" class="right">Bugs</a>
+  <Link to="/" {getProps}>Markets</Link>
+  <Link to="ranking" {getProps}>Ranking</Link>
+  <a href="https://forms.gle/fYmc9iTc9P46upm47">Bugs</a>
 
   {#if !signedIn && client}
-    <button on:click={signIn}>Login</button>
+    <div style="display: block; width:fit-content;float:right">
+      <button
+        on:click={signIn}
+        style="color: white; background-color: transparent; font-size: 17px;"
+        >Login</button
+      >
+    </div>
   {/if}
 
   {#if signedIn}
-    <a href="#/user/{principal}" on:click={myFunction} class="right">Profile</a>
-    <a href="#/create/" on:click={myFunction} class="right">Create</a>
-    <button on:click={signOut}>Logout</button>
+    <Link to="profile" {getProps}>Profile</Link>
+    <Link to="create" {getProps}>Create</Link>
+    <button
+      on:click={signOut}
+      style="color: white; background-color: transparent; font-size: 17px;"
+      >Logout</button
+    >
   {/if}
-  <a href="javascript:void(0);" class="icon" on:click={myFunction}>
+  <a href="javascript:void(0);" class="icon">
     <Fa icon={faBars} />
   </a>
 </div>
 
 <style>
-  .topnav a {
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
+  .button {
+    background-color: transparent;
+  }
+  .topnav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
-  .topnav button {
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    text-decoration: none;
-    font-size: 17px;
-    padding: 14px 16px;
-    border: none;
-    background: none;
+  .right {
+    padding: 5px;
   }
 
   .topnav button:hover {
@@ -140,10 +155,6 @@
     display: none;
     color: white;
     font-size: 1.2em;
-  }
-
-  .topnav.right {
-    margin-top: 5px;
   }
 
   @media screen and (max-width: 600px) {

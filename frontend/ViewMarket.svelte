@@ -333,6 +333,11 @@
     justify-content: center;
     padding-top: 60px;
     width: 100%;
+    outline: none;
+  }
+
+  h3 {
+    outline: none;
   }
 
   .rowView {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Router, Route, Link } from "svelte-navigator"
   import icLogo from "./assets/ic.svg"
   import { auth, createActor } from "./store/auth"
   import ListMarkets from "./ListMarkets.svelte"
@@ -34,31 +35,38 @@
 
 <svelte:window on:load={hashchange} on:hashchange={hashchange} />
 
-<div style="width: 100%; min-height: 80vh">
-  <Auth {auth} signedInF={(val) => (signedIn = val)} {createActor} />
-  {#if page === "market"}
-    <ViewMarket {auth} {signedIn} marketId={marketIdSelected} />
-  {:else if page === "user"}
-    <User {auth} principal={userPrincipal} />
-  {:else if page === "create"}
-    <CreateMarket {auth} />
-  {:else if page === "ranking"}
-    <Ranking {auth} />
-  {:else}
-    <ListMarkets {auth} />
-  {/if}
-</div>
-<footer
-  style=" width: 100%; text-align: center; padding: 20px 0px; align-items:center; display: flex; flex-direction: column;justify-content: center; gap: 15px"
->
-  <div style="width: 50%;display:flex; justify-content:center">
-    <img src={icLogo} alt="ic logo" style="max-width: 400px;" />
+<Router>
+  <div style="width: 100%; min-height: 80vh">
+    <Auth {auth} signedInF={(val) => (signedIn = val)} {createActor} />
+    <Route path="market">
+      <ViewMarket {auth} {signedIn} marketId={marketIdSelected} />
+    </Route>
+    <Route path="profile">
+      <User {auth} principal={userPrincipal} />
+    </Route>
+    <Route path="create">
+      <CreateMarket {auth} />
+    </Route>
+    <Route path="ranking">
+      <Ranking {auth} />
+    </Route>
+    <Route path="/">
+      <ListMarkets {auth} />
+    </Route>
   </div>
-  <div style="width: 50%;display:flex; justify-content:center;">
-    <a href="https://twitter.com/SeerMarkets" class="grey">Pense Technologies</a
-    >
-  </div>
-</footer>
+  <footer
+    style=" width: 100%; text-align: center; padding: 20px 0px; align-items:center; display: flex; flex-direction: column;justify-content: center; gap: 15px"
+  >
+    <div style="width: 50%;display:flex; justify-content:center">
+      <img src={icLogo} alt="ic logo" style="max-width: 400px;" />
+    </div>
+    <div style="width: 50%;display:flex; justify-content:center;">
+      <a href="https://twitter.com/SeerMarkets" class="grey"
+        >Pense Technologies</a
+      >
+    </div>
+  </footer>
+</Router>
 
 <style global>
   .grey {
