@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Router, Route, Link } from "svelte-navigator"
+  import { Router, Route, useNavigate, navigate } from "svelte-navigator"
   import icLogo from "./assets/ic.svg"
   import { auth, createActor } from "./store/auth"
   import ListMarkets from "./ListMarkets.svelte"
@@ -9,40 +9,24 @@
   import CreateMarket from "./CreateMarket.svelte"
   import Ranking from "./Ranking.svelte"
 
-  let userPrincipal
+  let principal = ""
   let marketIdSelected
-  let page
   let signedIn = false
 
-  async function hashchange() {
-    const path = window.location.hash.slice(1)
-    if (path.startsWith("/market/")) {
-      page = "market"
-      marketIdSelected = path.slice(8)
-      window.scrollTo(0, 0)
-    } else if (path.startsWith("/user/")) {
-      page = "user"
-      userPrincipal = path.slice(6)
-    } else if (path.startsWith("/create/")) {
-      page = "create"
-    } else if (path.startsWith("/ranking/")) {
-      page = "ranking"
-    } else {
-      window.location.hash = ""
-    }
+  const runAfterSign = (val, principal) => {
+    signedIn = val
+    principal = principal
   }
 </script>
 
-<svelte:window on:load={hashchange} on:hashchange={hashchange} />
-
 <Router>
   <div style="width: 100%; min-height: 80vh">
-    <Auth {auth} signedInF={(val) => (signedIn = val)} {createActor} />
+    <Auth {auth} signedInF={(val, p) => runAfterSign(val, p)} {createActor} />
     <Route path="market">
       <ViewMarket {auth} {signedIn} marketId={marketIdSelected} />
     </Route>
     <Route path="profile">
-      <User {auth} principal={userPrincipal} />
+      <User {auth} {principal} />
     </Route>
     <Route path="create">
       <CreateMarket {auth} />
@@ -51,7 +35,7 @@
       <Ranking {auth} />
     </Route>
     <Route path="/">
-      <ListMarkets {auth} />
+      <ListMarkets {auth} {principal} />
     </Route>
   </div>
   <footer

@@ -10,7 +10,7 @@ import Utils "Utils";
 module {
     public type MarketError = {
         #callerIsAnon;
-        #userNotCreated;
+        #profileNotCreated;
         #notEnoughLiquidity: Float;
         #titleMissing;
         #descriptionMissing;

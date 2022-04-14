@@ -41,16 +41,18 @@
     isGetting = false
     if (user) {
       user = user[0]
-      user.markets = user.markets.sort(function (a, b) {
-        var keyA = Number(a.marketId),
-          keyB = Number(b.marketId)
-        if (keyA < keyB) return -1
-        if (keyA > keyB) return 1
-        return 0
-      })
-      user.txs = user.txs.reverse()
+      if (user) {
+        user.markets = user.markets.sort(function (a, b) {
+          var keyA = Number(a.marketId),
+            keyB = Number(b.marketId)
+          if (keyA < keyB) return -1
+          if (keyA > keyB) return 1
+          return 0
+        })
+        user.txs = user.txs.reverse()
+        console.log(user)
+      }
     }
-    console.log(user)
   }
 
   let createUserData = async () => {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import { Router, Route, Link } from "svelte-navigator"
+  import { Link } from "svelte-navigator"
   import { AuthClient } from "@dfinity/auth-client"
   import Fa from "svelte-fa"
   import { faBars } from "@fortawesome/free-solid-svg-icons"
@@ -47,7 +47,7 @@
       }),
     }))
     principal = client.getIdentity().getPrincipal()
-    signedInF(true)
+    signedInF(true, principal)
     signedIn = true
   }
 
