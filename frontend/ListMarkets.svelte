@@ -5,6 +5,8 @@
   const PAGE_SIZE = 20
 
   export let auth
+  export let signedIn
+  export let signIn
   export let principal
 
   let markets = []
@@ -15,12 +17,16 @@
   const navigate = useNavigate()
 
   const runOnMount = async () => {
-    markets = await $auth.actor.readAllMarkets()
-    if (principal) user = await $auth.actor.readUser(principal)
-    if (user === null) navigate("profile")
+    if (signedIn) {
+      markets = await $auth.actor.readAllMarkets()
+      if (principal !== "") user = await $auth.actor.readUser(principal)
+      if (user === null) navigate("profile")
 
-    openMarkets = markets.filter((m) => "open" in m.state)
-    resolvedMarkets = markets.filter((m) => "resolved" in m.state)
+      openMarkets = markets.filter((m) => "open" in m.state)
+      resolvedMarkets = markets.filter((m) => "resolved" in m.state)
+    } else {
+      signIn()
+    }
   }
 
   const printFloat = (x) => {

@@ -1,80 +1,23 @@
 <script lang="ts">
-  import { onMount } from "svelte"
   import { Link } from "svelte-navigator"
-  import { AuthClient } from "@dfinity/auth-client"
   import Fa from "svelte-fa"
   import { faBars } from "@fortawesome/free-solid-svg-icons"
   import logo from "./assets/favicon.png"
 
-  export let auth
-  export let createActor
-  export let signedInF
-
-  let signedIn = false
-
-  /** @type {AuthClient} */
-  let client
-  let principal = ""
+  export let signIn
+  export let signOut
+  export let signedIn
   let navClass = "topnav"
 
-  function updateResponsive() {
-    var x = document.getElementById("myTopnav")
-    var classes = x.className.split(" ")
-    if (classes.includes("responsive")) {
-      //   navClass = "topnav responsive"
-      // } else {
-      navClass = "topnav"
-    }
-  }
-  const initAuth = async () => {
-    client = await AuthClient.create()
-    if (await client.isAuthenticated()) {
-      handleAuth()
-    }
-  }
-
-  function handleAuth() {
-    updateResponsive()
-    auth.update(() => ({
-      loggedIn: true,
-      actor: createActor({
-        agentOptions: {
-          identity: client.getIdentity(),
-        },
-        actorOptions: {
-          identity: client.getIdentity(),
-        },
-      }),
-    }))
-    principal = client.getIdentity().getPrincipal()
-    signedInF(true, principal)
-    signedIn = true
-  }
-
-  const signIn = () => {
-    client.login({
-      identityProvider: "http://rwlgt-iiaaa-aaaaa-aaaaa-cai.localhost:8000/",
-      // identityProvider: "https://identity.ic0.app/",
-      onSuccess: handleAuth,
-    })
-  }
-
-  const signOut = async () => {
-    await client.logout()
-    signedInF(false)
-    signedIn = false
-    auth.update(() => ({
-      loggedIn: false,
-      actor: createActor({
-        agentOptions: {
-          identity: client.getIdentity(),
-        },
-        actorOptions: {
-          identity: client.getIdentity(),
-        },
-      }),
-    }))
-  }
+  // function updateResponsive() {
+  //   var x = document.getElementById("myTopnav")
+  //   var classes = x.className.split(" ")
+  //   if (classes.includes("responsive")) {
+  //     //   navClass = "topnav responsive"
+  //     // } else {
+  //     navClass = "topnav"
+  //   }
+  // }
 
   function getProps({ location, href, isPartiallyCurrent, isCurrent }) {
     // const isActive = href === "/" ? isCurrent : isPartiallyCurrent || isCurrent
@@ -89,8 +32,6 @@
   function getProps2({ location, href, isPartiallyCurrent, isCurrent }) {
     return { style: "padding: 5px", target: "_blank" }
   }
-
-  onMount(initAuth)
 </script>
 
 <div class={navClass} id="myTopnav">
@@ -109,7 +50,7 @@
   <Link to="ranking" {getProps}>Ranking</Link>
   <a href="https://forms.gle/fYmc9iTc9P46upm47">Bugs</a>
 
-  {#if !signedIn && client}
+  {#if !signedIn}
     <div style="display: block; width:fit-content;float:right">
       <button
         on:click={signIn}

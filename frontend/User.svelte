@@ -2,9 +2,7 @@
   import { faBreadSlice } from "@fortawesome/free-solid-svg-icons"
 
   import { onMount } from "svelte"
-  import { identity, text } from "svelte/internal"
-  import ListMarkets from "./ListMarkets.svelte"
-  import ViewMarket from "./ViewMarket.svelte"
+
   export let auth
   export let principal
 

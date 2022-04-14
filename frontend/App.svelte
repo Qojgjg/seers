@@ -1,5 +1,8 @@
 <script lang="ts">
   import { Router, Route, useNavigate, navigate } from "svelte-navigator"
+  import { AuthClient } from "@dfinity/auth-client"
+
+  import { onMount } from "svelte"
   import icLogo from "./assets/ic.svg"
   import { auth, createActor } from "./store/auth"
   import ListMarkets from "./ListMarkets.svelte"
@@ -13,15 +16,71 @@
   let marketIdSelected
   let signedIn = false
 
+  /** @type {AuthClient} */
+  let client
+
   const runAfterSign = (val, principal) => {
     signedIn = val
     principal = principal
   }
+
+  function handleAuth() {
+    // updateResponsive()
+    auth.update(() => ({
+      loggedIn: true,
+      actor: createActor({
+        agentOptions: {
+          identity: client.getIdentity(),
+        },
+        actorOptions: {
+          identity: client.getIdentity(),
+        },
+      }),
+    }))
+    principal = client.getIdentity().getPrincipal().toText()
+    // signedInF(true, principal)
+    signedIn = true
+  }
+
+  const initAuth = async () => {
+    client = await AuthClient.create()
+    if (await client.isAuthenticated()) {
+      handleAuth()
+    }
+  }
+
+  const signIn = () => {
+    if (client)
+      client.login({
+        identityProvider: "http://rwlgt-iiaaa-aaaaa-aaaaa-cai.localhost:8000/",
+        // identityProvider: "https://identity.ic0.app/",
+        onSuccess: handleAuth,
+      })
+  }
+
+  const signOut = async () => {
+    await client.logout()
+    // signedInF(false)
+    signedIn = false
+    auth.update(() => ({
+      loggedIn: false,
+      actor: createActor({
+        agentOptions: {
+          identity: client.getIdentity(),
+        },
+        actorOptions: {
+          identity: client.getIdentity(),
+        },
+      }),
+    }))
+  }
+
+  onMount(initAuth)
 </script>
 
 <Router>
   <div style="width: 100%; min-height: 80vh">
-    <Auth {auth} signedInF={(val, p) => runAfterSign(val, p)} {createActor} />
+    <Auth {signedIn} {signIn} {signOut} />
     <Route path="market">
       <ViewMarket {auth} {signedIn} marketId={marketIdSelected} />
     </Route>
@@ -35,7 +94,7 @@
       <Ranking {auth} />
     </Route>
     <Route path="/">
-      <ListMarkets {auth} {principal} />
+      <ListMarkets {auth} {signedIn} {signIn} {principal} />
     </Route>
   </div>
   <footer
