@@ -33,11 +33,9 @@
   }
 
   let getUserData = async () => {
-    console.log("running setTimeout()" + principal)
     if (principal === "") {
       setTimeout(getUserData, 500)
     } else {
-      console.log("running getUserData() " + principal)
       isGetting = true
       user = await $auth.actor.getUserResult(principal)
       isGetting = false
