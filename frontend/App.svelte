@@ -13,13 +13,11 @@
   import Ranking from "./Ranking.svelte"
 
   let principal = ""
-  let marketIdSelected
 
   /** @type {AuthClient} */
   let client
 
   function handleAuth() {
-    // updateResponsive()
     auth.update(() => ({
       loggedIn: true,
       actor: createActor({

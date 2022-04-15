@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte"
+  import { afterUpdate, onMount } from "svelte"
 
   export let auth
   export let principal
@@ -33,21 +33,27 @@
   }
 
   let getUserData = async () => {
-    isGetting = true
-    user = await $auth.actor.getUserResult(principal)
-    isGetting = false
-    if (user) {
-      user = user[0]
+    console.log("running setTimeout()" + principal)
+    if (principal === "") {
+      setTimeout(getUserData, 500)
+    } else {
+      console.log("running getUserData() " + principal)
+      isGetting = true
+      user = await $auth.actor.getUserResult(principal)
+      isGetting = false
       if (user) {
-        user.markets = user.markets.sort(function (a, b) {
-          var keyA = Number(a.marketId),
-            keyB = Number(b.marketId)
-          if (keyA < keyB) return -1
-          if (keyA > keyB) return 1
-          return 0
-        })
-        user.txs = user.txs.reverse()
-        console.log(user)
+        user = user[0]
+        if (user) {
+          user.markets = user.markets.sort(function (a, b) {
+            var keyA = Number(a.marketId),
+              keyB = Number(b.marketId)
+            if (keyA < keyB) return -1
+            if (keyA > keyB) return 1
+            return 0
+          })
+          user.txs = user.txs.reverse()
+          console.log(user)
+        }
       }
     }
   }
@@ -80,8 +86,8 @@
     }
     refreshLabel = "Refresh"
   }
-
   onMount(getUserData)
+  // afterUpdate(getUserData)
 </script>
 
 <div class="header">
@@ -218,9 +224,13 @@
       </div>
     {:else}
       <div style="display: flex; align-items: center; flex-direction: column">
-        <div style="padding: 10px; margin: 10px">Please login</div>
         <div style="width: 100%;display:flex; justify-content:center">
-          <button class="demo-button" on:click={() => signIn()}>Login</button>
+          <button
+            class="demo-button"
+            on:click={() => {
+              signIn()
+            }}>Login</button
+          >
         </div>
       </div>
     {/if}
