@@ -1,19 +1,17 @@
 <script lang="ts">
-  import { Actor } from "@dfinity/agent"
-  import { NullClass } from "@dfinity/candid/lib/cjs/idl"
-
-  import { concat } from "@dfinity/candid/lib/cjs/utils/buffer"
-  import { faImages } from "@fortawesome/free-solid-svg-icons"
-  import { onMount, beforeUpdate } from "svelte"
-  import { identity, select_multiple_value } from "svelte/internal"
+  import { onMount } from "svelte"
+  import { useNavigate } from "svelte-navigator"
   import SvelteMarkdown from "svelte-markdown"
+  import { SignIdentity } from "@dfinity/agent"
 
   export let auth
-  export let marketId
-  export let signedIn
+  export let id
+  export let principal
+  export let signIn
+
+  const navigate = useNavigate()
 
   let market
-
   let seerAmount = 0
   let selected = 0
   let selectedLabel
@@ -38,7 +36,7 @@
   }
 
   const readMarket = async () => {
-    market = await $auth.actor.readMarket(parseInt(marketId))
+    market = await $auth.actor.readMarket(parseInt(id))
     market = market[0]
     selectedLabel = market.labels[0]
     selected = 0
@@ -278,7 +276,7 @@
                 {/if}
               </div>
             </div>
-            {#if signedIn}
+            {#if principal !== ""}
               <button
                 class="demo-button"
                 on:click={() => doIt(market.id, seerAmount)}
@@ -289,7 +287,9 @@
                 {errorResponse}
               </div>
             {:else}
-              <button class="demo-button" disabled> Please login </button>
+              <button class="demo-button" on:click={() => signIn()}>
+                Please login
+              </button>
             {/if}
           </div>
         </div>

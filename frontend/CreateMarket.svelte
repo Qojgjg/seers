@@ -1,5 +1,7 @@
 <script>
   export let auth
+  export let principal
+  export let signIn
 
   let labels = "Yes,No"
   let images = ""

@@ -4,9 +4,10 @@
   import { faBars } from "@fortawesome/free-solid-svg-icons"
   import logo from "./assets/favicon.png"
 
-  export let signIn
+  export let principal
   export let signOut
-  export let signedIn
+  export let signIn
+
   let navClass = "topnav"
 
   // function updateResponsive() {
@@ -50,7 +51,7 @@
   <Link to="ranking" {getProps}>Ranking</Link>
   <a href="https://forms.gle/fYmc9iTc9P46upm47">Bugs</a>
 
-  {#if !signedIn}
+  {#if principal === ""}
     <div style="display: block; width:fit-content;float:right">
       <button
         on:click={signIn}
@@ -60,7 +61,7 @@
     </div>
   {/if}
 
-  {#if signedIn}
+  {#if principal !== ""}
     <Link to="profile" {getProps}>Profile</Link>
     <Link to="create" {getProps}>Create</Link>
     <button

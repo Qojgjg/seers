@@ -1,32 +1,18 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import { useNavigate } from "svelte-navigator"
 
   const PAGE_SIZE = 20
 
   export let auth
-  export let signedIn
-  export let signIn
-  export let principal
 
   let markets = []
   let openMarkets = []
   let resolvedMarkets = []
-  let user = null
-
-  const navigate = useNavigate()
 
   const runOnMount = async () => {
-    if (signedIn) {
-      markets = await $auth.actor.readAllMarkets()
-      if (principal !== "") user = await $auth.actor.readUser(principal)
-      if (user === null) navigate("profile")
-
-      openMarkets = markets.filter((m) => "open" in m.state)
-      resolvedMarkets = markets.filter((m) => "resolved" in m.state)
-    } else {
-      signIn()
-    }
+    markets = await $auth.actor.readAllMarkets()
+    openMarkets = markets.filter((m) => "open" in m.state)
+    resolvedMarkets = markets.filter((m) => "resolved" in m.state)
   }
 
   const printFloat = (x) => {
@@ -58,7 +44,7 @@
   </select> -->
   {#each openMarkets as market}
     <div class="responsiveItem">
-      <a href="#/market/{market.id}">
+      <a href="market/{market.id}">
         <div class="gallery">
           <div>
             <img src={market.imageUrl} alt="random" />
@@ -96,7 +82,7 @@
   {/each}
   {#each resolvedMarkets as market}
     <div class="responsiveItem">
-      <a href="#/market/{market.id}">
+      <a href="market/{market.id}">
         <div class="gallery">
           <div>
             <img

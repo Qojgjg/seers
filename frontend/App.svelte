@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Router, Route, useNavigate, navigate } from "svelte-navigator"
+  import { Router, Route } from "svelte-navigator"
   import { AuthClient } from "@dfinity/auth-client"
 
   import { onMount } from "svelte"
@@ -14,15 +14,9 @@
 
   let principal = ""
   let marketIdSelected
-  let signedIn = false
 
   /** @type {AuthClient} */
   let client
-
-  const runAfterSign = (val, principal) => {
-    signedIn = val
-    principal = principal
-  }
 
   function handleAuth() {
     // updateResponsive()
@@ -38,8 +32,6 @@
       }),
     }))
     principal = client.getIdentity().getPrincipal().toText()
-    // signedInF(true, principal)
-    signedIn = true
   }
 
   const initAuth = async () => {
@@ -59,9 +51,8 @@
   }
 
   const signOut = async () => {
+    principal = ""
     await client.logout()
-    // signedInF(false)
-    signedIn = false
     auth.update(() => ({
       loggedIn: false,
       actor: createActor({
@@ -80,21 +71,21 @@
 
 <Router>
   <div style="width: 100%; min-height: 80vh">
-    <Auth {signedIn} {signIn} {signOut} />
-    <Route path="market">
-      <ViewMarket {auth} {signedIn} marketId={marketIdSelected} />
+    <Auth {principal} {signIn} {signOut} />
+    <Route path="market/:id" let:params>
+      <ViewMarket {auth} {principal} {signIn} id={params.id} />
     </Route>
     <Route path="profile">
-      <User {auth} {principal} />
+      <User {auth} {principal} {signIn} />
     </Route>
     <Route path="create">
-      <CreateMarket {auth} />
+      <CreateMarket {auth} {principal} {signIn} />
     </Route>
     <Route path="ranking">
       <Ranking {auth} />
     </Route>
     <Route path="/">
-      <ListMarkets {auth} {signedIn} {signIn} {principal} />
+      <ListMarkets {auth} />
     </Route>
   </div>
   <footer

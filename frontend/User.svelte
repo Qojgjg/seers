@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { faBreadSlice } from "@fortawesome/free-solid-svg-icons"
-
   import { onMount } from "svelte"
 
   export let auth
   export let principal
+  export let signIn
 
   let user = null
   let createLabel = "Create User"
@@ -196,7 +195,7 @@
       {/if}
     {:else if isGetting}
       Loading
-    {:else}
+    {:else if principal !== ""}
       <div style="display: flex; align-items: center; flex-direction: column">
         <div style="padding: 10px; margin: 10px">Handle:</div>
         <input
@@ -215,6 +214,13 @@
         <br />
         <div style="text-align:center;color:red">
           {errorResponse}
+        </div>
+      </div>
+    {:else}
+      <div style="display: flex; align-items: center; flex-direction: column">
+        <div style="padding: 10px; margin: 10px">Please login</div>
+        <div style="width: 100%;display:flex; justify-content:center">
+          <button class="demo-button" on:click={() => signIn()}>Login</button>
         </div>
       </div>
     {/if}
