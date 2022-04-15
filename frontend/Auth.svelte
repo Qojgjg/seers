@@ -3,42 +3,40 @@
   import Fa from "svelte-fa"
   import { faBars } from "@fortawesome/free-solid-svg-icons"
   import logo from "./assets/favicon.png"
+  import { onMount } from "svelte"
 
   export let principal
   export let signOut
   export let signIn
 
-  let navClass = "topnav"
+  let innerWidth = window.innerWidth
+  let navStyle = "display: flex; flex-direction: row; align-items: center"
+  let common =
+    ";background-color: transparent; font-size: 17px; padding: 5px; height: fit-content;"
+  let menuItemStyle = ""
+  let logoStyle = ""
 
-  // function updateResponsive() {
-  //   var x = document.getElementById("myTopnav")
-  //   var classes = x.className.split(" ")
-  //   if (classes.includes("responsive")) {
-  //     //   navClass = "topnav responsive"
-  //     // } else {
-  //     navClass = "topnav"
-  //   }
-  // }
-
-  function getProps({ location, href, isPartiallyCurrent, isCurrent }) {
-    // const isActive = href === "/" ? isCurrent : isPartiallyCurrent || isCurrent
-
-    // The object returned here is spread on the anchor element's attributes
-    // if (isActive) {
-    //   return { class: "active" }
-    // }
-    return { style: "padding: 5px" }
+  $: if (innerWidth < 600) {
+    menuItemStyle = "color: red; display: none; text-align: center" + common
+  } else {
+    menuItemStyle = "color: blue; text-align: center" + common
   }
 
-  function getProps2({ location, href, isPartiallyCurrent, isCurrent }) {
-    return { style: "padding: 5px", target: "_blank" }
+  function openMenu() {
+    navStyle = "display: flex; flex-direction: column; align-items: center"
+    menuItemStyle =
+      "color: green; display: block; width: 100%; text-align: right; margin-right: 15px" +
+      common
   }
 </script>
 
-<div class={navClass} id="myTopnav">
+<svelte:window bind:innerWidth />
+
+{innerWidth}
+
+<div style={navStyle}>
   <a
     href="/"
-    class="left"
     style="margin: 0; padding: 0; margin-right: 20px; margin-left: 20px"
     ><img
       src={logo}
@@ -47,86 +45,56 @@
     /></a
   >
 
-  <Link to="/" {getProps}>Markets</Link>
-  <Link to="ranking" {getProps}>Ranking</Link>
+  <Link to="/" style={menuItemStyle}>Markets</Link>
+  <Link to="ranking" style={menuItemStyle}>Ranking</Link>
 
   {#if principal === ""}
-    <a href="https://forms.gle/fYmc9iTc9P46upm47">Bugs</a>
-    <div style="display: block; width:fit-content;float:right">
-      <button
-        on:click={signIn}
-        style="color: white; background-color: transparent; font-size: 17px;"
-        >Login</button
-      >
-    </div>
+    <a href="https://forms.gle/fYmc9iTc9P46upm47" style={menuItemStyle}>Bugs</a>
+    <button on:click={signIn} style={menuItemStyle}>Login</button>
   {/if}
 
   {#if principal !== ""}
-    <Link to="profile" {getProps}>Profile</Link>
-    <Link to="create" {getProps}>Create</Link>
-    <a href="https://forms.gle/fYmc9iTc9P46upm47">Bugs</a>
+    <Link to="profile" style={menuItemStyle}>Profile</Link>
+    <Link to="create" style={menuItemStyle}>Create</Link>
+    <a href="https://forms.gle/fYmc9iTc9P46upm47" style={menuItemStyle}>Bugs</a>
 
-    <button
-      on:click={signOut}
-      style="color: white; background-color: transparent; font-size: 17px;"
-      >Logout</button
-    >
+    <button on:click={signOut} style={menuItemStyle}>Logout</button>
   {/if}
-  <a href="javascript:void(0);" class="icon">
+  <a href="javascript:void(0);" class="icon" on:click={openMenu}>
     <Fa icon={faBars} />
   </a>
 </div>
 
 <style>
-  .button {
-    background-color: transparent;
-  }
-  .topnav {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .right {
-    padding: 5px;
-  }
-
-  .topnav button:hover {
+  button:hover {
     cursor: pointer;
   }
 
-  .topnav .icon {
+  .icon {
     display: none;
     color: white;
     font-size: 1.2em;
   }
 
   @media screen and (max-width: 600px) {
-    .topnav a:not(:first-child) {
-      display: none;
-    }
-    .topnav button:not(:first-child) {
-      display: none;
-    }
-    .topnav a.icon {
+    /* .topnav a.icon {
       float: right;
       display: block;
       color: white;
-    }
-  }
-
-  @media screen and (max-width: 600px) {
-    .topnav.responsive .icon {
+    } */
+    .icon {
       position: absolute;
+      display: block;
+      padding: 10px;
       right: 0;
       top: 0;
       color: white;
     }
-    .topnav.responsive a.right {
+    /* .topnav.responsive a {
       text-align: right;
       float: none;
       display: block;
-    }
+    } */
     .topnav.responsive a.left {
       float: none;
       display: block;
