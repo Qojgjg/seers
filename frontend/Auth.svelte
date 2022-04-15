@@ -49,9 +49,9 @@
 
   <Link to="/" {getProps}>Markets</Link>
   <Link to="ranking" {getProps}>Ranking</Link>
-  <a href="https://forms.gle/fYmc9iTc9P46upm47">Bugs</a>
 
   {#if principal === ""}
+    <a href="https://forms.gle/fYmc9iTc9P46upm47">Bugs</a>
     <div style="display: block; width:fit-content;float:right">
       <button
         on:click={signIn}
@@ -64,6 +64,8 @@
   {#if principal !== ""}
     <Link to="profile" {getProps}>Profile</Link>
     <Link to="create" {getProps}>Create</Link>
+    <a href="https://forms.gle/fYmc9iTc9P46upm47">Bugs</a>
+
     <button
       on:click={signOut}
       style="color: white; background-color: transparent; font-size: 17px;"
