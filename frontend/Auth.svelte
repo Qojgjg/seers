@@ -10,38 +10,47 @@
   export let signIn
 
   let innerWidth = window.innerWidth
-  let navStyle = "display: flex; flex-direction: row; align-items: center"
+  let navStyle = "display: flex; flex-direction: row;"
   let common =
-    ";background-color: transparent; font-size: 17px; padding: 5px; height: fit-content;"
+    ";text-decoration: none; background-color: transparent; font-size: 18px; padding: 5px; \
+    height: 33px;color: white; margin-top: 15px; border: 0;"
   let menuItemStyle = ""
   let logoStyle = ""
+  let menuOpen = false
 
   $: if (innerWidth < 600) {
-    menuItemStyle = "color: red; display: none; text-align: center" + common
+    menuItemStyle = "display: none; text-align: center" + common
   } else {
-    menuItemStyle = "color: blue; text-align: center" + common
+    navStyle = "display: flex; flex-direction: row;"
+    menuItemStyle = "display: block; text-align: center" + common
   }
 
-  function openMenu() {
-    navStyle = "display: flex; flex-direction: column; align-items: center"
-    menuItemStyle =
-      "color: green; display: block; width: 100%; text-align: right; margin-right: 15px" +
-      common
+  function clickMenu() {
+    if (menuOpen) {
+      menuOpen = false
+      menuItemStyle =
+        "display: none; width: 100%; text-align: right; margin-right: 15px" +
+        common
+    } else {
+      menuOpen = true
+      navStyle = "display: flex; flex-direction: column;"
+      menuItemStyle =
+        "display: block; width: 100%; text-align: right; margin-right: 15px" +
+        common
+    }
   }
 </script>
 
 <svelte:window bind:innerWidth />
 
-{innerWidth}
-
 <div style={navStyle}>
   <a
     href="/"
-    style="margin: 0; padding: 0; margin-right: 20px; margin-left: 20px"
+    style="margin: 0; padding: 0; margin-right: 20px; margin-left: 20px; text-align: left"
     ><img
       src={logo}
       alt="logo"
-      style="width: 80px; align-content:center; text-align:center;"
+      style="width: 80px; align-content: left; text-align: left;"
     /></a
   >
 
@@ -60,7 +69,7 @@
 
     <button on:click={signOut} style={menuItemStyle}>Logout</button>
   {/if}
-  <a href="javascript:void(0);" class="icon" on:click={openMenu}>
+  <a href="javascript:void(0);" class="icon" on:click={clickMenu}>
     <Fa icon={faBars} />
   </a>
 </div>
