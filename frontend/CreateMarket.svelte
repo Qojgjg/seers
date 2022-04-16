@@ -87,17 +87,15 @@
         <div><input bind:value={imageUrl} size="40" maxlength="200" /></div>
       </div>
       <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
+        <div style="font-size: 1.5em">Image Preview:</div>
+        <div><img src={imageUrl} alt="preview" /></div>
+      </div>
+      <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">Options:</div>
         <div style="font-size: 1.5em">
           <input bind:value={labels} size="40" maxlength="1000" />
         </div>
       </div>
-      <!-- <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
-        <div style="font-size: 1.5em">Options images: (optional)</div>
-        <div style="font-size: 1.5em">
-          <input bind:value={images} size="40" maxlength="1000" />
-        </div>
-      </div> -->
       <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">End date:</div>
         <div><input bind:value={endDate} size="20" maxlength="30" /></div>
