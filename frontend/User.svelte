@@ -117,7 +117,7 @@
           Portfolio:
           {#each user.markets as market}
             {#if market.used == false}
-              <a href="#/market/{market.marketId}">
+              <a href="/market/{market.marketId}">
                 <div
                   style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: column; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
                 >

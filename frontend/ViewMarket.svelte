@@ -2,7 +2,9 @@
   import { onMount } from "svelte"
   import { useNavigate } from "svelte-navigator"
   import SvelteMarkdown from "svelte-markdown"
-  import { SignIdentity } from "@dfinity/agent"
+  import Content from "./Content.svelte"
+  import Modal from "./Modal.svelte"
+  import { modal } from "./stores.js"
 
   export let auth
   export let id
@@ -277,12 +279,16 @@
               </div>
             </div>
             {#if principal !== ""}
-              <button
+              <!-- <button
                 class="demo-button"
                 on:click={() => doIt(market.id, seerAmount)}
-              >
-                {buttonLabel}
-              </button>
+              > -->
+              <Modal show={$modal}>
+                <Content />
+              </Modal>
+
+              <!-- {buttonLabel} -->
+              <!-- </button> -->
               <div style="width: 100%;text-align:center;color:red">
                 {errorResponse}
               </div>
