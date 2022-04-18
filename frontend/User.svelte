@@ -208,7 +208,7 @@
         />
         <div style="width: 100%;display:flex; justify-content:center">
           <button
-            class="demo-button"
+            class="btn-grad"
             on:input={() => (errorResponse = "")}
             on:click={() => {
               createUserData()
@@ -224,7 +224,7 @@
       <div style="display: flex; align-items: center; flex-direction: column">
         <div style="width: 100%;display:flex; justify-content:center">
           <button
-            class="demo-button"
+            class="btn-grad"
             on:click={() => {
               signIn()
             }}>Login</button
