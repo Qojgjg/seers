@@ -4,7 +4,7 @@
   import SvelteMarkdown from "svelte-markdown"
   import Content from "./Content.svelte"
   import Modal from "./Modal.svelte"
-  import { modal } from "./stores.js"
+  import { modal } from "./store/stores.js"
 
   export let auth
   export let id

@@ -104,10 +104,10 @@
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
         Expected Balance: {Number(user.expSeerBalance).toFixed(2)} Σ
       </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        <button class="demo-button" on:click={refreshUser}
-          >{refreshLabel}</button
-        >
+      <div
+        style="margin-bottom: 10px; width: 100%; text-align:center; display: flex; justify-content: center"
+      >
+        <button class="btn-grad" on:click={refreshUser}>{refreshLabel}</button>
         <div style="text-align:center;color:red">
           {errorRefresh}
         </div>

@@ -131,6 +131,7 @@ export type Shares = bigint;
 export type Time = bigint;
 export type Title = string;
 export type TradeError = { 'callerIsAnon' : null } |
+  { 'minimalAmountIsOne' : null } |
   { 'notEnoughBalance' : null } |
   { 'marketClosed' : null } |
   { 'userNotCreated' : null } |

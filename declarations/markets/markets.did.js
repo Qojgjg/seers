@@ -11,6 +11,7 @@ export const idlFactory = ({ IDL }) => {
   const Balance = IDL.Float64;
   const TradeError = IDL.Variant({
     'callerIsAnon' : IDL.Null,
+    'minimalAmountIsOne' : IDL.Null,
     'notEnoughBalance' : IDL.Null,
     'marketClosed' : IDL.Null,
     'userNotCreated' : IDL.Null,

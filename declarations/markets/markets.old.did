@@ -174,7 +174,7 @@ service : {
   deleteMarket: (MarketId) -> (opt MarketResult);
   editMarketImage: (MarketId, text) -> (bool);
   editMarketProbs: (MarketId, vec Balance) -> (bool);
-  getUserResult: () -> (opt UserResult);
+  getUserResult: (UserId) -> (opt UserResult) query;
   importMarkets: (vec MarketResult) -> () oneway;
   importUsers: (vec OldUserResult) -> () oneway;
   increaseMarketCounter: (MarketId) -> (MarketId);

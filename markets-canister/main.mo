@@ -931,6 +931,7 @@ shared({ caller = initializer }) actor class Market() = this {
         #marketMissing;
         #marketClosed;
         #newtonFailed;
+        #minimalAmountIsOne;
     };
 
     // Sell tokens from caller back to the market.
@@ -946,6 +947,11 @@ shared({ caller = initializer }) actor class Market() = this {
         if (caller == anon) {
             return #err(#callerIsAnon);
         };
+
+        if (value < 1.0) {
+            return #err(#minimalAmountIsOne);
+        };
+
 
         let marketOpt = marketMap.get(marketId);
         
@@ -1123,7 +1129,12 @@ shared({ caller = initializer }) actor class Market() = this {
         if (user.seerBalance < value) {
             return #err(#notEnoughBalance);
         };
-        
+
+
+        if (value < 1.0) {
+            return #err(#minimalAmountIsOne);
+        };
+
         let marketOpt = marketMap.get(marketId);
 
         switch (marketOpt) {

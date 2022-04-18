@@ -41,5 +41,5 @@
    * to avoid limiting type declarations.
    */
   "include": ["frontend/**/*.d.ts", "frontend/**/*.ts", "frontend/**/*.js", "frontend/**/*.svelte"],
-  "exclude": ["frontend/store/*"]
+  "exclude": ["frontend/store/*", "frontend/utils/*"]
 }
