@@ -29,19 +29,35 @@
 <div class="header">
   <h3>Prediction Markets</h3>
 </div>
+<div
+  style="width: 100%; text-align:center;display: flex; justify-content:center; padding: 30px;"
+>
+  <div style="margin-right: 30px;">
+    <select
+      style="background: black; color: white; border: grey; width: 200px; padding: 5px;"
+    >
+      <option value="all">All</option>
+      <option value="crypto">Crypto</option>
+      <option value="sports">Sports</option>
+      <option value="politics">Politics</option>
+      <option value="entertainment">Entertainment</option>
+      <option value="science">Science</option>
+      <option value="business">Business</option>
+      <option value="finance">Finance</option>
+    </select>
+  </div>
+  <div>
+    <select
+      style="background: black; color: white; border: grey; width: 200px; padding: 5px;"
+    >
+      <option value="open">Open</option>
+      <option value="submitted">Submitted</option>
+      <option value="closed">Closed</option>
+      <option value="resolved">Resolved</option>
+    </select>
+  </div>
+</div>
 <div class="rowList">
-  <!-- <select
-    style="background: black; color: white; border: grey; width: 200px; padding: 5px;"
-  >
-    <option value="all">All</option>
-    <option value="crypto">Crypto</option>
-    <option value="sports">Sports</option>
-    <option value="politics">Politics</option>
-    <option value="entertainment">Entertainment</option>
-    <option value="science">Science</option>
-    <option value="business">Business</option>
-    <option value="finance">Finance</option>
-  </select> -->
   {#each openMarkets as market}
     <div class="responsiveItem">
       <a href="market/{market.id}">
