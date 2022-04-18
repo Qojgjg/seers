@@ -278,25 +278,28 @@
                 {/if}
               </div>
             </div>
-            {#if principal !== ""}
-              <!-- <button
-                class="btn-grad"
-                on:click={() => doIt(market.id, seerAmount)}
-              > -->
-              <Modal show={$modal}>
-                <Content onOk={() => doIt(market.id, seerAmount)} />
-              </Modal>
+            <div
+              style="width: 100%; text-align: center; display: flex; justify-content:center"
+            >
+              {#if principal !== ""}
+                <Modal show={$modal}>
+                  <Content
+                    onOk={() => doIt(market.id, seerAmount)}
+                    {tokensEstimate}
+                    {seerAmount}
+                    outcome={selectedLabel}
+                  />
+                </Modal>
 
-              <!-- {buttonLabel} -->
-              <!-- </button> -->
-              <div style="width: 100%;text-align:center;color:red">
-                {errorResponse}
-              </div>
-            {:else}
-              <button class="btn-grad" on:click={() => signIn()}>
-                Login
-              </button>
-            {/if}
+                <div style="width: 100%;text-align:center;color:red">
+                  {errorResponse}
+                </div>
+              {:else}
+                <button class="btn-grad" on:click={() => signIn()}>
+                  Login
+                </button>
+              {/if}
+            </div>
           </div>
         </div>
       </div>

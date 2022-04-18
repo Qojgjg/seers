@@ -3,6 +3,9 @@
   import Dialog from "./Dialog.svelte"
 
   export let onOk
+  export let tokensEstimate
+  export let outcome
+  export let seerAmount
 
   const { open } = getContext("simple-modal")
 
@@ -14,14 +17,13 @@
   let name
   let status = 0
 
-  const onCancel = (text) => {
+  const onCancel = () => {
     name = ""
     status = -1
   }
 
-  const onOkay = (text) => {
+  const onOkay = () => {
     onOk()
-    name = text
     status = 1
   }
 
@@ -29,7 +31,12 @@
     open(
       Dialog,
       {
-        message: "Confirm Transaction",
+        title: "Confirm Transaction",
+        message: `Buying ${tokensEstimate.toFixed(
+          2,
+        )} shares of "${outcome}". Total cost is ${Number(seerAmount).toFixed(
+          2,
+        )} Σ`,
         hasForm: true,
         onCancel,
         onOkay,
