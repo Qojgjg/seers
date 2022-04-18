@@ -37,8 +37,8 @@
 {/if} -->
 
 <div class="buttons">
-  <button class="demo-button" on:click={_onCancel}> Cancel </button>
-  <button class="demo-button" on:click={_onOkay}> Okay </button>
+  <button class="btn-grad" on:click={_onCancel}> Cancel </button>
+  <button class="btn-grad" on:click={_onOkay}> Okay </button>
 </div>
 
 <style>
@@ -53,6 +53,7 @@
 
   .buttons {
     display: flex;
-    justify-content: space-evenly;
+    width: 100%;
+    justify-content: space-around;
   }
 </style>

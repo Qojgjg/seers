@@ -102,13 +102,12 @@
       </div>
       {#if principal !== ""}
         <div style="width: 100%;text-align:center; ">
-          <button class="demo-button" on:click={createMarket}
-            >{buttonLabel}</button
+          <button class="btn-grad" on:click={createMarket}>{buttonLabel}</button
           >
         </div>
       {:else}
         <div style="width: 100%;text-align:center; ">
-          <button class="demo-button" on:click={signIn}>Please login</button>
+          <button class="btn-grad" on:click={signIn}>Please login</button>
         </div>
       {/if}
       <div style="width: 100%;text-align:center;color:red">

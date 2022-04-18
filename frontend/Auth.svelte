@@ -13,7 +13,7 @@
   let navStyle = "display: flex; flex-direction: row;"
   let common =
     ";text-decoration: none; background-color: transparent; font-size: 18px; padding: 5px; \
-    height: 33px;color: white; margin-top: 15px; border: 0;"
+    height: 31px;color: white; margin-top: 15px; border: 0;"
   let menuItemStyle = ""
   let logoStyle = ""
   let menuOpen = false

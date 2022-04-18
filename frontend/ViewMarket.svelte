@@ -156,7 +156,7 @@
             placeholder="Please share your insight"
             class="comment-input"
           /> -->
-          <button class="demo-button" on:click={postComment}>
+          <button class="btn-grad" on:click={postComment}>
             {commentLabel}
           </button>
           <div style="width: 100%;text-align:center;color:red">
@@ -280,11 +280,11 @@
             </div>
             {#if principal !== ""}
               <!-- <button
-                class="demo-button"
+                class="btn-grad"
                 on:click={() => doIt(market.id, seerAmount)}
               > -->
               <Modal show={$modal}>
-                <Content />
+                <Content onOk={() => doIt(market.id, seerAmount)} />
               </Modal>
 
               <!-- {buttonLabel} -->
@@ -293,8 +293,8 @@
                 {errorResponse}
               </div>
             {:else}
-              <button class="demo-button" on:click={() => signIn()}>
-                Please login
+              <button class="btn-grad" on:click={() => signIn()}>
+                Login
               </button>
             {/if}
           </div>

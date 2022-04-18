@@ -2,6 +2,8 @@
   import { getContext } from "svelte"
   import Dialog from "./Dialog.svelte"
 
+  export let onOk
+
   const { open } = getContext("simple-modal")
 
   let opening = false
@@ -18,6 +20,7 @@
   }
 
   const onOkay = (text) => {
+    onOk()
     name = text
     status = 1
   }
@@ -41,7 +44,7 @@
 </script>
 
 <section>
-  <button class="demo-button" on:click={showDialog}>Buy Yes</button>
+  <button class="btn-grad" on:click={showDialog}>Buy Yes</button>
 
   {#if status === 1}
     <p style="color: green">Done!</p>

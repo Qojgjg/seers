@@ -130,7 +130,7 @@
   {/each}
 </div>
 
-<style global>
+<style>
   .content {
     margin-left: 15px;
     width: 100%;
