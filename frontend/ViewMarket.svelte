@@ -304,9 +304,13 @@
                   {errorResponse}
                 </div>
               {:else}
-                <button class="btn-grad" on:click={() => signIn()}>
-                  Login
-                </button>
+                <div
+                  style="width: 100%; justify-content: center; text-align: center; display: flex"
+                >
+                  <button class="btn-grad" on:click={() => signIn()}>
+                    Login
+                  </button>
+                </div>
               {/if}
             </div>
           </div>
