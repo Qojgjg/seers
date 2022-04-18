@@ -6,6 +6,7 @@
   export let tokensEstimate
   export let outcome
   export let seerAmount
+  export let buttonLabel
 
   const { open } = getContext("simple-modal")
 
@@ -50,38 +51,11 @@
   }
 </script>
 
-<section>
-  <button class="btn-grad" on:click={showDialog}>Buy Yes</button>
-
-  {#if status === 1}
-    <p style="color: green">Done!</p>
-  {:else if status === -1}
-    <p style="color: red">Transaction was canceled</p>
-  {/if}
-
-  <div id="state">
-    {#if opening}
-      <p>opening modal...</p>
-    {:else if opened}
-      <p>opened modal!</p>
-    {:else if closing}
-      <p>closing modal...</p>
-    {:else if closed}
-      <p>closed modal!</p>
-    {/if}
-  </div>
-</section>
+<div
+  style="width: 100%; justify-content: center; text-align: center; display: flex"
+>
+  <button class="btn-grad" on:click={showDialog}>{buttonLabel}</button>
+</div>
 
 <style>
-  section {
-    padding-top: 0.5em;
-  }
-
-  #state {
-    position: absolute;
-    top: 0;
-    right: 0;
-    opacity: 0.33;
-    font-size: 0.8em;
-  }
 </style>

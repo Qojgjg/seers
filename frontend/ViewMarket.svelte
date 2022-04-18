@@ -279,7 +279,7 @@
               </div>
             </div>
             <div
-              style="width: 100%; text-align: center; display: flex; justify-content:center"
+              style="width: 100%; text-align: center; display: flex; flex-direction: column; justify-content: center"
             >
               {#if principal !== ""}
                 <Modal show={$modal}>
@@ -288,9 +288,9 @@
                     {tokensEstimate}
                     {seerAmount}
                     outcome={selectedLabel}
+                    {buttonLabel}
                   />
                 </Modal>
-
                 <div style="width: 100%;text-align:center;color:red">
                   {errorResponse}
                 </div>
