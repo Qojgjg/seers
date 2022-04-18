@@ -7,6 +7,7 @@
   export let outcome
   export let seerAmount
   export let buttonLabel
+  export let buyTokens
 
   const { open } = getContext("simple-modal")
 
@@ -16,16 +17,24 @@
     return onOk()
   }
 
+  const getAction = () => {
+    return buyTokens ? "Buying" : "Selling"
+  }
+
+  const getToken = () => {
+    return buyTokens ? "Σ" : "tokens"
+  }
+
   const showDialog = () => {
     open(
       Dialog,
       {
         title: "Confirm Transaction",
-        message: `Buying ${tokensEstimate.toFixed(
+        message: `${getAction()} ${tokensEstimate.toFixed(
           2,
         )} shares of "${outcome}". Total cost is ${Number(seerAmount).toFixed(
           2,
-        )} Σ`,
+        )} ${getToken()}`,
         hasForm: true,
         onCancel,
         onOkay,

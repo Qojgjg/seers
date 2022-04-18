@@ -109,7 +109,7 @@
       tokensEstimate = 0.0
     } else {
       errorResponse = ""
-      tokensEstimate = response["ok"]
+      tokensEstimate = 0.0
     }
     if (buyTokens) buttonLabel = "Buy " + selectedLabel
     else buttonLabel = "Sell " + selectedLabel
@@ -287,11 +287,17 @@
               {#if principal !== ""}
                 <Modal show={$modal}>
                   <Content
-                    onOk={() => doIt(market.id, seerAmount)}
+                    onOk={() => {
+                      let res = doIt(market.id, seerAmount)
+                      seerAmount = 0.0
+                      tokensEstimate = 0.0
+                      return res
+                    }}
                     {tokensEstimate}
                     {seerAmount}
                     outcome={selectedLabel}
                     {buttonLabel}
+                    {buyTokens}
                   />
                 </Modal>
                 <div style="width: 100%;text-align:center;color:red">
