@@ -10,22 +10,10 @@
 
   const { open } = getContext("simple-modal")
 
-  let opening = false
-  let opened = false
-  let closing = false
-  let closed = false
-
-  let name
-  let status = 0
-
-  const onCancel = () => {
-    name = ""
-    status = -1
-  }
+  const onCancel = () => {}
 
   const onOkay = () => {
-    onOk()
-    status = 1
+    return onOk()
   }
 
   const showDialog = () => {

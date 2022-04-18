@@ -8,6 +8,8 @@
 
   const { close } = getContext("simple-modal")
 
+  let response = null
+  let okLabel = "Okay"
   let onChange = () => {}
 
   function _onCancel() {
@@ -15,9 +17,10 @@
     close()
   }
 
-  function _onOkay() {
-    onOkay()
-    close()
+  async function _onOkay() {
+    okLabel = "Processing..."
+    response = await onOkay()
+    console.log("response: " + response)
   }
 
   $: onChange()
@@ -25,11 +28,20 @@
 
 <h3>{title}</h3>
 
-<div style="width: 100%; text-align: center">{message}</div>
+{#if !response}
+  <div style="width: 100%; text-align: center">{message}</div>
+{/if}
+{#if response && response.length == 2}
+  <div style="width: 100%; text-align: center">
+    {response[0] ? response[0] : "Transaction successful!"}
+  </div>
+{/if}
 
 <div class="buttons">
-  <button class="btn-grad" on:click={_onCancel}> Cancel </button>
-  <button class="btn-grad" on:click={_onOkay}> Okay </button>
+  <button class="btn-grad" on:click={_onCancel}> Close</button>
+  {#if !response}
+    <button class="btn-grad" on:click={_onOkay}>{okLabel}</button>
+  {/if}
 </div>
 
 <style>

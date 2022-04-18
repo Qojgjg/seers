@@ -106,6 +106,7 @@
       errorResponse =
         "Error: " +
         splitCamelCaseToString(Object.keys(response["err"]).toString())
+      tokensEstimate = 0.0
     } else {
       errorResponse = ""
       tokensEstimate = response["ok"]
@@ -114,6 +115,8 @@
     else buttonLabel = "Sell " + selectedLabel
 
     readMarket()
+
+    return [errorResponse, tokensEstimate]
   }
 
   onMount(readMarket)
