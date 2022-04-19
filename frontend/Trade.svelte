@@ -14,13 +14,13 @@
   let labels = ["Yes", "No"]
   let principal
 
-  let errorResponse
+  let errorResponse = ""
 
-  let buyOptClass
-  let sellOptClass
+  let buyOptClass = "BuyOptSelected"
+  let sellOptClass = "SellOpt"
 
-  let buttonLabel
-  let selectedLabel
+  let buttonLabel = "Buy"
+  let selectedLabel = 0
 
   let selected
   let probabilities = [0.6, 0.4]

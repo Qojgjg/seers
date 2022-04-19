@@ -69,6 +69,15 @@
   onMount(initAuth)
 </script>
 
+<svelte:head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope&display=swap"
+    rel="stylesheet"
+  />
+</svelte:head>
+
 <Router>
   <div style="width: 100%; min-height: 80vh">
     <Auth {principal} {signIn} {signOut} />
@@ -124,8 +133,8 @@
   body {
     margin: 0;
     color: whitesmoke;
-    font-family: "Inter", sans-serif;
-
+    /* font-family: "Inter", sans-serif; */
+    font-family: "Manrope", sans-serif;
     /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

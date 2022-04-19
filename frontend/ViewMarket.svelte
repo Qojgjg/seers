@@ -213,7 +213,14 @@
         source={`Shortly after becoming the largest shareholder of Twitter, on April 14, 2022, Elon Musk announced via tweet that he made an offer to buy all outstanding Twitter stock not already owned by him (https://twitter.com/elonmusk/status/1514564966564651008?s=20&t=F6dXSRvkSuqbGvdiBploJg). This would make Elon Musk the owner of Twitter. If Twitter announces it is being acquired by Elon Musk, or acquired by or merged with any entity controlled by Elon Musk by June 1, 2022, 11:59:59 PM ET, this market will resolve to “Yes”. Otherwise, this market will resolve to “No”. For the purpose of resolving this market, only announcements from Twitter that it is agreeing to an acquisition or merger will be sufficient to resolve this market as “Yes”. If Twitter announces by June 1, 2022, 11:59:59 PM ET that it will be acquired by Elon Musk, or acquired by or merged with any entity controlled by Elon Musk, it will be sufficient to resolve this market as “Yes” regardless of whether that acquisition or merger takes place within or outside of the timeframe of this market. If Twitter announces it will no longer agree to the terms of its initial agreement or announcement after previously announcing that it would agree to an acquisition by Elon Musk, or an acquisition by or merger with any entity controlled by Elon Musk, it will have no bearing on the resolution of this market. This market will resolve to "Yes" solely based on whether Twitter makes an initial announcement that it is agreeing to an acquisition by Elon Musk, or an acquisition by or merger with any entity controlled by Elon Musk. The primary resolution source for this market will be official information from Twitter (e.g. https://twitter.com/twitter, https://blog.twitter.com/, etc.); however, other credible reporting may be used to resolve this market.`}
       />
     </div>
-    <Trade />
+    <div style="width: 100%; display:flex">
+      <div style="width: 50%">
+        <Trade />
+      </div>
+      <div style="width: 50%">
+        <Trade />
+      </div>
+    </div>
   </div>
 </div>
 {#if market}
