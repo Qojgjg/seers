@@ -20,12 +20,12 @@
   let sellOptClass = "SellOpt"
 
   let buttonLabel = "Buy"
-  let selectedLabel = 0
+  let selectedLabel = ""
 
   let selected
   let probabilities = [0.6, 0.4]
 
-  let buyTokens
+  let buyTokens = true
 
   let market = {
     id,

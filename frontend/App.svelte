@@ -73,7 +73,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Manrope&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Manrope&family=Roboto&display=swap"
     rel="stylesheet"
   />
 </svelte:head>
@@ -135,6 +135,8 @@
     color: whitesmoke;
     /* font-family: "Inter", sans-serif; */
     font-family: "Manrope", sans-serif;
+    /* font-family: "Roboto", sans-serif; */
+
     /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
