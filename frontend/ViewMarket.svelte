@@ -5,6 +5,7 @@
   import Content from "./Content.svelte"
   import Modal from "./Modal.svelte"
   import { modal } from "./store/stores.js"
+  import Chart from "chart.js/auto"
 
   export let auth
   export let id
@@ -28,6 +29,68 @@
   let commentLabel = "Comment"
   let commentErrorResponse = ""
 
+  const createChart = () => {
+    const ctx = document.getElementById("myChart") as HTMLCanvasElement
+    const myChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: ["January", "February", "March", "April", "May", "June"],
+        datasets: [
+          {
+            label: "No",
+            data: [90, 80, 70, 95, 80, 70],
+
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+            ],
+            borderColor: [
+              "rgba(255, 99, 132, 1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+              "rgba(255, 159, 64, 1)",
+            ],
+            borderWidth: 1,
+          },
+          {
+            label: "Yes",
+            data: [10, 20, 30, 5, 20, 30],
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+            ],
+            borderColor: [
+              "rgba(255, 99, 132, 1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+              "rgba(255, 159, 64, 1)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    })
+  }
+
   const splitCamelCaseToString = (s) => {
     return s
       .split(/(?=[A-Z])/)
@@ -38,6 +101,7 @@
   }
 
   const readMarket = async () => {
+    createChart()
     market = await $auth.actor.readMarket(parseInt(id))
     market = market[0]
     selectedLabel = market.labels[0]
@@ -122,20 +186,43 @@
   onMount(readMarket)
 </script>
 
-{#if market}
-  <div class="header">
-    <h3>{market.title}</h3>
+<div
+  style="display: flex; width: 100%; align-items: center; justify-content: center; flex-direction:column; text-align: center"
+>
+  <div
+    style="background: rgba(0, 0, 0, 0.3); width: 80%; max-width: 1000px;padding: 30px; border-style: none; border-width: 2px; border-radius: 10px"
+  >
+    <div
+      style="display:flex; flex-direction: row; justify-content:start; text-align:center"
+    >
+      <img
+        style="width: 100px; height: 100px;border-radius: 50%; margin-right: 15px"
+        src={"https://www.dhresource.com/0x0/f2/albu/g9/M00/27/85/rBVaVVxO822ACwv4AALYau1h4a8355.jpg/500pcs-30mm-diameter-bitcoin-logo-label-sticker.jpg"}
+        alt="market"
+      />
+      <div style="">
+        <h3>Will Bitcoin reach his all time high in 2022?</h3>
+      </div>
+    </div>
+
+    <div style="">
+      <canvas id="myChart" />
+    </div>
+
+    <div style="line-height: 1.6; text-align:left">
+      <h3>About this market</h3>
+      <SvelteMarkdown
+        source={`Shortly after becoming the largest shareholder of Twitter, on April 14, 2022, Elon Musk announced via tweet that he made an offer to buy all outstanding Twitter stock not already owned by him (https://twitter.com/elonmusk/status/1514564966564651008?s=20&t=F6dXSRvkSuqbGvdiBploJg). This would make Elon Musk the owner of Twitter. If Twitter announces it is being acquired by Elon Musk, or acquired by or merged with any entity controlled by Elon Musk by June 1, 2022, 11:59:59 PM ET, this market will resolve to “Yes”. Otherwise, this market will resolve to “No”. For the purpose of resolving this market, only announcements from Twitter that it is agreeing to an acquisition or merger will be sufficient to resolve this market as “Yes”. If Twitter announces by June 1, 2022, 11:59:59 PM ET that it will be acquired by Elon Musk, or acquired by or merged with any entity controlled by Elon Musk, it will be sufficient to resolve this market as “Yes” regardless of whether that acquisition or merger takes place within or outside of the timeframe of this market. If Twitter announces it will no longer agree to the terms of its initial agreement or announcement after previously announcing that it would agree to an acquisition by Elon Musk, or an acquisition by or merger with any entity controlled by Elon Musk, it will have no bearing on the resolution of this market. This market will resolve to "Yes" solely based on whether Twitter makes an initial announcement that it is agreeing to an acquisition by Elon Musk, or an acquisition by or merger with any entity controlled by Elon Musk. The primary resolution source for this market will be official information from Twitter (e.g. https://twitter.com/twitter, https://blog.twitter.com/, etc.); however, other credible reporting may be used to resolve this market.`}
+      />
+    </div>
   </div>
+</div>
+{#if market}
+  <!-- 
   <div class="rowView">
     <div class="market-comments">
       <div class="market">
-        <!-- <h3 style="margin:5px; padding: 5px; text-align:center">Description</h3> -->
-        {#if market.imageUrl}
-          <img class="Image" src={market.imageUrl} alt="random" />
-        {/if}
-        <div style="line-height: 1.6;">
-          <SvelteMarkdown source={market.description} />
-        </div>
+        {#if market.imageUrl}{/if}
       </div>
       <div class="market">
         {#each market.comments as comment}
@@ -151,14 +238,6 @@
             style="height: auto; width: 100%"
             placeholder="Please share your insight"
           />
-          <!-- <input
-            bind:value={comment}
-            maxlength="400"
-            minlength="20"
-            type="text"
-            placeholder="Please share your insight"
-            class="comment-input"
-          /> -->
           <button class="btn-grad" on:click={postComment}>
             {commentLabel}
           </button>
@@ -180,11 +259,11 @@
               Status: {Object.keys(market.state).toString()}
             </div>
           </li>
-          <!-- <li>
+          <li>
             Starts: {new Date(
               parseInt(market.startDate) / 1_000_000,
             ).toDateString()}
-          </li> -->
+          </li>
           <li>
             Ends: {new Date(
               parseInt(market.endDate) / 1_000_000,
@@ -195,8 +274,8 @@
             Liquidity: {Number(market.liquidity).toFixed(2)} &Sigma;
           </li>
         </ul>
-      </div>
-      <div class="market-controls">
+      </div> -->
+  <!-- <div class="market-controls">
         <div
           style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column;width: 100%; padding: 10px;"
         >
@@ -222,14 +301,6 @@
             >
           </div>
           <div class="OutcomeTitle">Pick Outcome:</div>
-          <!-- {#if market.images[selected]}
-            <img
-              class="Image"
-              src={market.images[selected]}
-              alt="image of {selectedLabel}"
-            />
-          {/if} -->
-
           <div class="ContentTab">
             <select
               bind:value={selected}
@@ -315,9 +386,9 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> 
     </div>
-  </div>
+  </div>-->
 {:else}
   <div class="header">Loading</div>
 {/if}
@@ -365,7 +436,7 @@
   .rowView {
     display: flex;
     flex-wrap: wrap;
-    padding-top: 40px;
+    /* padding-top: 40px; */
     justify-content: center;
     width: 100%;
   }
@@ -528,6 +599,7 @@
     /* overflow: auto; */
     flex-direction: column;
     height: fit-content;
+    /* width: max-content; */
     /* min-width: 400px;
     max-width: 100%;*/
     margin-bottom: 1em;

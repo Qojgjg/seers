@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Chart from "chart.js/auto"
+
   import { Router, Route } from "svelte-navigator"
   import { AuthClient } from "@dfinity/auth-client"
 
