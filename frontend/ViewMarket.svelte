@@ -5,6 +5,7 @@
   import Chart from "chart.js/auto"
   import Trade from "./Trade.svelte"
   import Forecast from "./Forecast.svelte"
+  import Comments from "./Comments.svelte"
 
   export let auth
   export let id
@@ -247,6 +248,9 @@
       <div style="width: 50%">
         <Forecast />
       </div>
+    </div>
+    <div style="width: 100%; display:flex">
+      <Comments />
     </div>
   </div>
 </div>

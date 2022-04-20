@@ -1,26 +1,16 @@
 <script lang="ts">
-  import Content from "./Content.svelte"
-  import Modal from "./Modal.svelte"
-  import { modal } from "./store/stores.js"
-
   let id
   let startDate
   let endDate
   let volume
   let liquidity
   let state = { open: null }
-  let tokensEstimate
-  let seerAmount
   let labels = ["Yes", "No"]
   let principal
 
   let errorResponse = ""
-  let buttonLabel = "Submit"
-  let selectedLabel = ""
 
   let probabilities = [0.6, 0.4]
-
-  let buyTokens = true
 
   let market = {
     id,
@@ -56,22 +46,11 @@
             </div>
           </div>
         {/each}
-        <Modal show={$modal}>
-          <Content
-            onOk={() => {
-              let res = 0
-              //   doIt(market.id, seerAmount)
-              seerAmount = 0.0
-              tokensEstimate = 0.0
-              return res
-            }}
-            {tokensEstimate}
-            {seerAmount}
-            outcome={selectedLabel}
-            {buttonLabel}
-            {buyTokens}
-          />
-        </Modal>
+        <div
+          style="width: 100%; justify-content: center; text-align: center; display: flex"
+        >
+          <button class="btn-grad" on:click={() => 0}> Submit </button>
+        </div>
         <div style="width: 100%;text-align:center;color:red">
           {errorResponse}
         </div>
