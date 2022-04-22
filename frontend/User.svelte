@@ -257,6 +257,40 @@
   .btn-grad {
     background-image: linear-gradient(
       to right,
+      #4776e6 0%,
+      #8e54e9 51%,
+      #4776e6 100%
+    );
+  }
+  .btn-grad {
+    height: 40px;
+    margin: 1em;
+    padding: 0em 1em;
+    text-align: center;
+    text-transform: capitalize;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 1px #eee;
+    border-radius: 10px;
+    display: block;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    min-width: 100px;
+    max-width: 150px;
+    white-space: normal;
+  }
+
+  .btn-grad:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+  }
+
+  /* .btn-grad {
+    background-image: linear-gradient(
+      to right,
       #00c6ff 0%,
       #0072ff 51%,
       #00c6ff 100%
@@ -283,10 +317,11 @@
   }
 
   .btn-grad:hover {
-    background-position: right center; /* change the direction of the change here */
+    background-position: right center; 
     color: #fff;
     text-decoration: none;
-  }
+  } 
+  */
   /* 
   .demo-button {
     height: 40px;

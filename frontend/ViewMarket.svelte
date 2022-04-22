@@ -451,11 +451,14 @@
     outline: none;
   }
   select {
-    background-color: white;
-    color: black;
-    border-color: white;
-    margin-top: 10px;
+    background-color: rgb(33, 36, 41);
+    color: rgb(255, 255, 255);
+    border: 0;
     height: 30px;
+    font-family: "Roboto Mono";
+    margin-top: 10px;
+    font-size: 1.2em;
+    text-align: center;
   }
   .header {
     display: flex;
@@ -526,74 +529,6 @@
     margin-top: 0.5em;
   }
 
-  .OutcomeTitle {
-    width: 100%;
-    margin-top: 0.5em;
-  }
-  .YesNoOptions {
-    width: 100%;
-    display: flex;
-    height: fit-content;
-  }
-  .TabOptions {
-    width: 100%;
-    display: flex;
-    margin-top: 0.5em;
-    height: fit-content;
-  }
-  .ContentTab {
-    width: 100%;
-  }
-  .BuyOpt {
-    width: 50%;
-    height: 30px;
-    color: white;
-    border-radius: 5px 0 0 5px;
-    background: rgb(220 218 224 / 25%);
-  }
-  .SellOpt {
-    width: 50%;
-    height: 30px;
-    color: white;
-    border-radius: 0 5px 5px 0;
-    background: rgb(220 218 224 / 25%);
-  }
-  .BuyOptSelected {
-    width: 50%;
-    height: 30px;
-    color: black;
-    background-color: white;
-    border-radius: 5px 0 0 5px;
-  }
-  .SellOptSelected {
-    width: 50%;
-    height: 30px;
-    background-color: white;
-    border-radius: 0 5px 5px 0;
-    color: black;
-  }
-  .YesTabSelected {
-    width: 50%;
-    height: fit-content;
-    color: white;
-    background-color: green;
-  }
-  .NoTabSelected {
-    width: 50%;
-    height: fit-content;
-    color: white;
-    background-color: crimson;
-  }
-  .YesTab {
-    width: 50%;
-    height: fit-content;
-    color: black;
-  }
-  .NoTab {
-    width: 50%;
-    height: fit-content;
-    color: black;
-  }
   .container {
     display: flex;
     justify-content: center;
@@ -672,12 +607,10 @@
 
   .market-controls {
     box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
-    margin-bottom: 1em;
-    padding: 0.5em;
+    margin: 1em;
+    padding: 10px 30px;
     background-color: rgb(25, 27, 31);
     border: 1px solid rgb(90, 58, 81);
-
-    /* border: 2px solid rgb(25, 27, 31); */
     border-radius: 16px;
     justify-content: space-between;
     font-family: "Inter", sans-serif;
@@ -692,6 +625,7 @@
     overflow: auto;
     display: flex;
     justify-content: center;
+    width: 300px;
   }
   .MarketDetails {
     display: flex;

@@ -49,32 +49,9 @@
   }
 </script>
 
-<div class="v-container">
-  <!-- <div class="market-controls">
-    <ul
-      style="list-style-type: none; margin: 0; padding: 10px; width: 100%; line-height: 1.5em"
-    >
-      <h4 style="text-align:center; padding: 3px; margin: 3px">Details</h4>
-
-      <li>
-        <div style="margin:0;padding:0;text-transform:capitalize">
-          Status: {Object.keys(market.state).toString()}
-        </div>
-      </li>
-      <li>
-        Starts: {new Date(
-          parseInt(market.startDate) / 1_000_000,
-        ).toDateString()}
-      </li>
-      <li>
-        Ends: {new Date(parseInt(market.endDate) / 1_000_000).toDateString()}
-      </li>
-      <li>Volume: {Number(market.volume).toFixed(2)} &Sigma;</li>
-      <li>
-        Liquidity: {Number(market.liquidity).toFixed(2)} &Sigma;
-      </li>
-    </ul>
-  </div> -->
+<div
+  style="margin: 0em 1em;display:flex; justify-content:start; flex-direction:column"
+>
   <div class="market-controls">
     <div
       style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column;width: 100%; padding: 10px;"
@@ -113,10 +90,8 @@
         >
           {#each market.labels as label, i}
             <option value={i}>
-              {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma; - {label.slice(
-                0,
-                20,
-              )}
+              {label.slice(0, 20)}
+              ({(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;)
             </option>
           {/each}
         </select>
@@ -125,7 +100,8 @@
           <input
             bind:value={seerAmount}
             on:keyup={() => debounce(market.id, seerAmount, 500)}
-            style="width:100%; height: 30px"
+            placeholder="0"
+            style="color: rgb(255, 255, 255); background-color: rgb(33, 36, 41); font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; width: 150px"
           />
         </div>
         <div class="ControlData">
@@ -189,3 +165,74 @@
     </div>
   </div>
 </div>
+
+<style>
+  .OutcomeTitle {
+    width: 100%;
+    margin-top: 0.5em;
+  }
+  .YesNoOptions {
+    width: 300px;
+    display: flex;
+    height: fit-content;
+  }
+  .TabOptions {
+    width: 300px;
+    display: flex;
+    margin-top: 0.5em;
+    height: fit-content;
+  }
+  .ContentTab {
+    width: 300px;
+  }
+  .BuyOpt {
+    width: 50%;
+    height: 30px;
+    color: white;
+    border-radius: 5px 0 0 5px;
+    background: rgb(220 218 224 / 25%);
+  }
+  .SellOpt {
+    width: 50%;
+    height: 30px;
+    color: white;
+    border-radius: 0 5px 5px 0;
+    background: rgb(220 218 224 / 25%);
+  }
+  .BuyOptSelected {
+    width: 50%;
+    height: 30px;
+    color: black;
+    background-color: white;
+    border-radius: 5px 0 0 5px;
+  }
+  .SellOptSelected {
+    width: 50%;
+    height: 30px;
+    background-color: white;
+    border-radius: 0 5px 5px 0;
+    color: black;
+  }
+  .YesTabSelected {
+    width: 50%;
+    height: fit-content;
+    color: white;
+    background-color: green;
+  }
+  .NoTabSelected {
+    width: 50%;
+    height: fit-content;
+    color: white;
+    background-color: crimson;
+  }
+  .YesTab {
+    width: 50%;
+    height: fit-content;
+    color: black;
+  }
+  .NoTab {
+    width: 50%;
+    height: fit-content;
+    color: black;
+  }
+</style>
