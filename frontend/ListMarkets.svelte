@@ -34,7 +34,7 @@
 >
   <div style="margin-right: 30px;">
     <select
-      style="background: black; color: white; border: grey; width: 200px; padding: 5px;"
+      style="background: rgb(25, 27, 31); color: white; border: grey; width: 200px; padding: 5px;"
     >
       <option value="all">All</option>
       <option value="crypto">Crypto</option>
@@ -48,7 +48,7 @@
   </div>
   <div>
     <select
-      style="background: black; color: white; border: grey; width: 200px; padding: 5px;"
+      style="background: rgb(25, 27, 31); color: white; border: grey; width: 200px; padding: 5px;"
     >
       <option value="open">Open</option>
       <option value="submitted">Submitted</option>

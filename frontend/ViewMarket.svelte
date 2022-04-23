@@ -451,11 +451,10 @@
     outline: none;
   }
   select {
-    background-color: rgb(33, 36, 41);
+    background-color: rgb(25, 27, 31);
     color: rgb(255, 255, 255);
     border: 0;
     height: 30px;
-    font-family: "Roboto Mono";
     margin-top: 10px;
     font-size: 1.2em;
     text-align: center;
