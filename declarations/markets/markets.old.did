@@ -38,6 +38,7 @@ type TradeError =
    callerIsAnon;
    marketClosed;
    marketMissing;
+   minimalAmountIsOne;
    newtonFailed;
    notEnoughBalance;
    userNotCreated;
