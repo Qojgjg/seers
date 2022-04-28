@@ -138,12 +138,6 @@ module {
         }
     };
 
-    public type UserData = {
-        principal: Text;
-        handle: Text;
-        picture: Text;
-    };
-
     public type CollateralType = {
         #seers;
         #icp;

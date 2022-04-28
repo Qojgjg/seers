@@ -6,6 +6,7 @@ import Float "mo:base/Float";
 import Array "mo:base/Array";
 
 import Utils "Utils";
+import { BrierScore } "BrierScore";
 
 module {
     public type MarketError = {

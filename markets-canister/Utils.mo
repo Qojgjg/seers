@@ -1,8 +1,15 @@
 import Float "mo:base/Float";
 import Buffer "mo:base/Buffer";
 import Array "mo:base/Array";
+import Text "mo:base/Text";
 
 module {
+    public type UserData = {
+        principal: Text;
+        handle: Text;
+        picture: Text;
+    };
+
     public func bufferFromArray<X>(a: [X]): Buffer.Buffer<X> {
         var buf: Buffer.Buffer<X> = Buffer.Buffer<X>(a.size());
         for (e in a.vals()) {
