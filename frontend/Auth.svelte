@@ -54,7 +54,8 @@
     /></a
   >
 
-  <Link to="/" style={menuItemStyle}>Markets</Link>
+  <Link to="feed" style={menuItemStyle}>Feed</Link>
+  <Link to="markets" style={menuItemStyle}>Markets</Link>
   <Link to="ranking" style={menuItemStyle}>Ranking</Link>
 
   {#if principal === ""}
@@ -64,6 +65,7 @@
 
   {#if principal !== ""}
     <Link to="profile" style={menuItemStyle}>Profile</Link>
+    <Link to="wallet" style={menuItemStyle}>Wallet</Link>
     <Link to="create" style={menuItemStyle}>Create</Link>
     <a href="https://forms.gle/fYmc9iTc9P46upm47" style={menuItemStyle}>Bugs</a>
 

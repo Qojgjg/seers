@@ -1,6 +1,4 @@
 <script lang="ts">
-  import Chart from "chart.js/auto"
-
   import { Router, Route } from "svelte-navigator"
   import { AuthClient } from "@dfinity/auth-client"
 
@@ -10,9 +8,10 @@
   import ListMarkets from "./ListMarkets.svelte"
   import Auth from "./Auth.svelte"
   import ViewMarket from "./ViewMarket.svelte"
-  import User from "./User.svelte"
+  import Wallet from "./Wallet.svelte"
   import CreateMarket from "./CreateMarket.svelte"
   import Ranking from "./Ranking.svelte"
+  import Feed from "./Feed.svelte"
 
   let principal = ""
 
@@ -84,8 +83,8 @@
     <Route path="market/:id" let:params>
       <ViewMarket {auth} {principal} {signIn} id={params.id} />
     </Route>
-    <Route path="profile">
-      <User {auth} {principal} {signIn} />
+    <Route path="wallet">
+      <Wallet {auth} {principal} {signIn} />
     </Route>
     <Route path="create">
       <CreateMarket {auth} {principal} {signIn} />
@@ -93,7 +92,10 @@
     <Route path="ranking">
       <Ranking {auth} />
     </Route>
-    <Route path="/">
+    <Route path="feed">
+      <Feed />
+    </Route>
+    <Route path="markets">
       <ListMarkets {auth} />
     </Route>
   </div>
