@@ -1,3 +1,6 @@
+
+import Time "mo:base/Time";
+
 module {
     public type Like = {
         stars: Nat32;

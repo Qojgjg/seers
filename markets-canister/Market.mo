@@ -6,7 +6,9 @@ import Float "mo:base/Float";
 import Array "mo:base/Array";
 
 import Utils "Utils";
-import { BrierScore } "BrierScore";
+import BrierScore "BrierScore";
+import Tokens "Tokens";
+import Comment "Comment";
 
 module {
     public type MarketError = {
@@ -46,7 +48,7 @@ module {
         title: Text;
         labels: [Text];
         balances: [Float];
-        brierScores: [BrierScore];
+        brierScores: [BrierScore.BrierScore];
         shares: Float;
         spent: Float;
         redeemed: Bool;
@@ -74,12 +76,12 @@ module {
         images: [Text];
         probabilities: [Float];
         category: MarketCategory;
-        collateralType: CollateralType;
+        collateralType: Tokens.CollateralType;
         liquidity: Float;
         startDate: Time.Time;
         endDate: Time.Time;
         imageUrl: Text;
-        author: UserData;
+        author: Utils.UserData;
     };
 
     public type HistPoint = {
@@ -94,11 +96,11 @@ module {
         public var description: Text = initData.description;
         public var startDate: Time.Time = initData.startDate;
         public var endDate: Time.Time = initData.endDate;
-        public var author: UserData = initData.author;
+        public var author: Utils.UserData = initData.author;
         public var labels: [Text] = initData.labels;
         public var images: [Text] = initData.images;
         public var category: MarketCategory = initData.category;
-        public var collateralType: CollateralType = initData.collateralType;
+        public var collateralType: Tokens.CollateralType = initData.collateralType;
         public var probabilities: [Float] = initData.probabilities;
         public var liquidity: Float = initData.liquidity;
         public var reserves: [Float] = do {
@@ -127,7 +129,7 @@ module {
         public var imageUrl: Text = initData.imageUrl;
         public var state: MarketState = #pending;
         public var volume: Float = 0.0;
-        public var comments: Buffer.Buffer<Comment> = Buffer.Buffer<Comment>(10);
+        public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(10);
         public var histPrices: Buffer.Buffer<HistPoint> = Buffer.Buffer<HistPoint>(10);
         public var createdAt: Time.Time = Time.now();
         public var modifiedAt: Time.Time = Time.now();
@@ -168,14 +170,14 @@ module {
         description: Text;
         startDate: Time.Time;
         endDate: Time.Time;
-        author: UserData;
+        author: Utils.UserData;
         labels: [Text];
         images: [Text];
         probabilities: [Float];
         liquidity: Float;
         reserves: [Float];
         category: MarketCategory;
-        collateralType: CollateralType;
+        collateralType: Tokens.CollateralType;
         k: Float;
         providers: [Text];
         bettors: [Text];
@@ -183,7 +185,7 @@ module {
         imageUrl: Text;
         state: MarketState;
         volume: Float;
-        comments: [Comment];
+        comments: [Comment.Comment];
         histPrices: [HistPoint];
         createdAt: Time.Time;
         modifiedAt: Time.Time;

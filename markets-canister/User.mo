@@ -138,12 +138,6 @@ module {
         }
     };
 
-    public type CollateralType = {
-        #seers;
-        #icp;
-        #cycles;
-    };
-
     public type Like = {
         stars: Nat32;
         authorPrincipal: Text;
