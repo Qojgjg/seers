@@ -1,8 +1,11 @@
+import Comment "Comment";
+import Post "Post";
+
 module {
 
     public type FeedItem = {
-        #comment: Comment;
-        #post: Post;
+        #comment: Comment.Comment;
+        #post: Post.Post;
         #bet: Bet;
         #market: MarketStable;
     };
