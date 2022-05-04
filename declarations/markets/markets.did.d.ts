@@ -1,169 +1,181 @@
 import type { Principal } from '@dfinity/principal';
 export type AccountIdentifier = Array<number>;
-export type AddCommentError = { 'userIsAnon' : null } |
-  { 'userNotCreated' : null } |
-  { 'marketMissing' : null } |
-  { 'commentIsEmpty' : null };
-export type Author = string;
-export type Balance = number;
-export interface Comment { 'content' : string, 'author' : string }
-export type CreateMarketError = { 'callerIsAnon' : null } |
-  { 'imageMissing' : null } |
-  { 'optionsMissing' : null } |
-  { 'descriptionMissing' : null } |
-  { 'titleMissing' : null } |
-  { 'userNotCreated' : null } |
-  { 'endDateOld' : Time } |
-  { 'notEnoughLiquidity' : Balance };
-export type CreateUserError = { 'userExist' : null } |
-  { 'userIsAnon' : null };
-export type Description = string;
+export interface Balances {
+  'btc' : number,
+  'icp' : number,
+  'seers' : number,
+  'cycles' : number,
+}
+export interface Bet { 'tx' : UserTx, 'comment' : Comment__1 }
+export interface BrierScore { 'createdAt' : Time, 'score' : number }
+export type CollateralType = { 'icp' : null } |
+  { 'seers' : null } |
+  { 'cycles' : null };
+export interface Comment {
+  'id' : number,
+  'content' : string,
+  'createdAt' : Time,
+  'user' : UserData,
+  'likes' : Array<Like>,
+}
+export interface Comment__1 {
+  'id' : number,
+  'content' : string,
+  'createdAt' : Time,
+  'user' : UserData,
+  'likes' : Array<Like__1>,
+}
+export interface DepositAddrs {
+  'btc' : [] | [string],
+  'icp' : [] | [string],
+  'cycles' : [] | [string],
+}
+export interface ExpBalances {
+  'expBtc' : number,
+  'expIcp' : number,
+  'expSeers' : number,
+  'expCycles' : number,
+}
+export type FeedItem = { 'bet' : Bet } |
+  { 'post' : Post } |
+  { 'comment' : Comment__1 } |
+  { 'market' : MarketStable };
+export interface Followee { 'createdAt' : Time, 'user' : UserData }
+export interface Follower { 'createdAt' : Time, 'user' : UserData }
+export interface HistPoint {
+  'probabilities' : Array<number>,
+  'createdAt' : Time,
+  'liquidity' : number,
+}
 export interface ICP { 'e8s' : bigint }
+export interface Like {
+  'authorPicture' : string,
+  'createdAt' : Time,
+  'stars' : number,
+  'authorHandle' : string,
+  'authorPrincipal' : string,
+}
+export interface Like__1 {
+  'authorPicture' : string,
+  'createdAt' : Time,
+  'stars' : number,
+  'authorHandle' : string,
+  'authorPrincipal' : string,
+}
 export interface Market {
-  'addCommentToMarket' : (arg_0: MarketId, arg_1: string) => Promise<Result_4>,
-  'approveMarket' : (arg_0: MarketId) => Promise<undefined>,
-  'backup' : () => Promise<undefined>,
-  'buyOption' : (
-      arg_0: MarketId,
-      arg_1: Balance,
-      arg_2: bigint,
-      arg_3: boolean,
-    ) => Promise<Result>,
+  'approveMarket' : (arg_0: number) => Promise<undefined>,
   'callerAccount' : () => Promise<AccountIdentifier>,
   'canisterAccount' : () => Promise<string>,
-  'canisterBalance' : () => Promise<ICP>,
-  'cleanTxs' : (arg_0: UserId) => Promise<undefined>,
-  'createMarket' : (arg_0: MarketInitData) => Promise<Result_3>,
-  'createUserResult' : (arg_0: string) => Promise<Result_2>,
-  'deleteAllMarkets' : () => Promise<undefined>,
-  'deleteMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
-  'editMarketImage' : (arg_0: MarketId, arg_1: string) => Promise<boolean>,
-  'editMarketProbs' : (arg_0: MarketId, arg_1: Array<Balance>) => Promise<
-      boolean
-    >,
-  'getUserResult' : (arg_0: UserId) => Promise<[] | [UserResult]>,
-  'importMarkets' : (arg_0: Array<MarketResult>) => Promise<undefined>,
-  'importUsers' : (arg_0: Array<OldUserResult>) => Promise<undefined>,
-  'increaseMarketCounter' : (arg_0: MarketId) => Promise<MarketId>,
-  'moveStables' : () => Promise<undefined>,
-  'readAllMarkets' : () => Promise<Array<MarketResult>>,
-  'readAllOpenMarkets' : () => Promise<Array<MarketResult>>,
-  'readAllPendingMarkets' : () => Promise<Array<MarketResult>>,
-  'readAllUsers' : () => Promise<Array<UserResult>>,
-  'readBetsOfMarket' : (arg_0: MarketId) => Promise<
-      Array<[UserId, string, Array<UserTx>]>
-    >,
-  'readMarket' : (arg_0: MarketId) => Promise<[] | [MarketResult]>,
-  'readNewUsers' : () => Promise<Array<[UserId, UserResult]>>,
-  'readUser' : (arg_0: UserId) => Promise<[] | [UserResult]>,
-  'refreshUser' : () => Promise<Result_1>,
-  'resolveMarket' : (arg_0: MarketId, arg_1: bigint) => Promise<boolean>,
-  'restore' : () => Promise<undefined>,
-  'sellOption' : (
-      arg_0: MarketId,
-      arg_1: Balance,
-      arg_2: bigint,
-      arg_3: boolean,
-    ) => Promise<Result>,
+  'canisterFloat' : () => Promise<ICP>,
+  'readAllUsers' : () => Promise<Array<UserStable>>,
+  'resolveMarket' : (arg_0: number, arg_1: bigint) => Promise<boolean>,
   'setUpdating' : (arg_0: boolean) => Promise<undefined>,
-  'tip' : (arg_0: UserId, arg_1: Balance) => Promise<[] | [Balance]>,
 }
-export type MarketId = number;
-export interface MarketInitData {
-  'title' : Title,
+export type MarketCategory = { 'entertainment' : null } |
+  { 'seers' : null } |
+  { 'crypto' : null } |
+  { 'business' : null } |
+  { 'financial' : null } |
+  { 'sports' : null } |
+  { 'dfinity' : null } |
+  { 'science' : null } |
+  { 'politics' : null };
+export interface MarketStable {
+  'k' : number,
+  'id' : number,
+  'title' : string,
+  'histPrices' : Array<HistPoint>,
+  'probabilities' : Array<number>,
   'endDate' : Time,
+  'modifiedAt' : Time,
   'labels' : Array<string>,
-  'liquidity' : Balance,
-  'description' : Description,
-  'imageUrl' : Url,
-  'images' : Array<string>,
-}
-export interface MarketResult {
-  'k' : Balance,
-  'id' : MarketId,
-  'title' : Title,
-  'probabilities' : Array<Probability>,
-  'endDate' : Time,
-  'labels' : Array<string>,
-  'liquidity' : Balance,
-  'reserves' : Array<Balance>,
-  'description' : Description,
-  'volume' : Balance,
-  'author' : Author,
+  'createdAt' : Time,
+  'liquidity' : number,
+  'reserves' : Array<number>,
+  'collateralType' : CollateralType,
+  'description' : string,
+  'volume' : number,
+  'bettors' : Array<string>,
+  'author' : UserData,
   'state' : MarketState,
-  'imageUrl' : Url,
+  'imageUrl' : string,
+  'category' : MarketCategory,
   'providers' : Array<string>,
-  'comments' : Array<Comment>,
-  'totalShares' : Shares,
-  'blockTimestampLast' : Time,
+  'comments' : Array<Comment__1>,
+  'totalShares' : number,
   'startDate' : Time,
   'images' : Array<string>,
 }
 export type MarketState = { 'resolved' : bigint } |
   { 'closed' : null } |
   { 'pending' : null } |
-  { 'open' : null };
-export interface OldUserMarket {
-  'shares' : Shares,
-  'marketId' : MarketId,
-  'balances' : Array<Balance>,
-  'marketTitle' : Title,
+  { 'invalid' : null } |
+  { 'open' : null } |
+  { 'approved' : null };
+export interface Post {
+  'id' : number,
+  'content' : string,
+  'createdAt' : Time,
+  'author' : UserData,
+  'likes' : Array<Like__1>,
+  'comments' : Array<Comment__1>,
 }
-export interface OldUserResult {
-  'id' : UserId,
-  'seerBalance' : Balance,
-  'markets' : Array<OldUserMarket>,
-  'expSeerBalance' : Balance,
-  'handle' : string,
+export interface Post__1 {
+  'id' : number,
+  'content' : string,
+  'createdAt' : Time,
+  'author' : UserData,
+  'likes' : Array<Like>,
+  'comments' : Array<Comment>,
 }
-export type Probability = number;
-export type Result = { 'ok' : Balance } |
-  { 'err' : TradeError };
-export type Result_1 = { 'ok' : UserResult } |
-  { 'err' : UserError };
-export type Result_2 = { 'ok' : UserResult } |
-  { 'err' : CreateUserError };
-export type Result_3 = { 'ok' : MarketResult } |
-  { 'err' : CreateMarketError };
-export type Result_4 = { 'ok' : Comment } |
-  { 'err' : AddCommentError };
-export type Shares = bigint;
 export type Time = bigint;
-export type Title = string;
-export type TradeError = { 'callerIsAnon' : null } |
-  { 'minimalAmountIsOne' : null } |
-  { 'notEnoughBalance' : null } |
-  { 'marketClosed' : null } |
-  { 'userNotCreated' : null } |
-  { 'marketMissing' : null } |
-  { 'newtonFailed' : null };
-export type Url = string;
-export type UserError = { 'callerIsAnon' : null } |
-  { 'userNotCreated' : null };
-export type UserId = string;
-export interface UserMarket {
-  'shares' : Shares,
-  'labels' : Array<string>,
-  'used' : boolean,
-  'marketId' : MarketId,
-  'balances' : Array<Balance>,
-  'marketTitle' : Title,
-}
-export interface UserResult {
-  'id' : UserId,
-  'txs' : Array<UserTx>,
-  'seerBalance' : Balance,
-  'markets' : Array<UserMarket>,
-  'expSeerBalance' : Balance,
+export interface UserData {
+  'principal' : string,
+  'picture' : string,
   'handle' : string,
+}
+export interface UserMarket {
+  'brierScores' : Array<BrierScore>,
+  'title' : string,
+  'shares' : number,
+  'modifiedAt' : Time,
+  'redeemed' : boolean,
+  'labels' : Array<string>,
+  'createdAt' : Time,
+  'spent' : number,
+  'marketId' : number,
+  'balances' : Array<number>,
+}
+export interface UserStable {
+  'id' : string,
+  'bio' : string,
+  'txs' : Array<UserTx>,
+  'expBalances' : ExpBalances,
+  'twitter' : string,
+  'lastSeenAt' : Time,
+  'modifiedAt' : Time,
+  'feed' : Array<FeedItem>,
+  'createdAt' : Time,
+  'markets' : Array<UserMarket>,
+  'picture' : string,
+  'discord' : string,
+  'handle' : string,
+  'comments' : Array<Comment>,
+  'posts' : Array<Post__1>,
+  'followees' : Array<Followee>,
+  'followers' : Array<Follower>,
+  'depositAddrs' : DepositAddrs,
+  'balances' : Balances,
 }
 export interface UserTx {
-  'fee' : Balance,
+  'id' : number,
+  'fee' : number,
   'src' : [] | [bigint],
   'dest' : [] | [bigint],
-  'seerRecv' : Balance,
-  'seerSent' : Balance,
-  'marketId' : MarketId,
-  'timestamp' : Time,
+  'createdAt' : Time,
+  'recv' : number,
+  'sent' : number,
+  'marketId' : number,
+  'price' : number,
 }
 export interface _SERVICE extends Market {}

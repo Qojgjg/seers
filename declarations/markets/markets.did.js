@@ -1,178 +1,190 @@
 export const idlFactory = ({ IDL }) => {
-  const MarketId = IDL.Nat32;
-  const Comment = IDL.Record({ 'content' : IDL.Text, 'author' : IDL.Text });
-  const AddCommentError = IDL.Variant({
-    'userIsAnon' : IDL.Null,
-    'userNotCreated' : IDL.Null,
-    'marketMissing' : IDL.Null,
-    'commentIsEmpty' : IDL.Null,
-  });
-  const Result_4 = IDL.Variant({ 'ok' : Comment, 'err' : AddCommentError });
-  const Balance = IDL.Float64;
-  const TradeError = IDL.Variant({
-    'callerIsAnon' : IDL.Null,
-    'minimalAmountIsOne' : IDL.Null,
-    'notEnoughBalance' : IDL.Null,
-    'marketClosed' : IDL.Null,
-    'userNotCreated' : IDL.Null,
-    'marketMissing' : IDL.Null,
-    'newtonFailed' : IDL.Null,
-  });
-  const Result = IDL.Variant({ 'ok' : Balance, 'err' : TradeError });
   const AccountIdentifier = IDL.Vec(IDL.Nat8);
   const ICP = IDL.Record({ 'e8s' : IDL.Nat64 });
-  const UserId = IDL.Text;
-  const Title = IDL.Text;
   const Time = IDL.Int;
-  const Description = IDL.Text;
-  const Url = IDL.Text;
-  const MarketInitData = IDL.Record({
-    'title' : Title,
-    'endDate' : Time,
-    'labels' : IDL.Vec(IDL.Text),
-    'liquidity' : Balance,
-    'description' : Description,
-    'imageUrl' : Url,
-    'images' : IDL.Vec(IDL.Text),
+  const UserTx = IDL.Record({
+    'id' : IDL.Nat32,
+    'fee' : IDL.Float64,
+    'src' : IDL.Opt(IDL.Nat),
+    'dest' : IDL.Opt(IDL.Nat),
+    'createdAt' : Time,
+    'recv' : IDL.Float64,
+    'sent' : IDL.Float64,
+    'marketId' : IDL.Nat32,
+    'price' : IDL.Float64,
   });
-  const Probability = IDL.Float64;
-  const Author = IDL.Text;
+  const ExpBalances = IDL.Record({
+    'expBtc' : IDL.Float64,
+    'expIcp' : IDL.Float64,
+    'expSeers' : IDL.Float64,
+    'expCycles' : IDL.Float64,
+  });
+  const UserData = IDL.Record({
+    'principal' : IDL.Text,
+    'picture' : IDL.Text,
+    'handle' : IDL.Text,
+  });
+  const Like__1 = IDL.Record({
+    'authorPicture' : IDL.Text,
+    'createdAt' : Time,
+    'stars' : IDL.Nat32,
+    'authorHandle' : IDL.Text,
+    'authorPrincipal' : IDL.Text,
+  });
+  const Comment__1 = IDL.Record({
+    'id' : IDL.Nat32,
+    'content' : IDL.Text,
+    'createdAt' : Time,
+    'user' : UserData,
+    'likes' : IDL.Vec(Like__1),
+  });
+  const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : Comment__1 });
+  const Post = IDL.Record({
+    'id' : IDL.Nat32,
+    'content' : IDL.Text,
+    'createdAt' : Time,
+    'author' : UserData,
+    'likes' : IDL.Vec(Like__1),
+    'comments' : IDL.Vec(Comment__1),
+  });
+  const HistPoint = IDL.Record({
+    'probabilities' : IDL.Vec(IDL.Float64),
+    'createdAt' : Time,
+    'liquidity' : IDL.Float64,
+  });
+  const CollateralType = IDL.Variant({
+    'icp' : IDL.Null,
+    'seers' : IDL.Null,
+    'cycles' : IDL.Null,
+  });
   const MarketState = IDL.Variant({
     'resolved' : IDL.Nat,
     'closed' : IDL.Null,
     'pending' : IDL.Null,
+    'invalid' : IDL.Null,
     'open' : IDL.Null,
+    'approved' : IDL.Null,
   });
-  const Shares = IDL.Int;
-  const MarketResult = IDL.Record({
-    'k' : Balance,
-    'id' : MarketId,
-    'title' : Title,
-    'probabilities' : IDL.Vec(Probability),
+  const MarketCategory = IDL.Variant({
+    'entertainment' : IDL.Null,
+    'seers' : IDL.Null,
+    'crypto' : IDL.Null,
+    'business' : IDL.Null,
+    'financial' : IDL.Null,
+    'sports' : IDL.Null,
+    'dfinity' : IDL.Null,
+    'science' : IDL.Null,
+    'politics' : IDL.Null,
+  });
+  const MarketStable = IDL.Record({
+    'k' : IDL.Float64,
+    'id' : IDL.Nat32,
+    'title' : IDL.Text,
+    'histPrices' : IDL.Vec(HistPoint),
+    'probabilities' : IDL.Vec(IDL.Float64),
     'endDate' : Time,
+    'modifiedAt' : Time,
     'labels' : IDL.Vec(IDL.Text),
-    'liquidity' : Balance,
-    'reserves' : IDL.Vec(Balance),
-    'description' : Description,
-    'volume' : Balance,
-    'author' : Author,
+    'createdAt' : Time,
+    'liquidity' : IDL.Float64,
+    'reserves' : IDL.Vec(IDL.Float64),
+    'collateralType' : CollateralType,
+    'description' : IDL.Text,
+    'volume' : IDL.Float64,
+    'bettors' : IDL.Vec(IDL.Text),
+    'author' : UserData,
     'state' : MarketState,
-    'imageUrl' : Url,
+    'imageUrl' : IDL.Text,
+    'category' : MarketCategory,
     'providers' : IDL.Vec(IDL.Text),
-    'comments' : IDL.Vec(Comment),
-    'totalShares' : Shares,
-    'blockTimestampLast' : Time,
+    'comments' : IDL.Vec(Comment__1),
+    'totalShares' : IDL.Float64,
     'startDate' : Time,
     'images' : IDL.Vec(IDL.Text),
   });
-  const CreateMarketError = IDL.Variant({
-    'callerIsAnon' : IDL.Null,
-    'imageMissing' : IDL.Null,
-    'optionsMissing' : IDL.Null,
-    'descriptionMissing' : IDL.Null,
-    'titleMissing' : IDL.Null,
-    'userNotCreated' : IDL.Null,
-    'endDateOld' : Time,
-    'notEnoughLiquidity' : Balance,
+  const FeedItem = IDL.Variant({
+    'bet' : Bet,
+    'post' : Post,
+    'comment' : Comment__1,
+    'market' : MarketStable,
   });
-  const Result_3 = IDL.Variant({
-    'ok' : MarketResult,
-    'err' : CreateMarketError,
-  });
-  const UserTx = IDL.Record({
-    'fee' : Balance,
-    'src' : IDL.Opt(IDL.Nat),
-    'dest' : IDL.Opt(IDL.Nat),
-    'seerRecv' : Balance,
-    'seerSent' : Balance,
-    'marketId' : MarketId,
-    'timestamp' : Time,
-  });
+  const BrierScore = IDL.Record({ 'createdAt' : Time, 'score' : IDL.Float64 });
   const UserMarket = IDL.Record({
-    'shares' : Shares,
+    'brierScores' : IDL.Vec(BrierScore),
+    'title' : IDL.Text,
+    'shares' : IDL.Float64,
+    'modifiedAt' : Time,
+    'redeemed' : IDL.Bool,
     'labels' : IDL.Vec(IDL.Text),
-    'used' : IDL.Bool,
-    'marketId' : MarketId,
-    'balances' : IDL.Vec(Balance),
-    'marketTitle' : Title,
+    'createdAt' : Time,
+    'spent' : IDL.Float64,
+    'marketId' : IDL.Nat32,
+    'balances' : IDL.Vec(IDL.Float64),
   });
-  const UserResult = IDL.Record({
-    'id' : UserId,
+  const Like = IDL.Record({
+    'authorPicture' : IDL.Text,
+    'createdAt' : Time,
+    'stars' : IDL.Nat32,
+    'authorHandle' : IDL.Text,
+    'authorPrincipal' : IDL.Text,
+  });
+  const Comment = IDL.Record({
+    'id' : IDL.Nat32,
+    'content' : IDL.Text,
+    'createdAt' : Time,
+    'user' : UserData,
+    'likes' : IDL.Vec(Like),
+  });
+  const Post__1 = IDL.Record({
+    'id' : IDL.Nat32,
+    'content' : IDL.Text,
+    'createdAt' : Time,
+    'author' : UserData,
+    'likes' : IDL.Vec(Like),
+    'comments' : IDL.Vec(Comment),
+  });
+  const Followee = IDL.Record({ 'createdAt' : Time, 'user' : UserData });
+  const Follower = IDL.Record({ 'createdAt' : Time, 'user' : UserData });
+  const DepositAddrs = IDL.Record({
+    'btc' : IDL.Opt(IDL.Text),
+    'icp' : IDL.Opt(IDL.Text),
+    'cycles' : IDL.Opt(IDL.Text),
+  });
+  const Balances = IDL.Record({
+    'btc' : IDL.Float64,
+    'icp' : IDL.Float64,
+    'seers' : IDL.Float64,
+    'cycles' : IDL.Float64,
+  });
+  const UserStable = IDL.Record({
+    'id' : IDL.Text,
+    'bio' : IDL.Text,
     'txs' : IDL.Vec(UserTx),
-    'seerBalance' : Balance,
+    'expBalances' : ExpBalances,
+    'twitter' : IDL.Text,
+    'lastSeenAt' : Time,
+    'modifiedAt' : Time,
+    'feed' : IDL.Vec(FeedItem),
+    'createdAt' : Time,
     'markets' : IDL.Vec(UserMarket),
-    'expSeerBalance' : Balance,
+    'picture' : IDL.Text,
+    'discord' : IDL.Text,
     'handle' : IDL.Text,
+    'comments' : IDL.Vec(Comment),
+    'posts' : IDL.Vec(Post__1),
+    'followees' : IDL.Vec(Followee),
+    'followers' : IDL.Vec(Follower),
+    'depositAddrs' : DepositAddrs,
+    'balances' : Balances,
   });
-  const CreateUserError = IDL.Variant({
-    'userExist' : IDL.Null,
-    'userIsAnon' : IDL.Null,
-  });
-  const Result_2 = IDL.Variant({ 'ok' : UserResult, 'err' : CreateUserError });
-  const OldUserMarket = IDL.Record({
-    'shares' : Shares,
-    'marketId' : MarketId,
-    'balances' : IDL.Vec(Balance),
-    'marketTitle' : Title,
-  });
-  const OldUserResult = IDL.Record({
-    'id' : UserId,
-    'seerBalance' : Balance,
-    'markets' : IDL.Vec(OldUserMarket),
-    'expSeerBalance' : Balance,
-    'handle' : IDL.Text,
-  });
-  const UserError = IDL.Variant({
-    'callerIsAnon' : IDL.Null,
-    'userNotCreated' : IDL.Null,
-  });
-  const Result_1 = IDL.Variant({ 'ok' : UserResult, 'err' : UserError });
   const Market = IDL.Service({
-    'addCommentToMarket' : IDL.Func([MarketId, IDL.Text], [Result_4], []),
-    'approveMarket' : IDL.Func([MarketId], [], []),
-    'backup' : IDL.Func([], [], []),
-    'buyOption' : IDL.Func(
-        [MarketId, Balance, IDL.Nat, IDL.Bool],
-        [Result],
-        [],
-      ),
+    'approveMarket' : IDL.Func([IDL.Nat32], [], []),
     'callerAccount' : IDL.Func([], [AccountIdentifier], []),
     'canisterAccount' : IDL.Func([], [IDL.Text], ['query']),
-    'canisterBalance' : IDL.Func([], [ICP], []),
-    'cleanTxs' : IDL.Func([UserId], [], []),
-    'createMarket' : IDL.Func([MarketInitData], [Result_3], []),
-    'createUserResult' : IDL.Func([IDL.Text], [Result_2], []),
-    'deleteAllMarkets' : IDL.Func([], [], []),
-    'deleteMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], []),
-    'editMarketImage' : IDL.Func([MarketId, IDL.Text], [IDL.Bool], []),
-    'editMarketProbs' : IDL.Func([MarketId, IDL.Vec(Balance)], [IDL.Bool], []),
-    'getUserResult' : IDL.Func([UserId], [IDL.Opt(UserResult)], ['query']),
-    'importMarkets' : IDL.Func([IDL.Vec(MarketResult)], [], ['oneway']),
-    'importUsers' : IDL.Func([IDL.Vec(OldUserResult)], [], ['oneway']),
-    'increaseMarketCounter' : IDL.Func([MarketId], [MarketId], []),
-    'moveStables' : IDL.Func([], [], []),
-    'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
-    'readAllOpenMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
-    'readAllPendingMarkets' : IDL.Func([], [IDL.Vec(MarketResult)], ['query']),
-    'readAllUsers' : IDL.Func([], [IDL.Vec(UserResult)], ['query']),
-    'readBetsOfMarket' : IDL.Func(
-        [MarketId],
-        [IDL.Vec(IDL.Tuple(UserId, IDL.Text, IDL.Vec(UserTx)))],
-        ['query'],
-      ),
-    'readMarket' : IDL.Func([MarketId], [IDL.Opt(MarketResult)], ['query']),
-    'readNewUsers' : IDL.Func([], [IDL.Vec(IDL.Tuple(UserId, UserResult))], []),
-    'readUser' : IDL.Func([UserId], [IDL.Opt(UserResult)], ['query']),
-    'refreshUser' : IDL.Func([], [Result_1], []),
-    'resolveMarket' : IDL.Func([MarketId, IDL.Nat], [IDL.Bool], []),
-    'restore' : IDL.Func([], [], []),
-    'sellOption' : IDL.Func(
-        [MarketId, Balance, IDL.Nat, IDL.Bool],
-        [Result],
-        [],
-      ),
+    'canisterFloat' : IDL.Func([], [ICP], []),
+    'readAllUsers' : IDL.Func([], [IDL.Vec(UserStable)], ['query']),
+    'resolveMarket' : IDL.Func([IDL.Nat32, IDL.Nat], [IDL.Bool], []),
     'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),
-    'tip' : IDL.Func([UserId, Balance], [IDL.Opt(Balance)], []),
   });
   return Market;
 };
