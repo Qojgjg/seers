@@ -19,6 +19,7 @@ import M "Market";
 import U "User";
 import Utils "Utils";
 import Tx "Tx";
+import Comment "Comment";
 
 // import Array "mo:base/Array";
 // import Binary "mo:encoding/Binary";
@@ -480,7 +481,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Delete a market.
-    public shared(msg) func deleteMarket(marketId: Nat32): async ?MarketResult {
+    public shared(msg) func deleteMarket(marketId: Nat32): async ?M.MarketStable {
         assert(msg.caller == initializer); // Root call.
         
         let r = marketMap.remove(marketId);
@@ -854,7 +855,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Get user data.
-    public query func getUserResult(userId: Text): async ?UserResult {
+    public query func getUserResult(userId: Text): async ?U.UserStable {
         return Option.map(getUser(userId), userToUserResult);
     };
 
@@ -871,7 +872,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Create user.
-    public shared(msg) func createUserResult(handle: Text): async Result.Result<UserResult, CreateUserError> {
+    public shared(msg) func createUserResult(handle: Text): async Result.Result<U.UserStable, CreateUserError> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -954,7 +955,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Add a comment to a market.
-    public shared(msg) func addCommentToMarket(marketId: Nat32, content: Text): async Result.Result<Comment, AddCommentError> {
+    public shared(msg) func addCommentToMarket(marketId: Nat32, content: Text): async Result.Result<Comment.Comment, AddCommentError> {
         assert(not updating);
         
         let userId = Principal.toText(msg.caller);
@@ -1010,7 +1011,7 @@ shared({ caller = initializer }) actor class Market() = this {
         return v;
     };
 
-    private func keepOpenMarkets(o: (Nat32, Market)): ?MarketResult {
+    private func keepOpenMarkets(o: (Nat32, Market)): ?M.MarketStable {
         let m = o.1;
         switch (m.state) {
             case (#open) {
@@ -1018,7 +1019,7 @@ shared({ caller = initializer }) actor class Market() = this {
                     id = m.id;    
                     title = m.title;
                     description = m.description;
-                    labels = m.labels;
+                    labels = m.labels;  
                     images = m.images;
                     probabilities = m.probabilities;
                     liquidity = m.liquidity;
@@ -1044,7 +1045,7 @@ shared({ caller = initializer }) actor class Market() = this {
         return null;
     };
 
-    private func keepPendingMarkets(o: (Nat32, Market)): ?MarketResult {
+    private func keepPendingMarkets(o: (Nat32, Market)): ?M.MarketStable {
         let m = o.1;
         switch (m.state) {
             case (#pending) {
@@ -1078,7 +1079,7 @@ shared({ caller = initializer }) actor class Market() = this {
         return null;
     };
 
-    private func getUser(userId: Text): ?User {
+    private func getUser(userId: Text): ?U.User {
         userMap.get(userId)
     };
 
@@ -1088,12 +1089,12 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
 
-    private func createUser(userId: Text, handle: Text): Result.Result<User, CreateUserError> {
+    private func createUser(userId: Text, handle: Text): Result.Result<U.User, CreateUserError> {
         let exist = Trie.find(handles, userKey(handle), Text.equal);
 
         switch (exist) {
             case (null) {
-                let user: User = {
+                let user: U.User = {
                     var id = userId;
                     var seerFloat = 1000.0; // Airdrop
                     var expSeerFloat = 1000.0;
