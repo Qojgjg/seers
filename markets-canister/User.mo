@@ -8,23 +8,12 @@ import Array "mo:base/Array";
 import Utils "Utils";
 import BrierScore "BrierScore";
 import Feed "Feed";
+import Tx "Tx";
 
 module {
    
     public type BrierScore = {
         score: Float;
-        createdAt: Time.Time;
-    };
-
-    public type UserTx = {
-        id: Nat32;
-        marketId: Nat32;
-        src: ?Nat;
-        dest: ?Nat;
-        sent: Float;
-        recv: Float;
-        fee: Float;
-        price: Float;
         createdAt: Time.Time;
     };
 
@@ -39,7 +28,7 @@ module {
     };
 
     public type Bet = {
-        tx: UserTx;
+        tx: Tx.UserTx;
         comment: Comment;
     };
 
@@ -112,7 +101,7 @@ module {
         };
 
         public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
-        public var txs: Buffer.Buffer<UserTx> = Buffer.Buffer<UserTx>(5);
+        public var txs: Buffer.Buffer<Tx.UserTx> = Buffer.Buffer<Tx.UserTx>(5);
         public var comments: Buffer.Buffer<Comment> = Buffer.Buffer<Comment>(5);
         public var posts: Buffer.Buffer<Post> = Buffer.Buffer<Post>(5);
         public var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
@@ -185,12 +174,12 @@ module {
         twitter: Text;
         discord: Text;
         bio: Text;
-        feed: [FeedItem];
+        feed: [Feed.FeedItem];
         balances: Balances;
         expBalances: ExpBalances;
         depositAddrs: DepositAddrs;  
         markets: [UserMarket];
-        txs: [UserTx];
+        txs: [Tx.UserTx];
         comments: [Comment];
         posts: [Post];
         followers: [Follower];

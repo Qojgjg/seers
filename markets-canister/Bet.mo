@@ -1,9 +1,9 @@
-import { Comment } "Comment"
-import { UserTx } "Tx"
+import Comment "Comment";
+import Tx "Tx";
 
 module {
     public type Bet = {
-        tx: UserTx;
-        comment: Comment;
+        tx: Tx.UserTx;
+        comment: Comment.Comment;
     };
 }
