@@ -37,7 +37,7 @@
       setTimeout(getUserData, 500)
     } else {
       isGetting = true
-      user = await $auth.actor.getUserResult(principal)
+      user = await $auth.actor.getUserStable(principal)
       isGetting = false
       if (user) {
         user = user[0]
@@ -59,7 +59,7 @@
   let createUserData = async () => {
     createLabel = "Processing..."
     errorResponse = ""
-    response = await $auth.actor.createUserResult(handle)
+    response = await $auth.actor.createUser(handle)
     if (response["err"]) {
       errorResponse =
         "Error: " +
@@ -99,10 +99,10 @@
         Welcome {user.handle}! ♡
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Balance: {Number(user.seerBalance).toFixed(2)} Σ
+        Balance: {Number(user.balances["seers"]).toFixed(2)} Σ
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Expected Balance: {Number(user.expSeerBalance).toFixed(2)} Σ
+        Expected Balance: {Number(user.expBalances["expSeers"]).toFixed(2)} Σ
       </div>
       <div
         style="margin-bottom: 10px; width: 100%; text-align:center; display: flex; justify-content: center"

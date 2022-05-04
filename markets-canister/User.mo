@@ -4,6 +4,8 @@ import Buffer "mo:base/Buffer";
 import Iter "mo:base/Iter";
 import Float "mo:base/Float";
 import Array "mo:base/Array";
+import Trie "mo:base/Trie";
+import Text "mo:base/Text";
 
 import Utils "Utils";
 import BrierScore "BrierScore";
@@ -11,6 +13,32 @@ import Feed "Feed";
 import Tx "Tx";
 
 module {
+    public func userKey(x: Text) : Trie.Key<Text> {
+        return { hash = Text.hash(x); key = x };
+    };
+
+    public type UserError = {
+        #callerIsAnon;
+        #profileNotCreated;
+        #notEnoughLiquidity: Float;
+        #titleMissing;
+        #descriptionMissing;
+        #optionsMissing;
+        #imageMissing;
+        #startDateOld;
+        #endDateOld;
+        #endDateOlderThanStartDate;
+
+        #notEnoughBalance;
+        #marketMissing;
+        #marketNotOpen;
+        #newtonFailed;
+        #minimalAmountIsOne;
+
+        #commentIsEmpty;
+
+        #userAlreadyExist;
+    };
    
     public type BrierScore = {
         score: Float;

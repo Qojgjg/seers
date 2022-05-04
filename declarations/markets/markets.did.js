@@ -177,11 +177,33 @@ export const idlFactory = ({ IDL }) => {
     'depositAddrs' : DepositAddrs,
     'balances' : Balances,
   });
+  const UserError = IDL.Variant({
+    'callerIsAnon' : IDL.Null,
+    'minimalAmountIsOne' : IDL.Null,
+    'userAlreadyExist' : IDL.Null,
+    'imageMissing' : IDL.Null,
+    'profileNotCreated' : IDL.Null,
+    'notEnoughBalance' : IDL.Null,
+    'optionsMissing' : IDL.Null,
+    'descriptionMissing' : IDL.Null,
+    'titleMissing' : IDL.Null,
+    'marketMissing' : IDL.Null,
+    'startDateOld' : IDL.Null,
+    'marketNotOpen' : IDL.Null,
+    'commentIsEmpty' : IDL.Null,
+    'endDateOld' : IDL.Null,
+    'newtonFailed' : IDL.Null,
+    'endDateOlderThanStartDate' : IDL.Null,
+    'notEnoughLiquidity' : IDL.Float64,
+  });
+  const Result = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
   const Market = IDL.Service({
     'approveMarket' : IDL.Func([IDL.Nat32], [], []),
     'callerAccount' : IDL.Func([], [AccountIdentifier], []),
     'canisterAccount' : IDL.Func([], [IDL.Text], ['query']),
     'canisterFloat' : IDL.Func([], [ICP], []),
+    'createUser' : IDL.Func([IDL.Text], [Result], []),
+    'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserStable)], ['query']),
     'resolveMarket' : IDL.Func([IDL.Nat32, IDL.Nat], [IDL.Bool], []),
     'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),

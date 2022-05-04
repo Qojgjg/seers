@@ -839,9 +839,11 @@ shared({ caller = initializer }) actor class Market() = this {
     // };
 
     // Get user data.
-    // public query func getUserResult(userId: Text): async ?U.UserStable {
-    //     return Option.map(getUser(userId), userToUserResult);
-    // };
+    public query func getUserStable(userId: Text): async ?U.UserStable {
+        return Option.map(getUser(userId), func (u: U.User): U.UserStable {
+            return u.freeze();
+        });
+    };
 
     // public shared(msg) func cleanTxs(userId: Text): async () {
     //     assert(msg.caller == initializer); // Root call.
@@ -856,24 +858,24 @@ shared({ caller = initializer }) actor class Market() = this {
     // };
 
     // Create user.
-    // public shared(msg) func createUserResult(handle: Text): async Result.Result<U.UserStable, CreateUserError> {
-    //     assert(not updating);
+    public shared(msg) func createUser(handle: Text): async Result.Result<U.UserStable, U.UserError> {
+        assert(not updating);
 
-    //     let caller = Principal.toText(msg.caller);
+        let caller = Principal.toText(msg.caller);
 
-    //     if (caller == anon) {
-    //         return #err(#userIsAnon);
-    //     };
+        if (caller == anon) {
+            return #err(#callerIsAnon);
+        };
         
-    //     switch (createUser(caller, handle)) {
-    //         case (#err(e)) {
-    //             return #err(e);
-    //         };
-    //         case (#ok(user)) {
-    //             return #ok(userToUserResult(user))
-    //         };
-    //     };
-    // };
+        switch (_createUser(caller, handle)) {
+            case (#err(e)) {
+                return #err(e);
+            };
+            case (#ok(user)) {
+                return #ok(user.freeze())
+            };
+        };
+    };
 
 
     // Tip a user
@@ -976,10 +978,6 @@ shared({ caller = initializer }) actor class Market() = this {
     * Utilities
     */
 
-    // private func userKey(x: Text) : Trie.Key<Text> {
-    //     return { hash = Text.hash(x); key = x };
-    // };
-
     // private func marketKey(x: Nat32) : Trie.Key<Nat32> {
     //     return { hash = x; key = x };
     // };
@@ -1056,9 +1054,9 @@ shared({ caller = initializer }) actor class Market() = this {
     //     return null;
     // };
 
-    // private func getUser(userId: Text): ?U.User {
-    //     userMap.get(userId)
-    // };
+    private func getUser(userId: Text): ?U.User {
+        userMap.get(userId)
+    };
 
     // private type CreateUserError = {
     //     #userExist;
@@ -1066,35 +1064,32 @@ shared({ caller = initializer }) actor class Market() = this {
     // };
 
 
-    // private func createUser(userId: Text, handle: Text): Result.Result<U.User, CreateUserError> {
-    //     let exist = Trie.find(handles, userKey(handle), Text.equal);
+    private func _createUser(userId: Text, handle: Text): Result.Result<U.User, U.UserError> {
+        switch (userMap.get(handle)) {
+            case (null) {
+                let user: U.User = U.User({
+                    id = userId;
+                    handle = handle;
+                    picture = "";
+                    twitter = "";
+                    discord = "";
+                    bio = "";
+                });
 
-    //     switch (exist) {
-    //         case (null) {
-    //             let user: U.User = {
-    //                 var id = userId;
-    //                 var seerFloat = 1000.0; // Airdrop
-    //                 var expSeerFloat = 1000.0;
-    //                 var handle = handle;
-    //                 var markets = [];
-    //                 var txs = [];
-    //            };
+                handles := Trie.replace(
+                    handles,
+                    U.userKey(handle),
+                    Text.equal,
+                    ?handle,
+                ).0;
 
-    //             handles := Trie.replace(
-    //                 handles,
-    //                 userKey(handle),
-    //                 Text.equal,
-    //                 ?handle,
-    //             ).0;
+                userMap.put(userId, user);
 
-    //             userMap.put(userId, user);
-
-    //             return #ok(user);
-    //         };
-    //         case (userId) {
-    //             return #err(#userExist);
-    //         };
-    //     };
-    // };
-
+                return #ok(user);
+            };
+            case (userId) {
+                return #err(#userAlreadyExist);
+            };
+        };
+    };
 };

@@ -1,205 +1,222 @@
 type UserTx = 
  record {
+   createdAt: Time;
    dest: opt nat;
-   fee: Balance;
-   marketId: MarketId;
-   seerRecv: Balance;
-   seerSent: Balance;
+   fee: float64;
+   id: nat32;
+   marketId: nat32;
+   price: float64;
+   recv: float64;
+   sent: float64;
    src: opt nat;
-   timestamp: Time;
  };
-type UserResult = 
+type UserStable = 
  record {
-   expSeerBalance: Balance;
+   balances: Balances;
+   bio: text;
+   comments: vec Comment;
+   createdAt: Time;
+   depositAddrs: DepositAddrs;
+   discord: text;
+   expBalances: ExpBalances;
+   feed: vec FeedItem;
+   followees: vec Followee;
+   followers: vec Follower;
    handle: text;
-   id: UserId;
+   id: text;
+   lastSeenAt: Time;
    markets: vec UserMarket;
-   seerBalance: Balance;
+   modifiedAt: Time;
+   picture: text;
+   posts: vec Post__1;
+   twitter: text;
    txs: vec UserTx;
  };
 type UserMarket = 
  record {
-   balances: vec Balance;
+   balances: vec float64;
+   brierScores: vec BrierScore;
+   createdAt: Time;
    labels: vec text;
-   marketId: MarketId;
-   marketTitle: Title;
-   shares: Shares;
-   used: bool;
+   marketId: nat32;
+   modifiedAt: Time;
+   redeemed: bool;
+   shares: float64;
+   spent: float64;
+   title: text;
  };
-type UserId = text;
-type UserError = 
- variant {
-   callerIsAnon;
-   userNotCreated;
- };
-type Url = text;
-type TradeError = 
- variant {
-   callerIsAnon;
-   marketClosed;
-   marketMissing;
-   minimalAmountIsOne;
-   newtonFailed;
-   notEnoughBalance;
-   userNotCreated;
- };
-type Title = text;
-type Time = int;
-type Shares = int;
-type Result_4 = 
- variant {
-   err: AddCommentError;
-   ok: Comment;
- };
-type Result_3 = 
- variant {
-   err: CreateMarketError;
-   ok: MarketResult;
- };
-type Result_2 = 
- variant {
-   err: CreateUserError;
-   ok: UserResult;
- };
-type Result_1 = 
- variant {
-   err: UserError;
-   ok: UserResult;
- };
-type Result = 
- variant {
-   err: TradeError;
-   ok: Balance;
- };
-type Probability = float64;
-type OldUserResult = 
+type UserData = 
  record {
-   expSeerBalance: Balance;
    handle: text;
-   id: UserId;
-   markets: vec OldUserMarket;
-   seerBalance: Balance;
+   picture: text;
+   "principal": text;
  };
-type OldUserMarket = 
+type Time = int;
+type Post__1 = 
  record {
-   balances: vec Balance;
-   marketId: MarketId;
-   marketTitle: Title;
-   shares: Shares;
+   author: UserData;
+   comments: vec Comment;
+   content: text;
+   createdAt: Time;
+   id: nat32;
+   likes: vec Like;
+ };
+type Post = 
+ record {
+   author: UserData;
+   comments: vec Comment__1;
+   content: text;
+   createdAt: Time;
+   id: nat32;
+   likes: vec Like__1;
  };
 type MarketState = 
  variant {
+   approved;
    closed;
+   invalid;
    open;
    pending;
    resolved: nat;
  };
-type MarketResult = 
+type MarketStable = 
  record {
-   author: Author;
-   blockTimestampLast: Time;
-   comments: vec Comment;
-   description: Description;
+   author: UserData;
+   bettors: vec text;
+   category: MarketCategory;
+   collateralType: CollateralType;
+   comments: vec Comment__1;
+   createdAt: Time;
+   description: text;
    endDate: Time;
-   id: MarketId;
-   imageUrl: Url;
+   histPrices: vec HistPoint;
+   id: nat32;
+   imageUrl: text;
    images: vec text;
-   k: Balance;
+   k: float64;
    labels: vec text;
-   liquidity: Balance;
-   probabilities: vec Probability;
+   liquidity: float64;
+   modifiedAt: Time;
+   probabilities: vec float64;
    providers: vec text;
-   reserves: vec Balance;
+   reserves: vec float64;
    startDate: Time;
    state: MarketState;
-   title: Title;
-   totalShares: Shares;
-   volume: Balance;
+   title: text;
+   totalShares: float64;
+   volume: float64;
  };
-type MarketInitData = 
+type MarketCategory = 
+ variant {
+   business;
+   crypto;
+   dfinity;
+   entertainment;
+   financial;
+   politics;
+   science;
+   seers;
+   sports;
+ };
+type Like__1 = 
  record {
-   description: Description;
-   endDate: Time;
-   imageUrl: Url;
-   images: vec text;
-   labels: vec text;
-   liquidity: Balance;
-   title: Title;
+   authorHandle: text;
+   authorPicture: text;
+   authorPrincipal: text;
+   createdAt: Time;
+   stars: nat32;
  };
-type MarketId = nat32;
+type Like = 
+ record {
+   authorHandle: text;
+   authorPicture: text;
+   authorPrincipal: text;
+   createdAt: Time;
+   stars: nat32;
+ };
 type ICP = record {e8s: nat64;};
-type Description = text;
-type CreateUserError = 
- variant {
-   userExist;
-   userIsAnon;
+type HistPoint = 
+ record {
+   createdAt: Time;
+   liquidity: float64;
+   probabilities: vec float64;
  };
-type CreateMarketError = 
+type Follower = 
+ record {
+   createdAt: Time;
+   user: UserData;
+ };
+type Followee = 
+ record {
+   createdAt: Time;
+   user: UserData;
+ };
+type FeedItem = 
  variant {
-   callerIsAnon;
-   descriptionMissing;
-   endDateOld: Time;
-   imageMissing;
-   notEnoughLiquidity: Balance;
-   optionsMissing;
-   titleMissing;
-   userNotCreated;
+   bet: Bet;
+   comment: Comment__1;
+   market: MarketStable;
+   post: Post;
+ };
+type ExpBalances = 
+ record {
+   expBtc: float64;
+   expCycles: float64;
+   expIcp: float64;
+   expSeers: float64;
+ };
+type DepositAddrs = 
+ record {
+   btc: opt text;
+   cycles: opt text;
+   icp: opt text;
+ };
+type Comment__1 = 
+ record {
+   content: text;
+   createdAt: Time;
+   id: nat32;
+   likes: vec Like__1;
+   user: UserData;
  };
 type Comment = 
  record {
-   author: text;
    content: text;
+   createdAt: Time;
+   id: nat32;
+   likes: vec Like;
+   user: UserData;
  };
-type Balance = float64;
-type Author = text;
-type AddCommentError = 
+type CollateralType = 
  variant {
-   commentIsEmpty;
-   marketMissing;
-   userIsAnon;
-   userNotCreated;
+   cycles;
+   icp;
+   seers;
+ };
+type BrierScore = 
+ record {
+   createdAt: Time;
+   score: float64;
+ };
+type Bet = 
+ record {
+   comment: Comment__1;
+   tx: UserTx;
+ };
+type Balances = 
+ record {
+   btc: float64;
+   cycles: float64;
+   icp: float64;
+   seers: float64;
  };
 type AccountIdentifier = blob;
 service : {
-  addCommentToMarket: (MarketId, text) -> (Result_4);
-  approveMarket: (MarketId) -> ();
-  backup: () -> ();
-  buyOption: (MarketId, Balance, nat, bool) -> (Result);
+  approveMarket: (nat32) -> ();
   callerAccount: () -> (AccountIdentifier);
   canisterAccount: () -> (text) query;
-  canisterBalance: () -> (ICP);
-  cleanTxs: (UserId) -> ();
-  createMarket: (MarketInitData) -> (Result_3);
-  createUserResult: (text) -> (Result_2);
-  deleteAllMarkets: () -> ();
-  deleteMarket: (MarketId) -> (opt MarketResult);
-  editMarketImage: (MarketId, text) -> (bool);
-  editMarketProbs: (MarketId, vec Balance) -> (bool);
-  getUserResult: (UserId) -> (opt UserResult) query;
-  importMarkets: (vec MarketResult) -> () oneway;
-  importUsers: (vec OldUserResult) -> () oneway;
-  increaseMarketCounter: (MarketId) -> (MarketId);
-  moveStables: () -> ();
-  readAllMarkets: () -> (vec MarketResult) query;
-  readAllOpenMarkets: () -> (vec MarketResult) query;
-  readAllPendingMarkets: () -> (vec MarketResult) query;
-  readAllUsers: () -> (vec UserResult) query;
-  readBetsOfMarket: (MarketId) ->
-   (vec record {
-          UserId;
-          text;
-          vec UserTx;
-        }) query;
-  readMarket: (MarketId) -> (opt MarketResult) query;
-  readNewUsers: () -> (vec record {
-                             UserId;
-                             UserResult;
-                           });
-  readUser: (UserId) -> (opt UserResult) query;
-  refreshUser: () -> (Result_1);
-  resolveMarket: (MarketId, nat) -> (bool);
-  restore: () -> ();
-  sellOption: (MarketId, Balance, nat, bool) -> (Result);
+  canisterFloat: () -> (ICP);
+  readAllUsers: () -> (vec UserStable) query;
+  resolveMarket: (nat32, nat) -> (bool);
   setUpdating: (bool) -> () oneway;
-  tip: (UserId, Balance) -> (opt Balance);
 }

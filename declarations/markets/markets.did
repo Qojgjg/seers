@@ -45,6 +45,26 @@ type UserMarket =
    spent: float64;
    title: text;
  };
+type UserError = 
+ variant {
+   callerIsAnon;
+   commentIsEmpty;
+   descriptionMissing;
+   endDateOld;
+   endDateOlderThanStartDate;
+   imageMissing;
+   marketMissing;
+   marketNotOpen;
+   minimalAmountIsOne;
+   newtonFailed;
+   notEnoughBalance;
+   notEnoughLiquidity: float64;
+   optionsMissing;
+   profileNotCreated;
+   startDateOld;
+   titleMissing;
+   userAlreadyExist;
+ };
 type UserData = 
  record {
    handle: text;
@@ -52,6 +72,11 @@ type UserData =
    "principal": text;
  };
 type Time = int;
+type Result = 
+ variant {
+   err: UserError;
+   ok: UserStable;
+ };
 type Post__1 = 
  record {
    author: UserData;
@@ -124,6 +149,8 @@ type Market =
    callerAccount: () -> (AccountIdentifier);
    canisterAccount: () -> (text) query;
    canisterFloat: () -> (ICP);
+   createUser: (text) -> (Result);
+   getUserStable: (text) -> (opt UserStable) query;
    readAllUsers: () -> (vec UserStable) query;
    resolveMarket: (nat32, nat) -> (bool);
    setUpdating: (bool) -> () oneway;

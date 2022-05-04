@@ -67,6 +67,8 @@ export interface Market {
   'callerAccount' : () => Promise<AccountIdentifier>,
   'canisterAccount' : () => Promise<string>,
   'canisterFloat' : () => Promise<ICP>,
+  'createUser' : (arg_0: string) => Promise<Result>,
+  'getUserStable' : (arg_0: string) => Promise<[] | [UserStable]>,
   'readAllUsers' : () => Promise<Array<UserStable>>,
   'resolveMarket' : (arg_0: number, arg_1: bigint) => Promise<boolean>,
   'setUpdating' : (arg_0: boolean) => Promise<undefined>,
@@ -128,12 +130,31 @@ export interface Post__1 {
   'likes' : Array<Like>,
   'comments' : Array<Comment>,
 }
+export type Result = { 'ok' : UserStable } |
+  { 'err' : UserError };
 export type Time = bigint;
 export interface UserData {
   'principal' : string,
   'picture' : string,
   'handle' : string,
 }
+export type UserError = { 'callerIsAnon' : null } |
+  { 'minimalAmountIsOne' : null } |
+  { 'userAlreadyExist' : null } |
+  { 'imageMissing' : null } |
+  { 'profileNotCreated' : null } |
+  { 'notEnoughBalance' : null } |
+  { 'optionsMissing' : null } |
+  { 'descriptionMissing' : null } |
+  { 'titleMissing' : null } |
+  { 'marketMissing' : null } |
+  { 'startDateOld' : null } |
+  { 'marketNotOpen' : null } |
+  { 'commentIsEmpty' : null } |
+  { 'endDateOld' : null } |
+  { 'newtonFailed' : null } |
+  { 'endDateOlderThanStartDate' : null } |
+  { 'notEnoughLiquidity' : number };
 export interface UserMarket {
   'brierScores' : Array<BrierScore>,
   'title' : string,
