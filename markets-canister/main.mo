@@ -18,6 +18,7 @@ import Result "mo:base/Result";
 import M "Market";
 import U "User";
 import Utils "Utils";
+import Tx "Tx";
 
 // import Array "mo:base/Array";
 // import Binary "mo:encoding/Binary";
@@ -66,19 +67,19 @@ shared({ caller = initializer }) actor class Market() = this {
     private stable var nextNat32: Nat32 = 0;
     private stable var handles: Trie.Trie<Text, Text> = Trie.empty();
     
-    private stable var stableUsers: [(Text, M.UserStable)] = [];
+    private stable var stableUsers: [(Text, U.UserStable)] = [];
     private stable var stableMarkets: [(Nat32, M.MarketStable)] = [];
     
-    private var userMap: Map.HashMap<Text, M.User> = do {
-        let usersIter = Iter.map<(Text, M.UserStable), (Text, M.User)>(
+    private var userMap: Map.HashMap<Text, U.User> = do {
+        let usersIter = Iter.map<(Text, U.UserStable), (Text, U.User)>(
             stableUsers.vals(), 
-            func (e: (Text, M.UserStable)): (Text, M.User) {
-                let v = #v1(M.unFreezeUser(e.1));
+            func (e: (Text, U.UserStable)): (Text, U.User) {
+                let v = #v1(U.unFreezeUser(e.1));
                 return (e.0, v);
             }
         );
         
-        Map.fromIter<Text, M.User>(
+        Map.fromIter<Text, U.User>(
             usersIter,
             50, 
             Text.equal, 
@@ -153,7 +154,7 @@ shared({ caller = initializer }) actor class Market() = this {
     /* API */
 
     // Read all users.
-    public query func readAllUsers(): async [M.UserStable] {
+    public query func readAllUsers(): async [U.UserStable] {
         Array.map<(Text, User), UserResult>(
             Iter.toArray(userMap.entries()), 
             func (e: (Text, User)): UserResult {
@@ -334,13 +335,13 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Read user.
-    public query func readUser(userId: Text): async ?M.UserStable {
+    public query func readUser(userId: Text): async ?U.UserStable {
         let result = userMap.get(userId);
         return Option.map(result, userToUserResult);        
     };
 
     // Read all bets of some market.
-    public query func readBetsOfMarket(marketId: Nat32): async [(Text, Text, [M.UserTx])] {
+    public query func readBetsOfMarket(marketId: Nat32): async [(Text, Text, [Tx.UserTx])] {
         let result = marketMap.get(marketId);
         switch (result) {
             case (null) {
@@ -405,7 +406,7 @@ shared({ caller = initializer }) actor class Market() = this {
         #userNotCreated;
     };
 
-    public shared(msg) func refreshUser(): async Result.Result<UserResult, UserError> {
+    public shared(msg) func refreshUser(): async Result.Result<U.UserStable, UserError> {
         assert(not updating);
         let caller = Principal.toText(msg.caller);
         
