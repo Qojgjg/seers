@@ -43,19 +43,6 @@ module {
         #resolved: Nat;
     };
 
-    public type UserMarket = {
-        marketId: Nat32;
-        title: Text;
-        labels: [Text];
-        balances: [Float];
-        brierScores: [BrierScore.BrierScore];
-        shares: Float;
-        spent: Float;
-        redeemed: Bool;
-        createdAt: Time.Time;
-        modifiedAt: Time.Time;
-    };
-
     public type MarketCategory = {
         #crypto;
         #science;
