@@ -8,6 +8,7 @@
   let marketCreated = false
   let newMarketTitle = ""
   let newMarketDesc = ""
+  let startDate = "June 15, 2022 23:00:00"
   let endDate = "February 15, 2021 23:00:00"
   let imageUrl = ""
   let buttonLabel = "Create"
@@ -32,18 +33,23 @@
     let imagesA = images.split(",").map((s) => s.trim())
 
     for (; i < labelsA.length; i++) {
-      probabilities.push(BigInt(Math.floor(1000 / labelsA.length)))
+      probabilities.push(Math.floor(1 / labelsA.length))
     }
 
     const marketInitData = {
+      nextId: 0,
       title: newMarketTitle,
       description: newMarketDesc,
       labels: labelsA,
       images: imagesA,
       probabilities: probabilities,
+      category: { crypto: null },
       liquidity: liquidity,
+      startDate: Date.parse(startDate) * 1_000_000,
       endDate: Date.parse(endDate) * 1_000_000,
       imageUrl: imageUrl,
+      collateralType: { seers: null },
+      author: "",
     }
     buttonLabel = "Processing..."
     createResult = await $auth.actor.createMarket(marketInitData)
