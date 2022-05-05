@@ -68,7 +68,7 @@ module {
         startDate: Time.Time;
         endDate: Time.Time;
         imageUrl: Text;
-        author: Utils.UserData;
+        author: Text;
     };
 
     public type HistPoint = {
@@ -83,7 +83,7 @@ module {
         public var description: Text = initData.description;
         public var startDate: Time.Time = initData.startDate;
         public var endDate: Time.Time = initData.endDate;
-        public var author: Utils.UserData = initData.author;
+        public var author: Text = initData.author;
         public var labels: [Text] = initData.labels;
         public var images: [Text] = initData.images;
         public var category: MarketCategory = initData.category;
@@ -108,7 +108,7 @@ module {
         };
         public var providers: Buffer.Buffer<Text> = do {
             var providers = Buffer.Buffer<Text>(1);
-            providers.add(initData.author.principal);
+            providers.add(initData.author);
             providers
         };
         public var bettors: Buffer.Buffer<Text> = Buffer.Buffer<Text>(10);
@@ -157,7 +157,7 @@ module {
         description: Text;
         startDate: Time.Time;
         endDate: Time.Time;
-        author: Utils.UserData;
+        author: Text;
         labels: [Text];
         images: [Text];
         probabilities: [Float];

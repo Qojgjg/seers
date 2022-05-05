@@ -53,7 +53,7 @@
           </div>
           <!-- <div>{user.markets.length}</div> -->
           <div style="width: 10%;margin: 3px">
-            {Number(user.expSeerBalance).toFixed(0)}
+            {Number(user.expBalances["expSeers"]).toFixed(0)}
           </div>
         </div>
       {/each}

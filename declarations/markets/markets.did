@@ -72,6 +72,11 @@ type UserData =
    "principal": text;
  };
 type Time = int;
+type Result_1 = 
+ variant {
+   err: MarketError;
+   ok: MarketStable;
+ };
 type Result = 
  variant {
    err: UserError;
@@ -106,7 +111,7 @@ type MarketState =
  };
 type MarketStable = 
  record {
-   author: UserData;
+   author: text;
    bettors: vec text;
    category: MarketCategory;
    collateralType: CollateralType;
@@ -131,6 +136,42 @@ type MarketStable =
    totalShares: float64;
    volume: float64;
  };
+type MarketInitData = 
+ record {
+   author: text;
+   category: MarketCategory;
+   collateralType: CollateralType;
+   description: text;
+   endDate: Time;
+   imageUrl: text;
+   images: vec text;
+   labels: vec text;
+   liquidity: float64;
+   nextId: nat32;
+   probabilities: vec float64;
+   startDate: Time;
+   title: text;
+ };
+type MarketError = 
+ variant {
+   callerIsAnon;
+   commentIsEmpty;
+   descriptionMissing;
+   endDateOld;
+   endDateOlderThanStartDate;
+   imageMissing;
+   marketMissing;
+   marketNotOpen;
+   minimalAmountIsOne;
+   newtonFailed;
+   notEnoughBalance;
+   notEnoughLiquidity: float64;
+   optionsMissing;
+   profileNotCreated;
+   startDateOld;
+   titleMissing;
+   userAlreadyExist;
+ };
 type MarketCategory = 
  variant {
    business;
@@ -149,6 +190,7 @@ type Market =
    callerAccount: () -> (AccountIdentifier);
    canisterAccount: () -> (text) query;
    canisterFloat: () -> (ICP);
+   createMarket: (MarketInitData) -> (Result_1);
    createUser: (text) -> (Result);
    getUserStable: (text) -> (opt UserStable) query;
    readAllUsers: () -> (vec UserStable) query;

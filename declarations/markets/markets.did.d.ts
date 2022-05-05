@@ -67,6 +67,7 @@ export interface Market {
   'callerAccount' : () => Promise<AccountIdentifier>,
   'canisterAccount' : () => Promise<string>,
   'canisterFloat' : () => Promise<ICP>,
+  'createMarket' : (arg_0: MarketInitData) => Promise<Result_1>,
   'createUser' : (arg_0: string) => Promise<Result>,
   'getUserStable' : (arg_0: string) => Promise<[] | [UserStable]>,
   'readAllUsers' : () => Promise<Array<UserStable>>,
@@ -82,6 +83,38 @@ export type MarketCategory = { 'entertainment' : null } |
   { 'dfinity' : null } |
   { 'science' : null } |
   { 'politics' : null };
+export type MarketError = { 'callerIsAnon' : null } |
+  { 'minimalAmountIsOne' : null } |
+  { 'userAlreadyExist' : null } |
+  { 'imageMissing' : null } |
+  { 'profileNotCreated' : null } |
+  { 'notEnoughBalance' : null } |
+  { 'optionsMissing' : null } |
+  { 'descriptionMissing' : null } |
+  { 'titleMissing' : null } |
+  { 'marketMissing' : null } |
+  { 'startDateOld' : null } |
+  { 'marketNotOpen' : null } |
+  { 'commentIsEmpty' : null } |
+  { 'endDateOld' : null } |
+  { 'newtonFailed' : null } |
+  { 'endDateOlderThanStartDate' : null } |
+  { 'notEnoughLiquidity' : number };
+export interface MarketInitData {
+  'title' : string,
+  'probabilities' : Array<number>,
+  'endDate' : Time,
+  'labels' : Array<string>,
+  'liquidity' : number,
+  'collateralType' : CollateralType,
+  'description' : string,
+  'nextId' : number,
+  'author' : string,
+  'imageUrl' : string,
+  'category' : MarketCategory,
+  'startDate' : Time,
+  'images' : Array<string>,
+}
 export interface MarketStable {
   'k' : number,
   'id' : number,
@@ -98,7 +131,7 @@ export interface MarketStable {
   'description' : string,
   'volume' : number,
   'bettors' : Array<string>,
-  'author' : UserData,
+  'author' : string,
   'state' : MarketState,
   'imageUrl' : string,
   'category' : MarketCategory,
@@ -132,6 +165,8 @@ export interface Post__1 {
 }
 export type Result = { 'ok' : UserStable } |
   { 'err' : UserError };
+export type Result_1 = { 'ok' : MarketStable } |
+  { 'err' : MarketError };
 export type Time = bigint;
 export interface UserData {
   'principal' : string,

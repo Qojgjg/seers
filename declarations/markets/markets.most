@@ -65,7 +65,7 @@ type MarketCategory =
   };
 type MarketStable =
   {
-    author : UserData;
+    author : Text;
     bettors : [Text];
     category : MarketCategory;
     collateralType : CollateralType;
@@ -164,7 +164,7 @@ actor {
   stable var anon : Text;
   stable var handles :
     {#branch : Branch<Text, Text>; #empty; #leaf : Leaf<Text, Text>};
-  stable var nextNat32 : Nat32;
+  stable var nextMarketId : Nat32;
   stable var stableMarkets : [(Nat32, MarketStable)];
   stable var stableUsers : [(Text, UserStable)];
   stable var updating : Bool

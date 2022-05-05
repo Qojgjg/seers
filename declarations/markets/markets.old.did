@@ -216,6 +216,7 @@ service : {
   callerAccount: () -> (AccountIdentifier);
   canisterAccount: () -> (text) query;
   canisterFloat: () -> (ICP);
+  getUserStable: (text) -> (opt UserStable) query;
   readAllUsers: () -> (vec UserStable) query;
   resolveMarket: (nat32, nat) -> (bool);
   setUpdating: (bool) -> () oneway;

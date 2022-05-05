@@ -89,14 +89,14 @@
 </script>
 
 <div class="header">
-  <h3>Profile</h3>
+  <h3>Wallet</h3>
 </div>
 
 <div style="justify-content: center; display: flex;width: 100%">
   <div class="rowUser">
     {#if user}
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Welcome {user.handle}! ♡
+        {user.id}
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
         Balance: {Number(user.balances["seers"]).toFixed(2)} Σ

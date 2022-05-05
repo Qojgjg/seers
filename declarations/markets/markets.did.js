@@ -2,22 +2,49 @@ export const idlFactory = ({ IDL }) => {
   const AccountIdentifier = IDL.Vec(IDL.Nat8);
   const ICP = IDL.Record({ 'e8s' : IDL.Nat64 });
   const Time = IDL.Int;
-  const UserTx = IDL.Record({
-    'id' : IDL.Nat32,
-    'fee' : IDL.Float64,
-    'src' : IDL.Opt(IDL.Nat),
-    'dest' : IDL.Opt(IDL.Nat),
-    'createdAt' : Time,
-    'recv' : IDL.Float64,
-    'sent' : IDL.Float64,
-    'marketId' : IDL.Nat32,
-    'price' : IDL.Float64,
+  const CollateralType = IDL.Variant({
+    'icp' : IDL.Null,
+    'seers' : IDL.Null,
+    'cycles' : IDL.Null,
   });
-  const ExpBalances = IDL.Record({
-    'expBtc' : IDL.Float64,
-    'expIcp' : IDL.Float64,
-    'expSeers' : IDL.Float64,
-    'expCycles' : IDL.Float64,
+  const MarketCategory = IDL.Variant({
+    'entertainment' : IDL.Null,
+    'seers' : IDL.Null,
+    'crypto' : IDL.Null,
+    'business' : IDL.Null,
+    'financial' : IDL.Null,
+    'sports' : IDL.Null,
+    'dfinity' : IDL.Null,
+    'science' : IDL.Null,
+    'politics' : IDL.Null,
+  });
+  const MarketInitData = IDL.Record({
+    'title' : IDL.Text,
+    'probabilities' : IDL.Vec(IDL.Float64),
+    'endDate' : Time,
+    'labels' : IDL.Vec(IDL.Text),
+    'liquidity' : IDL.Float64,
+    'collateralType' : CollateralType,
+    'description' : IDL.Text,
+    'nextId' : IDL.Nat32,
+    'author' : IDL.Text,
+    'imageUrl' : IDL.Text,
+    'category' : MarketCategory,
+    'startDate' : Time,
+    'images' : IDL.Vec(IDL.Text),
+  });
+  const HistPoint = IDL.Record({
+    'probabilities' : IDL.Vec(IDL.Float64),
+    'createdAt' : Time,
+    'liquidity' : IDL.Float64,
+  });
+  const MarketState = IDL.Variant({
+    'resolved' : IDL.Nat,
+    'closed' : IDL.Null,
+    'pending' : IDL.Null,
+    'invalid' : IDL.Null,
+    'open' : IDL.Null,
+    'approved' : IDL.Null,
   });
   const UserData = IDL.Record({
     'principal' : IDL.Text,
@@ -38,44 +65,6 @@ export const idlFactory = ({ IDL }) => {
     'user' : UserData,
     'likes' : IDL.Vec(Like__1),
   });
-  const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : Comment__1 });
-  const Post = IDL.Record({
-    'id' : IDL.Nat32,
-    'content' : IDL.Text,
-    'createdAt' : Time,
-    'author' : UserData,
-    'likes' : IDL.Vec(Like__1),
-    'comments' : IDL.Vec(Comment__1),
-  });
-  const HistPoint = IDL.Record({
-    'probabilities' : IDL.Vec(IDL.Float64),
-    'createdAt' : Time,
-    'liquidity' : IDL.Float64,
-  });
-  const CollateralType = IDL.Variant({
-    'icp' : IDL.Null,
-    'seers' : IDL.Null,
-    'cycles' : IDL.Null,
-  });
-  const MarketState = IDL.Variant({
-    'resolved' : IDL.Nat,
-    'closed' : IDL.Null,
-    'pending' : IDL.Null,
-    'invalid' : IDL.Null,
-    'open' : IDL.Null,
-    'approved' : IDL.Null,
-  });
-  const MarketCategory = IDL.Variant({
-    'entertainment' : IDL.Null,
-    'seers' : IDL.Null,
-    'crypto' : IDL.Null,
-    'business' : IDL.Null,
-    'financial' : IDL.Null,
-    'sports' : IDL.Null,
-    'dfinity' : IDL.Null,
-    'science' : IDL.Null,
-    'politics' : IDL.Null,
-  });
   const MarketStable = IDL.Record({
     'k' : IDL.Float64,
     'id' : IDL.Nat32,
@@ -92,7 +81,7 @@ export const idlFactory = ({ IDL }) => {
     'description' : IDL.Text,
     'volume' : IDL.Float64,
     'bettors' : IDL.Vec(IDL.Text),
-    'author' : UserData,
+    'author' : IDL.Text,
     'state' : MarketState,
     'imageUrl' : IDL.Text,
     'category' : MarketCategory,
@@ -101,6 +90,52 @@ export const idlFactory = ({ IDL }) => {
     'totalShares' : IDL.Float64,
     'startDate' : Time,
     'images' : IDL.Vec(IDL.Text),
+  });
+  const MarketError = IDL.Variant({
+    'callerIsAnon' : IDL.Null,
+    'minimalAmountIsOne' : IDL.Null,
+    'userAlreadyExist' : IDL.Null,
+    'imageMissing' : IDL.Null,
+    'profileNotCreated' : IDL.Null,
+    'notEnoughBalance' : IDL.Null,
+    'optionsMissing' : IDL.Null,
+    'descriptionMissing' : IDL.Null,
+    'titleMissing' : IDL.Null,
+    'marketMissing' : IDL.Null,
+    'startDateOld' : IDL.Null,
+    'marketNotOpen' : IDL.Null,
+    'commentIsEmpty' : IDL.Null,
+    'endDateOld' : IDL.Null,
+    'newtonFailed' : IDL.Null,
+    'endDateOlderThanStartDate' : IDL.Null,
+    'notEnoughLiquidity' : IDL.Float64,
+  });
+  const Result_1 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
+  const UserTx = IDL.Record({
+    'id' : IDL.Nat32,
+    'fee' : IDL.Float64,
+    'src' : IDL.Opt(IDL.Nat),
+    'dest' : IDL.Opt(IDL.Nat),
+    'createdAt' : Time,
+    'recv' : IDL.Float64,
+    'sent' : IDL.Float64,
+    'marketId' : IDL.Nat32,
+    'price' : IDL.Float64,
+  });
+  const ExpBalances = IDL.Record({
+    'expBtc' : IDL.Float64,
+    'expIcp' : IDL.Float64,
+    'expSeers' : IDL.Float64,
+    'expCycles' : IDL.Float64,
+  });
+  const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : Comment__1 });
+  const Post = IDL.Record({
+    'id' : IDL.Nat32,
+    'content' : IDL.Text,
+    'createdAt' : Time,
+    'author' : UserData,
+    'likes' : IDL.Vec(Like__1),
+    'comments' : IDL.Vec(Comment__1),
   });
   const FeedItem = IDL.Variant({
     'bet' : Bet,
@@ -202,6 +237,7 @@ export const idlFactory = ({ IDL }) => {
     'callerAccount' : IDL.Func([], [AccountIdentifier], []),
     'canisterAccount' : IDL.Func([], [IDL.Text], ['query']),
     'canisterFloat' : IDL.Func([], [ICP], []),
+    'createMarket' : IDL.Func([MarketInitData], [Result_1], []),
     'createUser' : IDL.Func([IDL.Text], [Result], []),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserStable)], ['query']),

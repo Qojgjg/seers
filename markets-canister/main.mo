@@ -65,7 +65,7 @@ shared({ caller = initializer }) actor class Market() = this {
     /* State */
     
     private stable var updating: Bool = false;
-    private stable var nextNat32: Nat32 = 0;
+    private stable var nextMarketId: Nat32 = 0;
     private stable var handles: Trie.Trie<Text, Text> = Trie.empty();
     
     private stable var stableUsers: [(Text, U.UserStable)] = [];
@@ -207,18 +207,7 @@ shared({ caller = initializer }) actor class Market() = this {
         return false;
     };
 
-    public type CreateMarketError = {
-        #callerIsAnon;
-        #userNotCreated;
-        #notEnoughLiquidity: Float;
-        #titleMissing;
-        #descriptionMissing;
-        #optionsMissing;
-        #imageMissing;
-        #endDateOld: Time.Time;
-    };
-
-    private func checkMarketInitData(marketInitData: M.MarketInitData): Result.Result<(), CreateMarketError> {
+    private func checkMarketInitData(marketInitData: M.MarketInitData): Result.Result<(), M.MarketError> {
         if (marketInitData.liquidity < 100) {
             return #err(#notEnoughLiquidity(100));
         };
@@ -240,94 +229,78 @@ shared({ caller = initializer }) actor class Market() = this {
         };
 
         if (marketInitData.endDate < Time.now()) {
-            return #err(#endDateOld(marketInitData.endDate));
+            return #err(#endDateOld);
         };
 
         return #ok(());
     };
 
     // Create a new AMM market.
-    // public shared(msg) func createMarket(marketInitData: M.MarketInitData): async Result.Result<M.MarketStable, CreateMarketError> {
-    //     assert(not updating);
-    //     let author = Principal.toText(msg.caller);        
+    public shared(msg) func createMarket(marketInitData: M.MarketInitData): async Result.Result<M.MarketStable, M.MarketError> {
+        assert(not updating);
+        let author = Principal.toText(msg.caller);        
         
-    //     if (author == anon) {
-    //         return #err(#callerIsAnon);
-    //     };
+        if (author == anon) {
+            return #err(#callerIsAnon);
+        };
 
-    //     switch (checkMarketInitData(marketInitData)) {
-    //         case (#err(e)) {
-    //             return #err(e);
-    //         };
-    //         case (#ok(_)) { /* all good; continue */};
-    //     };
+        switch (checkMarketInitData(marketInitData)) {
+            case (#err(e)) {
+                return #err(e);
+            };
+            case (#ok(_)) { /* all good; continue */};
+        };
 
-    //     let optionsLength = marketInitData.labels.size();
-    //     let marketId = nextNat32;
-    //     let liquidity = marketInitData.liquidity;
+        let optionsLength = marketInitData.labels.size();
+        let marketId = nextMarketId;
+        let liquidity = marketInitData.liquidity;
 
-    //     var reserves: [var Float] = Array.init<Float>(optionsLength, 0);
-    //     let probabilities: [var Float] = Array.init<Float>(optionsLength, 1000 / Float.fromInt(optionsLength));
+        var reserves: [var Float] = Array.init<Float>(optionsLength, 0);
+        let probabilities: [var Float] = Array.init<Float>(optionsLength, 1000 / Float.fromInt(optionsLength));
         
-    //     var k: Float = 1;
+        var k: Float = 1;
 
-    //     for (i in Iter.range(0, optionsLength - 1)) {
-    //         reserves[i] := liquidity;
-    //         k := k * reserves[i];
-    //     };
+        for (i in Iter.range(0, optionsLength - 1)) {
+            reserves[i] := liquidity;
+            k := k * reserves[i];
+        };
     
-    //     // Dummy value.
-    //     let shares = Float.toInt(Float.sqrt(0));
+        // Dummy value.
+        let shares = Float.sqrt(0);
 
-    //     let newMarket: Market = {
-    //         id = marketId;
-    //         title = marketInitData.title;
-    //         description = marketInitData.description;
-    //         startDate = Time.now();
-    //         endDate = marketInitData.endDate;
-    //         author = author;
-    //         labels = marketInitData.labels;
-    //         images = marketInitData.images;
-    //         var probabilities = Array.freeze(probabilities);
-    //         var liquidity = liquidity;
-    //         var k = k;
-    //         var reserves = Array.freeze(reserves);
-    //         var blockTimestampLast = Time.now();
-    //         var totalShares = shares;
-    //         var providers = [author];
-    //         var imageUrl = marketInitData.imageUrl;
-    //         var state = #pending;
-    //         var volume = 0;
-    //         var comments = [];
-    //     };
+        let newMarket = M.Market(marketInitData);
 
-    //     // Update provider.
-    //     var user = switch (getUser(author)) {
-    //         case (null) {
-    //             return #err(#userNotCreated);
-    //         };
-    //         case (?user) {
-    //             user;
-    //         };
-    //     };
+        // Update provider.
+        var user = switch (getUser(author)) {
+            case (null) {
+                return #err(#profileNotCreated);
+            };
+            case (?user) {
+                user;
+            };
+        };
         
-    //     let userMarket: UserMarket = {
-    //         marketId = marketId;
-    //         marketTitle = marketInitData.title;
-    //         labels = marketInitData.labels;
-    //         balances = Array.freeze(Array.init<Float>(optionsLength, 0));
-    //         shares = shares;
-    //         used = false;
-    //     };
+        let userMarket: U.UserMarket = {
+            marketId = marketId;
+            title = marketInitData.title;
+            labels = marketInitData.labels;
+            balances = Array.freeze(Array.init<Float>(optionsLength, 0));
+            brierScores = [];
+            shares = shares;
+            spent = 0.0;
+            redeemed = false;
+            createdAt = Time.now();
+            modifiedAt = Time.now();
+        };
 
-    //     user.markets := Array.append(user.markets, [userMarket]);
-    //     userMap.put(user.id, user);
+        user.markets.add(userMarket);
+        userMap.put(user.id, user);
         
-    //     nextNat32 += 1;
-    //     marketMap.put(marketId, newMarket);
+        nextMarketId += 1;
+        marketMap.put(marketId, newMarket);
 
-    //     return #ok(marketToMarketResult(newMarket));
-    // };
+        return #ok(newMarket.freeze());
+    };
 
     // // Read a market.
     // public query func readMarket(marketId: Nat32): async ?M.MarketStable {
