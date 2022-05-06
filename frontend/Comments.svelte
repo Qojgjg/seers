@@ -4,12 +4,12 @@
   export let auth
   export let comments = []
   export let marketId
+  export let readMarket
 
   let imageUrl = ""
   let comment = ""
   let commentLabel = "Comment"
   let commentErrorResponse = ""
-  let market = { imageUrl, comments }
 
   const splitCamelCaseToString = (s) => {
     return s
@@ -31,7 +31,7 @@
         splitCamelCaseToString(Object.keys(response["err"]).toString())
     } else {
       commentErrorResponse = ""
-      //   readMarket()
+      readMarket()
       comment = ""
     }
     commentLabel = "Comment"
@@ -41,7 +41,7 @@
 <div style="width: 100%">
   <h3 style="text-align:start">Comments</h3>
   <div style="text-align:start">
-    {#each market.comments as comment}
+    {#each comments as comment}
       <div style="margin: 5px 0px">
         <div style="color:pink; padding: 5px 0px">{comment.author}</div>
         <SvelteMarkdown source={comment.content} />

@@ -37,7 +37,7 @@
     }
 
     const marketInitData = {
-      nextId: 0,
+      id: 0,
       title: newMarketTitle,
       description: newMarketDesc,
       labels: labelsA,
