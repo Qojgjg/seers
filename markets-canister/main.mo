@@ -72,6 +72,28 @@ shared({ caller = initializer }) actor class Market() = this {
     private stable var stableUsers: [(Text, U.UserStable)] = [];
     private stable var stableMarkets: [(Nat32, M.MarketStable)] = [];
     
+    private var userDataMap: Map.HashMap<Text, Utils.UserData> = do {
+        let usersIter = Iter.map<(Text, U.UserStable), (Text, Utils.UserData)>(
+            stableUsers.vals(), 
+            func (e: (Text, U.UserStable)): (Text, Utils.UserData) {
+                let u = U.unFreezeUser(e.1);
+                let ud: Utils.UserData = {
+                    principal = u.id;
+                    handle = u.handle;
+                    picture = u.picture;
+                };
+                return (e.0, ud);
+            }
+        );
+        
+        Map.fromIter<Text, Utils.UserData>(
+            usersIter,
+            50, 
+            Text.equal, 
+            Text.hash
+        )
+    };
+
     private var userMap: Map.HashMap<Text, U.User> = do {
         let usersIter = Iter.map<(Text, U.UserStable), (Text, U.User)>(
             stableUsers.vals(), 
