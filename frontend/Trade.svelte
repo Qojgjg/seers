@@ -54,7 +54,7 @@
 >
   <div class="market-controls">
     <div
-      style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column;width: 100%; padding: 10px;"
+      style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column;padding: 10px;"
     >
       <h4>Trade</h4>
       <div class="YesNoOptions">

@@ -4,7 +4,7 @@ export type Balance = { 'btc' : number } |
   { 'icp' : number } |
   { 'seers' : number } |
   { 'cycles' : number };
-export interface Bet { 'tx' : UserTx, 'comment' : Comment__1 }
+export interface Bet { 'tx' : UserTx, 'comment' : Comment }
 export interface BrierScore { 'createdAt' : Time, 'score' : number }
 export type CollateralType = { 'icp' : null } |
   { 'seers' : null } |
@@ -28,7 +28,7 @@ export type DepositAddr = { 'btc' : string } |
   { 'cycles' : string };
 export type FeedItem = { 'bet' : Bet } |
   { 'post' : Post } |
-  { 'comment' : Comment__1 } |
+  { 'comment' : Comment } |
   { 'market' : MarketStable };
 export interface Followee { 'createdAt' : Time, 'user' : UserData }
 export interface Follower { 'createdAt' : Time, 'user' : UserData }
@@ -60,7 +60,9 @@ export interface Market {
   'createMarket' : (arg_0: MarketInitData) => Promise<Result_1>,
   'createUser' : (arg_0: string) => Promise<Result>,
   'getUserStable' : (arg_0: string) => Promise<[] | [UserStable]>,
+  'readAllMarkets' : () => Promise<Array<MarketStable>>,
   'readAllUsers' : () => Promise<Array<UserStable>>,
+  'readMarket' : (arg_0: number) => Promise<[] | [MarketStable]>,
   'resolveMarket' : (arg_0: number, arg_1: bigint) => Promise<boolean>,
   'setUpdating' : (arg_0: boolean) => Promise<undefined>,
 }
@@ -126,7 +128,7 @@ export interface MarketStable {
   'imageUrl' : string,
   'category' : MarketCategory,
   'providers' : Array<string>,
-  'comments' : Array<Comment__1>,
+  'comments' : Array<Comment>,
   'totalShares' : number,
   'startDate' : Time,
   'images' : Array<string>,
@@ -142,16 +144,16 @@ export interface Post {
   'content' : string,
   'createdAt' : Time,
   'author' : UserData,
-  'likes' : Array<Like__1>,
-  'comments' : Array<Comment__1>,
+  'likes' : Array<Like>,
+  'comments' : Array<Comment>,
 }
 export interface Post__1 {
   'id' : number,
   'content' : string,
   'createdAt' : Time,
   'author' : UserData,
-  'likes' : Array<Like>,
-  'comments' : Array<Comment>,
+  'likes' : Array<Like__1>,
+  'comments' : Array<Comment__1>,
 }
 export type Result = { 'ok' : UserStable } |
   { 'err' : UserError };
@@ -208,7 +210,7 @@ export interface UserStable {
   'picture' : string,
   'discord' : string,
   'handle' : string,
-  'comments' : Array<Comment>,
+  'comments' : Array<Comment__1>,
   'posts' : Array<Post__1>,
   'followees' : Array<Followee>,
   'followers' : Array<Follower>,

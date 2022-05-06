@@ -1,7 +1,7 @@
 // Version: 1.0.0
 type AssocList<K, V> = List<(K, V)>;
 type AssocList__1<K, V> = AssocList<K, V>;
-type Balances = {btc : Float; cycles : Float; icp : Float; seers : Float};
+type Balance = {#btc : Float; #cycles : Float; #icp : Float; #seers : Float};
 type Bet = {comment : Comment; tx : UserTx};
 type Branch<K, V> = {left : Trie<K, V>; right : Trie<K, V>; size : Nat};
 type BrierScore = {createdAt : Time; score : Float};
@@ -22,9 +22,7 @@ type Comment__1 =
     likes : [Like__1];
     user : UserData
   };
-type DepositAddrs = {btc : ?Text; cycles : ?Text; icp : ?Text};
-type ExpBalances =
-  {expBtc : Float; expCycles : Float; expIcp : Float; expSeers : Float};
+type DepositAddr = {#btc : Text; #cycles : Text; #icp : Text};
 type FeedItem =
   {#bet : Bet; #comment : Comment; #market : MarketStable; #post : Post};
 type Followee = {createdAt : Time; user : UserData};
@@ -115,8 +113,10 @@ type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type UserData = {handle : Text; picture : Text; principal : Text};
 type UserMarket =
   {
+    author : Bool;
     balances : [Float];
     brierScores : [BrierScore];
+    collateralType : CollateralType;
     createdAt : Time;
     labels : [Text];
     marketId : Nat32;
@@ -128,13 +128,13 @@ type UserMarket =
   };
 type UserStable =
   {
-    balances : Balances;
+    balances : [Balance];
     bio : Text;
     comments : [Comment__1];
     createdAt : Time;
-    depositAddrs : DepositAddrs;
+    depositAddrs : [DepositAddr];
     discord : Text;
-    expBalances : ExpBalances;
+    expBalances : [Balance];
     feed : [FeedItem];
     followees : [Followee];
     followers : [Follower];

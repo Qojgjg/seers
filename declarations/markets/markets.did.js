@@ -51,19 +51,19 @@ export const idlFactory = ({ IDL }) => {
     'picture' : IDL.Text,
     'handle' : IDL.Text,
   });
-  const Like__1 = IDL.Record({
+  const Like = IDL.Record({
     'authorPicture' : IDL.Text,
     'createdAt' : Time,
     'stars' : IDL.Nat32,
     'authorHandle' : IDL.Text,
     'authorPrincipal' : IDL.Text,
   });
-  const Comment__1 = IDL.Record({
+  const Comment = IDL.Record({
     'id' : IDL.Nat32,
     'content' : IDL.Text,
     'createdAt' : Time,
     'user' : UserData,
-    'likes' : IDL.Vec(Like__1),
+    'likes' : IDL.Vec(Like),
   });
   const MarketStable = IDL.Record({
     'k' : IDL.Float64,
@@ -86,7 +86,7 @@ export const idlFactory = ({ IDL }) => {
     'imageUrl' : IDL.Text,
     'category' : MarketCategory,
     'providers' : IDL.Vec(IDL.Text),
-    'comments' : IDL.Vec(Comment__1),
+    'comments' : IDL.Vec(Comment),
     'totalShares' : IDL.Float64,
     'startDate' : Time,
     'images' : IDL.Vec(IDL.Text),
@@ -128,19 +128,19 @@ export const idlFactory = ({ IDL }) => {
     'seers' : IDL.Float64,
     'cycles' : IDL.Float64,
   });
-  const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : Comment__1 });
+  const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : Comment });
   const Post = IDL.Record({
     'id' : IDL.Nat32,
     'content' : IDL.Text,
     'createdAt' : Time,
     'author' : UserData,
-    'likes' : IDL.Vec(Like__1),
-    'comments' : IDL.Vec(Comment__1),
+    'likes' : IDL.Vec(Like),
+    'comments' : IDL.Vec(Comment),
   });
   const FeedItem = IDL.Variant({
     'bet' : Bet,
     'post' : Post,
-    'comment' : Comment__1,
+    'comment' : Comment,
     'market' : MarketStable,
   });
   const BrierScore = IDL.Record({ 'createdAt' : Time, 'score' : IDL.Float64 });
@@ -158,27 +158,27 @@ export const idlFactory = ({ IDL }) => {
     'marketId' : IDL.Nat32,
     'balances' : IDL.Vec(IDL.Float64),
   });
-  const Like = IDL.Record({
+  const Like__1 = IDL.Record({
     'authorPicture' : IDL.Text,
     'createdAt' : Time,
     'stars' : IDL.Nat32,
     'authorHandle' : IDL.Text,
     'authorPrincipal' : IDL.Text,
   });
-  const Comment = IDL.Record({
+  const Comment__1 = IDL.Record({
     'id' : IDL.Nat32,
     'content' : IDL.Text,
     'createdAt' : Time,
     'user' : UserData,
-    'likes' : IDL.Vec(Like),
+    'likes' : IDL.Vec(Like__1),
   });
   const Post__1 = IDL.Record({
     'id' : IDL.Nat32,
     'content' : IDL.Text,
     'createdAt' : Time,
     'author' : UserData,
-    'likes' : IDL.Vec(Like),
-    'comments' : IDL.Vec(Comment),
+    'likes' : IDL.Vec(Like__1),
+    'comments' : IDL.Vec(Comment__1),
   });
   const Followee = IDL.Record({ 'createdAt' : Time, 'user' : UserData });
   const Follower = IDL.Record({ 'createdAt' : Time, 'user' : UserData });
@@ -201,7 +201,7 @@ export const idlFactory = ({ IDL }) => {
     'picture' : IDL.Text,
     'discord' : IDL.Text,
     'handle' : IDL.Text,
-    'comments' : IDL.Vec(Comment),
+    'comments' : IDL.Vec(Comment__1),
     'posts' : IDL.Vec(Post__1),
     'followees' : IDL.Vec(Followee),
     'followers' : IDL.Vec(Follower),
@@ -236,7 +236,9 @@ export const idlFactory = ({ IDL }) => {
     'createMarket' : IDL.Func([MarketInitData], [Result_1], []),
     'createUser' : IDL.Func([IDL.Text], [Result], []),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
+    'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketStable)], ['query']),
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserStable)], ['query']),
+    'readMarket' : IDL.Func([IDL.Nat32], [IDL.Opt(MarketStable)], ['query']),
     'resolveMarket' : IDL.Func([IDL.Nat32, IDL.Nat], [IDL.Bool], []),
     'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),
   });

@@ -14,7 +14,7 @@ type UserStable =
  record {
    balances: vec Balance;
    bio: text;
-   comments: vec Comment;
+   comments: vec Comment__1;
    createdAt: Time;
    depositAddrs: vec DepositAddr;
    discord: text;
@@ -87,20 +87,20 @@ type Result =
 type Post__1 = 
  record {
    author: UserData;
-   comments: vec Comment;
-   content: text;
-   createdAt: Time;
-   id: nat32;
-   likes: vec Like;
- };
-type Post = 
- record {
-   author: UserData;
    comments: vec Comment__1;
    content: text;
    createdAt: Time;
    id: nat32;
    likes: vec Like__1;
+ };
+type Post = 
+ record {
+   author: UserData;
+   comments: vec Comment;
+   content: text;
+   createdAt: Time;
+   id: nat32;
+   likes: vec Like;
  };
 type MarketState = 
  variant {
@@ -117,7 +117,7 @@ type MarketStable =
    bettors: vec text;
    category: MarketCategory;
    collateralType: CollateralType;
-   comments: vec Comment__1;
+   comments: vec Comment;
    createdAt: Time;
    description: text;
    endDate: Time;
@@ -195,7 +195,9 @@ type Market =
    createMarket: (MarketInitData) -> (Result_1);
    createUser: (text) -> (Result);
    getUserStable: (text) -> (opt UserStable) query;
+   readAllMarkets: () -> (vec MarketStable) query;
    readAllUsers: () -> (vec UserStable) query;
+   readMarket: (nat32) -> (opt MarketStable) query;
    resolveMarket: (nat32, nat) -> (bool);
    setUpdating: (bool) -> () oneway;
  };
@@ -235,7 +237,7 @@ type Followee =
 type FeedItem = 
  variant {
    bet: Bet;
-   comment: Comment__1;
+   comment: Comment;
    market: MarketStable;
    post: Post;
  };
@@ -274,7 +276,7 @@ type BrierScore =
  };
 type Bet = 
  record {
-   comment: Comment__1;
+   comment: Comment;
    tx: UserTx;
  };
 type Balance = 

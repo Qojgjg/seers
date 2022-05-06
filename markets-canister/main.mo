@@ -304,11 +304,13 @@ shared({ caller = initializer }) actor class Market() = this {
         return #ok(newMarket.freeze());
     };
 
-    // // Read a market.
-    // public query func readMarket(marketId: Nat32): async ?M.MarketStable {
-    //     let result = marketMap.get(marketId);
-    //     return Option.map(result, func (m: M.Market): { return m.freeze(); });        
-    // };
+    // Read a market.
+    public query func readMarket(marketId: Nat32): async ?M.MarketStable {
+        let result = marketMap.get(marketId);
+        return Option.map(result, func (m: M.Market): M.MarketStable {
+            return m.freeze();
+        });        
+    };
 
     // // Read user.
     // public query func readUser(userId: Text): async ?U.UserStable {
@@ -346,14 +348,14 @@ shared({ caller = initializer }) actor class Market() = this {
 
 
     // Read all markets.
-    // public query func readAllMarkets(): async [M.MarketStable] {
-    //     Array.map<(Nat32, M.Market), M.MarketStable>(
-    //         Iter.toArray(marketMap.entries()),
-    //         func (e: (Nat32, M.Market)): M.MarketStable {
-    //             marketToMarketResult(e.1)
-    //         }
-    //     )
-    // };
+    public query func readAllMarkets(): async [M.MarketStable] {
+        Array.map<(Nat32, M.Market), M.MarketStable>(
+            Iter.toArray(marketMap.entries()),
+            func (e: (Nat32, M.Market)): M.MarketStable {
+                e.1.freeze()
+            }
+        )
+    };
 
     // Read all open markets.
     // public query func readAllOpenMarkets(): async [M.MarketStable] {
