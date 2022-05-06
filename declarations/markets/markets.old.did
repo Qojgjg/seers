@@ -280,6 +280,7 @@ service : {
   createMarket: (MarketInitData) -> (Result_1);
   createUser: (text) -> (Result);
   getUserStable: (text) -> (opt UserStable) query;
+  readAllMarkets: () -> (vec MarketStable) query;
   readAllUsers: () -> (vec UserStable) query;
   readMarket: (nat32) -> (opt MarketStable) query;
   resolveMarket: (nat32, nat) -> (bool);

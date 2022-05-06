@@ -116,7 +116,7 @@ module {
         // public var depositAddrs: Buffer.Buffer<DepositAddr> = Buffer.Buffer<DepositAddr>(3);
         // public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
         // public var txs: Buffer.Buffer<Tx.UserTx> = Buffer.Buffer<Tx.UserTx>(5);
-        // public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(5);
+        public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(5);
         // public var posts: Buffer.Buffer<Post.Post> = Buffer.Buffer<Post.Post>(5);
         // public var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
         // public var followees: Buffer.Buffer<Followee> = Buffer.Buffer<Followee>(5);
@@ -125,9 +125,9 @@ module {
         public var modifiedAt: Time.Time = Time.now();
 
         public func freeze(): UserStable {
-            // let stableComments = Array.map(comments.toArray(), func (c: Comment.Comment): Comment.CommentStable {
-            //     c.freeze()
-            // });
+            let stableComments = Array.map(comments.toArray(), func (c: Comment.Comment): Comment.CommentStable {
+                c.freeze()
+            });
             let us: UserStable = {
                 id = id;
                 handle = handle;
@@ -141,7 +141,7 @@ module {
                 // depositAddrs = depositAddrs.toArray();  
                 // markets = markets.toArray();
                 // txs = txs.toArray();
-                // comments = stableComments;
+                comments = stableComments;
                 // posts = posts.toArray();
                 // followers = followees.toArray();
                 // followees = followees.toArray();
@@ -166,7 +166,7 @@ module {
         // depositAddrs: [DepositAddr];  
         // markets: [UserMarket];
         // txs: [Tx.UserTx];
-        // comments: [Comment.CommentStable];
+        comments: [Comment.CommentStable];
         // posts: [Post.Post];
         // followers: [Follower];
         // followees: [Followee];
@@ -184,9 +184,9 @@ module {
             discord = u.discord;
             bio = u.bio;
         };
-        // let comments = Array.map(u.comments, func (c: Comment.CommentStable): Comment.Comment {
-        //     Comment.unFreeze(c)
-        // });
+        let comments = Array.map(u.comments, func (c: Comment.CommentStable): Comment.Comment {
+            Comment.unFreeze(c)
+        });
         var user: User = User(initData);
         // user.feed := Utils.bufferFromArray(u.feed);
         // user.balances := Utils.bufferFromArray(u.balances);
@@ -194,7 +194,7 @@ module {
         // user.depositAddrs := Utils.bufferFromArray(u.depositAddrs);
         // user.markets := Utils.bufferFromArray(u.markets);
         // user.txs := Utils.bufferFromArray(u.txs);
-        // user.comments := Utils.bufferFromArray(comments);
+        user.comments := Utils.bufferFromArray(comments);
         // user.posts := Utils.bufferFromArray(u.posts);
         // user.followers := Utils.bufferFromArray(u.followers);
         // user.followees := Utils.bufferFromArray(u.followees);

@@ -116,6 +116,7 @@ export const idlFactory = ({ IDL }) => {
     'picture' : IDL.Text,
     'discord' : IDL.Text,
     'handle' : IDL.Text,
+    'comments' : IDL.Vec(CommentStable),
   });
   const UserError = IDL.Variant({
     'callerIsAnon' : IDL.Null,

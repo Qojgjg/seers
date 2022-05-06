@@ -144,5 +144,6 @@ export interface UserStable {
   'picture' : string,
   'discord' : string,
   'handle' : string,
+  'comments' : Array<CommentStable>,
 }
 export interface _SERVICE extends Market {}
