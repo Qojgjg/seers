@@ -28,10 +28,12 @@
   let comment = ""
   let commentLabel = "Comment"
   let commentErrorResponse = ""
+  let myChart
 
   const createChart = () => {
+    if (myChart) myChart.destroy()
     const ctx = document.getElementById("myChart") as HTMLCanvasElement
-    const myChart = new Chart(ctx, {
+    myChart = new Chart(ctx, {
       type: "line",
       data: {
         labels: ["January", "February", "March", "April", "May", "June"],

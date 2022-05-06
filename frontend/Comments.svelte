@@ -6,7 +6,6 @@
   export let marketId
   export let readMarket
 
-  let imageUrl = ""
   let comment = ""
   let commentLabel = "Comment"
   let commentErrorResponse = ""
