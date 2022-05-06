@@ -56,7 +56,7 @@ module {
     };
 
     public type MarketInitData = {
-        nextId: Nat32;
+        id: Nat32;
         title: Text;
         description: Text;
         labels: [Text];
@@ -78,7 +78,7 @@ module {
     };
 
     public class Market (initData: MarketInitData) = this {
-        public let id: Nat32 = initData.nextId;    
+        public var id: Nat32 = initData.id;    
         public var title: Text = initData.title;
         public var description: Text = initData.description;
         public var startDate: Time.Time = initData.startDate;
@@ -183,7 +183,7 @@ module {
 
     public func unFreezeMarket(m: MarketStable): Market {
         let initData: MarketInitData = {
-            nextId = m.id;
+            id = m.id;
             title = m.title;
             description = m.description;
             startDate = m.startDate;

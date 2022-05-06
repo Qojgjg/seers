@@ -252,7 +252,7 @@
       </div>
     </div>
     <div style="width: 100%; display:flex">
-      <Comments comments={market?.comments} />
+      <Comments marketId={market?.id} {auth} comments={market?.comments} />
     </div>
   </div>
 </div>

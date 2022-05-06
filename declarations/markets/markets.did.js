@@ -52,6 +52,7 @@ export const idlFactory = ({ IDL }) => {
     'politics' : IDL.Null,
   });
   const MarketInitData = IDL.Record({
+    'id' : IDL.Nat32,
     'title' : IDL.Text,
     'probabilities' : IDL.Vec(IDL.Float64),
     'endDate' : Time,
@@ -59,7 +60,6 @@ export const idlFactory = ({ IDL }) => {
     'liquidity' : IDL.Float64,
     'collateralType' : CollateralType,
     'description' : IDL.Text,
-    'nextId' : IDL.Nat32,
     'author' : IDL.Text,
     'imageUrl' : IDL.Text,
     'category' : MarketCategory,

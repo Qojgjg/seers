@@ -79,6 +79,7 @@ export type MarketError = { 'callerIsAnon' : null } |
   { 'endDateOlderThanStartDate' : null } |
   { 'notEnoughLiquidity' : number };
 export interface MarketInitData {
+  'id' : number,
   'title' : string,
   'probabilities' : Array<number>,
   'endDate' : Time,
@@ -86,7 +87,6 @@ export interface MarketInitData {
   'liquidity' : number,
   'collateralType' : CollateralType,
   'description' : string,
-  'nextId' : number,
   'author' : string,
   'imageUrl' : string,
   'category' : MarketCategory,

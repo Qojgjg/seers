@@ -1,7 +1,9 @@
 <script lang="ts">
   import SvelteMarkdown from "svelte-markdown"
 
+  export let auth
   export let comments = []
+  export let marketId
 
   let imageUrl = ""
   let comment = ""
@@ -9,7 +11,31 @@
   let commentErrorResponse = ""
   let market = { imageUrl, comments }
 
-  const postComment = () => {}
+  const splitCamelCaseToString = (s) => {
+    return s
+      .split(/(?=[A-Z])/)
+      .map((p) => {
+        return p[0].toUpperCase() + p.slice(1)
+      })
+      .join(" ")
+  }
+
+  const postComment = async () => {
+    commentLabel = "Processing..."
+    console.log(marketId)
+    let response = await $auth.actor.addCommentToMarket(marketId, comment)
+
+    if (response["err"]) {
+      commentErrorResponse =
+        "Error: " +
+        splitCamelCaseToString(Object.keys(response["err"]).toString())
+    } else {
+      commentErrorResponse = ""
+      //   readMarket()
+      comment = ""
+    }
+    commentLabel = "Comment"
+  }
 </script>
 
 <div style="width: 100%">

@@ -270,6 +270,7 @@ shared({ caller = initializer }) actor class Market() = this {
         let shares = Float.sqrt(0);
 
         var newMarket = M.Market(marketInitData);
+        newMarket.id := marketId;
         newMarket.author := author;
 
         // Update provider.

@@ -12,10 +12,13 @@ type UserTx =
  };
 type UserStable = 
  record {
+   balances: vec Balance;
    bio: text;
    comments: vec CommentStable;
    createdAt: Time;
+   depositAddrs: vec DepositAddr;
    discord: text;
+   expBalances: vec Balance;
    feed: vec FeedItem;
    followees: vec Followee;
    followers: vec Follower;
@@ -203,6 +206,12 @@ type FeedItem =
    market: MarketStable;
    post: Post;
  };
+type DepositAddr = 
+ variant {
+   btc: text;
+   cycles: text;
+   icp: text;
+ };
 type CommentStable = 
  record {
    author: text;
@@ -227,6 +236,13 @@ type Bet =
  record {
    comment: CommentStable;
    tx: UserTx;
+ };
+type Balance = 
+ variant {
+   btc: float64;
+   cycles: float64;
+   icp: float64;
+   seers: float64;
  };
 type AccountIdentifier = blob;
 service : {
