@@ -34,6 +34,7 @@ type UserStable =
  };
 type UserMarket = 
  record {
+   author: bool;
    balances: vec float64;
    brierScores: vec BrierScore;
    collateralType: CollateralType;

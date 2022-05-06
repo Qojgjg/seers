@@ -113,6 +113,7 @@ type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type UserData = {handle : Text; picture : Text; principal : Text};
 type UserMarket =
   {
+    author : Bool;
     balances : [Float];
     brierScores : [BrierScore];
     collateralType : CollateralType;

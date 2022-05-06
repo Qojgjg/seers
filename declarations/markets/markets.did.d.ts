@@ -189,6 +189,7 @@ export interface UserMarket {
   'labels' : Array<string>,
   'createdAt' : Time,
   'collateralType' : CollateralType,
+  'author' : boolean,
   'spent' : number,
   'marketId' : number,
   'balances' : Array<number>,

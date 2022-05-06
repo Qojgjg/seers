@@ -93,6 +93,7 @@ module {
         shares: Float;
         spent: Float;
         redeemed: Bool;
+        author: Bool;
         createdAt: Time.Time;
         modifiedAt: Time.Time;
     };

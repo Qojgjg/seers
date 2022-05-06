@@ -290,6 +290,7 @@ shared({ caller = initializer }) actor class Market() = this {
             shares = shares;
             spent = 0.0;
             redeemed = false;
+            author = true;
             createdAt = Time.now();
             modifiedAt = Time.now();
         };

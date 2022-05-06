@@ -153,6 +153,7 @@ export const idlFactory = ({ IDL }) => {
     'labels' : IDL.Vec(IDL.Text),
     'createdAt' : Time,
     'collateralType' : CollateralType,
+    'author' : IDL.Bool,
     'spent' : IDL.Float64,
     'marketId' : IDL.Nat32,
     'balances' : IDL.Vec(IDL.Float64),

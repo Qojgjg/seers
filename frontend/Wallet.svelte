@@ -50,6 +50,8 @@
             if (keyA > keyB) return 1
             return 0
           })
+          user.ownMarkets = user.markets.filter((m) => m.author)
+          user.otherMarkets = user.markets.filter((m) => !m.author)
           user.txs = user.txs.reverse()
           console.log(user)
         }
@@ -117,11 +119,40 @@
           {errorRefresh}
         </div>
       </div>
-      {#if user.markets.length}
+      {#if user.ownMarkets.length > 0}
         <div style="display:flex; flex-direction: column;width: 100%">
-          Portfolio:
-          {#each user.markets as market}
-            {#if market.used == false}
+          My markets
+          {#each user.ownMarkets as market}
+            <a href="/market/{market.marketId}">
+              <div
+                style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: column; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
+              >
+                <div style="width: 100%; display: flex">
+                  <div style="width:fit-content; margin-right: 10px">
+                    #{market.marketId}:
+                  </div>
+                  <div style="width: auto">
+                    {market.title}
+                  </div>
+                </div>
+                <div style="width: 100%">
+                  {#each market.labels as label, i}
+                    {#if market.balances[i] > 0.0}
+                      {label +
+                        ": " +
+                        Number(market.balances[i]).toFixed(2) +
+                        "  "}
+                    {/if}
+                  {/each}
+                </div>
+              </div>
+            </a>
+          {/each}
+        </div>
+        <div style="display:flex; flex-direction: column;width: 100%">
+          {#if user.otherMarkets.length > 0}
+            Portfolio
+            {#each user.otherMarkets as market}
               <a href="/market/{market.marketId}">
                 <div
                   style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: column; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
@@ -131,7 +162,7 @@
                       #{market.marketId}:
                     </div>
                     <div style="width: auto">
-                      {market.marketTitle}
+                      {market.title}
                     </div>
                   </div>
                   <div style="width: 100%">
@@ -146,8 +177,8 @@
                   </div>
                 </div>
               </a>
-            {/if}
-          {/each}
+            {/each}
+          {/if}
         </div>
       {/if}
       {#if user.txs.length}
