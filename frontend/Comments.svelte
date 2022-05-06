@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { onMount } from "svelte"
   import SvelteMarkdown from "svelte-markdown"
 
   export let auth
-  export let comments = []
   export let marketId
   export let readMarket
+  export let comments = []
 
   let comment = ""
   let commentLabel = "Comment"
@@ -22,7 +21,6 @@
 
   const postComment = async () => {
     commentLabel = "Processing..."
-    console.log(marketId)
     let response = await $auth.actor.addCommentToMarket(marketId, comment)
 
     if (response["err"]) {
@@ -36,15 +34,6 @@
     }
     commentLabel = "Comment"
   }
-
-  const fetchUserData = async () => {
-    const authors = comments.map((c) => c.author)
-    console.log("authors: " + authors)
-    let response = await $auth.actor.readUserData(authors)
-    console.log(response)
-  }
-
-  onMount(fetchUserData)
 </script>
 
 <div style="width: 100%">
@@ -52,7 +41,12 @@
   <div style="text-align:start">
     {#each comments as comment}
       <div style="margin: 5px 0px">
-        <div style="color:pink; padding: 5px 0px">{comment.author}</div>
+        <img
+          src={comment.picture}
+          alt="pic"
+          style="width: 70px; height: 70px; border-radius: 50%"
+        />
+        <div style="color:pink; padding: 5px 0px">{comment.handle}</div>
         <SvelteMarkdown source={comment.content} />
       </div>
     {/each}

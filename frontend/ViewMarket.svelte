@@ -15,6 +15,7 @@
   const navigate = useNavigate()
 
   let market
+  let marketId
   let seerAmount = 0
   let selected = 0
   let selectedLabel
@@ -26,6 +27,7 @@
   let response = null
   let errorResponse = ""
   let comment = ""
+  let comments
   let commentLabel = "Comment"
   let commentErrorResponse = ""
   let myChart
@@ -109,11 +111,28 @@
       market = market[0]
       if (market) {
         selectedLabel = market.labels[0]
+        comments = market.comments
+        marketId = market.id
+        const authors = market.comments.map((c) => c.author)
+        const usersData = await $auth.actor.readUserData(authors)
+        console.log(usersData)
+        let completeComments = []
+        for (let comment of comments) {
+          for (const data of usersData) {
+            if (comment.author == data.principal) {
+              comment.handle = data.handle
+              comment.picture =
+                "https://assets.reedpopcdn.com/the-batman-hbo-max.jpg"
+              completeComments.push(comment)
+              break
+            }
+          }
+        }
+        comments = completeComments
       }
     }
     selected = 0
     buttonLabel = "Buy " + selectedLabel
-    console.log(market)
   }
 
   const postComment = async () => {
@@ -254,12 +273,7 @@
       </div>
     </div>
     <div style="width: 100%; display:flex">
-      <Comments
-        {readMarket}
-        marketId={market?.id}
-        {auth}
-        comments={market?.comments}
-      />
+      <Comments {auth} {marketId} {readMarket} {comments} />
     </div>
   </div>
 </div>
