@@ -11,6 +11,7 @@ import Utils "Utils";
 import BrierScore "BrierScore";
 import Feed "Feed";
 import Tx "Tx";
+import Tokens "Tokens";
 
 module {
     public func userKey(x: Text) : Trie.Key<Text> {
@@ -69,24 +70,17 @@ module {
         bio: Text;
     };
 
-    public type Balances = {
-        seers: Float;
-        icp: Float;
-        cycles: Float;
-        btc: Float;
+    public type Balance = {
+        #seers: Float;
+        #icp: Float;
+        #cycles: Float;
+        #btc: Float;
     };
 
-    public type ExpBalances = {
-        expSeers: Float;
-        expIcp: Float;
-        expCycles: Float;
-        expBtc: Float;
-    };
-
-    public type DepositAddrs = {
-        icp: ?Text;
-        cycles: ?Text;
-        btc: ?Text;
+    public type DepositAddr = {
+        #icp: Text;
+        #cycles: Text;
+        #btc: Text;
     };
 
     public type UserMarket = {
@@ -94,6 +88,7 @@ module {
         title: Text;
         labels: [Text];
         balances: [Float];
+        collateralType: Tokens.CollateralType;
         brierScores: [BrierScore.BrierScore];
         shares: Float;
         spent: Float;
@@ -110,24 +105,17 @@ module {
         public var discord: Text = initData.discord;
         public var bio: Text = initData.bio;
         public var feed: Buffer.Buffer<Feed.FeedItem> = Buffer.Buffer<Feed.FeedItem>(5);
-        public var balances: Balances = {
-            seers = 500.0;
-            icp = 0.0;
-            cycles = 0.0;
-            btc = 0.0;
+        public var balances: Buffer.Buffer<Balance> = do {
+            var b = Buffer.Buffer<Balance>(1);
+            b.add(#seers(500.0)); // Airdrop
+            b
         };
-        public var expBalances: ExpBalances = {
-            expSeers = 500.0;
-            expIcp = 0.0;
-            expCycles = 0.0;
-            expBtc = 0.0;    
+        public var expBalances: Buffer.Buffer<Balance> = do {
+            var b = Buffer.Buffer<Balance>(1);
+            b.add(#seers(500.0)); // Airdrop
+            b
         };
-        public var depositAddrs: DepositAddrs = {
-            icp = null;
-            cycles = null;
-            btc = null;
-        };
-
+        public var depositAddrs: Buffer.Buffer<DepositAddr> = Buffer.Buffer<DepositAddr>(3);
         public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
         public var txs: Buffer.Buffer<Tx.UserTx> = Buffer.Buffer<Tx.UserTx>(5);
         public var comments: Buffer.Buffer<Comment> = Buffer.Buffer<Comment>(5);
@@ -147,9 +135,9 @@ module {
                 discord = discord;
                 bio = bio;
                 feed = feed.toArray();
-                balances = balances;
-                expBalances = expBalances;
-                depositAddrs = depositAddrs;  
+                balances = balances.toArray();
+                expBalances = expBalances.toArray();
+                depositAddrs = depositAddrs.toArray();  
                 markets = markets.toArray();
                 txs = txs.toArray();
                 comments = comments.toArray();
@@ -203,9 +191,9 @@ module {
         discord: Text;
         bio: Text;
         feed: [Feed.FeedItem];
-        balances: Balances;
-        expBalances: ExpBalances;
-        depositAddrs: DepositAddrs;  
+        balances: [Balance];
+        expBalances: [Balance];
+        depositAddrs: [DepositAddr];  
         markets: [UserMarket];
         txs: [Tx.UserTx];
         comments: [Comment];
@@ -228,9 +216,9 @@ module {
         };
         var user: User = User(initData);
         user.feed := Utils.bufferFromArray(u.feed);
-        user.balances := u.balances;
-        user.expBalances := u.expBalances;
-        user.depositAddrs := u.depositAddrs;
+        user.balances := Utils.bufferFromArray(u.balances);
+        user.expBalances := Utils.bufferFromArray(u.expBalances);
+        user.depositAddrs := Utils.bufferFromArray(u.depositAddrs);
         user.markets := Utils.bufferFromArray(u.markets);
         user.txs := Utils.bufferFromArray(u.txs);
         user.comments := Utils.bufferFromArray(u.comments);

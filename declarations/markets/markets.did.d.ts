@@ -1,11 +1,9 @@
 import type { Principal } from '@dfinity/principal';
 export type AccountIdentifier = Array<number>;
-export interface Balances {
-  'btc' : number,
-  'icp' : number,
-  'seers' : number,
-  'cycles' : number,
-}
+export type Balance = { 'btc' : number } |
+  { 'icp' : number } |
+  { 'seers' : number } |
+  { 'cycles' : number };
 export interface Bet { 'tx' : UserTx, 'comment' : Comment__1 }
 export interface BrierScore { 'createdAt' : Time, 'score' : number }
 export type CollateralType = { 'icp' : null } |
@@ -25,17 +23,9 @@ export interface Comment__1 {
   'user' : UserData,
   'likes' : Array<Like__1>,
 }
-export interface DepositAddrs {
-  'btc' : [] | [string],
-  'icp' : [] | [string],
-  'cycles' : [] | [string],
-}
-export interface ExpBalances {
-  'expBtc' : number,
-  'expIcp' : number,
-  'expSeers' : number,
-  'expCycles' : number,
-}
+export type DepositAddr = { 'btc' : string } |
+  { 'icp' : string } |
+  { 'cycles' : string };
 export type FeedItem = { 'bet' : Bet } |
   { 'post' : Post } |
   { 'comment' : Comment__1 } |
@@ -198,6 +188,7 @@ export interface UserMarket {
   'redeemed' : boolean,
   'labels' : Array<string>,
   'createdAt' : Time,
+  'collateralType' : CollateralType,
   'spent' : number,
   'marketId' : number,
   'balances' : Array<number>,
@@ -206,7 +197,7 @@ export interface UserStable {
   'id' : string,
   'bio' : string,
   'txs' : Array<UserTx>,
-  'expBalances' : ExpBalances,
+  'expBalances' : Array<Balance>,
   'twitter' : string,
   'lastSeenAt' : Time,
   'modifiedAt' : Time,
@@ -220,8 +211,8 @@ export interface UserStable {
   'posts' : Array<Post__1>,
   'followees' : Array<Followee>,
   'followers' : Array<Follower>,
-  'depositAddrs' : DepositAddrs,
-  'balances' : Balances,
+  'depositAddrs' : Array<DepositAddr>,
+  'balances' : Array<Balance>,
 }
 export interface UserTx {
   'id' : number,

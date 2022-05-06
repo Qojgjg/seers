@@ -122,11 +122,11 @@ export const idlFactory = ({ IDL }) => {
     'marketId' : IDL.Nat32,
     'price' : IDL.Float64,
   });
-  const ExpBalances = IDL.Record({
-    'expBtc' : IDL.Float64,
-    'expIcp' : IDL.Float64,
-    'expSeers' : IDL.Float64,
-    'expCycles' : IDL.Float64,
+  const Balance = IDL.Variant({
+    'btc' : IDL.Float64,
+    'icp' : IDL.Float64,
+    'seers' : IDL.Float64,
+    'cycles' : IDL.Float64,
   });
   const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : Comment__1 });
   const Post = IDL.Record({
@@ -152,6 +152,7 @@ export const idlFactory = ({ IDL }) => {
     'redeemed' : IDL.Bool,
     'labels' : IDL.Vec(IDL.Text),
     'createdAt' : Time,
+    'collateralType' : CollateralType,
     'spent' : IDL.Float64,
     'marketId' : IDL.Nat32,
     'balances' : IDL.Vec(IDL.Float64),
@@ -180,22 +181,16 @@ export const idlFactory = ({ IDL }) => {
   });
   const Followee = IDL.Record({ 'createdAt' : Time, 'user' : UserData });
   const Follower = IDL.Record({ 'createdAt' : Time, 'user' : UserData });
-  const DepositAddrs = IDL.Record({
-    'btc' : IDL.Opt(IDL.Text),
-    'icp' : IDL.Opt(IDL.Text),
-    'cycles' : IDL.Opt(IDL.Text),
-  });
-  const Balances = IDL.Record({
-    'btc' : IDL.Float64,
-    'icp' : IDL.Float64,
-    'seers' : IDL.Float64,
-    'cycles' : IDL.Float64,
+  const DepositAddr = IDL.Variant({
+    'btc' : IDL.Text,
+    'icp' : IDL.Text,
+    'cycles' : IDL.Text,
   });
   const UserStable = IDL.Record({
     'id' : IDL.Text,
     'bio' : IDL.Text,
     'txs' : IDL.Vec(UserTx),
-    'expBalances' : ExpBalances,
+    'expBalances' : IDL.Vec(Balance),
     'twitter' : IDL.Text,
     'lastSeenAt' : Time,
     'modifiedAt' : Time,
@@ -209,8 +204,8 @@ export const idlFactory = ({ IDL }) => {
     'posts' : IDL.Vec(Post__1),
     'followees' : IDL.Vec(Followee),
     'followers' : IDL.Vec(Follower),
-    'depositAddrs' : DepositAddrs,
-    'balances' : Balances,
+    'depositAddrs' : IDL.Vec(DepositAddr),
+    'balances' : IDL.Vec(Balance),
   });
   const UserError = IDL.Variant({
     'callerIsAnon' : IDL.Null,

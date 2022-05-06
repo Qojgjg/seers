@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { faBalanceScale } from "@fortawesome/free-solid-svg-icons"
   import { afterUpdate, onMount } from "svelte"
 
   export let auth
@@ -96,13 +97,17 @@
   <div class="rowUser">
     {#if user}
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        {user.id}
+        Principal: {user.id}
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Balance: {Number(user.balances["seers"]).toFixed(2)} Σ
+        Balance: {Object.entries(user.balances).map(([k, v]) => {
+          return ` ${Number(v).toFixed(2)} ${k}`
+        })}
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Expected Balance: {Number(user.expBalances["expSeers"]).toFixed(2)} Σ
+        Expected Balance: {Object.entries(user.expBalances).map(([k, v]) => {
+          return ` ${Number(v).toFixed(2)} ${k}`
+        })}
       </div>
       <div
         style="margin-bottom: 10px; width: 100%; text-align:center; display: flex; justify-content: center"

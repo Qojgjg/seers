@@ -285,6 +285,7 @@ shared({ caller = initializer }) actor class Market() = this {
             title = marketInitData.title;
             labels = marketInitData.labels;
             balances = Array.freeze(Array.init<Float>(optionsLength, 0));
+            collateralType = marketInitData.collateralType;
             brierScores = [];
             shares = shares;
             spent = 0.0;

@@ -12,13 +12,13 @@ type UserTx =
  };
 type UserStable = 
  record {
-   balances: Balances;
+   balances: vec Balance;
    bio: text;
    comments: vec Comment;
    createdAt: Time;
-   depositAddrs: DepositAddrs;
+   depositAddrs: vec DepositAddr;
    discord: text;
-   expBalances: ExpBalances;
+   expBalances: vec Balance;
    feed: vec FeedItem;
    followees: vec Followee;
    followers: vec Follower;
@@ -36,6 +36,7 @@ type UserMarket =
  record {
    balances: vec float64;
    brierScores: vec BrierScore;
+   collateralType: CollateralType;
    createdAt: Time;
    labels: vec text;
    marketId: nat32;
@@ -237,18 +238,11 @@ type FeedItem =
    market: MarketStable;
    post: Post;
  };
-type ExpBalances = 
- record {
-   expBtc: float64;
-   expCycles: float64;
-   expIcp: float64;
-   expSeers: float64;
- };
-type DepositAddrs = 
- record {
-   btc: opt text;
-   cycles: opt text;
-   icp: opt text;
+type DepositAddr = 
+ variant {
+   btc: text;
+   cycles: text;
+   icp: text;
  };
 type Comment__1 = 
  record {
@@ -282,8 +276,8 @@ type Bet =
    comment: Comment__1;
    tx: UserTx;
  };
-type Balances = 
- record {
+type Balance = 
+ variant {
    btc: float64;
    cycles: float64;
    icp: float64;
