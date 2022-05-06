@@ -114,7 +114,7 @@ module {
         //     b
         // };
         // public var depositAddrs: Buffer.Buffer<DepositAddr> = Buffer.Buffer<DepositAddr>(3);
-        // public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
+        public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
         public var txs: Buffer.Buffer<Tx.UserTx> = Buffer.Buffer<Tx.UserTx>(5);
         public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(5);
         public var posts: Buffer.Buffer<Post.Post> = Buffer.Buffer<Post.Post>(5);
@@ -139,7 +139,7 @@ module {
                 // balances = balances.toArray();
                 // expBalances = expBalances.toArray();
                 // depositAddrs = depositAddrs.toArray();  
-                // markets = markets.toArray();
+                markets = markets.toArray();
                 txs = txs.toArray();
                 comments = stableComments;
                 posts = posts.toArray();
@@ -164,7 +164,7 @@ module {
         // balances: [Balance];
         // expBalances: [Balance];
         // depositAddrs: [DepositAddr];  
-        // markets: [UserMarket];
+        markets: [UserMarket];
         txs: [Tx.UserTx];
         comments: [Comment.CommentStable];
         posts: [Post.Post];
@@ -192,7 +192,7 @@ module {
         // user.balances := Utils.bufferFromArray(u.balances);
         // user.expBalances := Utils.bufferFromArray(u.expBalances);
         // user.depositAddrs := Utils.bufferFromArray(u.depositAddrs);
-        // user.markets := Utils.bufferFromArray(u.markets);
+        user.markets := Utils.bufferFromArray(u.markets);
         user.txs := Utils.bufferFromArray(u.txs);
         user.comments := Utils.bufferFromArray(comments);
         user.posts := Utils.bufferFromArray(u.posts);

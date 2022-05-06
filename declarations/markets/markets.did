@@ -21,11 +21,27 @@ type UserStable =
    handle: text;
    id: text;
    lastSeenAt: Time;
+   markets: vec UserMarket;
    modifiedAt: Time;
    picture: text;
    posts: vec Post;
    twitter: text;
    txs: vec UserTx;
+ };
+type UserMarket = 
+ record {
+   author: bool;
+   balances: vec float64;
+   brierScores: vec BrierScore;
+   collateralType: CollateralType;
+   createdAt: Time;
+   labels: vec text;
+   marketId: nat32;
+   modifiedAt: Time;
+   redeemed: bool;
+   shares: float64;
+   spent: float64;
+   title: text;
  };
 type UserError = 
  variant {
@@ -209,6 +225,11 @@ type CollateralType =
    cycles;
    icp;
    seers;
+ };
+type BrierScore = 
+ record {
+   createdAt: Time;
+   score: float64;
  };
 type AccountIdentifier = blob;
 service : () -> Market

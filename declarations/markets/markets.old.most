@@ -62,6 +62,15 @@ type MarketStable =
   };
 type MarketState =
   {#approved; #closed; #invalid; #open; #pending; #resolved : Nat};
+type Post =
+  {
+    author : Text;
+    comments : [CommentStable];
+    content : Text;
+    createdAt : Time;
+    id : Nat32;
+    likes : [Like]
+  };
 type Time = Int;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type UserStable =
@@ -77,6 +86,7 @@ type UserStable =
     lastSeenAt : Time;
     modifiedAt : Time;
     picture : Text;
+    posts : [Post];
     twitter : Text
   };
 actor {

@@ -117,6 +117,21 @@ export const idlFactory = ({ IDL }) => {
     'marketId' : IDL.Nat32,
     'price' : IDL.Float64,
   });
+  const BrierScore = IDL.Record({ 'createdAt' : Time, 'score' : IDL.Float64 });
+  const UserMarket = IDL.Record({
+    'brierScores' : IDL.Vec(BrierScore),
+    'title' : IDL.Text,
+    'shares' : IDL.Float64,
+    'modifiedAt' : Time,
+    'redeemed' : IDL.Bool,
+    'labels' : IDL.Vec(IDL.Text),
+    'createdAt' : Time,
+    'collateralType' : CollateralType,
+    'author' : IDL.Bool,
+    'spent' : IDL.Float64,
+    'marketId' : IDL.Nat32,
+    'balances' : IDL.Vec(IDL.Float64),
+  });
   const Post = IDL.Record({
     'id' : IDL.Nat32,
     'content' : IDL.Text,
@@ -135,6 +150,7 @@ export const idlFactory = ({ IDL }) => {
     'lastSeenAt' : Time,
     'modifiedAt' : Time,
     'createdAt' : Time,
+    'markets' : IDL.Vec(UserMarket),
     'picture' : IDL.Text,
     'discord' : IDL.Text,
     'handle' : IDL.Text,

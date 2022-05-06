@@ -2,6 +2,7 @@
 type AssocList<K, V> = List<(K, V)>;
 type AssocList__1<K, V> = AssocList<K, V>;
 type Branch<K, V> = {left : Trie<K, V>; right : Trie<K, V>; size : Nat};
+type BrierScore = {createdAt : Time; score : Float};
 type CollateralType = {#cycles; #icp; #seers};
 type CommentStable =
   {
@@ -73,6 +74,21 @@ type Post =
   };
 type Time = Int;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
+type UserMarket =
+  {
+    author : Bool;
+    balances : [Float];
+    brierScores : [BrierScore];
+    collateralType : CollateralType;
+    createdAt : Time;
+    labels : [Text];
+    marketId : Nat32;
+    modifiedAt : Time;
+    redeemed : Bool;
+    shares : Float;
+    spent : Float;
+    title : Text
+  };
 type UserStable =
   {
     bio : Text;
@@ -84,6 +100,7 @@ type UserStable =
     handle : Text;
     id : Text;
     lastSeenAt : Time;
+    markets : [UserMarket];
     modifiedAt : Time;
     picture : Text;
     posts : [Post];

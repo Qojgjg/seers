@@ -1,5 +1,6 @@
 import type { Principal } from '@dfinity/principal';
 export type AccountIdentifier = Array<number>;
+export interface BrierScore { 'createdAt' : Time, 'score' : number }
 export type CollateralType = { 'icp' : null } |
   { 'seers' : null } |
   { 'cycles' : null };
@@ -144,6 +145,20 @@ export type UserError = { 'callerIsAnon' : null } |
   { 'newtonFailed' : null } |
   { 'endDateOlderThanStartDate' : null } |
   { 'notEnoughLiquidity' : number };
+export interface UserMarket {
+  'brierScores' : Array<BrierScore>,
+  'title' : string,
+  'shares' : number,
+  'modifiedAt' : Time,
+  'redeemed' : boolean,
+  'labels' : Array<string>,
+  'createdAt' : Time,
+  'collateralType' : CollateralType,
+  'author' : boolean,
+  'spent' : number,
+  'marketId' : number,
+  'balances' : Array<number>,
+}
 export interface UserStable {
   'id' : string,
   'bio' : string,
@@ -152,6 +167,7 @@ export interface UserStable {
   'lastSeenAt' : Time,
   'modifiedAt' : Time,
   'createdAt' : Time,
+  'markets' : Array<UserMarket>,
   'picture' : string,
   'discord' : string,
   'handle' : string,
