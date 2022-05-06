@@ -65,6 +65,7 @@ type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type UserStable =
   {
     bio : Text;
+    comments : [CommentStable];
     createdAt : Time;
     discord : Text;
     handle : Text;

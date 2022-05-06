@@ -117,7 +117,7 @@ module {
         // public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
         // public var txs: Buffer.Buffer<Tx.UserTx> = Buffer.Buffer<Tx.UserTx>(5);
         public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(5);
-        // public var posts: Buffer.Buffer<Post.Post> = Buffer.Buffer<Post.Post>(5);
+        public var posts: Buffer.Buffer<Post.Post> = Buffer.Buffer<Post.Post>(5);
         public var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
         public var followees: Buffer.Buffer<Followee> = Buffer.Buffer<Followee>(5);
         public var createdAt: Time.Time = Time.now();
@@ -142,7 +142,7 @@ module {
                 // markets = markets.toArray();
                 // txs = txs.toArray();
                 comments = stableComments;
-                // posts = posts.toArray();
+                posts = posts.toArray();
                 followers = followees.toArray();
                 followees = followees.toArray();
                 createdAt = createdAt;
@@ -167,7 +167,7 @@ module {
         // markets: [UserMarket];
         // txs: [Tx.UserTx];
         comments: [Comment.CommentStable];
-        // posts: [Post.Post];
+        posts: [Post.Post];
         followers: [Follower];
         followees: [Followee];
         createdAt: Time.Time;
@@ -195,7 +195,7 @@ module {
         // user.markets := Utils.bufferFromArray(u.markets);
         // user.txs := Utils.bufferFromArray(u.txs);
         user.comments := Utils.bufferFromArray(comments);
-        // user.posts := Utils.bufferFromArray(u.posts);
+        user.posts := Utils.bufferFromArray(u.posts);
         user.followers := Utils.bufferFromArray(u.followers);
         user.followees := Utils.bufferFromArray(u.followees);
         user.createdAt := u.createdAt;

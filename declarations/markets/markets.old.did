@@ -1,6 +1,7 @@
 type UserStable = 
  record {
    bio: text;
+   comments: vec CommentStable;
    createdAt: Time;
    discord: text;
    handle: text;

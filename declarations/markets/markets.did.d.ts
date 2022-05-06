@@ -112,6 +112,14 @@ export type MarketState = { 'resolved' : bigint } |
   { 'invalid' : null } |
   { 'open' : null } |
   { 'approved' : null };
+export interface Post {
+  'id' : number,
+  'content' : string,
+  'createdAt' : Time,
+  'author' : string,
+  'likes' : Array<Like>,
+  'comments' : Array<CommentStable>,
+}
 export type Result = { 'ok' : UserStable } |
   { 'err' : UserError };
 export type Result_1 = { 'ok' : MarketStable } |
@@ -147,6 +155,7 @@ export interface UserStable {
   'discord' : string,
   'handle' : string,
   'comments' : Array<CommentStable>,
+  'posts' : Array<Post>,
   'followees' : Array<Followee>,
   'followers' : Array<Follower>,
 }

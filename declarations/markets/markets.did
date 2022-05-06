@@ -11,6 +11,7 @@ type UserStable =
    lastSeenAt: Time;
    modifiedAt: Time;
    picture: text;
+   posts: vec Post;
    twitter: text;
  };
 type UserError = 
@@ -48,6 +49,15 @@ type Result =
  variant {
    err: UserError;
    ok: UserStable;
+ };
+type Post = 
+ record {
+   author: text;
+   comments: vec CommentStable;
+   content: text;
+   createdAt: Time;
+   id: nat32;
+   likes: vec Like;
  };
 type MarketState = 
  variant {
