@@ -122,6 +122,9 @@ module {
         public var modifiedAt: Time.Time = Time.now();
 
         public func freeze(): MarketStable {
+            let stableComments = Array.map(comments.toArray(), func (c: Comment.Comment): Comment.CommentStable {
+                c.freeze()
+            });
             let ms: MarketStable = {
                 id = id;    
                 title = title;
@@ -143,7 +146,7 @@ module {
                 imageUrl = imageUrl;
                 state = state;
                 volume = volume;
-                comments = comments.toArray();
+                comments = stableComments;
                 histPrices = histPrices.toArray();
                 createdAt = createdAt;
                 modifiedAt = modifiedAt;
@@ -172,7 +175,7 @@ module {
         imageUrl: Text;
         state: MarketState;
         volume: Float;
-        comments: [Comment.Comment];
+        comments: [Comment.CommentStable];
         histPrices: [HistPoint];
         createdAt: Time.Time;
         modifiedAt: Time.Time;
@@ -194,6 +197,9 @@ module {
             category = m.category;
             collateralType = m.collateralType;
         };
+        let comments = Array.map(m.comments, func (c: Comment.CommentStable): Comment.Comment {
+            Comment.unFreeze(c)
+        });
         var market: Market = Market(initData);
         market.reserves := m.reserves;
         market.k := m.k;
@@ -202,7 +208,7 @@ module {
         market.totalShares := m.totalShares;
         market.state := m.state;
         market.volume := m.volume;
-        market.comments := Utils.bufferFromArray(m.comments);
+        market.comments := Utils.bufferFromArray(comments);
         market.histPrices := Utils.bufferFromArray(m.histPrices);
         market.createdAt := m.createdAt;
         market.modifiedAt := m.modifiedAt;

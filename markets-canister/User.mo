@@ -12,6 +12,8 @@ import BrierScore "BrierScore";
 import Feed "Feed";
 import Tx "Tx";
 import Tokens "Tokens";
+import Post "Post";
+import Comment "Comment";
 
 module {
     public func userKey(x: Text) : Trie.Key<Text> {
@@ -47,18 +49,13 @@ module {
     };
 
     public type Follower = {
-        user: Utils.UserData;
+        user: Text;
         createdAt: Time.Time;
     };
 
     public type Followee = {
-        user: Utils.UserData;
+        user: Text;
         createdAt: Time.Time;
-    };
-
-    public type Bet = {
-        tx: Tx.UserTx;
-        comment: Comment;
     };
 
     public type UserInitData = {
@@ -119,8 +116,8 @@ module {
         public var depositAddrs: Buffer.Buffer<DepositAddr> = Buffer.Buffer<DepositAddr>(3);
         public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
         public var txs: Buffer.Buffer<Tx.UserTx> = Buffer.Buffer<Tx.UserTx>(5);
-        public var comments: Buffer.Buffer<Comment> = Buffer.Buffer<Comment>(5);
-        public var posts: Buffer.Buffer<Post> = Buffer.Buffer<Post>(5);
+        public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(5);
+        public var posts: Buffer.Buffer<Post.Post> = Buffer.Buffer<Post.Post>(5);
         public var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
         public var followees: Buffer.Buffer<Followee> = Buffer.Buffer<Followee>(5);
         public var createdAt: Time.Time = Time.now();
@@ -128,6 +125,9 @@ module {
         public var modifiedAt: Time.Time = Time.now();
 
         public func freeze(): UserStable {
+            let stableComments = Array.map(comments.toArray(), func (c: Comment.Comment): Comment.CommentStable {
+                c.freeze()
+            });
             let us: UserStable = {
                 id = id;
                 handle = handle;
@@ -141,7 +141,7 @@ module {
                 depositAddrs = depositAddrs.toArray();  
                 markets = markets.toArray();
                 txs = txs.toArray();
-                comments = comments.toArray();
+                comments = stableComments;
                 posts = posts.toArray();
                 followers = followees.toArray();
                 followees = followees.toArray();
@@ -151,37 +151,6 @@ module {
             };
             return us;
         }
-    };
-
-    public type Like = {
-        stars: Nat32;
-        authorPrincipal: Text;
-        authorHandle: Text;
-        authorPicture: Text;
-        createdAt: Time.Time;
-    };
-
-    public type Comment = {
-        id: Nat32;
-        user: Utils.UserData;
-        content: Text;
-        likes: [Like];
-        createdAt: Time.Time;
-    };
-
-    public type Post = {
-        id: Nat32;
-        author: Utils.UserData;
-        content: Text;
-        comments: [Comment];
-        likes: [Like];
-        createdAt: Time.Time;
-    };
-
-    public type HistPoint = {
-        probabilities: [Float];
-        liquidity: Float;
-        createdAt: Time.Time;
     };
 
     public type UserStable = {
@@ -197,8 +166,8 @@ module {
         depositAddrs: [DepositAddr];  
         markets: [UserMarket];
         txs: [Tx.UserTx];
-        comments: [Comment];
-        posts: [Post];
+        comments: [Comment.CommentStable];
+        posts: [Post.Post];
         followers: [Follower];
         followees: [Followee];
         createdAt: Time.Time;
@@ -215,6 +184,9 @@ module {
             discord = u.discord;
             bio = u.bio;
         };
+        let comments = Array.map(u.comments, func (c: Comment.CommentStable): Comment.Comment {
+            Comment.unFreeze(c)
+        });
         var user: User = User(initData);
         user.feed := Utils.bufferFromArray(u.feed);
         user.balances := Utils.bufferFromArray(u.balances);
@@ -222,7 +194,7 @@ module {
         user.depositAddrs := Utils.bufferFromArray(u.depositAddrs);
         user.markets := Utils.bufferFromArray(u.markets);
         user.txs := Utils.bufferFromArray(u.txs);
-        user.comments := Utils.bufferFromArray(u.comments);
+        user.comments := Utils.bufferFromArray(comments);
         user.posts := Utils.bufferFromArray(u.posts);
         user.followers := Utils.bufferFromArray(u.followers);
         user.followees := Utils.bufferFromArray(u.followees);

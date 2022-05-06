@@ -1,21 +1,12 @@
 <script lang="ts">
   import SvelteMarkdown from "svelte-markdown"
 
+  export let comments
+
   let imageUrl = ""
   let comment = ""
   let commentLabel = "Comment"
   let commentErrorResponse = ""
-  let comments = [
-    {
-      author: "Marcio",
-      content: "This is first comment.",
-    },
-    {
-      author: "Jose",
-      content:
-        "If Twitter announces it will no longer agree to the terms of its initial agreement or announcement after previously announcing that it would agree to an acquisition by Elon Musk, or an acquisition by or merger with any entity controlled by Elon Musk, it will have no bearing on the resolution of this market. This market will resolve to 'Yes' solely based on whether Twitter makes an initial announcement that it is agreeing to an acquisition by Elon Musk, or an acquisition by or merger with any entity controlled by Elon Musk. The primary resolution source for this market will be official information from Twitter (e.g. https://twitter.com/twitter, https://blog.twitter.com/, etc.); however, other credible reporting may be used to resolve this market.",
-    },
-  ]
   let market = { imageUrl, comments }
 
   const postComment = () => {}

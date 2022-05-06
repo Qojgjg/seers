@@ -20,6 +20,7 @@ import U "User";
 import Utils "Utils";
 import Tx "Tx";
 import Comment "Comment";
+import Like "Like";
 
 // import Array "mo:base/Array";
 // import Binary "mo:encoding/Binary";
@@ -911,45 +912,47 @@ shared({ caller = initializer }) actor class Market() = this {
     // };
 
     // Add a comment to a market.
-    // public shared(msg) func addCommentToMarket(marketId: Nat32, content: Text): async Result.Result<Comment.Comment, AddCommentError> {
-    //     assert(not updating);
+    public shared(msg) func addCommentToMarket(marketId: Nat32, content: Text): async Result.Result<Comment.Comment, M.MarketError> {
+        assert(not updating);
         
-    //     let userId = Principal.toText(msg.caller);
+        let userId = Principal.toText(msg.caller);
         
-    //     if (userId == anon) {
-    //         return #err(#userIsAnon);
-    //     };
+        if (userId == anon) {
+            return #err(#callerIsAnon);
+        };
 
-    //     if (content == "") {
-    //         return #err(#commentIsEmpty);
-    //     };
+        if (content == "") {
+            return #err(#commentIsEmpty);
+        };
 
-    //     let userOpt = userMap.get(userId);
+        let userOpt = userMap.get(userId);
 
-    //     switch (userOpt) {
-    //         case null {
-    //             return #err(#userNotCreated);
-    //         };
-    //         case (?user) {
-    //             let marketOpt = marketMap.get(marketId);
+        switch (userOpt) {
+            case null {
+                return #err(#profileNotCreated);
+            };
+            case (?user) {
+                let marketOpt = marketMap.get(marketId);
 
-    //             switch (marketOpt) {
-    //                 case null {
-    //                     return #err(#marketMissing);
-    //                 };
-    //                 case (?market) {
-    //                     let comment: Comment = {
-    //                         author = user.handle;
-    //                         content = content;
-    //                     };
-    //                     market.comments := Array.append(market.comments, [comment]);
+                switch (marketOpt) {
+                    case null {
+                        return #err(#marketMissing);
+                    };
+                    case (?market) {
+                        let initData: Comment.CommentInitData = {
+                            id = Nat32.fromNat(market.comments.size());
+                            author = user.id;
+                            content = content;
+                        };
+                        let comment: Comment.Comment = Comment.Comment(initData);
+                        market.comments.add(comment);
                         
-    //                     return #ok(comment);
-    //                 };
-    //             };
-    //         };
-    //     };
-    // };
+                        return #ok(comment);
+                    };
+                };
+            };
+        };
+    };
 
     /**
     * Utilities

@@ -250,7 +250,7 @@
       </div>
     </div>
     <div style="width: 100%; display:flex">
-      <Comments />
+      <Comments comments={market?.comments} />
     </div>
   </div>
 </div>

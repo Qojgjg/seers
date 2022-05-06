@@ -7,9 +7,9 @@ import Utils "Utils";
 module {
     public type Post = {
         id: Nat32;
-        author: Utils.UserData;
+        author: Text;
         content: Text;
-        comments: [Comment.Comment];
+        comments: [Comment.CommentStable];
         likes: [Like.Like];
         createdAt: Time.Time;
     };

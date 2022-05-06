@@ -4,12 +4,10 @@ import Bet "Bet";
 import Market "Market";
 
 module {
-
     public type FeedItem = {
-        #comment: Comment.Comment;
+        #comment: Comment.CommentStable;
         #post: Post.Post;
         #bet: Bet.Bet;
         #market: Market.MarketStable;
     };
-
 }
