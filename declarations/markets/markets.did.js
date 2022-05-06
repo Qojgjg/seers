@@ -117,6 +117,12 @@ export const idlFactory = ({ IDL }) => {
     'marketId' : IDL.Nat32,
     'price' : IDL.Float64,
   });
+  const Balance = IDL.Variant({
+    'btc' : IDL.Float64,
+    'icp' : IDL.Float64,
+    'seers' : IDL.Float64,
+    'cycles' : IDL.Float64,
+  });
   const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : CommentStable });
   const Post = IDL.Record({
     'id' : IDL.Nat32,
@@ -149,10 +155,16 @@ export const idlFactory = ({ IDL }) => {
   });
   const Followee = IDL.Record({ 'createdAt' : Time, 'user' : IDL.Text });
   const Follower = IDL.Record({ 'createdAt' : Time, 'user' : IDL.Text });
+  const DepositAddr = IDL.Variant({
+    'btc' : IDL.Text,
+    'icp' : IDL.Text,
+    'cycles' : IDL.Text,
+  });
   const UserStable = IDL.Record({
     'id' : IDL.Text,
     'bio' : IDL.Text,
     'txs' : IDL.Vec(UserTx),
+    'expBalances' : IDL.Vec(Balance),
     'twitter' : IDL.Text,
     'lastSeenAt' : Time,
     'modifiedAt' : Time,
@@ -166,6 +178,8 @@ export const idlFactory = ({ IDL }) => {
     'posts' : IDL.Vec(Post),
     'followees' : IDL.Vec(Followee),
     'followers' : IDL.Vec(Follower),
+    'depositAddrs' : IDL.Vec(DepositAddr),
+    'balances' : IDL.Vec(Balance),
   });
   const UserError = IDL.Variant({
     'callerIsAnon' : IDL.Null,

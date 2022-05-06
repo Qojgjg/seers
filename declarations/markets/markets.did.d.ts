@@ -1,5 +1,9 @@
 import type { Principal } from '@dfinity/principal';
 export type AccountIdentifier = Array<number>;
+export type Balance = { 'btc' : number } |
+  { 'icp' : number } |
+  { 'seers' : number } |
+  { 'cycles' : number };
 export interface Bet { 'tx' : UserTx, 'comment' : CommentStable }
 export interface BrierScore { 'createdAt' : Time, 'score' : number }
 export type CollateralType = { 'icp' : null } |
@@ -13,6 +17,9 @@ export interface CommentStable {
   'author' : string,
   'likes' : Array<Like>,
 }
+export type DepositAddr = { 'btc' : string } |
+  { 'icp' : string } |
+  { 'cycles' : string };
 export type FeedItem = { 'bet' : Bet } |
   { 'post' : Post } |
   { 'comment' : CommentStable } |
@@ -168,6 +175,7 @@ export interface UserStable {
   'id' : string,
   'bio' : string,
   'txs' : Array<UserTx>,
+  'expBalances' : Array<Balance>,
   'twitter' : string,
   'lastSeenAt' : Time,
   'modifiedAt' : Time,
@@ -181,6 +189,8 @@ export interface UserStable {
   'posts' : Array<Post>,
   'followees' : Array<Followee>,
   'followers' : Array<Follower>,
+  'depositAddrs' : Array<DepositAddr>,
+  'balances' : Array<Balance>,
 }
 export interface UserTx {
   'id' : number,
