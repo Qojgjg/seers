@@ -1,51 +1,14 @@
-type UserTx = 
- record {
-   createdAt: Time;
-   dest: opt nat;
-   fee: float64;
-   id: nat32;
-   marketId: nat32;
-   price: float64;
-   recv: float64;
-   sent: float64;
-   src: opt nat;
- };
 type UserStable = 
  record {
-   balances: vec Balance;
    bio: text;
-   comments: vec Comment__1;
    createdAt: Time;
-   depositAddrs: vec DepositAddr;
    discord: text;
-   expBalances: vec Balance;
-   feed: vec FeedItem;
-   followees: vec Followee;
-   followers: vec Follower;
    handle: text;
    id: text;
    lastSeenAt: Time;
-   markets: vec UserMarket;
    modifiedAt: Time;
    picture: text;
-   posts: vec Post__1;
    twitter: text;
-   txs: vec UserTx;
- };
-type UserMarket = 
- record {
-   author: bool;
-   balances: vec float64;
-   brierScores: vec BrierScore;
-   collateralType: CollateralType;
-   createdAt: Time;
-   labels: vec text;
-   marketId: nat32;
-   modifiedAt: Time;
-   redeemed: bool;
-   shares: float64;
-   spent: float64;
-   title: text;
  };
 type UserError = 
  variant {
@@ -67,13 +30,12 @@ type UserError =
    titleMissing;
    userAlreadyExist;
  };
-type UserData = 
- record {
-   handle: text;
-   picture: text;
-   "principal": text;
- };
 type Time = int;
+type Result_2 = 
+ variant {
+   err: MarketError;
+   ok: CommentStable;
+ };
 type Result_1 = 
  variant {
    err: MarketError;
@@ -83,24 +45,6 @@ type Result =
  variant {
    err: UserError;
    ok: UserStable;
- };
-type Post__1 = 
- record {
-   author: UserData;
-   comments: vec Comment__1;
-   content: text;
-   createdAt: Time;
-   id: nat32;
-   likes: vec Like__1;
- };
-type Post = 
- record {
-   author: UserData;
-   comments: vec Comment;
-   content: text;
-   createdAt: Time;
-   id: nat32;
-   likes: vec Like;
  };
 type MarketState = 
  variant {
@@ -117,7 +61,7 @@ type MarketStable =
    bettors: vec text;
    category: MarketCategory;
    collateralType: CollateralType;
-   comments: vec Comment;
+   comments: vec CommentStable;
    createdAt: Time;
    description: text;
    endDate: Time;
@@ -188,6 +132,7 @@ type MarketCategory =
  };
 type Market = 
  service {
+   addCommentToMarket: (nat32, text) -> (Result_2);
    approveMarket: (nat32) -> ();
    callerAccount: () -> (AccountIdentifier);
    canisterAccount: () -> (text) query;
@@ -201,19 +146,9 @@ type Market =
    resolveMarket: (nat32, nat) -> (bool);
    setUpdating: (bool) -> () oneway;
  };
-type Like__1 = 
- record {
-   authorHandle: text;
-   authorPicture: text;
-   authorPrincipal: text;
-   createdAt: Time;
-   stars: nat32;
- };
 type Like = 
  record {
-   authorHandle: text;
-   authorPicture: text;
-   authorPrincipal: text;
+   author: text;
    createdAt: Time;
    stars: nat32;
  };
@@ -224,67 +159,20 @@ type HistPoint =
    liquidity: float64;
    probabilities: vec float64;
  };
-type Follower = 
+type CommentStable = 
  record {
-   createdAt: Time;
-   user: UserData;
- };
-type Followee = 
- record {
-   createdAt: Time;
-   user: UserData;
- };
-type FeedItem = 
- variant {
-   bet: Bet;
-   comment: Comment;
-   market: MarketStable;
-   post: Post;
- };
-type DepositAddr = 
- variant {
-   btc: text;
-   cycles: text;
-   icp: text;
- };
-type Comment__1 = 
- record {
-   content: text;
-   createdAt: Time;
-   id: nat32;
-   likes: vec Like__1;
-   user: UserData;
- };
-type Comment = 
- record {
+   author: text;
    content: text;
    createdAt: Time;
    id: nat32;
    likes: vec Like;
-   user: UserData;
+   modifiedAt: Time;
  };
 type CollateralType = 
  variant {
    cycles;
    icp;
    seers;
- };
-type BrierScore = 
- record {
-   createdAt: Time;
-   score: float64;
- };
-type Bet = 
- record {
-   comment: Comment;
-   tx: UserTx;
- };
-type Balance = 
- variant {
-   btc: float64;
-   cycles: float64;
-   icp: float64;
-   seers: float64;
  };
 type AccountIdentifier = blob;
 service : () -> Market

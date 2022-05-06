@@ -102,32 +102,32 @@ module {
         public var twitter: Text = initData.twitter;
         public var discord: Text = initData.discord;
         public var bio: Text = initData.bio;
-        public var feed: Buffer.Buffer<Feed.FeedItem> = Buffer.Buffer<Feed.FeedItem>(5);
-        public var balances: Buffer.Buffer<Balance> = do {
-            var b = Buffer.Buffer<Balance>(1);
-            b.add(#seers(500.0)); // Airdrop
-            b
-        };
-        public var expBalances: Buffer.Buffer<Balance> = do {
-            var b = Buffer.Buffer<Balance>(1);
-            b.add(#seers(500.0)); // Airdrop
-            b
-        };
-        public var depositAddrs: Buffer.Buffer<DepositAddr> = Buffer.Buffer<DepositAddr>(3);
-        public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
-        public var txs: Buffer.Buffer<Tx.UserTx> = Buffer.Buffer<Tx.UserTx>(5);
-        public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(5);
-        public var posts: Buffer.Buffer<Post.Post> = Buffer.Buffer<Post.Post>(5);
-        public var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
-        public var followees: Buffer.Buffer<Followee> = Buffer.Buffer<Followee>(5);
+        // public var feed: Buffer.Buffer<Feed.FeedItem> = Buffer.Buffer<Feed.FeedItem>(5);
+        // public var balances: Buffer.Buffer<Balance> = do {
+        //     var b = Buffer.Buffer<Balance>(1);
+        //     b.add(#seers(500.0)); // Airdrop
+        //     b
+        // };
+        // public var expBalances: Buffer.Buffer<Balance> = do {
+        //     var b = Buffer.Buffer<Balance>(1);
+        //     b.add(#seers(500.0)); // Airdrop
+        //     b
+        // };
+        // public var depositAddrs: Buffer.Buffer<DepositAddr> = Buffer.Buffer<DepositAddr>(3);
+        // public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
+        // public var txs: Buffer.Buffer<Tx.UserTx> = Buffer.Buffer<Tx.UserTx>(5);
+        // public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(5);
+        // public var posts: Buffer.Buffer<Post.Post> = Buffer.Buffer<Post.Post>(5);
+        // public var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
+        // public var followees: Buffer.Buffer<Followee> = Buffer.Buffer<Followee>(5);
         public var createdAt: Time.Time = Time.now();
         public var lastSeenAt: Time.Time = Time.now();
         public var modifiedAt: Time.Time = Time.now();
 
         public func freeze(): UserStable {
-            let stableComments = Array.map(comments.toArray(), func (c: Comment.Comment): Comment.CommentStable {
-                c.freeze()
-            });
+            // let stableComments = Array.map(comments.toArray(), func (c: Comment.Comment): Comment.CommentStable {
+            //     c.freeze()
+            // });
             let us: UserStable = {
                 id = id;
                 handle = handle;
@@ -135,16 +135,16 @@ module {
                 twitter = twitter;
                 discord = discord;
                 bio = bio;
-                feed = feed.toArray();
-                balances = balances.toArray();
-                expBalances = expBalances.toArray();
-                depositAddrs = depositAddrs.toArray();  
-                markets = markets.toArray();
-                txs = txs.toArray();
-                comments = stableComments;
-                posts = posts.toArray();
-                followers = followees.toArray();
-                followees = followees.toArray();
+                // feed = feed.toArray();
+                // balances = balances.toArray();
+                // expBalances = expBalances.toArray();
+                // depositAddrs = depositAddrs.toArray();  
+                // markets = markets.toArray();
+                // txs = txs.toArray();
+                // comments = stableComments;
+                // posts = posts.toArray();
+                // followers = followees.toArray();
+                // followees = followees.toArray();
                 createdAt = createdAt;
                 lastSeenAt = lastSeenAt;
                 modifiedAt = modifiedAt;
@@ -160,16 +160,16 @@ module {
         twitter: Text;
         discord: Text;
         bio: Text;
-        feed: [Feed.FeedItem];
-        balances: [Balance];
-        expBalances: [Balance];
-        depositAddrs: [DepositAddr];  
-        markets: [UserMarket];
-        txs: [Tx.UserTx];
-        comments: [Comment.CommentStable];
-        posts: [Post.Post];
-        followers: [Follower];
-        followees: [Followee];
+        // feed: [Feed.FeedItem];
+        // balances: [Balance];
+        // expBalances: [Balance];
+        // depositAddrs: [DepositAddr];  
+        // markets: [UserMarket];
+        // txs: [Tx.UserTx];
+        // comments: [Comment.CommentStable];
+        // posts: [Post.Post];
+        // followers: [Follower];
+        // followees: [Followee];
         createdAt: Time.Time;
         lastSeenAt: Time.Time;
         modifiedAt: Time.Time;
@@ -184,20 +184,20 @@ module {
             discord = u.discord;
             bio = u.bio;
         };
-        let comments = Array.map(u.comments, func (c: Comment.CommentStable): Comment.Comment {
-            Comment.unFreeze(c)
-        });
+        // let comments = Array.map(u.comments, func (c: Comment.CommentStable): Comment.Comment {
+        //     Comment.unFreeze(c)
+        // });
         var user: User = User(initData);
-        user.feed := Utils.bufferFromArray(u.feed);
-        user.balances := Utils.bufferFromArray(u.balances);
-        user.expBalances := Utils.bufferFromArray(u.expBalances);
-        user.depositAddrs := Utils.bufferFromArray(u.depositAddrs);
-        user.markets := Utils.bufferFromArray(u.markets);
-        user.txs := Utils.bufferFromArray(u.txs);
-        user.comments := Utils.bufferFromArray(comments);
-        user.posts := Utils.bufferFromArray(u.posts);
-        user.followers := Utils.bufferFromArray(u.followers);
-        user.followees := Utils.bufferFromArray(u.followees);
+        // user.feed := Utils.bufferFromArray(u.feed);
+        // user.balances := Utils.bufferFromArray(u.balances);
+        // user.expBalances := Utils.bufferFromArray(u.expBalances);
+        // user.depositAddrs := Utils.bufferFromArray(u.depositAddrs);
+        // user.markets := Utils.bufferFromArray(u.markets);
+        // user.txs := Utils.bufferFromArray(u.txs);
+        // user.comments := Utils.bufferFromArray(comments);
+        // user.posts := Utils.bufferFromArray(u.posts);
+        // user.followers := Utils.bufferFromArray(u.followers);
+        // user.followees := Utils.bufferFromArray(u.followees);
         user.createdAt := u.createdAt;
         user.lastSeenAt := u.lastSeenAt;
         user.modifiedAt := u.modifiedAt;

@@ -296,7 +296,7 @@ shared({ caller = initializer }) actor class Market() = this {
             modifiedAt = Time.now();
         };
 
-        user.markets.add(userMarket);
+        // user.markets.add(userMarket);
         userMap.put(user.id, user);
         
         nextMarketId += 1;
@@ -912,7 +912,7 @@ shared({ caller = initializer }) actor class Market() = this {
     // };
 
     // Add a comment to a market.
-    public shared(msg) func addCommentToMarket(marketId: Nat32, content: Text): async Result.Result<Comment.Comment, M.MarketError> {
+    public shared(msg) func addCommentToMarket(marketId: Nat32, content: Text): async Result.Result<Comment.CommentStable, M.MarketError> {
         assert(not updating);
         
         let userId = Principal.toText(msg.caller);
@@ -947,7 +947,7 @@ shared({ caller = initializer }) actor class Market() = this {
                         let comment: Comment.Comment = Comment.Comment(initData);
                         market.comments.add(comment);
                         
-                        return #ok(comment);
+                        return #ok(comment.freeze());
                     };
                 };
             };
