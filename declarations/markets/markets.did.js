@@ -117,6 +117,21 @@ export const idlFactory = ({ IDL }) => {
     'marketId' : IDL.Nat32,
     'price' : IDL.Float64,
   });
+  const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : CommentStable });
+  const Post = IDL.Record({
+    'id' : IDL.Nat32,
+    'content' : IDL.Text,
+    'createdAt' : Time,
+    'author' : IDL.Text,
+    'likes' : IDL.Vec(Like),
+    'comments' : IDL.Vec(CommentStable),
+  });
+  const FeedItem = IDL.Variant({
+    'bet' : Bet,
+    'post' : Post,
+    'comment' : CommentStable,
+    'market' : MarketStable,
+  });
   const BrierScore = IDL.Record({ 'createdAt' : Time, 'score' : IDL.Float64 });
   const UserMarket = IDL.Record({
     'brierScores' : IDL.Vec(BrierScore),
@@ -132,14 +147,6 @@ export const idlFactory = ({ IDL }) => {
     'marketId' : IDL.Nat32,
     'balances' : IDL.Vec(IDL.Float64),
   });
-  const Post = IDL.Record({
-    'id' : IDL.Nat32,
-    'content' : IDL.Text,
-    'createdAt' : Time,
-    'author' : IDL.Text,
-    'likes' : IDL.Vec(Like),
-    'comments' : IDL.Vec(CommentStable),
-  });
   const Followee = IDL.Record({ 'createdAt' : Time, 'user' : IDL.Text });
   const Follower = IDL.Record({ 'createdAt' : Time, 'user' : IDL.Text });
   const UserStable = IDL.Record({
@@ -149,6 +156,7 @@ export const idlFactory = ({ IDL }) => {
     'twitter' : IDL.Text,
     'lastSeenAt' : Time,
     'modifiedAt' : Time,
+    'feed' : IDL.Vec(FeedItem),
     'createdAt' : Time,
     'markets' : IDL.Vec(UserMarket),
     'picture' : IDL.Text,

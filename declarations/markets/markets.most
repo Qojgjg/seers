@@ -1,6 +1,7 @@
 // Version: 1.0.0
 type AssocList<K, V> = List<(K, V)>;
 type AssocList__1<K, V> = AssocList<K, V>;
+type Bet = {comment : CommentStable; tx : UserTx};
 type Branch<K, V> = {left : Trie<K, V>; right : Trie<K, V>; size : Nat};
 type BrierScore = {createdAt : Time; score : Float};
 type CollateralType = {#cycles; #icp; #seers};
@@ -12,6 +13,13 @@ type CommentStable =
     id : Nat32;
     likes : [Like];
     modifiedAt : Time
+  };
+type FeedItem =
+  {
+    #bet : Bet;
+    #comment : CommentStable;
+    #market : MarketStable;
+    #post : Post
   };
 type Followee = {createdAt : Time; user : Text};
 type Follower = {createdAt : Time; user : Text};
@@ -95,6 +103,7 @@ type UserStable =
     comments : [CommentStable];
     createdAt : Time;
     discord : Text;
+    feed : [FeedItem];
     followees : [Followee];
     followers : [Follower];
     handle : Text;

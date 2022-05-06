@@ -4,6 +4,6 @@ import Tx "Tx";
 module {
     public type Bet = {
         tx: Tx.UserTx;
-        comment: Comment.Comment;
+        comment: Comment.CommentStable;
     };
 }

@@ -1,5 +1,6 @@
 import type { Principal } from '@dfinity/principal';
 export type AccountIdentifier = Array<number>;
+export interface Bet { 'tx' : UserTx, 'comment' : CommentStable }
 export interface BrierScore { 'createdAt' : Time, 'score' : number }
 export type CollateralType = { 'icp' : null } |
   { 'seers' : null } |
@@ -12,6 +13,10 @@ export interface CommentStable {
   'author' : string,
   'likes' : Array<Like>,
 }
+export type FeedItem = { 'bet' : Bet } |
+  { 'post' : Post } |
+  { 'comment' : CommentStable } |
+  { 'market' : MarketStable };
 export interface Followee { 'createdAt' : Time, 'user' : string }
 export interface Follower { 'createdAt' : Time, 'user' : string }
 export interface HistPoint {
@@ -166,6 +171,7 @@ export interface UserStable {
   'twitter' : string,
   'lastSeenAt' : Time,
   'modifiedAt' : Time,
+  'feed' : Array<FeedItem>,
   'createdAt' : Time,
   'markets' : Array<UserMarket>,
   'picture' : string,

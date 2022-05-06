@@ -102,7 +102,7 @@ module {
         public var twitter: Text = initData.twitter;
         public var discord: Text = initData.discord;
         public var bio: Text = initData.bio;
-        // public var feed: Buffer.Buffer<Feed.FeedItem> = Buffer.Buffer<Feed.FeedItem>(5);
+        public var feed: Buffer.Buffer<Feed.FeedItem> = Buffer.Buffer<Feed.FeedItem>(5);
         // public var balances: Buffer.Buffer<Balance> = do {
         //     var b = Buffer.Buffer<Balance>(1);
         //     b.add(#seers(500.0)); // Airdrop
@@ -135,7 +135,7 @@ module {
                 twitter = twitter;
                 discord = discord;
                 bio = bio;
-                // feed = feed.toArray();
+                feed = feed.toArray();
                 // balances = balances.toArray();
                 // expBalances = expBalances.toArray();
                 // depositAddrs = depositAddrs.toArray();  
@@ -160,7 +160,7 @@ module {
         twitter: Text;
         discord: Text;
         bio: Text;
-        // feed: [Feed.FeedItem];
+        feed: [Feed.FeedItem];
         // balances: [Balance];
         // expBalances: [Balance];
         // depositAddrs: [DepositAddr];  
@@ -188,7 +188,7 @@ module {
             Comment.unFreeze(c)
         });
         var user: User = User(initData);
-        // user.feed := Utils.bufferFromArray(u.feed);
+        user.feed := Utils.bufferFromArray(u.feed);
         // user.balances := Utils.bufferFromArray(u.balances);
         // user.expBalances := Utils.bufferFromArray(u.expBalances);
         // user.depositAddrs := Utils.bufferFromArray(u.depositAddrs);
