@@ -135,11 +135,11 @@ type MarketInitData =
    collateralType: CollateralType;
    description: text;
    endDate: Time;
+   id: nat32;
    imageUrl: text;
    images: vec text;
    labels: vec text;
    liquidity: float64;
-   nextId: nat32;
    probabilities: vec float64;
    startDate: Time;
    title: text;

@@ -187,6 +187,26 @@ shared({ caller = initializer }) actor class Market() = this {
         )
     };
 
+    // Read user data corresponding to these user principals.
+    public query func readUserData(users: [Text]): async [Utils.UserData] {
+        return Array.mapFilter<(Text, Utils.UserData), Utils.UserData>(
+            Iter.toArray(userDataMap.entries()), 
+            func (e: (Text, Utils.UserData)): ?Utils.UserData {
+                let exist = Array.find(users, func (p: Text): Bool {
+                    return p == e.0;
+                });
+                switch (exist) {
+                    case (null) {
+                        return null;
+                    };
+                    case (?p) {
+                        return ?e.1;
+                    };
+                }
+            }
+        );
+    };
+
     public shared(msg) func setUpdating(status: Bool): () {
         assert(msg.caller == initializer); // Root call.
         updating := status;

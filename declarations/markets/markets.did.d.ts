@@ -49,6 +49,7 @@ export interface Market {
   'readAllMarkets' : () => Promise<Array<MarketStable>>,
   'readAllUsers' : () => Promise<Array<UserStable>>,
   'readMarket' : (arg_0: number) => Promise<[] | [MarketStable]>,
+  'readUserData' : (arg_0: Array<string>) => Promise<Array<UserData>>,
   'resolveMarket' : (arg_0: number, arg_1: bigint) => Promise<boolean>,
   'setUpdating' : (arg_0: boolean) => Promise<undefined>,
 }
@@ -140,6 +141,11 @@ export type Result_1 = { 'ok' : MarketStable } |
 export type Result_2 = { 'ok' : CommentStable } |
   { 'err' : MarketError };
 export type Time = bigint;
+export interface UserData {
+  'principal' : string,
+  'picture' : string,
+  'handle' : string,
+}
 export type UserError = { 'callerIsAnon' : null } |
   { 'minimalAmountIsOne' : null } |
   { 'userAlreadyExist' : null } |
