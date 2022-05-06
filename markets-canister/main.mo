@@ -202,7 +202,7 @@ shared({ caller = initializer }) actor class Market() = this {
                     case (?p) {
                         return ?e.1;
                     };
-                }
+                };
             }
         );
     };
@@ -1100,6 +1100,12 @@ shared({ caller = initializer }) actor class Market() = this {
                     bio = "";
                 });
 
+                let userData: Utils.UserData = {
+                    principal = user.id;
+                    handle = user.handle;
+                    picture = user.picture;
+                };
+
                 handles := Trie.replace(
                     handles,
                     U.userKey(handle),
@@ -1108,6 +1114,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 ).0;
 
                 userMap.put(userId, user);
+                userDataMap.put(userId, userData);
 
                 return #ok(user);
             };

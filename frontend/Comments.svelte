@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte"
   import SvelteMarkdown from "svelte-markdown"
 
   export let auth
@@ -35,6 +36,15 @@
     }
     commentLabel = "Comment"
   }
+
+  const fetchUserData = async () => {
+    const authors = comments.map((c) => c.author)
+    console.log("authors: " + authors)
+    let response = await $auth.actor.readUserData(authors)
+    console.log(response)
+  }
+
+  onMount(fetchUserData)
 </script>
 
 <div style="width: 100%">
