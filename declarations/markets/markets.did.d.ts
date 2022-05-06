@@ -147,6 +147,7 @@ export type UserError = { 'callerIsAnon' : null } |
 export interface UserStable {
   'id' : string,
   'bio' : string,
+  'txs' : Array<UserTx>,
   'twitter' : string,
   'lastSeenAt' : Time,
   'modifiedAt' : Time,
@@ -158,5 +159,16 @@ export interface UserStable {
   'posts' : Array<Post>,
   'followees' : Array<Followee>,
   'followers' : Array<Follower>,
+}
+export interface UserTx {
+  'id' : number,
+  'fee' : number,
+  'src' : [] | [bigint],
+  'dest' : [] | [bigint],
+  'createdAt' : Time,
+  'recv' : number,
+  'sent' : number,
+  'marketId' : number,
+  'price' : number,
 }
 export interface _SERVICE extends Market {}

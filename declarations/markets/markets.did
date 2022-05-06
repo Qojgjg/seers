@@ -1,3 +1,15 @@
+type UserTx = 
+ record {
+   createdAt: Time;
+   dest: opt nat;
+   fee: float64;
+   id: nat32;
+   marketId: nat32;
+   price: float64;
+   recv: float64;
+   sent: float64;
+   src: opt nat;
+ };
 type UserStable = 
  record {
    bio: text;
@@ -13,6 +25,7 @@ type UserStable =
    picture: text;
    posts: vec Post;
    twitter: text;
+   txs: vec UserTx;
  };
 type UserError = 
  variant {

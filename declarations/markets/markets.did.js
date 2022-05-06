@@ -106,6 +106,17 @@ export const idlFactory = ({ IDL }) => {
     'images' : IDL.Vec(IDL.Text),
   });
   const Result_1 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
+  const UserTx = IDL.Record({
+    'id' : IDL.Nat32,
+    'fee' : IDL.Float64,
+    'src' : IDL.Opt(IDL.Nat),
+    'dest' : IDL.Opt(IDL.Nat),
+    'createdAt' : Time,
+    'recv' : IDL.Float64,
+    'sent' : IDL.Float64,
+    'marketId' : IDL.Nat32,
+    'price' : IDL.Float64,
+  });
   const Post = IDL.Record({
     'id' : IDL.Nat32,
     'content' : IDL.Text,
@@ -119,6 +130,7 @@ export const idlFactory = ({ IDL }) => {
   const UserStable = IDL.Record({
     'id' : IDL.Text,
     'bio' : IDL.Text,
+    'txs' : IDL.Vec(UserTx),
     'twitter' : IDL.Text,
     'lastSeenAt' : Time,
     'modifiedAt' : Time,

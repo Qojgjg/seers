@@ -87,7 +87,20 @@ type UserStable =
     modifiedAt : Time;
     picture : Text;
     posts : [Post];
-    twitter : Text
+    twitter : Text;
+    txs : [UserTx]
+  };
+type UserTx =
+  {
+    createdAt : Time;
+    dest : ?Nat;
+    fee : Float;
+    id : Nat32;
+    marketId : Nat32;
+    price : Float;
+    recv : Float;
+    sent : Float;
+    src : ?Nat
   };
 actor {
   stable var anon : Text;
