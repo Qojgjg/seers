@@ -1,53 +1,23 @@
 // Version: 1.0.0
 type AssocList<K, V> = List<(K, V)>;
 type AssocList__1<K, V> = AssocList<K, V>;
-type Balance = {#btc : Float; #cycles : Float; #icp : Float; #seers : Float};
-type Bet = {comment : Comment; tx : UserTx};
 type Branch<K, V> = {left : Trie<K, V>; right : Trie<K, V>; size : Nat};
-type BrierScore = {createdAt : Time; score : Float};
 type CollateralType = {#cycles; #icp; #seers};
-type Comment =
+type CommentStable =
   {
+    author : Text;
     content : Text;
     createdAt : Time;
     id : Nat32;
     likes : [Like];
-    user : UserData
+    modifiedAt : Time
   };
-type Comment__1 =
-  {
-    content : Text;
-    createdAt : Time;
-    id : Nat32;
-    likes : [Like__1];
-    user : UserData
-  };
-type DepositAddr = {#btc : Text; #cycles : Text; #icp : Text};
-type FeedItem =
-  {#bet : Bet; #comment : Comment; #market : MarketStable; #post : Post};
-type Followee = {createdAt : Time; user : UserData};
-type Follower = {createdAt : Time; user : UserData};
 type Hash = Nat32;
 type HistPoint =
   {createdAt : Time; liquidity : Float; probabilities : [Float]};
 type Key<K> = {hash : Hash; key : K};
 type Leaf<K, V> = {keyvals : AssocList__1<Key<K>, V>; size : Nat};
-type Like =
-  {
-    authorHandle : Text;
-    authorPicture : Text;
-    authorPrincipal : Text;
-    createdAt : Time;
-    stars : Nat32
-  };
-type Like__1 =
-  {
-    authorHandle : Text;
-    authorPicture : Text;
-    authorPrincipal : Text;
-    createdAt : Time;
-    stars : Nat32
-  };
+type Like = {author : Text; createdAt : Time; stars : Nat32};
 type List<T> = ?(T, List<T>);
 type MarketCategory =
   {
@@ -67,7 +37,7 @@ type MarketStable =
     bettors : [Text];
     category : MarketCategory;
     collateralType : CollateralType;
-    comments : [Comment];
+    comments : [CommentStable];
     createdAt : Time;
     description : Text;
     endDate : Time;
@@ -90,75 +60,19 @@ type MarketStable =
   };
 type MarketState =
   {#approved; #closed; #invalid; #open; #pending; #resolved : Nat};
-type Post =
-  {
-    author : UserData;
-    comments : [Comment];
-    content : Text;
-    createdAt : Time;
-    id : Nat32;
-    likes : [Like]
-  };
-type Post__1 =
-  {
-    author : UserData;
-    comments : [Comment__1];
-    content : Text;
-    createdAt : Time;
-    id : Nat32;
-    likes : [Like__1]
-  };
 type Time = Int;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
-type UserData = {handle : Text; picture : Text; principal : Text};
-type UserMarket =
-  {
-    author : Bool;
-    balances : [Float];
-    brierScores : [BrierScore];
-    collateralType : CollateralType;
-    createdAt : Time;
-    labels : [Text];
-    marketId : Nat32;
-    modifiedAt : Time;
-    redeemed : Bool;
-    shares : Float;
-    spent : Float;
-    title : Text
-  };
 type UserStable =
   {
-    balances : [Balance];
     bio : Text;
-    comments : [Comment__1];
     createdAt : Time;
-    depositAddrs : [DepositAddr];
     discord : Text;
-    expBalances : [Balance];
-    feed : [FeedItem];
-    followees : [Followee];
-    followers : [Follower];
     handle : Text;
     id : Text;
     lastSeenAt : Time;
-    markets : [UserMarket];
     modifiedAt : Time;
     picture : Text;
-    posts : [Post__1];
-    twitter : Text;
-    txs : [UserTx]
-  };
-type UserTx =
-  {
-    createdAt : Time;
-    dest : ?Nat;
-    fee : Float;
-    id : Nat32;
-    marketId : Nat32;
-    price : Float;
-    recv : Float;
-    sent : Float;
-    src : ?Nat
+    twitter : Text
   };
 actor {
   stable var anon : Text;

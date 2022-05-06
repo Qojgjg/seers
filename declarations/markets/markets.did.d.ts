@@ -11,6 +11,8 @@ export interface CommentStable {
   'author' : string,
   'likes' : Array<Like>,
 }
+export interface Followee { 'createdAt' : Time, 'user' : string }
+export interface Follower { 'createdAt' : Time, 'user' : string }
 export interface HistPoint {
   'probabilities' : Array<number>,
   'createdAt' : Time,
@@ -145,5 +147,7 @@ export interface UserStable {
   'discord' : string,
   'handle' : string,
   'comments' : Array<CommentStable>,
+  'followees' : Array<Followee>,
+  'followers' : Array<Follower>,
 }
 export interface _SERVICE extends Market {}

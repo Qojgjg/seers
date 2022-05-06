@@ -118,8 +118,8 @@ module {
         // public var txs: Buffer.Buffer<Tx.UserTx> = Buffer.Buffer<Tx.UserTx>(5);
         public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(5);
         // public var posts: Buffer.Buffer<Post.Post> = Buffer.Buffer<Post.Post>(5);
-        // public var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
-        // public var followees: Buffer.Buffer<Followee> = Buffer.Buffer<Followee>(5);
+        public var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
+        public var followees: Buffer.Buffer<Followee> = Buffer.Buffer<Followee>(5);
         public var createdAt: Time.Time = Time.now();
         public var lastSeenAt: Time.Time = Time.now();
         public var modifiedAt: Time.Time = Time.now();
@@ -143,8 +143,8 @@ module {
                 // txs = txs.toArray();
                 comments = stableComments;
                 // posts = posts.toArray();
-                // followers = followees.toArray();
-                // followees = followees.toArray();
+                followers = followees.toArray();
+                followees = followees.toArray();
                 createdAt = createdAt;
                 lastSeenAt = lastSeenAt;
                 modifiedAt = modifiedAt;
@@ -168,8 +168,8 @@ module {
         // txs: [Tx.UserTx];
         comments: [Comment.CommentStable];
         // posts: [Post.Post];
-        // followers: [Follower];
-        // followees: [Followee];
+        followers: [Follower];
+        followees: [Followee];
         createdAt: Time.Time;
         lastSeenAt: Time.Time;
         modifiedAt: Time.Time;
@@ -196,8 +196,8 @@ module {
         // user.txs := Utils.bufferFromArray(u.txs);
         user.comments := Utils.bufferFromArray(comments);
         // user.posts := Utils.bufferFromArray(u.posts);
-        // user.followers := Utils.bufferFromArray(u.followers);
-        // user.followees := Utils.bufferFromArray(u.followees);
+        user.followers := Utils.bufferFromArray(u.followers);
+        user.followees := Utils.bufferFromArray(u.followees);
         user.createdAt := u.createdAt;
         user.lastSeenAt := u.lastSeenAt;
         user.modifiedAt := u.modifiedAt;

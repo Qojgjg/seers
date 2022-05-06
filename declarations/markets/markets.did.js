@@ -106,6 +106,8 @@ export const idlFactory = ({ IDL }) => {
     'images' : IDL.Vec(IDL.Text),
   });
   const Result_1 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
+  const Followee = IDL.Record({ 'createdAt' : Time, 'user' : IDL.Text });
+  const Follower = IDL.Record({ 'createdAt' : Time, 'user' : IDL.Text });
   const UserStable = IDL.Record({
     'id' : IDL.Text,
     'bio' : IDL.Text,
@@ -117,6 +119,8 @@ export const idlFactory = ({ IDL }) => {
     'discord' : IDL.Text,
     'handle' : IDL.Text,
     'comments' : IDL.Vec(CommentStable),
+    'followees' : IDL.Vec(Followee),
+    'followers' : IDL.Vec(Follower),
   });
   const UserError = IDL.Variant({
     'callerIsAnon' : IDL.Null,

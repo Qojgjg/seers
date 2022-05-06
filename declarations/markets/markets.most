@@ -12,6 +12,8 @@ type CommentStable =
     likes : [Like];
     modifiedAt : Time
   };
+type Followee = {createdAt : Time; user : Text};
+type Follower = {createdAt : Time; user : Text};
 type Hash = Nat32;
 type HistPoint =
   {createdAt : Time; liquidity : Float; probabilities : [Float]};
@@ -68,6 +70,8 @@ type UserStable =
     comments : [CommentStable];
     createdAt : Time;
     discord : Text;
+    followees : [Followee];
+    followers : [Follower];
     handle : Text;
     id : Text;
     lastSeenAt : Time;

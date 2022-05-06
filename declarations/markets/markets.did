@@ -4,6 +4,8 @@ type UserStable =
    comments: vec CommentStable;
    createdAt: Time;
    discord: text;
+   followees: vec Followee;
+   followers: vec Follower;
    handle: text;
    id: text;
    lastSeenAt: Time;
@@ -159,6 +161,16 @@ type HistPoint =
    createdAt: Time;
    liquidity: float64;
    probabilities: vec float64;
+ };
+type Follower = 
+ record {
+   createdAt: Time;
+   user: text;
+ };
+type Followee = 
+ record {
+   createdAt: Time;
+   user: text;
  };
 type CommentStable = 
  record {
