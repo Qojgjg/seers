@@ -1,7 +1,7 @@
 <script lang="ts">
   import SvelteMarkdown from "svelte-markdown"
 
-  export let comments
+  export let comments = []
 
   let imageUrl = ""
   let comment = ""

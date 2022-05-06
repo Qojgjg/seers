@@ -269,7 +269,8 @@ shared({ caller = initializer }) actor class Market() = this {
         // Dummy value.
         let shares = Float.sqrt(0);
 
-        let newMarket = M.Market(marketInitData);
+        var newMarket = M.Market(marketInitData);
+        newMarket.author := author;
 
         // Update provider.
         var user = switch (getUser(author)) {
@@ -296,7 +297,7 @@ shared({ caller = initializer }) actor class Market() = this {
             modifiedAt = Time.now();
         };
 
-        // user.markets.add(userMarket);
+        user.markets.add(userMarket);
         userMap.put(user.id, user);
         
         nextMarketId += 1;

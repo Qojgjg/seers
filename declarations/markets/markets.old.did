@@ -16,6 +16,7 @@ type UserStable =
    comments: vec CommentStable;
    createdAt: Time;
    discord: text;
+   feed: vec FeedItem;
    followees: vec Followee;
    followers: vec Follower;
    handle: text;
@@ -195,6 +196,13 @@ type Followee =
    createdAt: Time;
    user: text;
  };
+type FeedItem = 
+ variant {
+   bet: Bet;
+   comment: CommentStable;
+   market: MarketStable;
+   post: Post;
+ };
 type CommentStable = 
  record {
    author: text;
@@ -214,6 +222,11 @@ type BrierScore =
  record {
    createdAt: Time;
    score: float64;
+ };
+type Bet = 
+ record {
+   comment: CommentStable;
+   tx: UserTx;
  };
 type AccountIdentifier = blob;
 service : {

@@ -120,7 +120,7 @@
           {errorRefresh}
         </div>
       </div>
-      {#if user.ownMarkets.length > 0}
+      {#if user.ownMarkets?.length > 0}
         <div style="display:flex; flex-direction: column;width: 100%">
           My markets
           {#each user.ownMarkets as market}
@@ -151,7 +151,7 @@
           {/each}
         </div>
         <div style="display:flex; flex-direction: column;width: 100%">
-          {#if user.otherMarkets.length > 0}
+          {#if user.otherMarkets?.length > 0}
             Portfolio
             {#each user.otherMarkets as market}
               <a href="/market/{market.marketId}">

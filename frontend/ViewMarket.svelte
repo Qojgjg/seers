@@ -105,7 +105,9 @@
     market = await $auth.actor.readMarket(parseInt(id))
     if (market) {
       market = market[0]
-      selectedLabel = market.labels[0]
+      if (market) {
+        selectedLabel = market.labels[0]
+      }
     }
     selected = 0
     buttonLabel = "Buy " + selectedLabel
