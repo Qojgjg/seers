@@ -100,13 +100,13 @@
         Principal: {user.id}
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Balance: {Object.entries(user.balances).map(([k, v]) => {
-          return ` ${Number(v).toFixed(2)} ${k}`
+        Balance: {user.balances.map((o) => {
+          return ` ${Number(Object.values(o)).toFixed(2)} ${Object.keys(o)}`
         })}
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Expected Balance: {Object.entries(user.expBalances).map(([k, v]) => {
-          return ` ${Number(v).toFixed(2)} ${k}`
+        Expected Balance: {user.expBalances.map((o) => {
+          return ` ${Number(Object.values(o)).toFixed(2)} ${Object.keys(o)}`
         })}
       </div>
       <div
