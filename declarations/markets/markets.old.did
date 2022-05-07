@@ -67,6 +67,12 @@ type UserError =
    titleMissing;
    userAlreadyExist;
  };
+type UserData = 
+ record {
+   handle: text;
+   picture: text;
+   "principal": text;
+ };
 type Time = int;
 type Result_2 = 
  variant {
@@ -94,6 +100,7 @@ type Post =
  };
 type MarketState = 
  variant {
+   any;
    approved;
    closed;
    invalid;
@@ -166,6 +173,7 @@ type MarketError =
  };
 type MarketCategory = 
  variant {
+   any;
    business;
    crypto;
    dfinity;
@@ -174,6 +182,7 @@ type MarketCategory =
    politics;
    science;
    seers;
+   self;
    sports;
  };
 type Like = 
@@ -254,9 +263,10 @@ service : {
   createMarket: (MarketInitData) -> (Result_1);
   createUser: (text) -> (Result);
   getUserStable: (text) -> (opt UserStable) query;
-  readAllMarkets: () -> (vec MarketStable) query;
+  readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
   readAllUsers: () -> (vec UserStable) query;
   readMarket: (nat32) -> (opt MarketStable) query;
+  readUserData: (vec text) -> (vec UserData) query;
   resolveMarket: (nat32, nat) -> (bool);
   setUpdating: (bool) -> () oneway;
 }

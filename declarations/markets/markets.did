@@ -100,6 +100,7 @@ type Post =
  };
 type MarketState = 
  variant {
+   any;
    approved;
    closed;
    invalid;
@@ -172,6 +173,7 @@ type MarketError =
  };
 type MarketCategory = 
  variant {
+   any;
    business;
    crypto;
    dfinity;
@@ -180,6 +182,7 @@ type MarketCategory =
    politics;
    science;
    seers;
+   self;
    sports;
  };
 type Market = 
@@ -192,7 +195,7 @@ type Market =
    createMarket: (MarketInitData) -> (Result_1);
    createUser: (text) -> (Result);
    getUserStable: (text) -> (opt UserStable) query;
-   readAllMarkets: () -> (vec MarketStable) query;
+   readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
    readAllUsers: () -> (vec UserStable) query;
    readMarket: (nat32) -> (opt MarketStable) query;
    readUserData: (vec text) -> (vec UserData) query;

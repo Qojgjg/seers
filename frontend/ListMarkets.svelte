@@ -8,11 +8,17 @@
   let markets = []
   let openMarkets = []
   let resolvedMarkets = []
+  let categorySelected = "any"
+  let stateSelected = "any"
 
   const runOnMount = async () => {
-    markets = await $auth.actor.readAllMarkets()
-    openMarkets = markets.filter((m) => "open" in m.state)
-    resolvedMarkets = markets.filter((m) => "resolved" in m.state)
+    let category = {}
+    let state = {}
+    category[categorySelected] = null
+    state[stateSelected] = null
+    console.log(category)
+    console.log(state)
+    markets = await $auth.actor.readAllMarkets(category, state)
   }
 
   const printFloat = (x) => {
@@ -34,9 +40,10 @@
 >
   <div style="margin-right: 30px;">
     <select
+      bind:value={categorySelected}
       style="background: rgb(25, 27, 31); color: white; border: grey; width: 200px; padding: 5px;"
     >
-      <option value="all">All</option>
+      <option value="any">All</option>
       <option value="crypto">Crypto</option>
       <option value="sports">Sports</option>
       <option value="politics">Politics</option>
@@ -48,8 +55,10 @@
   </div>
   <div>
     <select
+      bind:value={stateSelected}
       style="background: rgb(25, 27, 31); color: white; border: grey; width: 200px; padding: 5px;"
     >
+      <option value="any">All</option>
       <option value="open">Open</option>
       <option value="submitted">Submitted</option>
       <option value="closed">Closed</option>
@@ -58,91 +67,92 @@
   </div>
 </div>
 <div class="rowList">
-  {#each openMarkets as market}
-    <div class="responsiveItem">
-      <a href="market/{market.id}">
-        <div class="gallery">
-          <div>
-            <img src={market.imageUrl} alt="random" />
-          </div>
-          <div class="content">
-            <h4 style="padding-top: 0;margin-top:0">
-              {market.title}
-            </h4>
-            <div
-              style="margin-top: 10px; margin-bottom: 10px; max-height: 80px; overflow:hidden;"
-            >
-              {#each market.labels as label, i}
-                <div style="width: 100%; display: flex; font-size: 1.2em;">
-                  <div style="width: 50%">{label}</div>
-                  <div style="width: 50%">
-                    {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
+  {#each markets as market}
+    {#if !market.state["resolved"]}
+      <div class="responsiveItem">
+        <a href="market/{market.id}">
+          <div class="gallery">
+            <div>
+              <img src={market.imageUrl} alt="random" />
+            </div>
+            <div class="content">
+              <h4 style="padding-top: 0;margin-top:0">
+                {market.title}
+              </h4>
+              <div
+                style="margin-top: 10px; margin-bottom: 10px; max-height: 80px; overflow:hidden;"
+              >
+                {#each market.labels as label, i}
+                  <div style="width: 100%; display: flex; font-size: 1.2em;">
+                    <div style="width: 50%">{label}</div>
+                    <div style="width: 50%">
+                      {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
+                    </div>
                   </div>
+                {/each}
+              </div>
+              <div
+                style="width: 100%; display: flex; flex-direction: row; font-size: 1em; padding-top: 5px"
+              >
+                <div style="width: 50%; ">
+                  Volume: {printFloat(market.volume)} &Sigma;
                 </div>
-              {/each}
-            </div>
-            <div
-              style="width: 100%; display: flex; flex-direction: row; font-size: 1em; padding-top: 5px"
-            >
-              <div style="width: 50%; ">
-                Volume: {printFloat(market.volume)} &Sigma;
-              </div>
-              <div style="width: 50%">
-                Liquidity: {printFloat(market.liquidity)} &Sigma;
+                <div style="width: 50%">
+                  Liquidity: {printFloat(market.liquidity)} &Sigma;
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </a>
-    </div>
-  {/each}
-  {#each resolvedMarkets as market}
-    <div class="responsiveItem">
-      <a href="market/{market.id}">
-        <div class="gallery">
-          <div>
-            <img
-              src={market.imageUrl}
-              alt="random"
-              style="filter: brightness(50%);"
-            />
-          </div>
-          <div class="content-resolved">
-            <h4 style="padding-top: 0;margin-top:0">
-              {market.title}
-              <span style="color: hotpink;">
-                Resolved to {market.labels[market.state["resolved"]].slice(
-                  0,
-                  20,
-                )}
-              </span>
-            </h4>
-            <div
-              style="margin-top: 10px; margin-bottom: 10px; max-height: 80px; overflow:hidden;"
-            >
-              {#each market.labels as label, i}
-                <div style="width: 100%; display: flex; font-size: 1.2em;">
-                  <div style="width: 50%">{label}</div>
-                  <div style="width: 50%">
-                    {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
+        </a>
+      </div>
+    {:else}
+      <div class="responsiveItem">
+        <a href="market/{market.id}">
+          <div class="gallery">
+            <div>
+              <img
+                src={market.imageUrl}
+                alt="random"
+                style="filter: brightness(50%);"
+              />
+            </div>
+            <div class="content-resolved">
+              <h4 style="padding-top: 0;margin-top:0">
+                {market.title}
+                <span style="color: hotpink;">
+                  Resolved to {market.labels[market.state["resolved"]].slice(
+                    0,
+                    20,
+                  )}
+                </span>
+              </h4>
+              <div
+                style="margin-top: 10px; margin-bottom: 10px; max-height: 80px; overflow:hidden;"
+              >
+                {#each market.labels as label, i}
+                  <div style="width: 100%; display: flex; font-size: 1.2em;">
+                    <div style="width: 50%">{label}</div>
+                    <div style="width: 50%">
+                      {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
+                    </div>
                   </div>
-                </div>
-              {/each}
-            </div>
-            <div
-              style="width: 100%; display: flex; flex-direction: row; font-size: 1em; padding-top: 5px"
-            >
-              <div style="width: 50%; ">
-                Volume: {printFloat(market.volume)} &Sigma;
+                {/each}
               </div>
-              <div style="width: 50%">
-                Liquidity: {printFloat(market.liquidity)} &Sigma;
+              <div
+                style="width: 100%; display: flex; flex-direction: row; font-size: 1em; padding-top: 5px"
+              >
+                <div style="width: 50%; ">
+                  Volume: {printFloat(market.volume)} &Sigma;
+                </div>
+                <div style="width: 50%">
+                  Liquidity: {printFloat(market.liquidity)} &Sigma;
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </a>
-    </div>
+        </a>
+      </div>
+    {/if}
   {/each}
 </div>
 

@@ -46,14 +46,18 @@ export interface Market {
   'createMarket' : (arg_0: MarketInitData) => Promise<Result_1>,
   'createUser' : (arg_0: string) => Promise<Result>,
   'getUserStable' : (arg_0: string) => Promise<[] | [UserStable]>,
-  'readAllMarkets' : () => Promise<Array<MarketStable>>,
+  'readAllMarkets' : (arg_0: MarketCategory, arg_1: MarketState) => Promise<
+      Array<MarketStable>
+    >,
   'readAllUsers' : () => Promise<Array<UserStable>>,
   'readMarket' : (arg_0: number) => Promise<[] | [MarketStable]>,
   'readUserData' : (arg_0: Array<string>) => Promise<Array<UserData>>,
   'resolveMarket' : (arg_0: number, arg_1: bigint) => Promise<boolean>,
   'setUpdating' : (arg_0: boolean) => Promise<undefined>,
 }
-export type MarketCategory = { 'entertainment' : null } |
+export type MarketCategory = { 'any' : null } |
+  { 'entertainment' : null } |
+  { 'self' : null } |
   { 'seers' : null } |
   { 'crypto' : null } |
   { 'business' : null } |
@@ -120,7 +124,8 @@ export interface MarketStable {
   'startDate' : Time,
   'images' : Array<string>,
 }
-export type MarketState = { 'resolved' : bigint } |
+export type MarketState = { 'any' : null } |
+  { 'resolved' : bigint } |
   { 'closed' : null } |
   { 'pending' : null } |
   { 'invalid' : null } |

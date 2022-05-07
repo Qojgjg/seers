@@ -393,13 +393,21 @@ shared({ caller = initializer }) actor class Market() = this {
 
 
     // Read all markets.
-    public query func readAllMarkets(): async [M.MarketStable] {
-        Array.map<(Nat32, M.Market), M.MarketStable>(
+    public query func readAllMarkets(
+        category: M.MarketCategory,
+        state: M.MarketState,
+    ): async [M.MarketStable] {
+        return Array.mapFilter<(Nat32, M.Market), M.MarketStable>(
             Iter.toArray(marketMap.entries()),
-            func (e: (Nat32, M.Market)): M.MarketStable {
-                e.1.freeze()
+            func (e: (Nat32, M.Market)): ?M.MarketStable {
+                Debug.print(debug_show(state, category));
+                if ((category == #any or e.1.category == category)
+                    and (state == #any or e.1.state == state)) {
+                        return ?e.1.freeze();
+                };
+                return null;
             }
-        )
+        );
     };
 
     // Read all open markets.

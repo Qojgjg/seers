@@ -41,7 +41,9 @@ export const idlFactory = ({ IDL }) => {
     'cycles' : IDL.Null,
   });
   const MarketCategory = IDL.Variant({
+    'any' : IDL.Null,
     'entertainment' : IDL.Null,
+    'self' : IDL.Null,
     'seers' : IDL.Null,
     'crypto' : IDL.Null,
     'business' : IDL.Null,
@@ -72,6 +74,7 @@ export const idlFactory = ({ IDL }) => {
     'liquidity' : IDL.Float64,
   });
   const MarketState = IDL.Variant({
+    'any' : IDL.Null,
     'resolved' : IDL.Nat,
     'closed' : IDL.Null,
     'pending' : IDL.Null,
@@ -215,7 +218,11 @@ export const idlFactory = ({ IDL }) => {
     'createMarket' : IDL.Func([MarketInitData], [Result_1], []),
     'createUser' : IDL.Func([IDL.Text], [Result], []),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
-    'readAllMarkets' : IDL.Func([], [IDL.Vec(MarketStable)], ['query']),
+    'readAllMarkets' : IDL.Func(
+        [MarketCategory, MarketState],
+        [IDL.Vec(MarketStable)],
+        ['query'],
+      ),
     'readAllUsers' : IDL.Func([], [IDL.Vec(UserStable)], ['query']),
     'readMarket' : IDL.Func([IDL.Nat32], [IDL.Opt(MarketStable)], ['query']),
     'readUserData' : IDL.Func(

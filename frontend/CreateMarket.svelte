@@ -94,7 +94,7 @@
       </div>
       <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">Image Preview:</div>
-        <div><img src={imageUrl} alt="preview" /></div>
+        <div><img src={imageUrl} alt="preview" style="width: 100px" /></div>
       </div>
       <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">Options:</div>

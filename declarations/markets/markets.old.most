@@ -34,6 +34,7 @@ type Like = {author : Text; createdAt : Time; stars : Nat32};
 type List<T> = ?(T, List<T>);
 type MarketCategory =
   {
+    #any;
     #business;
     #crypto;
     #dfinity;
@@ -42,6 +43,7 @@ type MarketCategory =
     #politics;
     #science;
     #seers;
+    #self;
     #sports
   };
 type MarketStable =
@@ -72,7 +74,7 @@ type MarketStable =
     volume : Float
   };
 type MarketState =
-  {#approved; #closed; #invalid; #open; #pending; #resolved : Nat};
+  {#any; #approved; #closed; #invalid; #open; #pending; #resolved : Nat};
 type Post =
   {
     author : Text;

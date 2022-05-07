@@ -35,15 +35,17 @@ module {
     };
 
     public type MarketState = {
-        #pending: ();
-        #approved: ();
-        #open: ();
-        #closed: ();
-        #invalid: ();
+        #any;
+        #pending;
+        #approved;
+        #open;
+        #closed;
+        #invalid;
         #resolved: Nat;
     };
 
     public type MarketCategory = {
+        #any;
         #crypto;
         #science;
         #politics;
@@ -53,6 +55,7 @@ module {
         #financial;
         #seers;
         #dfinity;
+        #self;
     };
 
     public type MarketInitData = {
