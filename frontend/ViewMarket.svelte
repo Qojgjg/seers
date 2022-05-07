@@ -16,20 +16,8 @@
 
   let market
   let marketId
-  let seerAmount = 0
-  let selected = 0
   let selectedLabel
-  let buyOptClass = "BuyOptSelected"
-  let sellOptClass = "SellOpt"
-  let buyTokens = true
-  let buttonLabel
-  let tokensEstimate = 0.0
-  let response = null
-  let errorResponse = ""
-  let comment = ""
   let comments
-  let commentLabel = "Comment"
-  let commentErrorResponse = ""
   let myChart
 
   const createChart = () => {
@@ -95,15 +83,6 @@
     })
   }
 
-  const splitCamelCaseToString = (s) => {
-    return s
-      .split(/(?=[A-Z])/)
-      .map((p) => {
-        return p[0].toUpperCase() + p.slice(1)
-      })
-      .join(" ")
-  }
-
   const readMarket = async () => {
     createChart()
     market = await $auth.actor.readMarket(parseInt(id))
@@ -131,81 +110,6 @@
         comments = completeComments
       }
     }
-    selected = 0
-    buttonLabel = "Buy " + selectedLabel
-  }
-
-  const postComment = async () => {
-    commentLabel = "Processing..."
-    let response = await $auth.actor.addCommentToMarket(market.id, comment)
-
-    if (response["err"]) {
-      commentErrorResponse =
-        "Error: " +
-        splitCamelCaseToString(Object.keys(response["err"]).toString())
-    } else {
-      commentErrorResponse = ""
-      readMarket()
-      comment = ""
-    }
-    commentLabel = "Comment"
-  }
-
-  // let typingTimer //timer identifier
-
-  // const debounce = (id, a, ms) => {
-  //   tokensEstimate = 0
-  //   clearTimeout(typingTimer)
-  //   if (seerAmount) {
-  //     typingTimer = setTimeout(() => dryRun(id, a), ms)
-  //   }
-  // }
-
-  const dryRun = async (marketId, amount) => {
-    amount = parseInt(amount)
-    console.log("Selected: " + selected)
-    if (buyTokens) {
-      response = await $auth.actor.buyOption(marketId, amount, selected, false)
-    } else {
-      response = await $auth.actor.sellOption(marketId, amount, selected, false)
-    }
-
-    if (response["err"]) {
-      errorResponse =
-        "Error: " +
-        splitCamelCaseToString(Object.keys(response["err"]).toString())
-    } else {
-      errorResponse = ""
-      tokensEstimate = response["ok"]
-    }
-  }
-
-  const doIt = async (marketId, amount) => {
-    errorResponse = ""
-    buttonLabel = "Processing..."
-    amount = parseInt(amount)
-    console.log("Selected: " + selected)
-
-    if (buyTokens) {
-      response = await $auth.actor.buyOption(marketId, amount, selected, true)
-    } else {
-      response = await $auth.actor.sellOption(marketId, amount, selected, true)
-    }
-    if (response["err"]) {
-      errorResponse =
-        "Error: " +
-        splitCamelCaseToString(Object.keys(response["err"]).toString())
-      tokensEstimate = 0.0
-    } else {
-      errorResponse = ""
-      tokensEstimate = 0.0
-    }
-    if (buyTokens) buttonLabel = "Buy " + selectedLabel
-    else buttonLabel = "Sell " + selectedLabel
-
-    readMarket()
-
-    return [errorResponse, tokensEstimate]
   }
 
   onMount(readMarket)
@@ -256,7 +160,7 @@
       </div>
     </div>
 
-    <div style="">
+    <div style="width: 600px">
       <canvas id="myChart" />
     </div>
 
@@ -266,7 +170,7 @@
     </div>
     <div style="width: 100%; display:flex">
       <div>
-        <Trade />
+        <Trade {auth} {readMarket} />
       </div>
       <div>
         <Forecast />

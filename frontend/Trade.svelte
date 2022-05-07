@@ -3,6 +3,9 @@
   import Modal from "./Modal.svelte"
   import { modal } from "./store/stores.js"
 
+  export let auth
+  export let readMarket
+
   let id
   let startDate
   let endDate
@@ -13,7 +16,7 @@
   let seerAmount
   let labels = ["Yes", "No"]
   let principal
-
+  let response
   let errorResponse = ""
 
   let buyOptClass = "BuyOptSelected"
@@ -44,8 +47,64 @@
     tokensEstimate = 0
     clearTimeout(typingTimer)
     if (seerAmount) {
-      //   typingTimer = setTimeout(() => dryRun(id, a), ms)
+      typingTimer = setTimeout(() => dryRun(id, a), ms)
     }
+  }
+
+  const splitCamelCaseToString = (s) => {
+    return s
+      .split(/(?=[A-Z])/)
+      .map((p) => {
+        return p[0].toUpperCase() + p.slice(1)
+      })
+      .join(" ")
+  }
+
+  const dryRun = async (marketId, amount) => {
+    amount = parseInt(amount)
+    console.log("Selected: " + selected)
+    if (buyTokens) {
+      response = await $auth.actor.buyOption(marketId, amount, selected, false)
+    } else {
+      response = await $auth.actor.sellOption(marketId, amount, selected, false)
+    }
+
+    if (response["err"]) {
+      errorResponse =
+        "Error: " +
+        splitCamelCaseToString(Object.keys(response["err"]).toString())
+    } else {
+      errorResponse = ""
+      tokensEstimate = response["ok"]
+    }
+  }
+
+  const doIt = async (marketId, amount) => {
+    errorResponse = ""
+    buttonLabel = "Processing..."
+    amount = parseInt(amount)
+    console.log("Selected: " + selected)
+
+    if (buyTokens) {
+      response = await $auth.actor.buyOption(marketId, amount, selected, true)
+    } else {
+      response = await $auth.actor.sellOption(marketId, amount, selected, true)
+    }
+    if (response["err"]) {
+      errorResponse =
+        "Error: " +
+        splitCamelCaseToString(Object.keys(response["err"]).toString())
+      tokensEstimate = 0.0
+    } else {
+      errorResponse = ""
+      tokensEstimate = 0.0
+    }
+    if (buyTokens) buttonLabel = "Buy " + selectedLabel
+    else buttonLabel = "Sell " + selectedLabel
+
+    readMarket()
+
+    return [errorResponse, tokensEstimate]
   }
 </script>
 
@@ -138,7 +197,7 @@
               <Content
                 onOk={() => {
                   let res = 0
-                  //   doIt(market.id, seerAmount)
+                  doIt(market.id, seerAmount)
                   seerAmount = 0.0
                   tokensEstimate = 0.0
                   return res
