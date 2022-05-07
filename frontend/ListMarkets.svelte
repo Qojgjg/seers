@@ -85,7 +85,7 @@
                   <div style="width: 100%; display: flex; font-size: 1.2em;">
                     <div style="width: 50%">{label}</div>
                     <div style="width: 50%">
-                      {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
+                      {Number(market.probabilities[i]).toFixed(2)} &Sigma;
                     </div>
                   </div>
                 {/each}
@@ -132,7 +132,7 @@
                   <div style="width: 100%; display: flex; font-size: 1.2em;">
                     <div style="width: 50%">{label}</div>
                     <div style="width: 50%">
-                      {(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;
+                      {Number(market.probabilities[i]).toFixed(2)} &Sigma;
                     </div>
                   </div>
                 {/each}

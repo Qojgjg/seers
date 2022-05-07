@@ -115,7 +115,6 @@
           bind:value={categorySelected}
           style="background: white; color: black; width: 200px;"
         >
-          <option value="any">All</option>
           <option value="crypto">Crypto</option>
           <option value="sports">Sports</option>
           <option value="politics">Politics</option>
