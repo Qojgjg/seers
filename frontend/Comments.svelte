@@ -54,7 +54,7 @@
       <textarea
         bind:value={comment}
         rows="10"
-        style="height: auto; width: 100%; font-size: 1.3em"
+        style="height: auto; width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 1px solid rgb(90, 58, 81);"
         placeholder="Please share your insight"
       />
       <div style="display:flex; justify-content: right">
