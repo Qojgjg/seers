@@ -39,11 +39,7 @@
   style="width: 100%; text-align:center;display: flex; justify-content:center; padding: 30px;"
 >
   <div style="margin-right: 30px;">
-    <select
-      bind:value={categorySelected}
-      on:change={runOnMount}
-      style="background: rgb(25, 27, 31); color: white; border: grey; width: 200px; padding: 5px;"
-    >
+    <select bind:value={categorySelected} on:change={runOnMount}>
       <option value="any">All</option>
       <option value="crypto">Crypto</option>
       <option value="sports">Sports</option>
@@ -52,19 +48,20 @@
       <option value="science">Science</option>
       <option value="business">Business</option>
       <option value="finance">Finance</option>
+      <option value="seers">Seers</option>
+      <option value="dfinity">Internet Computer</option>
+      <option value="self">Self Referential</option>
     </select>
   </div>
   <div>
-    <select
-      bind:value={stateSelected}
-      on:change={runOnMount}
-      style="background: rgb(25, 27, 31); color: white; border: grey; width: 200px; padding: 5px;"
-    >
+    <select bind:value={stateSelected} on:change={runOnMount}>
       <option value="any">All</option>
+      <option value="pending">Pending</option>
+      <option value="approved">Approved</option>
       <option value="open">Open</option>
-      <option value="submitted">Submitted</option>
       <option value="closed">Closed</option>
       <option value="resolved">Resolved</option>
+      <option value="invalid">Invalid</option>
     </select>
   </div>
 </div>

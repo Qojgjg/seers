@@ -14,6 +14,7 @@
   let buttonLabel = "Create"
   let errorResponse = ""
   let createResult = null
+  let categorySelected
 
   const splitCamelCaseToString = (s) => {
     return s
@@ -36,6 +37,8 @@
       probabilities.push(Math.floor(1 / labelsA.length))
     }
 
+    let category = {}
+    category[categorySelected] = null
     const marketInitData = {
       id: 0,
       title: newMarketTitle,
@@ -43,7 +46,7 @@
       labels: labelsA,
       images: imagesA,
       probabilities: probabilities,
-      category: { crypto: null },
+      category: category,
       liquidity: liquidity,
       startDate: Date.parse(startDate) * 1_000_000,
       endDate: Date.parse(endDate) * 1_000_000,
@@ -105,6 +108,25 @@
       <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
         <div style="font-size: 1.5em">End date:</div>
         <div><input bind:value={endDate} size="20" maxlength="30" /></div>
+      </div>
+      <div style="width: 80%;padding: 1em; text-align:left; font-size: 0.7em">
+        <div style="font-size: 1.5em">Category:</div>
+        <select
+          bind:value={categorySelected}
+          style="background: white; color: black; width: 200px;"
+        >
+          <option value="any">All</option>
+          <option value="crypto">Crypto</option>
+          <option value="sports">Sports</option>
+          <option value="politics">Politics</option>
+          <option value="entertainment">Entertainment</option>
+          <option value="science">Science</option>
+          <option value="business">Business</option>
+          <option value="finance">Finance</option>
+          <option value="seers">Seers</option>
+          <option value="dfinity">Internet Computer</option>
+          <option value="self">Self Referential</option>
+        </select>
       </div>
       {#if principal !== ""}
         <div style="width: 100%;text-align:center; ">

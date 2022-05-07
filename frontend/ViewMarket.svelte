@@ -474,13 +474,15 @@
     outline: none;
   }
   select {
+    border: 1px solid rgb(90, 58, 81);
     background-color: rgb(25, 27, 31);
     color: rgb(255, 255, 255);
-    border: 0;
     height: 30px;
     margin-top: 10px;
     font-size: 1.2em;
     text-align: center;
+    width: 200px;
+    padding: 5px;
   }
   .header {
     display: flex;
