@@ -34,7 +34,7 @@
     let imagesA = images.split(",").map((s) => s.trim())
 
     for (; i < labelsA.length; i++) {
-      probabilities.push(Math.floor(1 / labelsA.length))
+      probabilities.push(1.0 / labelsA.length)
     }
 
     let category = {}

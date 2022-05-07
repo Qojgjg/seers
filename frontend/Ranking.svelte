@@ -53,7 +53,9 @@
           </div>
           <!-- <div>{user.markets.length}</div> -->
           <div style="width: 10%;margin: 3px">
-            {Number(user.expBalances["expSeers"]).toFixed(0)}
+            {user.expBalances.map((o) => {
+              return ` ${Number(Object.values(o)).toFixed(2)}`
+            })}
           </div>
         </div>
       {/each}
