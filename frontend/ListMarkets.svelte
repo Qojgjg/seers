@@ -41,6 +41,7 @@
   <div style="margin-right: 30px;">
     <select
       bind:value={categorySelected}
+      on:change={runOnMount}
       style="background: rgb(25, 27, 31); color: white; border: grey; width: 200px; padding: 5px;"
     >
       <option value="any">All</option>
@@ -56,6 +57,7 @@
   <div>
     <select
       bind:value={stateSelected}
+      on:change={runOnMount}
       style="background: rgb(25, 27, 31); color: white; border: grey; width: 200px; padding: 5px;"
     >
       <option value="any">All</option>
