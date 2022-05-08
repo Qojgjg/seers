@@ -5,6 +5,7 @@
 
   export let auth
   export let readMarket
+  export let market
 
   let id
   let startDate
@@ -26,20 +27,8 @@
   let selectedLabel = ""
 
   let selected
-  let probabilities = [0.6, 0.4]
 
   let buyTokens = true
-
-  let market = {
-    id,
-    state,
-    startDate,
-    endDate,
-    volume,
-    liquidity,
-    labels,
-    probabilities,
-  }
 
   let typingTimer //timer identifier
 
@@ -111,118 +100,120 @@
 <div
   style="margin: 0em 1em;display:flex; justify-content:start; flex-direction:column"
 >
-  <div class="market-controls">
-    <div
-      style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column;padding: 10px;"
-    >
-      <h4>Trade</h4>
-      <div class="YesNoOptions">
-        <button
-          class={buyOptClass}
-          on:click={() => {
-            buyOptClass = "BuyOptSelected"
-            sellOptClass = "SellOpt"
-            buyTokens = true
-            buttonLabel = "Buy " + selectedLabel
-          }}>Buy</button
-        >
-        <button
-          class={sellOptClass}
-          on:click={() => {
-            buyOptClass = "BuyOpt"
-            sellOptClass = "SellOptSelected"
-            buyTokens = false
-            buttonLabel = "Sell " + selectedLabel
-          }}>Sell</button
-        >
-      </div>
-      <div class="OutcomeTitle">Pick Outcome:</div>
-      <div class="ContentTab">
-        <select
-          bind:value={selected}
-          style="width: 100%"
-          on:change={() => {
-            selectedLabel = market.labels[selected]
-            if (buyTokens) buttonLabel = "Buy " + selectedLabel
-            else buttonLabel = "Sell " + selectedLabel
-          }}
-        >
-          {#each market.labels as label, i}
-            <option value={i}>
-              {label.slice(0, 20)}
-              ({(Number(market.probabilities[i]) / 1000.0).toFixed(2)} &Sigma;)
-            </option>
-          {/each}
-        </select>
-        <div class="OutcomeTitle">Amount:</div>
-        <div class="OutcomeTitle">
-          <input
-            bind:value={seerAmount}
-            on:keyup={() => debounce(market.id, seerAmount, 500)}
-            placeholder="0"
-            style="color: rgb(255, 255, 255); background-color: rgb(33, 36, 41); font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; width: 150px"
-          />
+  {#if market}
+    <div class="market-controls">
+      <div
+        style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column;padding: 10px;"
+      >
+        <h4>Trade</h4>
+        <div class="YesNoOptions">
+          <button
+            class={buyOptClass}
+            on:click={() => {
+              buyOptClass = "BuyOptSelected"
+              sellOptClass = "SellOpt"
+              buyTokens = true
+              buttonLabel = "Buy " + selectedLabel
+            }}>Buy</button
+          >
+          <button
+            class={sellOptClass}
+            on:click={() => {
+              buyOptClass = "BuyOpt"
+              sellOptClass = "SellOptSelected"
+              buyTokens = false
+              buttonLabel = "Sell " + selectedLabel
+            }}>Sell</button
+          >
         </div>
-        <div class="ControlData">
-          <div>LP fee 0.00%</div>
-          <div>
-            {#if buyTokens}
-              Avg. price {tokensEstimate
-                ? (seerAmount / tokensEstimate).toFixed(2)
-                : 0} &Sigma;
+        <div class="OutcomeTitle">Pick Outcome:</div>
+        <div class="ContentTab">
+          <select
+            bind:value={selected}
+            style="width: 100%"
+            on:change={() => {
+              selectedLabel = market.labels[selected]
+              if (buyTokens) buttonLabel = "Buy " + selectedLabel
+              else buttonLabel = "Sell " + selectedLabel
+            }}
+          >
+            {#each market.labels as label, i}
+              <option value={i}>
+                {label.slice(0, 20)}
+                ({Number(market.probabilities[i]).toFixed(2)} &Sigma;)
+              </option>
+            {/each}
+          </select>
+          <div class="OutcomeTitle">Amount:</div>
+          <div class="OutcomeTitle">
+            <input
+              bind:value={seerAmount}
+              on:keyup={() => debounce(market.id, seerAmount, 500)}
+              placeholder="0"
+              style="color: rgb(255, 255, 255); background-color: rgb(33, 36, 41); font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; width: 150px"
+            />
+          </div>
+          <div class="ControlData">
+            <div>LP fee 0.00%</div>
+            <div>
+              {#if buyTokens}
+                Avg. price {tokensEstimate
+                  ? (seerAmount / tokensEstimate).toFixed(2)
+                  : 0} &Sigma;
+              {:else}
+                Avg. price {tokensEstimate
+                  ? (seerAmount / tokensEstimate).toFixed(2)
+                  : 0} tokens
+              {/if}
+            </div>
+            <div>
+              {#if buyTokens}
+                Max. Winnings {tokensEstimate
+                  ? Number(tokensEstimate).toFixed(2)
+                  : Number(0).toFixed(2)}
+                &Sigma;
+              {:else}
+                Get back {tokensEstimate
+                  ? Number(tokensEstimate).toFixed(2)
+                  : Number(0).toFixed(2)} &Sigma;
+              {/if}
+            </div>
+          </div>
+          <div
+            style="width: 100%; text-align: center; display: flex; flex-direction: column; justify-content: center"
+          >
+            {#if principal !== ""}
+              <Modal show={$modal}>
+                <Content
+                  onOk={() => {
+                    let res = 0
+                    doIt(market.id, seerAmount)
+                    seerAmount = 0.0
+                    tokensEstimate = 0.0
+                    return res
+                  }}
+                  {tokensEstimate}
+                  {seerAmount}
+                  outcome={selectedLabel}
+                  {buttonLabel}
+                  {buyTokens}
+                />
+              </Modal>
+              <div style="width: 100%;text-align:center;color:red">
+                {errorResponse}
+              </div>
             {:else}
-              Avg. price {tokensEstimate
-                ? (seerAmount / tokensEstimate).toFixed(2)
-                : 0} tokens
+              <div
+                style="width: 100%; justify-content: center; text-align: center; display: flex"
+              >
+                <button class="btn-grad" on:click={() => 0}> Login </button>
+              </div>
             {/if}
           </div>
-          <div>
-            {#if buyTokens}
-              Max. Winnings {tokensEstimate
-                ? Number(tokensEstimate).toFixed(2)
-                : Number(0).toFixed(2)}
-              &Sigma;
-            {:else}
-              Get back {tokensEstimate
-                ? Number(tokensEstimate).toFixed(2)
-                : Number(0).toFixed(2)} &Sigma;
-            {/if}
-          </div>
-        </div>
-        <div
-          style="width: 100%; text-align: center; display: flex; flex-direction: column; justify-content: center"
-        >
-          {#if principal !== ""}
-            <Modal show={$modal}>
-              <Content
-                onOk={() => {
-                  let res = 0
-                  doIt(market.id, seerAmount)
-                  seerAmount = 0.0
-                  tokensEstimate = 0.0
-                  return res
-                }}
-                {tokensEstimate}
-                {seerAmount}
-                outcome={selectedLabel}
-                {buttonLabel}
-                {buyTokens}
-              />
-            </Modal>
-            <div style="width: 100%;text-align:center;color:red">
-              {errorResponse}
-            </div>
-          {:else}
-            <div
-              style="width: 100%; justify-content: center; text-align: center; display: flex"
-            >
-              <button class="btn-grad" on:click={() => 0}> Login </button>
-            </div>
-          {/if}
         </div>
       </div>
     </div>
-  </div>
+  {/if}
 </div>
 
 <style>

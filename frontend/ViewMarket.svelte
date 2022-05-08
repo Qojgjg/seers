@@ -170,7 +170,7 @@
     </div>
     <div style="width: 100%; display:flex">
       <div>
-        <Trade {auth} {readMarket} />
+        <Trade {auth} {readMarket} {market} />
       </div>
       <div>
         <Forecast />

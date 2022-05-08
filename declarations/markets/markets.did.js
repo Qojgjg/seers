@@ -32,7 +32,8 @@ export const idlFactory = ({ IDL }) => {
     'endDateOlderThanStartDate' : IDL.Null,
     'notEnoughLiquidity' : IDL.Float64,
   });
-  const Result_2 = IDL.Variant({ 'ok' : CommentStable, 'err' : MarketError });
+  const Result_3 = IDL.Variant({ 'ok' : CommentStable, 'err' : MarketError });
+  const Result_2 = IDL.Variant({ 'ok' : IDL.Float64, 'err' : MarketError });
   const AccountIdentifier = IDL.Vec(IDL.Nat8);
   const ICP = IDL.Record({ 'e8s' : IDL.Nat64 });
   const CollateralType = IDL.Variant({
@@ -120,7 +121,7 @@ export const idlFactory = ({ IDL }) => {
     'marketId' : IDL.Nat32,
     'price' : IDL.Float64,
   });
-  const Balance = IDL.Variant({
+  const Balance = IDL.Record({
     'btc' : IDL.Float64,
     'icp' : IDL.Float64,
     'seers' : IDL.Float64,
@@ -167,7 +168,7 @@ export const idlFactory = ({ IDL }) => {
     'id' : IDL.Text,
     'bio' : IDL.Text,
     'txs' : IDL.Vec(UserTx),
-    'expBalances' : IDL.Vec(Balance),
+    'expBalances' : Balance,
     'twitter' : IDL.Text,
     'lastSeenAt' : Time,
     'modifiedAt' : Time,
@@ -182,7 +183,7 @@ export const idlFactory = ({ IDL }) => {
     'followees' : IDL.Vec(Followee),
     'followers' : IDL.Vec(Follower),
     'depositAddrs' : IDL.Vec(DepositAddr),
-    'balances' : IDL.Vec(Balance),
+    'balances' : Balance,
   });
   const UserError = IDL.Variant({
     'callerIsAnon' : IDL.Null,
@@ -210,8 +211,13 @@ export const idlFactory = ({ IDL }) => {
     'handle' : IDL.Text,
   });
   const Market = IDL.Service({
-    'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_2], []),
+    'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_3], []),
     'approveMarket' : IDL.Func([IDL.Nat32], [], []),
+    'buyOption' : IDL.Func(
+        [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
+        [Result_2],
+        [],
+      ),
     'callerAccount' : IDL.Func([], [AccountIdentifier], []),
     'canisterAccount' : IDL.Func([], [IDL.Text], ['query']),
     'canisterFloat' : IDL.Func([], [ICP], []),

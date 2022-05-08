@@ -68,10 +68,10 @@ module {
     };
 
     public type Balance = {
-        #seers: Float;
-        #icp: Float;
-        #cycles: Float;
-        #btc: Float;
+        seers: Float;
+        icp: Float;
+        cycles: Float;
+        btc: Float;
     };
 
     public type DepositAddr = {
@@ -103,15 +103,17 @@ module {
         public var discord: Text = initData.discord;
         public var bio: Text = initData.bio;
         public var feed: Buffer.Buffer<Feed.FeedItem> = Buffer.Buffer<Feed.FeedItem>(5);
-        public var balances: Buffer.Buffer<Balance> = do {
-            var b = Buffer.Buffer<Balance>(1);
-            b.add(#seers(500.0)); // Airdrop
-            b
+        public var balances: Balance = {
+            seers = 500.0;
+            icp = 0.0;
+            cycles = 0.0;
+            btc = 0.0;
         };
-        public var expBalances: Buffer.Buffer<Balance> = do {
-            var b = Buffer.Buffer<Balance>(1);
-            b.add(#seers(500.0)); // Airdrop
-            b
+        public var expBalances: Balance = {
+            seers = 500.0;
+            icp = 0.0;
+            cycles = 0.0;
+            btc = 0.0;
         };
         public var depositAddrs: Buffer.Buffer<DepositAddr> = Buffer.Buffer<DepositAddr>(3);
         public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
@@ -136,8 +138,8 @@ module {
                 discord = discord;
                 bio = bio;
                 feed = feed.toArray();
-                balances = balances.toArray();
-                expBalances = expBalances.toArray();
+                balances = balances;
+                expBalances = expBalances;
                 depositAddrs = depositAddrs.toArray();  
                 markets = markets.toArray();
                 txs = txs.toArray();
@@ -161,8 +163,8 @@ module {
         discord: Text;
         bio: Text;
         feed: [Feed.FeedItem];
-        balances: [Balance];
-        expBalances: [Balance];
+        balances: Balance;
+        expBalances: Balance;
         depositAddrs: [DepositAddr];  
         markets: [UserMarket];
         txs: [Tx.UserTx];
@@ -189,8 +191,8 @@ module {
         });
         var user: User = User(initData);
         user.feed := Utils.bufferFromArray(u.feed);
-        user.balances := Utils.bufferFromArray(u.balances);
-        user.expBalances := Utils.bufferFromArray(u.expBalances);
+        user.balances := u.balances;
+        user.expBalances := u.expBalances;
         user.depositAddrs := Utils.bufferFromArray(u.depositAddrs);
         user.markets := Utils.bufferFromArray(u.markets);
         user.txs := Utils.bufferFromArray(u.txs);

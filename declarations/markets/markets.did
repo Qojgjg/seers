@@ -12,13 +12,13 @@ type UserTx =
  };
 type UserStable = 
  record {
-   balances: vec Balance;
+   balances: Balance;
    bio: text;
    comments: vec CommentStable;
    createdAt: Time;
    depositAddrs: vec DepositAddr;
    discord: text;
-   expBalances: vec Balance;
+   expBalances: Balance;
    feed: vec FeedItem;
    followees: vec Followee;
    followers: vec Follower;
@@ -74,10 +74,15 @@ type UserData =
    "principal": text;
  };
 type Time = int;
-type Result_2 = 
+type Result_3 = 
  variant {
    err: MarketError;
    ok: CommentStable;
+ };
+type Result_2 = 
+ variant {
+   err: MarketError;
+   ok: float64;
  };
 type Result_1 = 
  variant {
@@ -187,8 +192,9 @@ type MarketCategory =
  };
 type Market = 
  service {
-   addCommentToMarket: (nat32, text) -> (Result_2);
+   addCommentToMarket: (nat32, text) -> (Result_3);
    approveMarket: (nat32) -> ();
+   buyOption: (nat32, float64, nat, bool) -> (Result_2);
    callerAccount: () -> (AccountIdentifier);
    canisterAccount: () -> (text) query;
    canisterFloat: () -> (ICP);
@@ -264,7 +270,7 @@ type Bet =
    tx: UserTx;
  };
 type Balance = 
- variant {
+ record {
    btc: float64;
    cycles: float64;
    icp: float64;

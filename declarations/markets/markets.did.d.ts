@@ -1,9 +1,11 @@
 import type { Principal } from '@dfinity/principal';
 export type AccountIdentifier = Array<number>;
-export type Balance = { 'btc' : number } |
-  { 'icp' : number } |
-  { 'seers' : number } |
-  { 'cycles' : number };
+export interface Balance {
+  'btc' : number,
+  'icp' : number,
+  'seers' : number,
+  'cycles' : number,
+}
 export interface Bet { 'tx' : UserTx, 'comment' : CommentStable }
 export interface BrierScore { 'createdAt' : Time, 'score' : number }
 export type CollateralType = { 'icp' : null } |
@@ -38,8 +40,14 @@ export interface Like {
   'stars' : number,
 }
 export interface Market {
-  'addCommentToMarket' : (arg_0: number, arg_1: string) => Promise<Result_2>,
+  'addCommentToMarket' : (arg_0: number, arg_1: string) => Promise<Result_3>,
   'approveMarket' : (arg_0: number) => Promise<undefined>,
+  'buyOption' : (
+      arg_0: number,
+      arg_1: number,
+      arg_2: bigint,
+      arg_3: boolean,
+    ) => Promise<Result_2>,
   'callerAccount' : () => Promise<AccountIdentifier>,
   'canisterAccount' : () => Promise<string>,
   'canisterFloat' : () => Promise<ICP>,
@@ -143,7 +151,9 @@ export type Result = { 'ok' : UserStable } |
   { 'err' : UserError };
 export type Result_1 = { 'ok' : MarketStable } |
   { 'err' : MarketError };
-export type Result_2 = { 'ok' : CommentStable } |
+export type Result_2 = { 'ok' : number } |
+  { 'err' : MarketError };
+export type Result_3 = { 'ok' : CommentStable } |
   { 'err' : MarketError };
 export type Time = bigint;
 export interface UserData {
@@ -186,7 +196,7 @@ export interface UserStable {
   'id' : string,
   'bio' : string,
   'txs' : Array<UserTx>,
-  'expBalances' : Array<Balance>,
+  'expBalances' : Balance,
   'twitter' : string,
   'lastSeenAt' : Time,
   'modifiedAt' : Time,
@@ -201,7 +211,7 @@ export interface UserStable {
   'followees' : Array<Followee>,
   'followers' : Array<Follower>,
   'depositAddrs' : Array<DepositAddr>,
-  'balances' : Array<Balance>,
+  'balances' : Balance,
 }
 export interface UserTx {
   'id' : number,

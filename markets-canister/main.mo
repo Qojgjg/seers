@@ -701,172 +701,193 @@ shared({ caller = initializer }) actor class Market() = this {
     //     };
     // };
 
-    // public shared(msg) func buyOption(
-    //         marketId: Nat32,
-    //         value: Float,
-    //         selected: Nat,
-    //         save: Bool
-    //     ): async Result.Result<Float, TradeError> {
-    //     assert(not updating);
+    public shared(msg) func buyOption(
+            marketId: Nat32,
+            value: Float,
+            selected: Nat,
+            save: Bool
+        ): async Result.Result<Float, M.MarketError> {
+        assert(not updating);
 
-    //     let caller = Principal.toText(msg.caller);
+        let caller = Principal.toText(msg.caller);
         
-    //     if (caller == anon) {
-    //         return #err(#callerIsAnon);
-    //     };
+        if (caller == anon) {
+            return #err(#callerIsAnon);
+        };
 
-    //     var user = switch (getUser(caller)) {
-    //         case (null) {
-    //             return #err(#userNotCreated);
-    //         };
-    //         case (?user) {
-    //             user;
-    //         };
-    //     };
+        var user = switch (getUser(caller)) {
+            case (null) {
+                return #err(#profileNotCreated);
+            };
+            case (?user) {
+                user;
+            };
+        };
 
-    //     if (user.seerFloat < value) {
-    //         return #err(#notEnoughFloat);
-    //     };
+        if (user.balances.seers < value) {
+            return #err(#notEnoughBalance);
+        };
 
 
-    //     if (value < 1.0) {
-    //         return #err(#minimalAmountIsOne);
-    //     };
+        if (value < 1.0) {
+            return #err(#minimalAmountIsOne);
+        };
 
-    //     let marketOpt = marketMap.get(marketId);
+        let marketOpt = marketMap.get(marketId);
 
-    //     switch (marketOpt) {
-    //         case null {
-    //             return #err(#marketMissing);
-    //         };
-    //         case (?market) {
-    //             if (market.state != #open) { 
-    //                 return #err(#marketClosed);
-    //             };
+        switch (marketOpt) {
+            case null {
+                return #err(#marketMissing);
+            };
+            case (?market) {
+                if (market.state != #open) { 
+                    return #err(#marketNotOpen);
+                };
 
-    //             if (market.endDate < Time.now()) { 
-    //                 market.state := #closed;
-    //                 return #err(#marketClosed);
-    //             };
+                if (market.endDate < Time.now()) { 
+                    market.state := #closed;
+                    return #err(#marketNotOpen);
+                };
                 
-    //             let optionsSize = market.reserves.size();
-    //             var semiK: Float = 1.0;
+                let optionsSize = market.reserves.size();
+                var semiK: Float = 1.0;
 
-    //             for (i in Iter.range(0, optionsSize - 1)) {
-    //                 if (i != selected) {
-    //                     semiK := semiK * (market.reserves[i] + value);
-    //                 };
-    //             };
+                for (i in Iter.range(0, optionsSize - 1)) {
+                    if (i != selected) {
+                        semiK := semiK * (market.reserves[i] + value);
+                    };
+                };
                 
-    //             let newSelectedReserve: Float = market.k / semiK;
-    //             let tokensOut = market.reserves[selected] - newSelectedReserve + value;
+                let newSelectedReserve: Float = market.k / semiK;
+                let tokensOut = market.reserves[selected] - newSelectedReserve + value;
                 
-    //             if (not save) { // Dry run.
-    //                 return #ok(tokensOut);
-    //             };
+                if (not save) { // Dry run.
+                    return #ok(tokensOut);
+                };
 
-    //             var newReserves: [var Float] = Array.init(optionsSize, 0.0);
-    //             let newLiquidity = market.liquidity + value;
+                var newReserves: [var Float] = Array.init(optionsSize, 0.0);
+                let newLiquidity = market.liquidity + value;
                
-    //             for (i in Iter.range(0, optionsSize - 1)) {
-    //                 if (i != selected) {
-    //                     newReserves[i] := market.reserves[i] + value;
-    //                 } else {
-    //                     newReserves[i] := newSelectedReserve;
-    //                 };
-    //             };
+                for (i in Iter.range(0, optionsSize - 1)) {
+                    if (i != selected) {
+                        newReserves[i] := market.reserves[i] + value;
+                    } else {
+                        newReserves[i] := newSelectedReserve;
+                    };
+                };
                 
-    //             market.reserves := Array.freeze(newReserves);
-    //             market.liquidity := newLiquidity;
-    //             market.volume := market.volume + value;
+                market.reserves := Array.freeze(newReserves);
+                market.liquidity := newLiquidity;
+                market.volume := market.volume + value;
 
-    //             let weight: [var Float] = Array.init(optionsSize, 1.0); 
-    //             let probabilities: [var Probability] = Array.init(optionsSize, 0.0);
-    //             var weightSum: Float  = 0.0;
+                let weight: [var Float] = Array.init(optionsSize, 1.0); 
+                let probabilities: [var Float] = Array.init(optionsSize, 0.0);
+                var weightSum: Float  = 0.0;
                     
-    //             for (i in Iter.range(0, optionsSize - 1)) {
-    //                 for (j in Iter.range(0, optionsSize - 1)) {
-    //                     if (i != j) {
-    //                         weight[i] := weight[i] * market.reserves[j];
-    //                     };
-    //                 };
-    //                 weightSum := weightSum + weight[i];
-    //             };
+                for (i in Iter.range(0, optionsSize - 1)) {
+                    for (j in Iter.range(0, optionsSize - 1)) {
+                        if (i != j) {
+                            weight[i] := weight[i] * market.reserves[j];
+                        };
+                    };
+                    weightSum := weightSum + weight[i];
+                };
 
-    //             for (i in Iter.range(0, optionsSize - 1)) {
-    //                 probabilities[i] := weight[i] * 1000.0 / weightSum;
-    //             };
+                for (i in Iter.range(0, optionsSize - 1)) {
+                    probabilities[i] := weight[i] * 1000.0 / weightSum;
+                };
 
-    //             market.probabilities :=  Array.freeze(probabilities);
+                market.probabilities :=  Array.freeze(probabilities);
 
-    //             var marketTokensOpt = Array.find(user.markets,
-    //                 func (ut: UserMarket): Bool {
-    //                     ut.marketId == market.id
-    //                 }
-    //             );
+                var markets = user.markets.toArray();
+                let marketTokensOpt = Array.find<U.UserMarket>(markets,
+                    func (ut: U.UserMarket): Bool {
+                        ut.marketId == market.id
+                    }
+                );
 
-    //             switch (marketTokensOpt) {
-    //                 case null {
-    //                     let balances: [var Float] = Array.init(optionsSize, 0.0);
-    //                     balances[selected] := tokensOut;
+                switch (marketTokensOpt) {
+                    case null {
+                        let balances: [var Float] = Array.init(optionsSize, 0.0);
+                        balances[selected] := tokensOut;
 
-    //                     let newUserMarket: UserMarket = {
-    //                         marketId = market.id;
-    //                         marketTitle = market.title;
-    //                         labels = market.labels;
-    //                         balances = Array.freeze(balances);
-    //                         shares = 0;
-    //                         used = false;
-    //                     };
-    //                     user.markets := Array.append(user.markets, [newUserMarket]);
-    //                 };
-    //                 case (?marketTokens) {
-    //                     user.markets := Array.mapFilter(user.markets, 
-    //                         func (ut: UserMarket): ?UserMarket {
-    //                             if (ut.marketId != market.id) {
-    //                                 return ?ut;
-    //                             } else {
-    //                                 let newFloats = Array.mapEntries(ut.balances,
-    //                                     func (b: Float, i: Nat): Float {
-    //                                         if (i == selected) {
-    //                                             return b + tokensOut;
-    //                                         } else {
-    //                                             return b;
-    //                                         };
-    //                                     }
-    //                                 );
+                        let newUserMarket: U.UserMarket = {
+                            author = (market.author == caller);
+                            balances = Array.freeze(balances);
+                            brierScores = [];
+                            collateralType = #seers;
+                            createdAt = Time.now();
+                            modifiedAt = Time.now();
+                            redeemed = false;
+                            marketId = market.id;
+                            title = market.title;
+                            labels = market.labels;
+                            shares = 0;
+                            spent = value;
+                        };
+                        user.markets.add(newUserMarket);
+                    };
+                    case (?marketTokens) {
+                        markets := Array.mapFilter(markets, 
+                            func (ut: U.UserMarket): ?U.UserMarket {
+                                if (ut.marketId != market.id) {
+                                    return ?ut;
+                                } else {
+                                    let newBalances = Array.mapEntries(ut.balances,
+                                        func (b: Float, i: Nat): Float {
+                                            if (i == selected) {
+                                                return b + tokensOut;
+                                            } else {
+                                                return b;
+                                            };
+                                        }
+                                    );
 
-    //                                 let newUserMarket: UserMarket = {
-    //                                     marketId = market.id;
-    //                                     marketTitle = market.title;
-    //                                     labels = market.labels;
-    //                                     balances = newFloats;
-    //                                     shares = ut.shares;
-    //                                     used = ut.used;
-    //                                 };
-    //                                 return ?newUserMarket;
-    //                             };
-    //                         }
-    //                     );
-    //                 };
-    //             };
+                                    let newUserMarket: U.UserMarket = {
+                                        author = ut.author;
+                                        balances = newBalances;
+                                        brierScores = ut.brierScores;
+                                        collateralType = ut.collateralType;
+                                        createdAt = ut.createdAt;
+                                        labels = market.labels;
+                                        marketId = market.id;
+                                        modifiedAt = Time.now();
+                                        redeemed = false;
+                                        shares = ut.shares;
+                                        spent = ut.spent + value;
+                                        title = market.title;
+                                    };
+                                    return ?newUserMarket;
+                                };
+                            }
+                        );
+                    };
+                };
+                user.markets := Utils.bufferFromArray(markets);
+                let newBalances: U.Balance = {
+                    seers = user.balances.seers - value;
+                    icp = user.balances.icp;
+                    cycles = user.balances.cycles;
+                    btc = user.balances.btc;
+                };
+                user.balances := newBalances;
+                let newTx: Tx.UserTx = {
+                    id = Nat32.fromNat(user.txs.size());
+                    marketId = market.id;
+                    src = null;
+                    dest = ?selected;
+                    sent = value;
+                    recv = tokensOut;
+                    price = value / tokensOut;
+                    fee = 0.0;
+                    createdAt = Time.now();
+                };
+                user.txs.add(newTx);
 
-    //             user.seerFloat := user.seerFloat - value;
-    //             let newTx: UserTx = {
-    //                 marketId = market.id;
-    //                 src = null;
-    //                 dest = ?selected;
-    //                 seerSent = value;
-    //                 seerRecv = tokensOut;
-    //                 fee = 0.0;
-    //                 timestamp = Time.now();
-    //             };
-    //             user.txs := Array.append(user.txs, [newTx]);
-
-    //             return #ok(tokensOut);
-    //         };
-    //     };
-    // };
+                return #ok(tokensOut);
+            };
+        };
+    };
 
     // Get user data.
     public query func getUserStable(userId: Text): async ?U.UserStable {
