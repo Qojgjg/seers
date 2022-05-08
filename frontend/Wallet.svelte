@@ -103,14 +103,10 @@
         Principal: {user.id}
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Balance: {user.balances.map((o) => {
-          return ` ${Number(Object.values(o)).toFixed(2)} ${Object.keys(o)}`
-        })}
+        Balance: {Number(user.balances.seers).toFixed(2)}
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Expected Balance: {user.expBalances.map((o) => {
-          return ` ${Number(Object.values(o)).toFixed(2)} ${Object.keys(o)}`
-        })}
+        Expected Balance: {Number(user.expBalances.seers).toFixed(2)}
       </div>
       <div
         style="margin-bottom: 10px; width: 100%; text-align:center; display: flex; justify-content: center"
