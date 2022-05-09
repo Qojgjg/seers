@@ -221,7 +221,7 @@ shared({ caller = initializer }) actor class Market() = this {
     // };
 
     // Approve a market.
-    public shared(msg) func approveMarket(marketId: Nat32): async () {
+    public shared(msg) func setMarketState(marketId: Nat32, state: M.MarketState): async () {
         assert(msg.caller == initializer); // Root call.
 
         switch (marketMap.get(marketId)) {
@@ -229,7 +229,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 return;
             };
             case (?market) {
-                market.state := #open;
+                market.state := state;
             };
         };
     }; 

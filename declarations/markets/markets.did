@@ -193,7 +193,6 @@ type MarketCategory =
 type Market = 
  service {
    addCommentToMarket: (nat32, text) -> (Result_3);
-   approveMarket: (nat32) -> ();
    buyOption: (nat32, float64, nat, bool) -> (Result_2);
    callerAccount: () -> (AccountIdentifier);
    canisterAccount: () -> (text) query;
@@ -206,6 +205,7 @@ type Market =
    readMarket: (nat32) -> (opt MarketStable) query;
    readUserData: (vec text) -> (vec UserData) query;
    resolveMarket: (nat32, nat) -> (bool);
+   setMarketState: (nat32, MarketState) -> ();
    setUpdating: (bool) -> () oneway;
  };
 type Like = 

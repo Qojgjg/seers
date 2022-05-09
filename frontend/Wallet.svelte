@@ -103,10 +103,10 @@
         Principal: {user.id}
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Balance: {Number(user.balances.seers).toFixed(2)}
+        Balance: {Number(user.balances.seers).toFixed(2)} seers
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Expected Balance: {Number(user.expBalances.seers).toFixed(2)}
+        Expected Balance: {Number(user.expBalances.seers).toFixed(2)} seers
       </div>
       <div
         style="margin-bottom: 10px; width: 100%; text-align:center; display: flex; justify-content: center"

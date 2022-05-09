@@ -212,7 +212,6 @@ export const idlFactory = ({ IDL }) => {
   });
   const Market = IDL.Service({
     'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_3], []),
-    'approveMarket' : IDL.Func([IDL.Nat32], [], []),
     'buyOption' : IDL.Func(
         [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
         [Result_2],
@@ -237,6 +236,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'resolveMarket' : IDL.Func([IDL.Nat32, IDL.Nat], [IDL.Bool], []),
+    'setMarketState' : IDL.Func([IDL.Nat32, MarketState], [], []),
     'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),
   });
   return Market;
