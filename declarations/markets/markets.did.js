@@ -33,7 +33,7 @@ export const idlFactory = ({ IDL }) => {
     'notEnoughLiquidity' : IDL.Float64,
   });
   const Result_3 = IDL.Variant({ 'ok' : CommentStable, 'err' : MarketError });
-  const Result_2 = IDL.Variant({ 'ok' : IDL.Float64, 'err' : MarketError });
+  const Result = IDL.Variant({ 'ok' : IDL.Float64, 'err' : MarketError });
   const AccountIdentifier = IDL.Vec(IDL.Nat8);
   const ICP = IDL.Record({ 'e8s' : IDL.Nat64 });
   const CollateralType = IDL.Variant({
@@ -109,7 +109,7 @@ export const idlFactory = ({ IDL }) => {
     'startDate' : Time,
     'images' : IDL.Vec(IDL.Text),
   });
-  const Result_1 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
+  const Result_2 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
   const UserTx = IDL.Record({
     'id' : IDL.Nat32,
     'fee' : IDL.Float64,
@@ -204,7 +204,7 @@ export const idlFactory = ({ IDL }) => {
     'endDateOlderThanStartDate' : IDL.Null,
     'notEnoughLiquidity' : IDL.Float64,
   });
-  const Result = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
+  const Result_1 = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
   const UserData = IDL.Record({
     'principal' : IDL.Text,
     'picture' : IDL.Text,
@@ -212,16 +212,16 @@ export const idlFactory = ({ IDL }) => {
   });
   const Market = IDL.Service({
     'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_3], []),
-    'buyOption' : IDL.Func(
+    'buyOutcome' : IDL.Func(
         [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
-        [Result_2],
+        [Result],
         [],
       ),
     'callerAccount' : IDL.Func([], [AccountIdentifier], []),
     'canisterAccount' : IDL.Func([], [IDL.Text], ['query']),
     'canisterFloat' : IDL.Func([], [ICP], []),
-    'createMarket' : IDL.Func([MarketInitData], [Result_1], []),
-    'createUser' : IDL.Func([IDL.Text], [Result], []),
+    'createMarket' : IDL.Func([MarketInitData], [Result_2], []),
+    'createUser' : IDL.Func([IDL.Text], [Result_1], []),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
     'readAllMarkets' : IDL.Func(
         [MarketCategory, MarketState],
@@ -236,6 +236,11 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'resolveMarket' : IDL.Func([IDL.Nat32, IDL.Nat], [IDL.Bool], []),
+    'sellOutcome' : IDL.Func(
+        [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
+        [Result],
+        [],
+      ),
     'setMarketState' : IDL.Func([IDL.Nat32, MarketState], [IDL.Bool], []),
     'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),
   });

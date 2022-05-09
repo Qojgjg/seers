@@ -41,17 +41,17 @@ export interface Like {
 }
 export interface Market {
   'addCommentToMarket' : (arg_0: number, arg_1: string) => Promise<Result_3>,
-  'buyOption' : (
+  'buyOutcome' : (
       arg_0: number,
       arg_1: number,
       arg_2: bigint,
       arg_3: boolean,
-    ) => Promise<Result_2>,
+    ) => Promise<Result>,
   'callerAccount' : () => Promise<AccountIdentifier>,
   'canisterAccount' : () => Promise<string>,
   'canisterFloat' : () => Promise<ICP>,
-  'createMarket' : (arg_0: MarketInitData) => Promise<Result_1>,
-  'createUser' : (arg_0: string) => Promise<Result>,
+  'createMarket' : (arg_0: MarketInitData) => Promise<Result_2>,
+  'createUser' : (arg_0: string) => Promise<Result_1>,
   'getUserStable' : (arg_0: string) => Promise<[] | [UserStable]>,
   'readAllMarkets' : (arg_0: MarketCategory, arg_1: MarketState) => Promise<
       Array<MarketStable>
@@ -60,6 +60,12 @@ export interface Market {
   'readMarket' : (arg_0: number) => Promise<[] | [MarketStable]>,
   'readUserData' : (arg_0: Array<string>) => Promise<Array<UserData>>,
   'resolveMarket' : (arg_0: number, arg_1: bigint) => Promise<boolean>,
+  'sellOutcome' : (
+      arg_0: number,
+      arg_1: number,
+      arg_2: bigint,
+      arg_3: boolean,
+    ) => Promise<Result>,
   'setMarketState' : (arg_0: number, arg_1: MarketState) => Promise<boolean>,
   'setUpdating' : (arg_0: boolean) => Promise<undefined>,
 }
@@ -147,11 +153,11 @@ export interface Post {
   'likes' : Array<Like>,
   'comments' : Array<CommentStable>,
 }
-export type Result = { 'ok' : UserStable } |
-  { 'err' : UserError };
-export type Result_1 = { 'ok' : MarketStable } |
+export type Result = { 'ok' : number } |
   { 'err' : MarketError };
-export type Result_2 = { 'ok' : number } |
+export type Result_1 = { 'ok' : UserStable } |
+  { 'err' : UserError };
+export type Result_2 = { 'ok' : MarketStable } |
   { 'err' : MarketError };
 export type Result_3 = { 'ok' : CommentStable } |
   { 'err' : MarketError };

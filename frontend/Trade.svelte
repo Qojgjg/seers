@@ -52,9 +52,14 @@
     amount = parseInt(amount)
     console.log("Selected: " + selected)
     if (buyTokens) {
-      response = await $auth.actor.buyOption(marketId, amount, selected, false)
+      response = await $auth.actor.buyOutcome(marketId, amount, selected, false)
     } else {
-      response = await $auth.actor.sellOption(marketId, amount, selected, false)
+      response = await $auth.actor.sellOutcome(
+        marketId,
+        amount,
+        selected,
+        false,
+      )
     }
 
     if (response["err"]) {
