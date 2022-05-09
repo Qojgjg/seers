@@ -209,20 +209,20 @@
                     : "seers"}
                 </div>
                 <div style="width: auto;margin-right: 10px;">
-                  Price {(tx.seerSent / tx.seerRecv).toFixed(2)}
+                  Price {(tx.sent / tx.recv).toFixed(2)}
                 </div>
                 <div style="width: auto;margin-right: 10px;">
-                  Received {tx.seerRecv.toFixed(2)}
+                  Received {tx.recv.toFixed(2)}
                 </div>
                 <div style="width: auto;margin-right: 10px;">
-                  Spent {tx.seerSent.toFixed(2)}
+                  Spent {tx.sent.toFixed(2)}
                 </div>
                 <div style="width: auto;margin-right: 10px;">
                   Fee {tx.fee.toFixed(2)}
                 </div>
                 <div style="width: auto;margin-right: 10px;">
                   Date {new Date(
-                    parseInt(tx.timestamp) / 1_000_000,
+                    parseInt(tx.createdAt) / 1_000_000,
                   ).toLocaleDateString()}
                 </div>
               </div>

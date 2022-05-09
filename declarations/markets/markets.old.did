@@ -273,6 +273,6 @@ service : {
   readMarket: (nat32) -> (opt MarketStable) query;
   readUserData: (vec text) -> (vec UserData) query;
   resolveMarket: (nat32, nat) -> (bool);
-  setMarketState: (nat32, MarketState) -> ();
+  setMarketState: (nat32, MarketState) -> (bool);
   setUpdating: (bool) -> () oneway;
 }

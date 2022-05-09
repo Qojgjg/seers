@@ -104,13 +104,13 @@ module {
         public var bio: Text = initData.bio;
         public var feed: Buffer.Buffer<Feed.FeedItem> = Buffer.Buffer<Feed.FeedItem>(5);
         public var balances: Balance = {
-            seers = 500.0;
+            seers = 1_000_000.0;
             icp = 0.0;
             cycles = 0.0;
             btc = 0.0;
         };
         public var expBalances: Balance = {
-            seers = 500.0;
+            seers = 1_000_000.0;
             icp = 0.0;
             cycles = 0.0;
             btc = 0.0;
