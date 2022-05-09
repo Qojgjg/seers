@@ -60,7 +60,7 @@ export interface Market {
   'readMarket' : (arg_0: number) => Promise<[] | [MarketStable]>,
   'readUserData' : (arg_0: Array<string>) => Promise<Array<UserData>>,
   'resolveMarket' : (arg_0: number, arg_1: bigint) => Promise<boolean>,
-  'setMarketState' : (arg_0: number, arg_1: MarketState) => Promise<undefined>,
+  'setMarketState' : (arg_0: number, arg_1: MarketState) => Promise<boolean>,
   'setUpdating' : (arg_0: boolean) => Promise<undefined>,
 }
 export type MarketCategory = { 'any' : null } |

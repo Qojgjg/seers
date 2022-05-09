@@ -1,7 +1,7 @@
 // Version: 1.0.0
 type AssocList<K, V> = List<(K, V)>;
 type AssocList__1<K, V> = AssocList<K, V>;
-type Balance = {#btc : Float; #cycles : Float; #icp : Float; #seers : Float};
+type Balance = {btc : Float; cycles : Float; icp : Float; seers : Float};
 type Bet = {comment : CommentStable; tx : UserTx};
 type Branch<K, V> = {left : Trie<K, V>; right : Trie<K, V>; size : Nat};
 type BrierScore = {createdAt : Time; score : Float};
@@ -103,13 +103,13 @@ type UserMarket =
   };
 type UserStable =
   {
-    balances : [Balance];
+    balances : Balance;
     bio : Text;
     comments : [CommentStable];
     createdAt : Time;
     depositAddrs : [DepositAddr];
     discord : Text;
-    expBalances : [Balance];
+    expBalances : Balance;
     feed : [FeedItem];
     followees : [Followee];
     followers : [Follower];

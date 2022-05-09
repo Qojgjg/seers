@@ -221,15 +221,16 @@ shared({ caller = initializer }) actor class Market() = this {
     // };
 
     // Approve a market.
-    public shared(msg) func setMarketState(marketId: Nat32, state: M.MarketState): async () {
+    public shared(msg) func setMarketState(marketId: Nat32, state: M.MarketState): async Bool {
         assert(msg.caller == initializer); // Root call.
 
         switch (marketMap.get(marketId)) {
             case (null) {
-                return;
+                return false;
             };
             case (?market) {
                 market.state := state;
+                return true;
             };
         };
     }; 
@@ -794,7 +795,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 };
 
                 for (i in Iter.range(0, optionsSize - 1)) {
-                    probabilities[i] := weight[i] * 1000.0 / weightSum;
+                    probabilities[i] := weight[i] / weightSum;
                 };
 
                 market.probabilities :=  Array.freeze(probabilities);

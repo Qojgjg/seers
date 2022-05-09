@@ -236,7 +236,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'resolveMarket' : IDL.Func([IDL.Nat32, IDL.Nat], [IDL.Bool], []),
-    'setMarketState' : IDL.Func([IDL.Nat32, MarketState], [], []),
+    'setMarketState' : IDL.Func([IDL.Nat32, MarketState], [IDL.Bool], []),
     'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),
   });
   return Market;

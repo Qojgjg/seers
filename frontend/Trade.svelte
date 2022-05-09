@@ -24,9 +24,8 @@
   let sellOptClass = "SellOpt"
 
   let buttonLabel = "Buy"
-  let selectedLabel = ""
-
-  let selected
+  let selected = 0
+  let selectedLabel = market ? market.labels[selected] : ""
 
   let buyTokens = true
 
@@ -66,6 +65,8 @@
       errorResponse = ""
       tokensEstimate = response["ok"]
     }
+
+    selectedLabel = market ? market.labels[selected] : ""
   }
 
   const doIt = async (marketId, amount) => {
@@ -185,9 +186,8 @@
             {#if principal !== ""}
               <Modal show={$modal}>
                 <Content
-                  onOk={() => {
-                    let res = 0
-                    doIt(market.id, seerAmount)
+                  onOk={async () => {
+                    let res = await doIt(market.id, seerAmount)
                     seerAmount = 0.0
                     tokensEstimate = 0.0
                     return res
