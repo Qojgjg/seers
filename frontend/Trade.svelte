@@ -81,9 +81,9 @@
     console.log("Selected: " + selected)
 
     if (buyTokens) {
-      response = await $auth.actor.buyOption(marketId, amount, selected, true)
+      response = await $auth.actor.buyOutcome(marketId, amount, selected, true)
     } else {
-      response = await $auth.actor.sellOption(marketId, amount, selected, true)
+      response = await $auth.actor.sellOutcome(marketId, amount, selected, true)
     }
     if (response["err"]) {
       errorResponse =

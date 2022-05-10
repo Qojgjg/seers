@@ -204,6 +204,7 @@ type Market =
    readAllUsers: () -> (vec UserStable) query;
    readMarket: (nat32) -> (opt MarketStable) query;
    readUserData: (vec text) -> (vec UserData) query;
+   refreshUser: () -> (Result_1);
    resolveMarket: (nat32, nat) -> (bool);
    sellOutcome: (nat32, float64, nat, bool) -> (Result);
    setMarketState: (nat32, MarketState) -> (bool);

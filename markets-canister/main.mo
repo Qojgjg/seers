@@ -411,78 +411,205 @@ shared({ caller = initializer }) actor class Market() = this {
         );
     };
 
-    // public shared(msg) func refreshUser(): async Result.Result<U.UserStable, UserError> {
-    //     assert(not updating);
-    //     let caller = Principal.toText(msg.caller);
+    public shared(msg) func refreshUser(): async Result.Result<U.UserStable, U.UserError> {
+        assert(not updating);
+        let caller = Principal.toText(msg.caller);
         
-    //     if (caller == anon) {
-    //         return #err(#callerIsAnon);
-    //     };
+        if (caller == anon) {
+            return #err(#callerIsAnon);
+        };
 
-    //     let userOpt = userMap.get(caller);
+        let userOpt = userMap.get(caller);
 
-    //     switch (userOpt) {
-    //         case (null) {
-    //             return #err(#userNotCreated);
-    //         };
-    //         case (?user) {
-    //             user.expSeerFloat := user.seerFloat;
-    //             user.markets := Array.mapFilter(user.markets, 
-    //                 func (ut: UserMarket): ?UserMarket {
+        switch (userOpt) {
+            case (null) {
+                return #err(#profileNotCreated);
+            };
+            case (?user) {
+                user.expBalances := {
+                    seers = user.balances.seers;
+                    icp = user.balances.icp;
+                    cycles = user.balances.cycles;
+                    btc = user.balances.btc;
+                };
+                var markets = user.markets.toArray();
+                markets := Array.mapFilter(markets, 
+                    func (ut: U.UserMarket): ?U.UserMarket {
+                        let marketOpt = marketMap.get(ut.marketId);
                         
-    //                     let marketOpt = marketMap.get(ut.marketId);
-                        
-    //                     switch (marketOpt) {
-    //                         case (null) {
-    //                             // Market was deleted so we delete its data from the user.
-    //                             return null;
-    //                         };
-    //                         case (?market) {
-    //                             switch (market.state) {
-    //                                 case (#resolved(i)) {
-    //                                     if (not ut.used) {
-    //                                         let reward = ut.balances[i];
-    //                                         // Give reward to user and set market to old.
-    //                                         user.seerFloat := user.seerFloat + reward;
-    //                                         user.expSeerFloat := user.expSeerFloat + reward;
+                        switch (marketOpt) {
+                            case (null) {
+                                // Market was deleted so we delete its data from the user.
+                                return null;
+                            };
+                            case (?market) {
+                                switch (market.state) {
+                                    case (#resolved(i)) {
+                                        if (not ut.redeemed) {
+                                            let reward = ut.balances[i];
 
-    //                                         let oldMarket: UserMarket = {
-    //                                             marketId = ut.marketId;
-    //                                             marketTitle = ut.marketTitle;
-    //                                             balances = ut.balances;
-    //                                             labels = ut.labels;
-    //                                             shares = ut.shares;
-    //                                             used = true;
-    //                                         };
+                                            switch (market.collateralType) {
+                                                case (#seers) {
+                                                    user.balances := {
+                                                        seers = user.balances.seers + reward;
+                                                        icp = user.balances.icp;
+                                                        cycles = user.balances.cycles;
+                                                        btc = user.balances.btc;
+                                                    };
 
-    //                                         return ?oldMarket;
-    //                                     };
+                                                    user.expBalances := {
+                                                        seers = user.expBalances.seers + reward;
+                                                        icp = user.expBalances.icp;
+                                                        cycles = user.expBalances.cycles;
+                                                        btc = user.expBalances.btc;
+                                                    };
+                                                };
+                                                case (#icp) {
+                                                    user.balances := {
+                                                        seers = user.balances.seers;
+                                                        icp = user.balances.icp + reward;
+                                                        cycles = user.balances.cycles;
+                                                        btc = user.balances.btc;
+                                                    };
+                                                    user.expBalances := {
+                                                        seers = user.expBalances.seers;
+                                                        icp = user.expBalances.icp + reward;
+                                                        cycles = user.expBalances.cycles;
+                                                        btc = user.expBalances.btc;
+                                                    };
+                                                };
+                                                case (#cycles) {
+                                                    user.balances := {
+                                                        seers = user.balances.seers;
+                                                        icp = user.balances.icp;
+                                                        cycles = user.balances.cycles + reward;
+                                                        btc = user.balances.btc;
+                                                    };
+                                                    user.expBalances := {
+                                                        seers = user.expBalances.seers;
+                                                        icp = user.expBalances.icp;
+                                                        cycles = user.expBalances.cycles + reward;
+                                                        btc = user.expBalances.btc;
+                                                    };
+                                                };
+                                                case (#btc) {
+                                                    user.balances := {
+                                                        seers = user.balances.seers;
+                                                        icp = user.balances.icp;
+                                                        cycles = user.balances.cycles;
+                                                        btc = user.balances.btc + reward;
+                                                    };
+                                                    user.expBalances := {
+                                                        seers = user.expBalances.seers;
+                                                        icp = user.expBalances.icp;
+                                                        cycles = user.expBalances.cycles;
+                                                        btc = user.expBalances.btc + reward;
+                                                    };
+                                                };
+                                            };
 
-    //                                     return ?ut;
-    //                                 };
-    //                                 case (#open) {
-    //                                     // Market still open. Update expected balance.
-    //                                     let optionsSize = market.probabilities.size();
+                                            let oldMarket: U.UserMarket = {
+                                                marketId = ut.marketId;
+                                                title = ut.title;
+                                                labels = ut.labels;
+                                                balances = ut.balances;
+                                                collateralType = ut.collateralType;
+                                                brierScores = ut.brierScores;
+                                                shares = ut.shares;
+                                                spent = ut.spent;
+                                                redeemed = true;
+                                                author = ut.author;
+                                                createdAt = ut.createdAt;
+                                                modifiedAt = ut.modifiedAt;
+                                            };
 
-    //                                     for (j in Iter.range(0, optionsSize - 1)) {
-    //                                         user.expSeerFloat := user.expSeerFloat 
-    //                                             + market.probabilities[j] * ut.balances[j] / 1000.0; 
-    //                                     };
+                                            return ?oldMarket;
+                                        };
 
-    //                                     return ?ut;
-    //                                 };
-    //                                 case _ {
-    //                                     return ?ut;
-    //                                 };
-    //                             };
-    //                         };
-    //                     };
-    //                 }
-    //             );
-    //             return #ok(userToUserResult(user));
-    //         };
-    //     };
-    // };
+                                        return ?ut;
+                                    };
+                                    case (#open) {
+                                        // Market still open. Update expected balance.
+                                        let optionsSize = market.probabilities.size();
+
+                                        switch (market.collateralType) {
+                                            case (#seers) {
+                                                var b = user.expBalances.seers;
+
+                                                for (j in Iter.range(0, optionsSize - 1)) {
+                                                    b := b + market.probabilities[j] * ut.balances[j]; 
+                                                };
+
+                                                user.expBalances := {
+                                                    seers = b;
+                                                    icp = user.expBalances.icp;
+                                                    cycles = user.expBalances.cycles;
+                                                    btc = user.expBalances.btc;
+                                                };
+                                            };
+                                            case (#icp) {
+                                                var b = user.expBalances.icp;
+
+                                                for (j in Iter.range(0, optionsSize - 1)) {
+                                                    b := b + market.probabilities[j] * ut.balances[j]; 
+                                                };
+
+                                                user.expBalances := {
+                                                    seers = user.expBalances.seers;
+                                                    icp = b;
+                                                    cycles = user.expBalances.cycles;
+                                                    btc = user.expBalances.btc;
+                                                };
+                                            };
+
+                                            case (#cycles) {
+                                                var b = user.expBalances.cycles;
+
+                                                for (j in Iter.range(0, optionsSize - 1)) {
+                                                    b := b + market.probabilities[j] * ut.balances[j]; 
+                                                };
+
+                                                user.expBalances := {
+                                                    seers = user.expBalances.seers;
+                                                    icp = user.expBalances.icp;
+                                                    cycles = b;
+                                                    btc = user.expBalances.btc;
+                                                };
+                                            };
+
+                                            case (#btc) {
+                                                var b = user.expBalances.btc;
+
+                                                for (j in Iter.range(0, optionsSize - 1)) {
+                                                    b := b + market.probabilities[j] * ut.balances[j]; 
+                                                };
+
+                                                user.expBalances := {
+                                                    seers = user.expBalances.seers;
+                                                    icp = user.expBalances.icp;
+                                                    cycles = user.expBalances.cycles;
+                                                    btc = b;
+                                                };
+                                            };
+                                        };
+
+                                        
+
+                                        return ?ut;
+                                    };
+                                    case _ {
+                                        return ?ut;
+                                    };
+                                };
+                            };
+                        };
+                    }
+                );
+                user.markets := Utils.bufferFromArray(markets);
+                return #ok(user.freeze());
+            };
+        };
+    };
 
     // Delete a market.
     // public shared(msg) func deleteMarket(marketId: Nat32): async ?M.MarketStable {

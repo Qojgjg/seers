@@ -59,6 +59,7 @@ export interface Market {
   'readAllUsers' : () => Promise<Array<UserStable>>,
   'readMarket' : (arg_0: number) => Promise<[] | [MarketStable]>,
   'readUserData' : (arg_0: Array<string>) => Promise<Array<UserData>>,
+  'refreshUser' : () => Promise<Result_1>,
   'resolveMarket' : (arg_0: number, arg_1: bigint) => Promise<boolean>,
   'sellOutcome' : (
       arg_0: number,

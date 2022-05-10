@@ -235,6 +235,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(UserData)],
         ['query'],
       ),
+    'refreshUser' : IDL.Func([], [Result_1], []),
     'resolveMarket' : IDL.Func([IDL.Nat32, IDL.Nat], [IDL.Bool], []),
     'sellOutcome' : IDL.Func(
         [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
