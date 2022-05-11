@@ -123,6 +123,7 @@ type MarketStable =
    createdAt: Time;
    description: text;
    endDate: Time;
+   forecasts: vec Forecast;
    histPrices: vec HistPoint;
    id: nat32;
    imageUrl: text;
@@ -203,6 +204,7 @@ type HistPoint =
    liquidity: float64;
    probabilities: vec float64;
  };
+type Forecast = vec float64;
 type Follower = 
  record {
    createdAt: Time;

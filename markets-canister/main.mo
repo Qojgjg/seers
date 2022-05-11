@@ -921,6 +921,12 @@ shared({ caller = initializer }) actor class Market() = this {
                 };
 
                 market.probabilities :=  Array.freeze(probabilities);
+                let histPoint: M.HistPoint = {
+                    probabilities = market.probabilities;
+                    liquidity = market.liquidity;
+                    createdAt = Time.now();
+                };
+                market.histPrices.add(histPoint);
 
                 var markets = user.markets.toArray();
                 let marketTokensOpt = Array.find<U.UserMarket>(markets,

@@ -25,6 +25,7 @@ type FeedItem =
   };
 type Followee = {createdAt : Time; user : Text};
 type Follower = {createdAt : Time; user : Text};
+type Forecast = [Float];
 type Hash = Nat32;
 type HistPoint =
   {createdAt : Time; liquidity : Float; probabilities : [Float]};
@@ -56,6 +57,7 @@ type MarketStable =
     createdAt : Time;
     description : Text;
     endDate : Time;
+    forecasts : [Forecast];
     histPrices : [HistPoint];
     id : Nat32;
     imageUrl : Text;
