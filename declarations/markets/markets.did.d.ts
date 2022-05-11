@@ -28,6 +28,7 @@ export type FeedItem = { 'bet' : Bet } |
   { 'market' : MarketStable };
 export interface Followee { 'createdAt' : Time, 'user' : string }
 export interface Follower { 'createdAt' : Time, 'user' : string }
+export type Forecast = Array<number>;
 export interface HistPoint {
   'probabilities' : Array<number>,
   'createdAt' : Time,
@@ -116,6 +117,7 @@ export interface MarketInitData {
 export interface MarketStable {
   'k' : number,
   'id' : number,
+  'forecasts' : Array<Forecast>,
   'title' : string,
   'histPrices' : Array<HistPoint>,
   'probabilities' : Array<number>,

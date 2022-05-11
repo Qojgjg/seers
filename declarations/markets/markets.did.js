@@ -69,6 +69,7 @@ export const idlFactory = ({ IDL }) => {
     'startDate' : Time,
     'images' : IDL.Vec(IDL.Text),
   });
+  const Forecast = IDL.Vec(IDL.Float64);
   const HistPoint = IDL.Record({
     'probabilities' : IDL.Vec(IDL.Float64),
     'createdAt' : Time,
@@ -86,6 +87,7 @@ export const idlFactory = ({ IDL }) => {
   const MarketStable = IDL.Record({
     'k' : IDL.Float64,
     'id' : IDL.Nat32,
+    'forecasts' : IDL.Vec(Forecast),
     'title' : IDL.Text,
     'histPrices' : IDL.Vec(HistPoint),
     'probabilities' : IDL.Vec(IDL.Float64),

@@ -8,7 +8,7 @@ import Trie "mo:base/Trie";
 import Text "mo:base/Text";
 
 import Utils "Utils";
-import BrierScore "BrierScore";
+import Forecast "Forecast";
 import Feed "Feed";
 import Tx "Tx";
 import Tokens "Tokens";
@@ -43,11 +43,6 @@ module {
         #userAlreadyExist;
     };
    
-    public type BrierScore = {
-        score: Float;
-        createdAt: Time.Time;
-    };
-
     public type Follower = {
         user: Text;
         createdAt: Time.Time;
@@ -86,7 +81,7 @@ module {
         labels: [Text];
         balances: [Float];
         collateralType: Tokens.CollateralType;
-        brierScores: [BrierScore.BrierScore];
+        brierScores: [Forecast.BrierScore];
         shares: Float;
         spent: Float;
         redeemed: Bool;
@@ -118,6 +113,7 @@ module {
         public var depositAddrs: Buffer.Buffer<DepositAddr> = Buffer.Buffer<DepositAddr>(3);
         public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
         public var txs: Buffer.Buffer<Tx.UserTx> = Buffer.Buffer<Tx.UserTx>(5);
+        public var forecasts: Buffer.Buffer<Forecast.Forecast> = Buffer.Buffer<Forecast.Forecast>(5);
         public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(5);
         public var posts: Buffer.Buffer<Post.Post> = Buffer.Buffer<Post.Post>(5);
         public var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);

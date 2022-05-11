@@ -6,7 +6,7 @@ import Float "mo:base/Float";
 import Array "mo:base/Array";
 
 import Utils "Utils";
-import BrierScore "BrierScore";
+import Forecast "Forecast";
 import Tokens "Tokens";
 import Comment "Comment";
 
@@ -121,6 +121,7 @@ module {
         public var volume: Float = 0.0;
         public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(10);
         public var histPrices: Buffer.Buffer<HistPoint> = Buffer.Buffer<HistPoint>(10);
+        public var forecasts: Buffer.Buffer<Forecast.Forecast> = Buffer.Buffer<Forecast.Forecast>(5);
         public var createdAt: Time.Time = Time.now();
         public var modifiedAt: Time.Time = Time.now();
 
@@ -151,6 +152,7 @@ module {
                 volume = volume;
                 comments = stableComments;
                 histPrices = histPrices.toArray();
+                forecasts = forecasts.toArray();
                 createdAt = createdAt;
                 modifiedAt = modifiedAt;
             };
@@ -180,6 +182,7 @@ module {
         volume: Float;
         comments: [Comment.CommentStable];
         histPrices: [HistPoint];
+        forecasts: [Forecast.Forecast];
         createdAt: Time.Time;
         modifiedAt: Time.Time;
     };
@@ -213,6 +216,7 @@ module {
         market.volume := m.volume;
         market.comments := Utils.bufferFromArray(comments);
         market.histPrices := Utils.bufferFromArray(m.histPrices);
+        market.forecasts := Utils.bufferFromArray(m.forecasts);
         market.createdAt := m.createdAt;
         market.modifiedAt := m.modifiedAt;
 
