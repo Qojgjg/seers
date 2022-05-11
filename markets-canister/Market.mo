@@ -120,7 +120,16 @@ module {
         public var state: MarketState = #pending;
         public var volume: Float = 0.0;
         public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(10);
-        public var histPrices: Buffer.Buffer<HistPoint> = Buffer.Buffer<HistPoint>(10);
+        public var histPrices: Buffer.Buffer<HistPoint> = do {
+            var histPrices = Buffer.Buffer<HistPoint>(1);
+            let histPoint: HistPoint = {
+                probabilities = initData.probabilities;
+                liquidity = initData.liquidity;
+                createdAt = Time.now();
+            };
+            histPrices.add(histPoint);
+            histPrices
+        };
         public var forecasts: Buffer.Buffer<Forecast.Forecast> = Buffer.Buffer<Forecast.Forecast>(5);
         public var createdAt: Time.Time = Time.now();
         public var modifiedAt: Time.Time = Time.now();
