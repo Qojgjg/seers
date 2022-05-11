@@ -56,7 +56,6 @@
           console.log(user)
         }
       }
-      console.log(user)
     }
   }
 
@@ -85,6 +84,19 @@
     } else {
       errorRefresh = ""
       user = response["ok"]
+      if (user) {
+        user.markets = user.markets.sort(function (a, b) {
+          var keyA = Number(a.marketId),
+            keyB = Number(b.marketId)
+          if (keyA < keyB) return -1
+          if (keyA > keyB) return 1
+          return 0
+        })
+        user.ownMarkets = user.markets.filter((m) => m.author)
+        user.otherMarkets = user.markets.filter((m) => !m.author)
+        user.txs = user.txs.reverse()
+        console.log(user)
+      }
     }
     refreshLabel = "Refresh"
   }
@@ -182,7 +194,7 @@
         <div
           style="display:flex; flex-direction: column;width: 100%; margin-top: 20px"
         >
-          Transactions:
+          Transactions
           {#each user.txs as tx, i}
             <div
               style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: column; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
