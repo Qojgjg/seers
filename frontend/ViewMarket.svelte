@@ -23,68 +23,113 @@
   const createChart = () => {
     if (myChart) myChart.destroy()
     const ctx = document.getElementById("myChart") as HTMLCanvasElement
-    myChart = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: ["January", "February", "March", "April", "May", "June"],
-        datasets: [
-          {
-            label: "No",
-            data: [90, 80, 70, 95, 80, 70],
+    const backgrounds = [
+      "rgba(54, 162, 235, 0.2)",
+      "rgba(255, 99, 132, 0.2)",
+      "rgba(255, 206, 86, 0.2)",
+      "rgba(75, 192, 192, 0.2)",
+      "rgba(153, 102, 255, 0.2)",
+      "rgba(255, 159, 64, 0.2)",
+    ]
+    const borders = [
+      "rgba(54, 162, 235, 1)",
+      "rgba(255, 99, 132, 1)",
+      "rgba(255, 206, 86, 1)",
+      "rgba(75, 192, 192, 1)",
+      "rgba(153, 102, 255, 1)",
+      "rgba(255, 159, 64, 1)",
+    ]
 
-            backgroundColor: [
-              "rgba(255, 99, 132, 0.2)",
-              "rgba(54, 162, 235, 0.2)",
-              "rgba(255, 206, 86, 0.2)",
-              "rgba(75, 192, 192, 0.2)",
-              "rgba(153, 102, 255, 0.2)",
-              "rgba(255, 159, 64, 0.2)",
-            ],
-            borderColor: [
-              "rgba(255, 99, 132, 1)",
-              "rgba(54, 162, 235, 1)",
-              "rgba(255, 206, 86, 1)",
-              "rgba(75, 192, 192, 1)",
-              "rgba(153, 102, 255, 1)",
-              "rgba(255, 159, 64, 1)",
-            ],
-            borderWidth: 1,
-          },
-          {
-            label: "Yes",
-            data: [10, 20, 30, 5, 20, 30],
-            backgroundColor: [
-              "rgba(255, 99, 132, 0.2)",
-              "rgba(54, 162, 235, 0.2)",
-              "rgba(255, 206, 86, 0.2)",
-              "rgba(75, 192, 192, 0.2)",
-              "rgba(153, 102, 255, 0.2)",
-              "rgba(255, 159, 64, 0.2)",
-            ],
-            borderColor: [
-              "rgba(255, 99, 132, 1)",
-              "rgba(54, 162, 235, 1)",
-              "rgba(255, 206, 86, 1)",
-              "rgba(75, 192, 192, 1)",
-              "rgba(153, 102, 255, 1)",
-              "rgba(255, 159, 64, 1)",
-            ],
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
+    if (market) {
+      const datasets = market.labels.map((label, idx) => {
+        return {
+          label: label,
+          data: market.histPrices.map((point) => point.probabilities[idx]),
+          backgroundColor: [backgrounds[idx]],
+          borderColor: [borders[idx]],
+          borderWidth: 1,
+        }
+      })
+
+      console.log("Datasets: " + JSON.stringify(datasets))
+
+      myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["January"],
+          datasets: datasets,
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
           },
         },
-      },
-    })
+      })
+
+      // myChart = new Chart(ctx, {
+      //   type: "line",
+      //   data: {
+      //     labels: ["January", "February", "March", "April", "May", "June"],
+      //     datasets: [
+      //       {
+      //         label: "No",
+      //         data: [90, 80, 70, 95, 80, 70],
+
+      //         backgroundColor: [
+      //           "rgba(255, 99, 132, 0.2)",
+      //           "rgba(54, 162, 235, 0.2)",
+      //           "rgba(255, 206, 86, 0.2)",
+      //           "rgba(75, 192, 192, 0.2)",
+      //           "rgba(153, 102, 255, 0.2)",
+      //           "rgba(255, 159, 64, 0.2)",
+      //         ],
+      //         borderColor: [
+      //           "rgba(255, 99, 132, 1)",
+      //           "rgba(54, 162, 235, 1)",
+      //           "rgba(255, 206, 86, 1)",
+      //           "rgba(75, 192, 192, 1)",
+      //           "rgba(153, 102, 255, 1)",
+      //           "rgba(255, 159, 64, 1)",
+      //         ],
+      //         borderWidth: 1,
+      //       },
+      //       {
+      //         label: "Yes",
+      //         data: [10, 20, 30, 5, 20, 30],
+      //         backgroundColor: [
+      //           "rgba(255, 99, 132, 0.2)",
+      //           "rgba(54, 162, 235, 0.2)",
+      //           "rgba(255, 206, 86, 0.2)",
+      //           "rgba(75, 192, 192, 0.2)",
+      //           "rgba(153, 102, 255, 0.2)",
+      //           "rgba(255, 159, 64, 0.2)",
+      //         ],
+      //         borderColor: [
+      //           "rgba(255, 99, 132, 1)",
+      //           "rgba(54, 162, 235, 1)",
+      //           "rgba(255, 206, 86, 1)",
+      //           "rgba(75, 192, 192, 1)",
+      //           "rgba(153, 102, 255, 1)",
+      //           "rgba(255, 159, 64, 1)",
+      //         ],
+      //         borderWidth: 1,
+      //       },
+      //     ],
+      //   },
+      //   options: {
+      //     scales: {
+      //       y: {
+      //         beginAtZero: true,
+      //       },
+      //     },
+      //   },
+      // })
+    }
   }
 
   const readMarket = async () => {
-    createChart()
     market = await $auth.actor.readMarket(parseInt(id))
     if (market) {
       market = market[0]
@@ -108,6 +153,7 @@
           }
         }
         comments = completeComments
+        createChart()
       }
     }
   }
