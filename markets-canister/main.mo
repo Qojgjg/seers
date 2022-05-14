@@ -21,6 +21,7 @@ import Utils "Utils";
 import Tx "Tx";
 import Comment "Comment";
 import Like "Like";
+import Forecast "Forecast";
 
 // import Array "mo:base/Array";
 // import Binary "mo:encoding/Binary";
@@ -822,6 +823,32 @@ shared({ caller = initializer }) actor class Market() = this {
                 };
             };
         };
+    };
+
+    public shared(msg) func submitForecast(
+        marketId: Nat32,
+        forecast: Forecast.Forecast
+    ): async Result.Result<(), M.MarketError> {
+        
+        assert(not updating);
+        let caller = Principal.toText(msg.caller);
+        
+        if (caller == anon) {
+            return #err(#callerIsAnon);
+        };
+
+        let marketOpt = marketMap.get(marketId);
+
+        switch (marketOpt) {
+            case null {
+                return #err(#marketMissing);
+            };
+            case (?market) {
+                market.forecasts.add(forecast);
+            };
+        };
+
+        return #ok();
     };
 
     public shared(msg) func buyOutcome(

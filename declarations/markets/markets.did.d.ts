@@ -41,18 +41,18 @@ export interface Like {
   'stars' : number,
 }
 export interface Market {
-  'addCommentToMarket' : (arg_0: number, arg_1: string) => Promise<Result_3>,
+  'addCommentToMarket' : (arg_0: number, arg_1: string) => Promise<Result_4>,
   'buyOutcome' : (
       arg_0: number,
       arg_1: number,
       arg_2: bigint,
       arg_3: boolean,
-    ) => Promise<Result>,
+    ) => Promise<Result_1>,
   'callerAccount' : () => Promise<AccountIdentifier>,
   'canisterAccount' : () => Promise<string>,
   'canisterFloat' : () => Promise<ICP>,
-  'createMarket' : (arg_0: MarketInitData) => Promise<Result_2>,
-  'createUser' : (arg_0: string) => Promise<Result_1>,
+  'createMarket' : (arg_0: MarketInitData) => Promise<Result_3>,
+  'createUser' : (arg_0: string) => Promise<Result_2>,
   'getUserStable' : (arg_0: string) => Promise<[] | [UserStable]>,
   'readAllMarkets' : (arg_0: MarketCategory, arg_1: MarketState) => Promise<
       Array<MarketStable>
@@ -60,16 +60,17 @@ export interface Market {
   'readAllUsers' : () => Promise<Array<UserStable>>,
   'readMarket' : (arg_0: number) => Promise<[] | [MarketStable]>,
   'readUserData' : (arg_0: Array<string>) => Promise<Array<UserData>>,
-  'refreshUser' : () => Promise<Result_1>,
+  'refreshUser' : () => Promise<Result_2>,
   'resolveMarket' : (arg_0: number, arg_1: bigint) => Promise<boolean>,
   'sellOutcome' : (
       arg_0: number,
       arg_1: number,
       arg_2: bigint,
       arg_3: boolean,
-    ) => Promise<Result>,
+    ) => Promise<Result_1>,
   'setMarketState' : (arg_0: number, arg_1: MarketState) => Promise<boolean>,
   'setUpdating' : (arg_0: boolean) => Promise<undefined>,
+  'submitForecast' : (arg_0: number, arg_1: Forecast) => Promise<Result>,
 }
 export type MarketCategory = { 'any' : null } |
   { 'entertainment' : null } |
@@ -156,13 +157,15 @@ export interface Post {
   'likes' : Array<Like>,
   'comments' : Array<CommentStable>,
 }
-export type Result = { 'ok' : number } |
+export type Result = { 'ok' : null } |
   { 'err' : MarketError };
-export type Result_1 = { 'ok' : UserStable } |
+export type Result_1 = { 'ok' : number } |
+  { 'err' : MarketError };
+export type Result_2 = { 'ok' : UserStable } |
   { 'err' : UserError };
-export type Result_2 = { 'ok' : MarketStable } |
+export type Result_3 = { 'ok' : MarketStable } |
   { 'err' : MarketError };
-export type Result_3 = { 'ok' : CommentStable } |
+export type Result_4 = { 'ok' : CommentStable } |
   { 'err' : MarketError };
 export type Time = bigint;
 export interface UserData {
