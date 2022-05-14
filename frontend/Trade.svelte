@@ -2,6 +2,7 @@
   import Content from "./Content.svelte"
   import Modal from "./Modal.svelte"
   import { modal } from "./store/stores.js"
+  import inf from "./assets/inf.gif"
 
   export let auth
   export let readMarket
@@ -181,6 +182,13 @@
           <div
             style="width: 100%; text-align: center; display: flex; flex-direction: column; justify-content: center"
           >
+            <button class="btn-grad" on:click={() => 0}>
+              <img
+                src={inf}
+                alt="inf"
+                style="width: 100%; height: 400%; margin: -50%"
+              />
+            </button>
             {#if principal !== ""}
               <Modal show={$modal}>
                 <Content
