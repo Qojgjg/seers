@@ -837,8 +837,17 @@ shared({ caller = initializer }) actor class Market() = this {
             return #err(#callerIsAnon);
         };
 
-        let marketOpt = marketMap.get(marketId);
+        let userOpt = userMap.get(caller);
+        switch (userOpt) {
+            case null {
+                return #err(#profileNotCreated);
+            };
+            case (?user) {
+                user.forecasts.add(forecast);
+            };
+        };
 
+        let marketOpt = marketMap.get(marketId);
         switch (marketOpt) {
             case null {
                 return #err(#marketMissing);
