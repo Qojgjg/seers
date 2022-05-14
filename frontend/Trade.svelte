@@ -8,8 +8,8 @@
   export let market
   export let principal
 
-  let tokensEstimate
-  let seerAmount
+  let tokensEstimate = 0.0
+  let seerAmount = 0.0
   let response
   let errorResponse = ""
 
