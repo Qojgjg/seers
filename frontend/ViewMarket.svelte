@@ -80,6 +80,9 @@
       market = market[0]
       if (market) {
         selectedLabel = market.labels[0]
+        market.labels = market.labels.map((label) => {
+          return { label, value: 0.0 }
+        })
         comments = market.comments
         marketId = market.id
         const authors = market.comments.map((c) => c.author)
@@ -161,10 +164,10 @@
     </div>
     <div style="width: 100%; display:flex">
       <div>
-        <Trade {auth} {readMarket} {market} />
+        <Trade {auth} {readMarket} {market} {principal} />
       </div>
       <div>
-        <Forecast />
+        <Forecast {auth} {readMarket} {market} {principal} />
       </div>
     </div>
     <div style="width: 100%; display:flex">

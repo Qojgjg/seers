@@ -1,26 +1,15 @@
 <script lang="ts">
-  let id
-  let startDate
-  let endDate
-  let volume
-  let liquidity
-  let state = { open: null }
-  let labels = ["Yes", "No"]
-  let principal
+  export let auth
+  export let readMarket
+  export let market
+  export let principal
 
   let errorResponse = ""
 
-  let probabilities = [0.6, 0.4]
-
-  let market = {
-    id,
-    state,
-    startDate,
-    endDate,
-    volume,
-    liquidity,
-    labels,
-    probabilities,
+  const submitForecast = async () => {
+    const values = market.labels.map((l) => Number(l.value) / 100.0)
+    const r = await $auth.actor.submitForecast(market.id, values)
+    console.log(r)
   }
 </script>
 
@@ -32,16 +21,17 @@
     <div
       style="width: 200px; text-align: center; display: flex; flex-direction: column; justify-content: center"
     >
-      {#if principal !== ""}
-        {#each market.labels as label}
+      {#if market}
+        {#each market?.labels as label}
           <div
             style="display:flex; flex-direction:row; width: 200px; justify-content:center; align-items:center; padding: 5px"
           >
-            <div style="width: 50px; margin-right: 20px">{label}</div>
+            <div style="width: 50px; margin-right: 20px">{label.label}</div>
             <div style="width: 50px;">
               <input
+                bind:value={label.value}
                 style="width: 100%; color: rgb(255, 255, 255); background-color: rgb(33, 36, 41); height: 1em; font-family: 'Roboto Mono', monospace; border: 0"
-                placeholder="0"
+                placeholder="0.0"
               /> %
             </div>
           </div>
@@ -49,7 +39,14 @@
         <div
           style="width: 200px; justify-content: center; text-align: center; display: flex"
         >
-          <button class="btn-grad" on:click={() => 0}> Submit </button>
+          <button
+            class="btn-grad"
+            on:click={async () => {
+              await submitForecast()
+            }}
+          >
+            Submit
+          </button>
         </div>
         <div style="width: 100%;text-align:center;color:red">
           {errorResponse}

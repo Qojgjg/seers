@@ -6,17 +6,10 @@
   export let auth
   export let readMarket
   export let market
+  export let principal
 
-  let id
-  let startDate
-  let endDate
-  let volume
-  let liquidity
-  let state = { open: null }
   let tokensEstimate
   let seerAmount
-  let labels = ["Yes", "No"]
-  let principal
   let response
   let errorResponse = ""
 
@@ -145,7 +138,7 @@
           >
             {#each market.labels as label, i}
               <option value={i}>
-                {label.slice(0, 20)}
+                {label.label.slice(0, 20)}
                 ({Number(market.probabilities[i]).toFixed(2)} &Sigma;)
               </option>
             {/each}
