@@ -224,19 +224,19 @@
     margin-top: 0.5em;
   }
   .YesNoOptions {
-    width: 300px;
+    width: 200px;
     display: flex;
     height: fit-content;
     justify-content: center;
   }
   .TabOptions {
-    width: 300px;
+    width: 200px;
     display: flex;
     margin-top: 0.5em;
     height: fit-content;
   }
   .ContentTab {
-    width: 300px;
+    width: 200px;
     display: flex;
     justify-content: center;
   }
