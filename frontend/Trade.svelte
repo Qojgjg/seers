@@ -102,57 +102,60 @@
   {#if market}
     <div class="market-controls">
       <div
-        style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column;padding: 10px;"
+        style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column;padding: 10px; width: 200px"
       >
         <h4>Trade</h4>
         <div class="YesNoOptions">
-          <button
-            class={buyOptClass}
-            on:click={() => {
-              buyOptClass = "BuyOptSelected"
-              sellOptClass = "SellOpt"
-              buyTokens = true
-              buttonLabel = "Buy " + selectedLabel
-            }}>Buy</button
-          >
-          <button
-            class={sellOptClass}
-            on:click={() => {
-              buyOptClass = "BuyOpt"
-              sellOptClass = "SellOptSelected"
-              buyTokens = false
-              buttonLabel = "Sell " + selectedLabel
-            }}>Sell</button
-          >
+          <div style="width: 70%">
+            <button
+              class={buyOptClass}
+              on:click={() => {
+                buyOptClass = "BuyOptSelected"
+                sellOptClass = "SellOpt"
+                buyTokens = true
+                buttonLabel = "Buy " + selectedLabel
+              }}>Buy</button
+            >
+            <button
+              class={sellOptClass}
+              on:click={() => {
+                buyOptClass = "BuyOpt"
+                sellOptClass = "SellOptSelected"
+                buyTokens = false
+                buttonLabel = "Sell " + selectedLabel
+              }}>Sell</button
+            >
+          </div>
         </div>
         <div class="OutcomeTitle">Outcome:</div>
         <div class="ContentTab">
-          <select
-            bind:value={selected}
-            style="width: 100%"
-            on:change={() => {
-              selectedLabel = market.labels[selected]
-              if (buyTokens) buttonLabel = "Buy " + selectedLabel
-              else buttonLabel = "Sell " + selectedLabel
-            }}
-          >
-            {#each market.labels as label, i}
-              <option value={i}>
-                {label.label.slice(0, 20)}
-                ({Number(market.probabilities[i]).toFixed(2)} &Sigma;)
-              </option>
-            {/each}
-          </select>
-          <div class="OutcomeTitle">Amount:</div>
-          <div class="OutcomeTitle">
-            <input
-              bind:value={seerAmount}
-              on:keyup={() => debounce(market.id, seerAmount, 500)}
-              placeholder="0"
-              style="color: rgb(255, 255, 255); background-color: rgb(33, 36, 41); font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; width: 150px"
-            />
-          </div>
-          <!-- <div class="ControlData">
+          <div style="width: 70%">
+            <select
+              bind:value={selected}
+              style="width: 100%; height: 1.7em"
+              on:change={() => {
+                selectedLabel = market.labels[selected]
+                if (buyTokens) buttonLabel = "Buy " + selectedLabel
+                else buttonLabel = "Sell " + selectedLabel
+              }}
+            >
+              {#each market.labels as label, i}
+                <option value={i}>
+                  {label.label.slice(0, 20)}
+                  ({Number(market.probabilities[i]).toFixed(2)} &Sigma;)
+                </option>
+              {/each}
+            </select>
+            <div class="OutcomeTitle">Amount:</div>
+            <div class="OutcomeTitle">
+              <input
+                bind:value={seerAmount}
+                on:keyup={() => debounce(market.id, seerAmount, 500)}
+                placeholder="0"
+                style="color: rgb(255, 255, 255); background-color: rgb(33, 36, 41); font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; width: 100px"
+              />
+            </div>
+            <!-- <div class="ControlData">
             <div>LP fee 0.00%</div>
             <div>
               {#if buyTokens}
@@ -178,35 +181,36 @@
               {/if}
             </div>
           </div> -->
-          <div
-            style="width: 100%; text-align: center; display: flex; flex-direction: column; justify-content: center"
-          >
-            {#if principal !== ""}
-              <Modal show={$modal}>
-                <Content
-                  onOk={async () => {
-                    let res = await doIt(market.id, seerAmount)
-                    seerAmount = 0.0
-                    tokensEstimate = 0.0
-                    return res
-                  }}
-                  {tokensEstimate}
-                  {seerAmount}
-                  outcome={selectedLabel}
-                  {buttonLabel}
-                  {buyTokens}
-                />
-              </Modal>
-              <div style="width: 100%;text-align:center;color:red">
-                {errorResponse}
-              </div>
-            {:else}
-              <div
-                style="width: 100%; justify-content: center; text-align: center; display: flex"
-              >
-                <button class="btn-grad" on:click={() => 0}> Login </button>
-              </div>
-            {/if}
+            <div
+              style="width: 100%; text-align: center; display: flex; flex-direction: column; justify-content: center"
+            >
+              {#if principal !== ""}
+                <Modal show={$modal}>
+                  <Content
+                    onOk={async () => {
+                      let res = await doIt(market.id, seerAmount)
+                      seerAmount = 0.0
+                      tokensEstimate = 0.0
+                      return res
+                    }}
+                    {tokensEstimate}
+                    {seerAmount}
+                    outcome={selectedLabel}
+                    {buttonLabel}
+                    {buyTokens}
+                  />
+                </Modal>
+                <div style="width: 100%;text-align:center;color:red">
+                  {errorResponse}
+                </div>
+              {:else}
+                <div
+                  style="width: 100%; justify-content: center; text-align: center; display: flex"
+                >
+                  <button class="btn-grad" on:click={() => 0}> Login </button>
+                </div>
+              {/if}
+            </div>
           </div>
         </div>
       </div>
@@ -223,6 +227,7 @@
     width: 300px;
     display: flex;
     height: fit-content;
+    justify-content: center;
   }
   .TabOptions {
     width: 300px;
@@ -232,6 +237,8 @@
   }
   .ContentTab {
     width: 300px;
+    display: flex;
+    justify-content: center;
   }
   .BuyOpt {
     width: 50%;
