@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import { useNavigate } from "svelte-navigator"
   import SvelteMarkdown from "svelte-markdown"
   import Chart from "chart.js/auto"
   import Trade from "./Trade.svelte"
@@ -10,9 +9,6 @@
   export let auth
   export let id
   export let principal
-  export let signIn
-
-  const navigate = useNavigate()
 
   let market
   let marketId

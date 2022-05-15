@@ -8,13 +8,29 @@
 
   let errorResponse = ""
   let processing = false
+  let done = false
+
+  const splitCamelCaseToString = (s) => {
+    return s
+      .split(/(?=[A-Z])/)
+      .map((p) => {
+        return p[0].toUpperCase() + p.slice(1)
+      })
+      .join(" ")
+  }
 
   const submitForecast = async () => {
     const values = market.labels.map((l) => Number(l.value) / 100.0)
     processing = true
     const r = await $auth.actor.submitForecast(market.id, values)
+    if ("err" in r) {
+      errorResponse =
+        "Error: " + splitCamelCaseToString(Object.keys(r["err"]).toString())
+    } else {
+      errorResponse = ""
+      done = true
+    }
     processing = false
-    console.log(r)
   }
 </script>
 
@@ -64,9 +80,13 @@
             </button>
           {/if}
         </div>
-        <div style="width: 100%;text-align:center;color:red">
-          {errorResponse}
-        </div>
+        {#if errorResponse}
+          <div style="width: 100%;text-align:center;color:red">
+            {errorResponse}
+          </div>
+        {:else if done}
+          <div style="width: 100%;text-align:center;color:green">Done!</div>
+        {/if}
       {:else}
         <div
           style="width: 200px; justify-content: center; text-align: center; display: flex"
