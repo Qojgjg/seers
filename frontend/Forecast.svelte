@@ -61,11 +61,15 @@
           style="width: 150px; justify-content: center; text-align: center; display: flex; align-items:center"
         >
           {#if processing}
-            <button class="btn-grad" on:click={() => 0} style="width: 150px">
+            <button
+              class="btn-grad"
+              on:click={() => 0}
+              style="width: 150px; overflow:hidden"
+            >
               <img
                 src={inf}
                 alt="inf"
-                style="width: 150%; height: 400%; margin: -75%"
+                style="width: 150%; height: 400%; margin: -75%;"
               />
             </button>
           {:else}
