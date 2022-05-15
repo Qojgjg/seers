@@ -1,25 +1,30 @@
 <script lang="ts">
+  import inf from "./assets/inf.gif"
+
   export let auth
   export let readMarket
   export let market
   export let principal
 
   let errorResponse = ""
+  let processing = false
 
   const submitForecast = async () => {
     const values = market.labels.map((l) => Number(l.value) / 100.0)
+    processing = true
     const r = await $auth.actor.submitForecast(market.id, values)
+    processing = false
     console.log(r)
   }
 </script>
 
 <div class="market-controls">
   <div
-    style="display:flex; justify-content:start; text-align:center; align-items:center;flex-direction:column;width: 200px; padding: 10px;"
+    style="display:flex; justify-content:center; text-align:center; align-items:center;flex-direction:column;width: 200px; padding: 10px;"
   >
     <h4>Forecast</h4>
     <div
-      style="width: 200px; text-align: center; display: flex; flex-direction: column; justify-content: center"
+      style="width: 200px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items:center"
     >
       {#if market}
         {#each market?.labels as label}
@@ -37,16 +42,27 @@
           </div>
         {/each}
         <div
-          style="width: 200px; justify-content: center; text-align: center; display: flex"
+          style="width: 150px; justify-content: center; text-align: center; display: flex; align-items:center"
         >
-          <button
-            class="btn-grad"
-            on:click={async () => {
-              await submitForecast()
-            }}
-          >
-            Submit
-          </button>
+          {#if processing}
+            <button class="btn-grad" on:click={() => 0} style="width: 150px">
+              <img
+                src={inf}
+                alt="inf"
+                style="width: 150%; height: 400%; margin: -75%"
+              />
+            </button>
+          {:else}
+            <button
+              class="btn-grad"
+              style="width: 150px"
+              on:click={async () => {
+                await submitForecast()
+              }}
+            >
+              Submit
+            </button>
+          {/if}
         </div>
         <div style="width: 100%;text-align:center;color:red">
           {errorResponse}
