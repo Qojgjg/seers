@@ -37,9 +37,12 @@
     ]
 
     if (market) {
+      if (market.histPrices.length == 1) {
+        market.histPrices.push(market.histPrices[0])
+      }
       const datasets = market.labels.map((label, idx) => {
         return {
-          label: label,
+          label: label.label,
           data: market.histPrices.map((point) => point.probabilities[idx]),
           backgroundColor: [backgrounds[idx]],
           borderColor: [borders[idx]],
