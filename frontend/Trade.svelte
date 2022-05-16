@@ -155,32 +155,32 @@
                 style="color: rgb(255, 255, 255); background-color: rgb(33, 36, 41); font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; width: 100px"
               />
             </div>
-            <!-- <div class="ControlData">
-            <div>LP fee 0.00%</div>
-            <div>
-              {#if buyTokens}
-                Avg. price {tokensEstimate
-                  ? (seerAmount / tokensEstimate).toFixed(2)
-                  : 0} &Sigma;
-              {:else}
-                Avg. price {tokensEstimate
-                  ? (seerAmount / tokensEstimate).toFixed(2)
-                  : 0} tokens
-              {/if}
+            <div class="ControlData">
+              <div>LP fee 0.00%</div>
+              <div>
+                {#if buyTokens}
+                  Avg. price {tokensEstimate
+                    ? (seerAmount / tokensEstimate).toFixed(2)
+                    : 0} &Sigma;
+                {:else}
+                  Avg. price {tokensEstimate
+                    ? (seerAmount / tokensEstimate).toFixed(2)
+                    : 0} tokens
+                {/if}
+              </div>
+              <div>
+                {#if buyTokens}
+                  Max. Winnings {tokensEstimate
+                    ? Number(tokensEstimate).toFixed(2)
+                    : Number(0).toFixed(2)}
+                  &Sigma;
+                {:else}
+                  Get back {tokensEstimate
+                    ? Number(tokensEstimate).toFixed(2)
+                    : Number(0).toFixed(2)} &Sigma;
+                {/if}
+              </div>
             </div>
-            <div>
-              {#if buyTokens}
-                Max. Winnings {tokensEstimate
-                  ? Number(tokensEstimate).toFixed(2)
-                  : Number(0).toFixed(2)}
-                &Sigma;
-              {:else}
-                Get back {tokensEstimate
-                  ? Number(tokensEstimate).toFixed(2)
-                  : Number(0).toFixed(2)} &Sigma;
-              {/if}
-            </div>
-          </div> -->
             <div
               style="width: 100%; text-align: center; display: flex; flex-direction: column; justify-content: center"
             >

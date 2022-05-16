@@ -158,7 +158,7 @@
     </div>
 
     <div style="line-height: 2; text-align:left; font-size: 1.1em">
-      <h3>About</h3>
+      <h3>Market Rules</h3>
       <SvelteMarkdown source={market?.description} />
     </div>
     <div style="width: 100%; display:flex">
