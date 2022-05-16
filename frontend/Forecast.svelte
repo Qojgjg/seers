@@ -5,6 +5,7 @@
   export let readMarket
   export let market
   export let principal
+  export let signIn
 
   let errorResponse = ""
   let processing = false
@@ -72,7 +73,7 @@
                 style="width: 150%; height: 400%; margin: -75%;"
               />
             </button>
-          {:else}
+          {:else if principal != ""}
             <button
               class="btn-grad"
               style="width: 150px"
@@ -82,6 +83,8 @@
             >
               Submit
             </button>
+          {:else}
+            <button class="btn-grad" on:click={() => signIn()}> Login </button>
           {/if}
         </div>
         {#if errorResponse}

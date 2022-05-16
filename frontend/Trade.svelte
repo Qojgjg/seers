@@ -8,12 +8,13 @@
   export let market
   export let principal
   export let selectedLabel
+  export let signIn
 
   let tokensEstimate = 0.0
   let seerAmount = 0.0
   let response
   let errorResponse = ""
-
+  let processing = false
   let buyOptClass = "BuyOptSelected"
   let sellOptClass = "SellOpt"
 
@@ -44,6 +45,7 @@
   const dryRun = async (marketId, amount) => {
     amount = parseInt(amount)
     console.log("Selected: " + selected)
+    processing = true
     if (buyTokens) {
       response = await $auth.actor.buyOutcome(marketId, amount, selected, false)
     } else {
@@ -54,6 +56,7 @@
         false,
       )
     }
+    processing = false
 
     if (response["err"]) {
       errorResponse =
@@ -170,7 +173,7 @@
               </div>
               <div>
                 {#if buyTokens}
-                  Max. Winnings {tokensEstimate
+                  Winnings {tokensEstimate
                     ? Number(tokensEstimate).toFixed(2)
                     : Number(0).toFixed(2)}
                   &Sigma;
@@ -198,16 +201,21 @@
                     outcome={selectedLabel}
                     {buttonLabel}
                     {buyTokens}
+                    {processing}
                   />
                 </Modal>
-                <div style="width: 100%;text-align:center;color:red">
+                <div
+                  style="width: 100%;text-align:center;color:red;overflow:visible"
+                >
                   {errorResponse}
                 </div>
               {:else}
                 <div
                   style="width: 100%; justify-content: center; text-align: center; display: flex"
                 >
-                  <button class="btn-grad" on:click={() => 0}> Login </button>
+                  <button class="btn-grad" on:click={() => signIn()}>
+                    Login
+                  </button>
                 </div>
               {/if}
             </div>

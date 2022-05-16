@@ -9,6 +9,7 @@
   export let auth
   export let id
   export let principal
+  export let signIn
 
   let market
   let marketId
@@ -144,7 +145,7 @@
       style="display:flex; flex-direction: row; justify-content:start; text-align:center"
     >
       <img
-        style="width: 100px; height: 100px;border-radius: 50%; margin-right: 15px"
+        style="width: 150px; border-radius: 5px; margin-right: 15px"
         src={market?.imageUrl}
         alt="market"
       />
@@ -163,14 +164,21 @@
     </div>
     <div style="width: 100%; display:flex">
       <div>
-        <Trade {auth} {readMarket} {market} {principal} {selectedLabel} />
+        <Trade
+          {auth}
+          {readMarket}
+          {market}
+          {principal}
+          {selectedLabel}
+          {signIn}
+        />
       </div>
       <div>
-        <Forecast {auth} {readMarket} {market} {principal} />
+        <Forecast {auth} {readMarket} {market} {principal} {signIn} />
       </div>
     </div>
     <div style="width: 100%; display:flex">
-      <Comments {auth} {marketId} {readMarket} {comments} />
+      <Comments {auth} {marketId} {readMarket} {comments} {signIn} />
     </div>
   </div>
 </div>

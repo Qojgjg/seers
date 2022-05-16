@@ -5,6 +5,7 @@
   export let marketId
   export let readMarket
   export let comments = []
+  export let signIn
 
   let comment = ""
   let commentLabel = "Comment"

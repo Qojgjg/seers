@@ -1,6 +1,7 @@
 <script>
   import { getContext } from "svelte"
   import Dialog from "./Dialog.svelte"
+  import inf from "./assets/inf.gif"
 
   export let onOk
   export let tokensEstimate
@@ -8,6 +9,7 @@
   export let seerAmount
   export let buttonLabel
   export let buyTokens
+  export let processing
 
   const { open } = getContext("simple-modal")
 
@@ -51,7 +53,21 @@
 <div
   style="width: 100%; justify-content: center; text-align: center; display: flex"
 >
-  <button class="btn-grad" on:click={showDialog}>{buttonLabel}</button>
+  {#if processing}
+    <button
+      class="btn-grad"
+      on:click={() => 0}
+      style="width: 150px; overflow:hidden"
+    >
+      <img
+        src={inf}
+        alt="inf"
+        style="width: 150%; height: 400%; margin: -75%;"
+      />
+    </button>
+  {:else}
+    <button class="btn-grad" on:click={showDialog}>{buttonLabel}</button>
+  {/if}
 </div>
 
 <style>
