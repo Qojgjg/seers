@@ -154,7 +154,7 @@
           <h3>{market?.title}</h3>
         </div>
       </div>
-      <div style="display:flex;">
+      <div style="display:flex;padding-top: 20px">
         <div style="width: 70%">
           <div style="width: 600px">
             <canvas id="myChart" />
@@ -166,7 +166,9 @@
           </div>
         </div>
 
-        <div style="width: 30%; display:flex; flex-direction:column">
+        <div
+          style="width: 30%; display:flex; flex-direction:column; padding-left: 20px"
+        >
           <div>
             <Trade
               {auth}
