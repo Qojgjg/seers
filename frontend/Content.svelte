@@ -19,12 +19,20 @@
     return onOk()
   }
 
-  const getAction = () => {
-    return buyTokens ? "Buying" : "Selling"
-  }
-
-  const getToken = () => {
-    return buyTokens ? "Σ" : "tokens"
+  const getMessage = () => {
+    if (buyTokens) {
+      return `Buying ${tokensEstimate.toFixed(
+        2,
+      )} shares of "${outcome}". Total cost is ${Number(seerAmount).toFixed(
+        2,
+      )} tokens`
+    } else {
+      return `Selling ${Number(seerAmount).toFixed(
+        2,
+      )} shares of "${outcome}". Receiving ${Number(tokensEstimate).toFixed(
+        2,
+      )} Σ`
+    }
   }
 
   const showDialog = () => {
@@ -32,11 +40,7 @@
       Dialog,
       {
         title: "Confirm Transaction",
-        message: `${getAction()} ${tokensEstimate.toFixed(
-          2,
-        )} shares of "${outcome}". Total cost is ${Number(seerAmount).toFixed(
-          2,
-        )} ${getToken()}`,
+        message: getMessage(),
         hasForm: true,
         onCancel,
         onOkay,
