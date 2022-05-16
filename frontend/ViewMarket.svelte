@@ -109,32 +109,6 @@
   onMount(readMarket)
 </script>
 
-<!-- <div class="market-controls">
-      <ul
-        style="list-style-type: none; margin: 0; padding: 10px; width: 100%; line-height: 1.5em"
-      >
-        <h4 style="text-align:center; padding: 3px; margin: 3px">Details</h4>
-  
-        <li>
-          <div style="margin:0;padding:0;text-transform:capitalize">
-            Status: {Object.keys(market.state).toString()}
-          </div>
-        </li>
-        <li>
-          Starts: {new Date(
-            parseInt(market.startDate) / 1_000_000,
-          ).toDateString()}
-        </li>
-        <li>
-          Ends: {new Date(parseInt(market.endDate) / 1_000_000).toDateString()}
-        </li>
-        <li>Volume: {Number(market.volume).toFixed(2)} &Sigma;</li>
-        <li>
-          Liquidity: {Number(market.liquidity).toFixed(2)} &Sigma;
-        </li>
-      </ul>
-    </div> -->
-
 <div
   style="display: flex; padding: 30px; align-items: center; justify-content: center; flex-direction:column; text-align: center"
 >
@@ -146,12 +120,38 @@
         style="display:flex; flex-direction: row; justify-content:start; text-align:center"
       >
         <img
-          style="width: 150px; border-radius: 5px; margin-right: 15px"
+          style="width: 150px; height: fit-content; border-radius: 5px; margin-right: 15px"
           src={market?.imageUrl}
           alt="market"
         />
         <div style="">
           <h3>{market?.title}</h3>
+
+          <div class="">
+            <div
+              style="display:flex; margin: 0; padding: 10px; width: 100%; line-height: 1.5em; gap: 5px; color:gray"
+            >
+              <div>
+                <div style="margin:0;padding:0;text-transform:capitalize">
+                  Status: {market ? Object.keys(market?.state).toString() : ""}
+                </div>
+              </div>
+              <div>
+                Starts: {new Date(
+                  parseInt(market?.startDate) / 1_000_000,
+                ).toDateString()}
+              </div>
+              <div>
+                Ends: {new Date(
+                  parseInt(market?.endDate) / 1_000_000,
+                ).toDateString()}
+              </div>
+              <div>Volume: {Number(market?.volume).toFixed(2)} &Sigma;</div>
+              <div>
+                Liquidity: {Number(market?.liquidity).toFixed(2)} &Sigma;
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div style="display:flex;padding-top: 20px">
