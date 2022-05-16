@@ -141,7 +141,7 @@
   <div
     style="display:flex;background: rgba(0, 0, 0, 0.3); width: 80%; max-width: 1000px;padding: 80px; border-style: none; border-width: 2px; border-radius: 10px"
   >
-    <div style="width: 70%">
+    <div style="">
       <div
         style="display:flex; flex-direction: row; justify-content:start; text-align:center"
       >
@@ -154,34 +154,38 @@
           <h3>{market?.title}</h3>
         </div>
       </div>
-      <div style="width: 600px">
-        <canvas id="myChart" />
-      </div>
+      <div style="display:flex;">
+        <div style="width: 70%">
+          <div style="width: 600px">
+            <canvas id="myChart" />
+          </div>
 
-      <div style="line-height: 2; text-align:left; font-size: 1.1em">
-        <h3>Market Rules</h3>
-        <SvelteMarkdown source={market?.description} />
+          <div style="line-height: 2; text-align:left; font-size: 1.1em">
+            <h3>Market Rules</h3>
+            <SvelteMarkdown source={market?.description} />
+          </div>
+        </div>
+
+        <div style="width: 30%; display:flex; flex-direction:column">
+          <div>
+            <Trade
+              {auth}
+              {readMarket}
+              {market}
+              {principal}
+              {selectedLabel}
+              {signIn}
+            />
+          </div>
+          <div>
+            <Forecast {auth} {readMarket} {market} {principal} {signIn} />
+          </div>
+        </div>
+      </div>
+      <div style="width: 100%; display:flex">
+        <Comments {auth} {marketId} {readMarket} {comments} {signIn} />
       </div>
     </div>
-
-    <div style="width: 30%; display:flex; flex-direction:column">
-      <div>
-        <Trade
-          {auth}
-          {readMarket}
-          {market}
-          {principal}
-          {selectedLabel}
-          {signIn}
-        />
-      </div>
-      <div>
-        <Forecast {auth} {readMarket} {market} {principal} {signIn} />
-      </div>
-    </div>
-    <!-- <div style="width: 100%; display:flex">
-      <Comments {auth} {marketId} {readMarket} {comments} {signIn} />
-    </div> -->
   </div>
 </div>
 
