@@ -100,7 +100,7 @@
         <div><img src={imageUrl} alt="preview" style="width: 100px" /></div>
       </div>
       <div style="width: 80%; padding: 1em; text-align:left; font-size: 0.7em">
-        <div style="font-size: 1.5em">Options:</div>
+        <div style="font-size: 1.5em">Outcomes:</div>
         <div style="font-size: 1.5em">
           <input bind:value={labels} size="40" maxlength="1000" />
         </div>
@@ -145,6 +145,9 @@
 {/if}
 
 <style global>
+  input {
+    line-height: 20px;
+  }
   .rowCreate {
     display: flex;
     flex-direction: column;
@@ -159,8 +162,9 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    padding: 10px;
+    padding: 30px;
     justify-content: center;
+    width: 500px;
 
     background-color: rgb(25, 27, 31);
     border: 1px solid rgb(90, 58, 81);

@@ -154,7 +154,7 @@
           </div>
         </div>
       </div>
-      <div style="display:flex;padding-top: 20px">
+      <div style="display:flex;margin-top: 50px">
         <div style="width: 70%">
           <div style="width: 600px">
             <canvas id="myChart" />

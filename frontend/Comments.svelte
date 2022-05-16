@@ -86,7 +86,16 @@
             style="width: 70px; height: 70px; border-radius: 50%"
           />
           <div>
-            <div style="color:pink; padding: 0px 0px">{comment.handle}</div>
+            <div style="display:flex; gap: 10px">
+              <div style="color:pink; padding: 0px 0px; font-weight:bold">
+                {comment.handle}
+              </div>
+              <div style="color:grey; padding: 0px 0px">
+                {new Date(
+                  Number(comment.createdAt) / 1_000_000,
+                ).toLocaleString()}
+              </div>
+            </div>
             <SvelteMarkdown source={comment.content} />
           </div>
         </div>
