@@ -7,6 +7,7 @@
   export let readMarket
   export let market
   export let principal
+  export let selectedLabel
 
   let tokensEstimate = 0.0
   let seerAmount = 0.0
@@ -18,7 +19,6 @@
 
   let buttonLabel = "Buy"
   let selected = 0
-  let selectedLabel = market ? market.labels[selected] : ""
 
   let buyTokens = true
 
@@ -64,7 +64,7 @@
       tokensEstimate = response["ok"]
     }
 
-    selectedLabel = market ? market.labels[selected] : ""
+    selectedLabel = market ? market.labels[selected].label : ""
   }
 
   const doIt = async (marketId, amount) => {
@@ -134,7 +134,7 @@
               bind:value={selected}
               style="width: 100%; height: 1.7em"
               on:change={() => {
-                selectedLabel = market.labels[selected]
+                selectedLabel = market.labels[selected].label
                 if (buyTokens) buttonLabel = "Buy " + selectedLabel
                 else buttonLabel = "Sell " + selectedLabel
               }}

@@ -163,7 +163,7 @@
     </div>
     <div style="width: 100%; display:flex">
       <div>
-        <Trade {auth} {readMarket} {market} {principal} />
+        <Trade {auth} {readMarket} {market} {principal} {selectedLabel} />
       </div>
       <div>
         <Forecast {auth} {readMarket} {market} {principal} />

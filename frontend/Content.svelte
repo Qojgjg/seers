@@ -30,9 +30,11 @@
       Dialog,
       {
         title: "Confirm Transaction",
-        message: `${getAction()} ${tokensEstimate.toFixed(2)} shares of "${
-          outcome.label
-        }". Total cost is ${Number(seerAmount).toFixed(2)} ${getToken()}`,
+        message: `${getAction()} ${tokensEstimate.toFixed(
+          2,
+        )} shares of "${outcome}". Total cost is ${Number(seerAmount).toFixed(
+          2,
+        )} ${getToken()}`,
         hasForm: true,
         onCancel,
         onOkay,
