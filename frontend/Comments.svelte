@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Principal } from "@dfinity/principal"
   import SvelteMarkdown from "svelte-markdown"
 
   export let auth
@@ -6,6 +7,7 @@
   export let readMarket
   export let comments = []
   export let signIn
+  export let principal
 
   let comment = ""
   let commentLabel = "Comment"
@@ -40,17 +42,6 @@
 <div style="width: 100%">
   <h3 style="text-align:start">Comments</h3>
   <div style="text-align:start">
-    {#each comments as comment}
-      <div style="margin: 5px 0px">
-        <img
-          src={comment.picture}
-          alt="pic"
-          style="width: 70px; height: 70px; border-radius: 50%"
-        />
-        <div style="color:pink; padding: 5px 0px">{comment.handle}</div>
-        <SvelteMarkdown source={comment.content} />
-      </div>
-    {/each}
     <div class="comment-container">
       <textarea
         bind:value={comment}
@@ -58,14 +49,37 @@
         style="height: auto; width: 95%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 10px"
         placeholder="Please share your insights. You can use markdown."
       />
-      <div style="display:flex; justify-content: right; width: 95%">
-        <button class="btn-grad" on:click={postComment}>
-          {commentLabel}
-        </button>
-      </div>
+      {#if principal === ""}
+        <div style="display:flex; justify-content: right; width: 95%">
+          <button class="btn-grad" on:click={() => signIn()}> Login </button>
+        </div>
+      {:else}
+        <div style="display:flex; justify-content: right; width: 95%">
+          <button class="btn-grad" on:click={postComment}>
+            {commentLabel}
+          </button>
+        </div>
+      {/if}
       <div style="width: 100%;text-align:center;color:red">
         {commentErrorResponse}
       </div>
     </div>
+    {#each comments as comment}
+      <div style="margin: 5px 0px">
+        <div
+          style="display:flex; gap: 20px; margin: 15px 0px; min-height: 100px"
+        >
+          <img
+            src={comment.picture}
+            alt="pic"
+            style="width: 70px; height: 70px; border-radius: 50%"
+          />
+          <div>
+            <div style="color:pink; padding: 0px 0px">{comment.handle}</div>
+            <SvelteMarkdown source={comment.content} />
+          </div>
+        </div>
+      </div>
+    {/each}
   </div>
 </div>

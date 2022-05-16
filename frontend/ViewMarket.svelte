@@ -185,7 +185,14 @@
         </div>
       </div>
       <div style="width: 100%; display:flex">
-        <Comments {auth} {marketId} {readMarket} {comments} {signIn} />
+        <Comments
+          {auth}
+          {marketId}
+          {readMarket}
+          {comments}
+          {principal}
+          {signIn}
+        />
       </div>
     </div>
   </div>
