@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Principal } from "@dfinity/principal"
   import SvelteMarkdown from "svelte-markdown"
+  import inf from "./assets/inf.gif"
 
   export let auth
   export let marketId
@@ -9,6 +9,7 @@
   export let signIn
   export let principal
 
+  let processing = false
   let comment = ""
   let commentLabel = "Comment"
   let commentErrorResponse = ""
@@ -23,7 +24,7 @@
   }
 
   const postComment = async () => {
-    commentLabel = "Processing..."
+    processing = true
     let response = await $auth.actor.addCommentToMarket(marketId, comment)
 
     if (response["err"]) {
@@ -35,7 +36,7 @@
       readMarket()
       comment = ""
     }
-    commentLabel = "Comment"
+    processing = false
   }
 </script>
 
@@ -49,17 +50,27 @@
         style="height: auto; width: 95%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 10px"
         placeholder="Please share your insights. You can use markdown."
       />
-      {#if principal === ""}
-        <div style="display:flex; justify-content: right; width: 95%">
+      <div style="display:flex; justify-content: right; width: 95%">
+        {#if principal === ""}
           <button class="btn-grad" on:click={() => signIn()}> Login </button>
-        </div>
-      {:else}
-        <div style="display:flex; justify-content: right; width: 95%">
+        {:else if processing}
+          <button
+            class="btn-grad"
+            on:click={() => 0}
+            style="width: 100px; overflow:hidden"
+          >
+            <img
+              src={inf}
+              alt="inf"
+              style="width: 150px; height: 400%; margin: -100%;"
+            />
+          </button>
+        {:else}
           <button class="btn-grad" on:click={postComment}>
             {commentLabel}
           </button>
-        </div>
-      {/if}
+        {/if}
+      </div>
       <div style="width: 100%;text-align:center;color:red">
         {commentErrorResponse}
       </div>

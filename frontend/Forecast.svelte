@@ -73,7 +73,7 @@
                 <img
                   src={inf}
                   alt="inf"
-                  style="width: 150%; height: 400%; margin: -75%;"
+                  style="width: 150%; height: 400%; margin: -100%;"
                 />
               </button>
             {:else if principal != ""}

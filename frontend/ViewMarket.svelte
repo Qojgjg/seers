@@ -184,16 +184,20 @@
           </div>
         </div>
       </div>
-      <div style="width: 100%; display:flex">
-        <Comments
-          {auth}
-          {marketId}
-          {readMarket}
-          {comments}
-          {principal}
-          {signIn}
-        />
-      </div>
+    </div>
+  </div>
+  <div
+    style="margin: 15px 0px;display:flex;background: rgba(0, 0, 0, 0.3); width: 80%; max-width: 1000px;padding: 40px 80px; border-style: none; border-width: 2px; border-radius: 10px"
+  >
+    <div style="width: 100%; display:flex">
+      <Comments
+        {auth}
+        {marketId}
+        {readMarket}
+        {comments}
+        {principal}
+        {signIn}
+      />
     </div>
   </div>
 </div>
