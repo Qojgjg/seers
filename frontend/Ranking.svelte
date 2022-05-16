@@ -34,13 +34,13 @@
           #
         </div>
         <div
-          style="width: 70%;margin: 3px; font-size: 1.2em;margin-bottom: 1em"
+          style="width: 60%;margin: 3px; font-size: 1.2em;margin-bottom: 1em"
         >
           Handle
         </div>
         <!-- <div># Markets</div> -->
         <div
-          style="width: 10%;margin: 3px; font-size: 1.2em;margin-bottom: 1em"
+          style="width: 20%;margin: 3px; font-size: 1.2em;margin-bottom: 1em"
         >
           E(&Sigma)
         </div>
@@ -48,11 +48,11 @@
       {#each response as user, i}
         <div class="row">
           <div style="width: 20%;margin: 3px">{i}</div>
-          <div style="width: 70%;margin: 3px">
+          <div style="width: 60%;margin: 3px">
             {user.handle ? user.handle : user.id.slice(0, 11)}
           </div>
           <!-- <div>{user.markets.length}</div> -->
-          <div style="width: 10%;margin: 3px">
+          <div style="width: 20%;margin: 3px">
             {Number(user.expBalances.seers).toFixed(2)}
           </div>
         </div>
