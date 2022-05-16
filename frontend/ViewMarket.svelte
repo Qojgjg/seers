@@ -129,7 +129,7 @@
 
           <div class="">
             <div
-              style="display:flex; margin: 0; padding: 10px; width: 100%; line-height: 1.5em; gap: 5px; color:gray"
+              style="display:flex; margin: 0; padding: 10px; width: 100%; line-height: 1.5em; gap: 10px; color:gray"
             >
               <div>
                 <div style="margin:0;padding:0;text-transform:capitalize">
@@ -146,9 +146,9 @@
                   parseInt(market?.endDate) / 1_000_000,
                 ).toDateString()}
               </div>
-              <div>Volume: {Number(market?.volume).toFixed(2)} &Sigma;</div>
+              <div>Volume: {Number(market?.volume).toFixed(0)} &Sigma;</div>
               <div>
-                Liquidity: {Number(market?.liquidity).toFixed(2)} &Sigma;
+                Liquidity: {Number(market?.liquidity).toFixed(0)} &Sigma;
               </div>
             </div>
           </div>

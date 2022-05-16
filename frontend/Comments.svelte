@@ -54,11 +54,11 @@
     <div class="comment-container">
       <textarea
         bind:value={comment}
-        rows="10"
-        style="height: auto; width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 1px solid rgb(90, 58, 81);"
-        placeholder="Please share your insight"
+        rows="5"
+        style="height: auto; width: 95%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 10px"
+        placeholder="Please share your insights. You can use markdown."
       />
-      <div style="display:flex; justify-content: right">
+      <div style="display:flex; justify-content: right; width: 95%">
         <button class="btn-grad" on:click={postComment}>
           {commentLabel}
         </button>
