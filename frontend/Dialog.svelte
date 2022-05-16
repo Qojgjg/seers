@@ -1,5 +1,6 @@
 <script>
   import { getContext } from "svelte"
+  import inf from "./assets/inf.gif"
 
   export let title
   export let message
@@ -10,6 +11,8 @@
 
   let response = null
   let okLabel = "Okay"
+  let processing = false
+
   let onChange = () => {}
 
   function _onCancel() {
@@ -18,15 +21,20 @@
   }
 
   async function _onOkay() {
-    okLabel = "Processing..."
+    processing = true
     response = await onOkay()
+    processing = false
     console.log("response: " + response)
   }
 
   $: onChange()
 </script>
 
-<h3>{title}</h3>
+{#if !response}
+  <h3>{title}</h3>
+{:else}
+  <h3>Transaction Response</h3>
+{/if}
 
 {#if !response}
   <div style="width: 100%; text-align: center">{message}</div>
@@ -40,7 +48,21 @@
 <div class="buttons">
   <button class="btn-grad" on:click={_onCancel}> Close</button>
   {#if !response}
-    <button class="btn-grad" on:click={_onOkay}>{okLabel}</button>
+    {#if processing}
+      <button
+        class="btn-grad"
+        on:click={() => 0}
+        style="width: 100px;overflow:hidden"
+      >
+        <img
+          src={inf}
+          alt="inf"
+          style="width: 150px; height: 400%; margin: -100%;"
+        />
+      </button>
+    {:else}
+      <button class="btn-grad" on:click={_onOkay}>{okLabel}</button>
+    {/if}
   {/if}
 </div>
 
