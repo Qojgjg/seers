@@ -1,6 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte"
   import { init } from "svelte/internal"
+  import Fa from "svelte-fa"
+  import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
+  import { faRetweet } from "@fortawesome/free-solid-svg-icons"
 
   export let auth
   export let principal
@@ -222,7 +225,25 @@
                   ).toLocaleString()}
                 </div>
               </div>
-              <div style="width: 100%; text-align:start">{post.content}</div>
+              <div style="width: 100%; text-align:start; padding: 5px 0px">
+                {post.content}
+              </div>
+              <div
+                style="width: 100%; display:flex; gap: 30px; padding: 5px 0px"
+              >
+                <div style="width: 50px; display:flex; gap: 15px">
+                  <div><Fa icon={faComment} /></div>
+                  <div>0</div>
+                </div>
+                <div style="width: 50px; display:flex; gap: 15px">
+                  <div><Fa icon={faRetweet} /></div>
+                  <div>0</div>
+                </div>
+                <div style="width: 50px; display:flex; gap: 15px">
+                  <div><Fa icon={faHeart} /></div>
+                  <div>0</div>
+                </div>
+              </div>
             </div>
           </div>
         {/each}
