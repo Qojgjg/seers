@@ -56,10 +56,14 @@ module {
     public type UserInitData = {
         id: Text;
         handle: Text;
+        age: Nat;
+        city: Text;
         picture: Text;
+        cover: Text;
         twitter: Text;
         discord: Text;
         bio: Text;
+        website: Text;
     };
 
     public type Balance = {
@@ -94,6 +98,10 @@ module {
         public var id: Text = initData.id;
         public var handle: Text = initData.handle;
         public var picture: Text = initData.picture;
+        public var cover: Text = initData.cover;
+        public var website: Text = initData.website;
+        public var city: Text = initData.city;
+        public var age: Nat = initData.age;
         public var twitter: Text = initData.twitter;
         public var discord: Text = initData.discord;
         public var bio: Text = initData.bio;
@@ -129,7 +137,11 @@ module {
             let us: UserStable = {
                 id = id;
                 handle = handle;
+                city = city;
+                age = age;
                 picture = picture;
+                cover = cover;
+                website = website;
                 twitter = twitter;
                 discord = discord;
                 bio = bio;
@@ -154,10 +166,14 @@ module {
     public type UserStable = {
         id: Text;
         handle: Text;
+        age: Nat;
+        city: Text;
         picture: Text;
+        cover: Text;
         twitter: Text;
         discord: Text;
         bio: Text;
+        website: Text;
         feed: [Feed.FeedItem];
         balances: Balance;
         expBalances: Balance;
@@ -177,10 +193,14 @@ module {
         let initData: UserInitData = {
             id = u.id;
             handle = u.handle;
+            age = u.age;
+            city = u.city;
             picture = u.picture;
+            cover = u.cover;
             twitter = u.twitter;
             discord = u.discord;
             bio = u.bio;
+            website = u.website;
         };
         let comments = Array.map(u.comments, func (c: Comment.CommentStable): Comment.Comment {
             Comment.unFreeze(c)

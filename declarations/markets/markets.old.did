@@ -74,25 +74,30 @@ type UserData =
    "principal": text;
  };
 type Time = int;
-type Result_3 = 
+type Result_4 = 
  variant {
    err: MarketError;
    ok: CommentStable;
  };
-type Result_2 = 
+type Result_3 = 
  variant {
    err: MarketError;
    ok: MarketStable;
  };
-type Result_1 = 
+type Result_2 = 
  variant {
    err: UserError;
    ok: UserStable;
  };
-type Result = 
+type Result_1 = 
  variant {
    err: MarketError;
    ok: float64;
+ };
+type Result = 
+ variant {
+   err: MarketError;
+   ok;
  };
 type Post = 
  record {
@@ -262,21 +267,22 @@ type Balance =
  };
 type AccountIdentifier = blob;
 service : {
-  addCommentToMarket: (nat32, text) -> (Result_3);
-  buyOutcome: (nat32, float64, nat, bool) -> (Result);
+  addCommentToMarket: (nat32, text) -> (Result_4);
+  buyOutcome: (nat32, float64, nat, bool) -> (Result_1);
   callerAccount: () -> (AccountIdentifier);
   canisterAccount: () -> (text) query;
   canisterFloat: () -> (ICP);
-  createMarket: (MarketInitData) -> (Result_2);
-  createUser: (text) -> (Result_1);
+  createMarket: (MarketInitData) -> (Result_3);
+  createUser: (text) -> (Result_2);
   getUserStable: (text) -> (opt UserStable) query;
   readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
   readAllUsers: () -> (vec UserStable) query;
   readMarket: (nat32) -> (opt MarketStable) query;
   readUserData: (vec text) -> (vec UserData) query;
-  refreshUser: () -> (Result_1);
+  refreshUser: () -> (Result_2);
   resolveMarket: (nat32, nat) -> (bool);
-  sellOutcome: (nat32, float64, nat, bool) -> (Result);
+  sellOutcome: (nat32, float64, nat, bool) -> (Result_1);
   setMarketState: (nat32, MarketState) -> (bool);
   setUpdating: (bool) -> () oneway;
+  submitForecast: (nat32, Forecast) -> (Result);
 }

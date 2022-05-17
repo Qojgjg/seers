@@ -105,9 +105,12 @@ type UserMarket =
   };
 type UserStable =
   {
+    age : Nat;
     balances : Balance;
     bio : Text;
+    city : Text;
     comments : [CommentStable];
+    cover : Text;
     createdAt : Time;
     depositAddrs : [DepositAddr];
     discord : Text;
@@ -123,7 +126,8 @@ type UserStable =
     picture : Text;
     posts : [Post];
     twitter : Text;
-    txs : [UserTx]
+    txs : [UserTx];
+    website : Text
   };
 type UserTx =
   {

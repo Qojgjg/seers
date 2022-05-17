@@ -52,7 +52,7 @@ export interface Market {
   'canisterAccount' : () => Promise<string>,
   'canisterFloat' : () => Promise<ICP>,
   'createMarket' : (arg_0: MarketInitData) => Promise<Result_3>,
-  'createUser' : (arg_0: string) => Promise<Result_2>,
+  'createUser' : (arg_0: UserInitData) => Promise<Result_2>,
   'getUserStable' : (arg_0: string) => Promise<[] | [UserStable]>,
   'readAllMarkets' : (arg_0: MarketCategory, arg_1: MarketState) => Promise<
       Array<MarketStable>
@@ -190,6 +190,18 @@ export type UserError = { 'callerIsAnon' : null } |
   { 'newtonFailed' : null } |
   { 'endDateOlderThanStartDate' : null } |
   { 'notEnoughLiquidity' : number };
+export interface UserInitData {
+  'id' : string,
+  'age' : bigint,
+  'bio' : string,
+  'twitter' : string,
+  'city' : string,
+  'cover' : string,
+  'website' : string,
+  'picture' : string,
+  'discord' : string,
+  'handle' : string,
+}
 export interface UserMarket {
   'brierScores' : Array<BrierScore>,
   'title' : string,
@@ -206,15 +218,19 @@ export interface UserMarket {
 }
 export interface UserStable {
   'id' : string,
+  'age' : bigint,
   'bio' : string,
   'txs' : Array<UserTx>,
   'expBalances' : Balance,
   'twitter' : string,
   'lastSeenAt' : Time,
   'modifiedAt' : Time,
+  'city' : string,
   'feed' : Array<FeedItem>,
   'createdAt' : Time,
+  'cover' : string,
   'markets' : Array<UserMarket>,
+  'website' : string,
   'picture' : string,
   'discord' : string,
   'handle' : string,

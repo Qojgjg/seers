@@ -112,6 +112,18 @@ export const idlFactory = ({ IDL }) => {
     'images' : IDL.Vec(IDL.Text),
   });
   const Result_3 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
+  const UserInitData = IDL.Record({
+    'id' : IDL.Text,
+    'age' : IDL.Nat,
+    'bio' : IDL.Text,
+    'twitter' : IDL.Text,
+    'city' : IDL.Text,
+    'cover' : IDL.Text,
+    'website' : IDL.Text,
+    'picture' : IDL.Text,
+    'discord' : IDL.Text,
+    'handle' : IDL.Text,
+  });
   const UserTx = IDL.Record({
     'id' : IDL.Nat32,
     'fee' : IDL.Float64,
@@ -168,15 +180,19 @@ export const idlFactory = ({ IDL }) => {
   });
   const UserStable = IDL.Record({
     'id' : IDL.Text,
+    'age' : IDL.Nat,
     'bio' : IDL.Text,
     'txs' : IDL.Vec(UserTx),
     'expBalances' : Balance,
     'twitter' : IDL.Text,
     'lastSeenAt' : Time,
     'modifiedAt' : Time,
+    'city' : IDL.Text,
     'feed' : IDL.Vec(FeedItem),
     'createdAt' : Time,
+    'cover' : IDL.Text,
     'markets' : IDL.Vec(UserMarket),
+    'website' : IDL.Text,
     'picture' : IDL.Text,
     'discord' : IDL.Text,
     'handle' : IDL.Text,
@@ -224,7 +240,7 @@ export const idlFactory = ({ IDL }) => {
     'canisterAccount' : IDL.Func([], [IDL.Text], ['query']),
     'canisterFloat' : IDL.Func([], [ICP], []),
     'createMarket' : IDL.Func([MarketInitData], [Result_3], []),
-    'createUser' : IDL.Func([IDL.Text], [Result_2], []),
+    'createUser' : IDL.Func([UserInitData], [Result_2], []),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
     'readAllMarkets' : IDL.Func(
         [MarketCategory, MarketState],

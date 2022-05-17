@@ -1074,7 +1074,9 @@ shared({ caller = initializer }) actor class Market() = this {
     // };
 
     // Create user.
-    public shared(msg) func createUser(handle: Text): async Result.Result<U.UserStable, U.UserError> {
+    public shared(msg) func createUser(
+        initData: U.UserInitData,
+    ): async Result.Result<U.UserStable, U.UserError> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -1083,7 +1085,7 @@ shared({ caller = initializer }) actor class Market() = this {
             return #err(#callerIsAnon);
         };
         
-        switch (_createUser(caller, handle)) {
+        switch (_createUser(initData)) {
             case (#err(e)) {
                 return #err(e);
             };
@@ -1282,17 +1284,12 @@ shared({ caller = initializer }) actor class Market() = this {
     // };
 
 
-    private func _createUser(userId: Text, handle: Text): Result.Result<U.User, U.UserError> {
-        switch (userMap.get(handle)) {
+    private func _createUser(
+        initData: U.UserInitData,
+    ): Result.Result<U.User, U.UserError> {
+        switch (userMap.get(initData.handle)) {
             case (null) {
-                let user: U.User = U.User({
-                    id = userId;
-                    handle = handle;
-                    picture = "";
-                    twitter = "";
-                    discord = "";
-                    bio = "";
-                });
+                let user: U.User = U.User(initData);
 
                 let userData: Utils.UserData = {
                     principal = user.id;
@@ -1302,17 +1299,17 @@ shared({ caller = initializer }) actor class Market() = this {
 
                 handles := Trie.replace(
                     handles,
-                    U.userKey(handle),
+                    U.userKey(user.handle),
                     Text.equal,
-                    ?handle,
+                    ?user.handle,
                 ).0;
 
-                userMap.put(userId, user);
-                userDataMap.put(userId, userData);
+                userMap.put(user.id, user);
+                userDataMap.put(user.id, userData);
 
                 return #ok(user);
             };
-            case (userId) {
+            case _ {
                 return #err(#userAlreadyExist);
             };
         };

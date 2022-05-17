@@ -12,9 +12,12 @@ type UserTx =
  };
 type UserStable = 
  record {
+   age: nat;
    balances: Balance;
    bio: text;
+   city: text;
    comments: vec CommentStable;
+   cover: text;
    createdAt: Time;
    depositAddrs: vec DepositAddr;
    discord: text;
@@ -31,6 +34,7 @@ type UserStable =
    posts: vec Post;
    twitter: text;
    txs: vec UserTx;
+   website: text;
  };
 type UserMarket = 
  record {
@@ -46,6 +50,19 @@ type UserMarket =
    shares: float64;
    spent: float64;
    title: text;
+ };
+type UserInitData = 
+ record {
+   age: nat;
+   bio: text;
+   city: text;
+   cover: text;
+   discord: text;
+   handle: text;
+   id: text;
+   picture: text;
+   twitter: text;
+   website: text;
  };
 type UserError = 
  variant {
@@ -204,7 +221,7 @@ type Market =
    canisterAccount: () -> (text) query;
    canisterFloat: () -> (ICP);
    createMarket: (MarketInitData) -> (Result_3);
-   createUser: (text) -> (Result_2);
+   createUser: (UserInitData) -> (Result_2);
    getUserStable: (text) -> (opt UserStable) query;
    readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
    readAllUsers: () -> (vec UserStable) query;
