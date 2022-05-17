@@ -43,13 +43,13 @@ export interface Like {
   'stars' : number,
 }
 export interface Market {
-  'addCommentToMarket' : ActorMethod<[number, string], Result_4>,
-  'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_1>,
+  'addCommentToMarket' : ActorMethod<[number, string], Result_5>,
+  'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_2>,
   'callerAccount' : ActorMethod<[], AccountIdentifier>,
   'canisterAccount' : ActorMethod<[], string>,
   'canisterFloat' : ActorMethod<[], ICP>,
-  'createMarket' : ActorMethod<[MarketInitData], Result_3>,
-  'createUser' : ActorMethod<[UserInitData], Result_2>,
+  'createMarket' : ActorMethod<[MarketInitData], Result_4>,
+  'createUser' : ActorMethod<[UserInitData], Result_3>,
   'getUserStable' : ActorMethod<[string], [] | [UserStable]>,
   'readAllMarkets' : ActorMethod<
     [MarketCategory, MarketState],
@@ -58,12 +58,13 @@ export interface Market {
   'readAllUsers' : ActorMethod<[], Array<UserStable>>,
   'readMarket' : ActorMethod<[number], [] | [MarketStable]>,
   'readUserData' : ActorMethod<[Array<string>], Array<UserData>>,
-  'refreshUser' : ActorMethod<[], Result_2>,
+  'refreshUser' : ActorMethod<[], Result_3>,
   'resolveMarket' : ActorMethod<[number, bigint], boolean>,
-  'sellOutcome' : ActorMethod<[number, number, bigint, boolean], Result_1>,
+  'sellOutcome' : ActorMethod<[number, number, bigint, boolean], Result_2>,
   'setMarketState' : ActorMethod<[number, MarketState], boolean>,
   'setUpdating' : ActorMethod<[boolean], undefined>,
-  'submitForecast' : ActorMethod<[number, Forecast], Result>,
+  'submitForecast' : ActorMethod<[number, Forecast], Result_1>,
+  'submitPost' : ActorMethod<[string], Result>,
 }
 export type MarketCategory = { 'any' : null } |
   { 'entertainment' : null } |
@@ -151,14 +152,16 @@ export interface Post {
   'comments' : Array<CommentStable>,
 }
 export type Result = { 'ok' : null } |
-  { 'err' : MarketError };
-export type Result_1 = { 'ok' : number } |
-  { 'err' : MarketError };
-export type Result_2 = { 'ok' : UserStable } |
   { 'err' : UserError };
-export type Result_3 = { 'ok' : MarketStable } |
+export type Result_1 = { 'ok' : null } |
   { 'err' : MarketError };
-export type Result_4 = { 'ok' : CommentStable } |
+export type Result_2 = { 'ok' : number } |
+  { 'err' : MarketError };
+export type Result_3 = { 'ok' : UserStable } |
+  { 'err' : UserError };
+export type Result_4 = { 'ok' : MarketStable } |
+  { 'err' : MarketError };
+export type Result_5 = { 'ok' : CommentStable } |
   { 'err' : MarketError };
 export type Time = bigint;
 export interface UserData {

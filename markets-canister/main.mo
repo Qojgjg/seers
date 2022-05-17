@@ -19,6 +19,7 @@ import M "Market";
 import U "User";
 import Utils "Utils";
 import Tx "Tx";
+import Post "Post";
 import Comment "Comment";
 import Like "Like";
 import Forecast "Forecast";
@@ -1091,6 +1092,37 @@ shared({ caller = initializer }) actor class Market() = this {
             };
             case (#ok(user)) {
                 return #ok(user.freeze())
+            };
+        };
+    };
+
+    // Create post and push it to user.
+    public shared(msg) func submitPost(content: Text): async Result.Result<(), U.UserError> {
+        assert(not updating);
+        
+        let caller = Principal.toText(msg.caller);
+        
+        if (caller == anon) {
+            return #err(#callerIsAnon);
+        };
+
+        switch (getUser(caller)) {
+            case null {
+                return #err(#profileNotCreated);
+            };
+            case (?user) {
+                let post: Post.Post = {
+                    id = Nat32.fromNat(user.posts.size());
+                    author = caller;
+                    content = content;
+                    comments = [];
+                    likes = [];
+                    createdAt = Time.now();
+                };
+
+                user.posts.add(post);
+
+                return #ok();
             };
         };
     };

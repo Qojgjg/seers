@@ -1,0 +1,153 @@
+// Version: 1.0.0
+type AssocList<K, V> = List<(K, V)>;
+type AssocList__1<K, V> = AssocList<K, V>;
+type Balance = {btc : Float; cycles : Float; icp : Float; seers : Float};
+type Bet = {comment : CommentStable; tx : UserTx};
+type Branch<K, V> = {left : Trie<K, V>; right : Trie<K, V>; size : Nat};
+type BrierScore = {createdAt : Time; score : Float};
+type CollateralType = {#cycles; #icp; #seers};
+type CommentStable =
+  {
+    author : Text;
+    content : Text;
+    createdAt : Time;
+    id : Nat32;
+    likes : [Like];
+    modifiedAt : Time
+  };
+type DepositAddr = {#btc : Text; #cycles : Text; #icp : Text};
+type FeedItem =
+  {
+    #bet : Bet;
+    #comment : CommentStable;
+    #market : MarketStable;
+    #post : Post
+  };
+type Followee = {createdAt : Time; user : Text};
+type Follower = {createdAt : Time; user : Text};
+type Forecast = [Float];
+type Hash = Nat32;
+type HistPoint =
+  {createdAt : Time; liquidity : Float; probabilities : [Float]};
+type Key<K> = {hash : Hash; key : K};
+type Leaf<K, V> = {keyvals : AssocList__1<Key<K>, V>; size : Nat};
+type Like = {author : Text; createdAt : Time; stars : Nat32};
+type List<T> = ?(T, List<T>);
+type MarketCategory =
+  {
+    #any;
+    #business;
+    #crypto;
+    #dfinity;
+    #entertainment;
+    #financial;
+    #politics;
+    #science;
+    #seers;
+    #self;
+    #sports
+  };
+type MarketStable =
+  {
+    author : Text;
+    bettors : [Text];
+    category : MarketCategory;
+    collateralType : CollateralType;
+    comments : [CommentStable];
+    createdAt : Time;
+    description : Text;
+    endDate : Time;
+    forecasts : [Forecast];
+    histPrices : [HistPoint];
+    id : Nat32;
+    imageUrl : Text;
+    images : [Text];
+    k : Float;
+    labels : [Text];
+    liquidity : Float;
+    modifiedAt : Time;
+    probabilities : [Float];
+    providers : [Text];
+    reserves : [Float];
+    startDate : Time;
+    state : MarketState;
+    title : Text;
+    totalShares : Float;
+    volume : Float
+  };
+type MarketState =
+  {#any; #approved; #closed; #invalid; #open; #pending; #resolved : Nat};
+type Post =
+  {
+    author : Text;
+    comments : [CommentStable];
+    content : Text;
+    createdAt : Time;
+    id : Nat32;
+    likes : [Like]
+  };
+type Time = Int;
+type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
+type UserMarket =
+  {
+    author : Bool;
+    balances : [Float];
+    brierScores : [BrierScore];
+    collateralType : CollateralType;
+    createdAt : Time;
+    labels : [Text];
+    marketId : Nat32;
+    modifiedAt : Time;
+    redeemed : Bool;
+    shares : Float;
+    spent : Float;
+    title : Text
+  };
+type UserStable =
+  {
+    age : Nat;
+    balances : Balance;
+    bio : Text;
+    city : Text;
+    comments : [CommentStable];
+    cover : Text;
+    createdAt : Time;
+    depositAddrs : [DepositAddr];
+    discord : Text;
+    expBalances : Balance;
+    feed : [FeedItem];
+    followees : [Followee];
+    followers : [Follower];
+    handle : Text;
+    id : Text;
+    lastSeenAt : Time;
+    markets : [UserMarket];
+    modifiedAt : Time;
+    name : Text;
+    picture : Text;
+    posts : [Post];
+    twitter : Text;
+    txs : [UserTx];
+    website : Text
+  };
+type UserTx =
+  {
+    createdAt : Time;
+    dest : ?Nat;
+    fee : Float;
+    id : Nat32;
+    marketId : Nat32;
+    price : Float;
+    recv : Float;
+    sent : Float;
+    src : ?Nat
+  };
+actor {
+  stable var anon : Text;
+  stable var handles :
+    {#branch : Branch<Text, Text>; #empty; #leaf : Leaf<Text, Text>};
+  stable var nextMarketId : Nat32;
+  stable var stableMarkets : [(Nat32, MarketStable)];
+  stable var stableUsers : [(Text, UserStable)];
+  stable var updating : Bool
+};

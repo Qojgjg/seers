@@ -32,8 +32,8 @@ export const idlFactory = ({ IDL }) => {
     'endDateOlderThanStartDate' : IDL.Null,
     'notEnoughLiquidity' : IDL.Float64,
   });
-  const Result_4 = IDL.Variant({ 'ok' : CommentStable, 'err' : MarketError });
-  const Result_1 = IDL.Variant({ 'ok' : IDL.Float64, 'err' : MarketError });
+  const Result_5 = IDL.Variant({ 'ok' : CommentStable, 'err' : MarketError });
+  const Result_2 = IDL.Variant({ 'ok' : IDL.Float64, 'err' : MarketError });
   const AccountIdentifier = IDL.Vec(IDL.Nat8);
   const ICP = IDL.Record({ 'e8s' : IDL.Nat64 });
   const CollateralType = IDL.Variant({
@@ -111,7 +111,7 @@ export const idlFactory = ({ IDL }) => {
     'startDate' : Time,
     'images' : IDL.Vec(IDL.Text),
   });
-  const Result_3 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
+  const Result_4 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
   const UserInitData = IDL.Record({
     'id' : IDL.Text,
     'age' : IDL.Nat,
@@ -224,25 +224,26 @@ export const idlFactory = ({ IDL }) => {
     'endDateOlderThanStartDate' : IDL.Null,
     'notEnoughLiquidity' : IDL.Float64,
   });
-  const Result_2 = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
+  const Result_3 = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
   const UserData = IDL.Record({
     'principal' : IDL.Text,
     'picture' : IDL.Text,
     'handle' : IDL.Text,
   });
-  const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : MarketError });
+  const Result_1 = IDL.Variant({ 'ok' : IDL.Null, 'err' : MarketError });
+  const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : UserError });
   const Market = IDL.Service({
-    'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_4], []),
+    'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_5], []),
     'buyOutcome' : IDL.Func(
         [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
-        [Result_1],
+        [Result_2],
         [],
       ),
     'callerAccount' : IDL.Func([], [AccountIdentifier], []),
     'canisterAccount' : IDL.Func([], [IDL.Text], ['query']),
     'canisterFloat' : IDL.Func([], [ICP], []),
-    'createMarket' : IDL.Func([MarketInitData], [Result_3], []),
-    'createUser' : IDL.Func([UserInitData], [Result_2], []),
+    'createMarket' : IDL.Func([MarketInitData], [Result_4], []),
+    'createUser' : IDL.Func([UserInitData], [Result_3], []),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
     'readAllMarkets' : IDL.Func(
         [MarketCategory, MarketState],
@@ -256,16 +257,17 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(UserData)],
         ['query'],
       ),
-    'refreshUser' : IDL.Func([], [Result_2], []),
+    'refreshUser' : IDL.Func([], [Result_3], []),
     'resolveMarket' : IDL.Func([IDL.Nat32, IDL.Nat], [IDL.Bool], []),
     'sellOutcome' : IDL.Func(
         [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
-        [Result_1],
+        [Result_2],
         [],
       ),
     'setMarketState' : IDL.Func([IDL.Nat32, MarketState], [IDL.Bool], []),
     'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),
-    'submitForecast' : IDL.Func([IDL.Nat32, Forecast], [Result], []),
+    'submitForecast' : IDL.Func([IDL.Nat32, Forecast], [Result_1], []),
+    'submitPost' : IDL.Func([IDL.Text], [Result], []),
   });
   return Market;
 };
