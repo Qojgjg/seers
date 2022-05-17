@@ -10,17 +10,20 @@
   let createLabel = "Create User"
 
   let id = principal
-  let handle = ""
-  let name = ""
-  let age = 42
-  let city = ""
-  let picture = ""
-  let cover = ""
-  let twitter = ""
-  let discord = ""
-  let bio = ""
-  let website = ""
+  let handle = "marcio"
+  let name = "Marcio Diaz"
+  let age = 35
+  let city = "Lisbon"
+  let picture =
+    "https://conteudo.imguol.com.br/c/entretenimento/04/2022/02/25/batman-1645790799911_v2_1x1.jpg"
+  let cover =
+    "https://sm.ign.com/ign_pt/news/t/the-batman/the-batmans-rating-has-been-confirmed_bh3x.jpg"
+  let twitter = "@marci0d"
+  let discord = "none"
+  let bio = "Shadowy Super Coder"
+  let website = "seers.bet"
 
+  let editMode = false
   let response = null
   let errorResponse = ""
   let errorRefresh = ""
@@ -74,6 +77,7 @@
   let createUserData = async () => {
     createLabel = "Processing..."
     errorResponse = ""
+    age = Number(age)
 
     let initData = {
       id,
@@ -142,9 +146,36 @@
 
 <div style="justify-content: center; display: flex;width: 100%">
   <div class="rowUser">
-    {#if user}
+    {#if user && !editMode}
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Principal: {user.id}
+        Id: {user.id}
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        Handle: @{user.handle}
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        Name: {user.name}
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        City: {user.city}
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        Twitter: {user.twitter}
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        Discord: {user.discord}
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        Bio: {user.bio}
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        Website: {user.website}
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        Picture: <img src={user.picture} alt="avatar" style="width: 100px" />
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        Cover: <img src={user.cover} alt="cover" style="width: 100px" />
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
         Balance: {Number(user.balances.seers).toFixed(2)} seers
@@ -155,7 +186,8 @@
       <div
         style="margin-bottom: 10px; width: 100%; text-align:center; display: flex; justify-content: center"
       >
-        <button class="btn-grad" on:click={refreshUser}>{refreshLabel}</button>
+        <button class="btn-grad" on:click={() => (editMode = true)}>Edit</button
+        >
         <div style="text-align:center;color:red">
           {errorRefresh}
         </div>
