@@ -10,17 +10,18 @@
   let createLabel = "Create User"
 
   let id = principal
-  let handle = "marcio"
-  let name = "Marcio Diaz"
+  let handle = "seers"
+  let name = "Seers"
   let age = 35
   let city = "Lisbon"
   let picture =
     "https://conteudo.imguol.com.br/c/entretenimento/04/2022/02/25/batman-1645790799911_v2_1x1.jpg"
   let cover =
     "https://sm.ign.com/ign_pt/news/t/the-batman/the-batmans-rating-has-been-confirmed_bh3x.jpg"
-  let twitter = "@marci0d"
+  let twitter = "@SeerMarkets"
   let discord = "none"
-  let bio = "Shadowy Super Coder"
+  let bio =
+    "Social Network for forecasting. Prediction Markets and much more. Our goal is to predict the future 30% more accurately. Powered by  #InternetComputer"
   let website = "seers.bet"
 
   let editMode = false
@@ -134,11 +135,7 @@
   onMount(getUserData)
 </script>
 
-{#if user}
-  <div class="header">
-    <h3>Profile</h3>
-  </div>
-{:else}
+{#if !user}
   <div class="header">
     <h3>Create Profile</h3>
   </div>
@@ -148,50 +145,62 @@
   <div class="rowUser">
     {#if user && !editMode}
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Id: {user.id}
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Handle: @{user.handle}
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Name: {user.name}
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        City: {user.city}
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Twitter: {user.twitter}
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Discord: {user.discord}
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Bio: {user.bio}
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Website: {user.website}
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Picture: <img src={user.picture} alt="avatar" style="width: 100px" />
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Cover: <img src={user.cover} alt="cover" style="width: 100px" />
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Balance: {Number(user.balances.seers).toFixed(2)} seers
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Expected Balance: {Number(user.expBalances.seers).toFixed(2)} seers
+        <img
+          src={user.cover}
+          alt="cover"
+          style="width: 100%; height: 300px;object-fit: cover;"
+        />
       </div>
       <div
-        style="margin-bottom: 10px; width: 100%; text-align:center; display: flex; justify-content: center"
+        style="min-width: 200px; margin-bottom: 10px; width: 100%; text-align:start; display:flex;margin-top:-50px; justify-content:space-between"
       >
-        <button class="btn-grad" on:click={() => (editMode = true)}>Edit</button
+        <div style="text-align:start; width: 100px">
+          <img
+            src={user.picture}
+            alt="avatar"
+            style="width: 100px; height: 100px; border-radius:50%; object-fit:cover;"
+          />
+        </div>
+        <div
+          style="margin-left: 5px; margin-top: 40px; flex-grow:1; justify-content:start"
         >
-        <div style="text-align:center;color:red">
-          {errorRefresh}
+          <div>{user.name}</div>
+          <div style="color:gray">@{user.handle}</div>
+        </div>
+        <div
+          style="margin-bottom: 10px; width: 100px; text-align:end; display: flex; justify-content:end"
+        >
+          <button
+            class="btn-grad"
+            style="background:black"
+            on:click={() => (editMode = true)}>Edit Profile</button
+          >
+          <div style="text-align:center;color:red">
+            {errorRefresh}
+          </div>
         </div>
       </div>
+      <div
+        style="width: 100%; text-align:start;display:flex; flex-direction:row"
+      >
+        <div style="width: 100%; text-align:start; margin: 5px; padding: 5px">
+          {user.bio}
+        </div>
+      </div>
+
+      <div
+        style="width: 100%; text-align: center; color: grey; justify-content:space-between; display:flex;margin:5px;padding:5px"
+      >
+        <div>City: {user.city}</div>
+        <div>Twitter: {user.twitter}</div>
+        <div>Discord: {user.discord}</div>
+        <div>
+          Website: <a href={`http://${user.website}`} alt="web"
+            >{user.website}</a
+          >
+        </div>
+      </div>
+
       {#if user.ownMarkets?.length > 0}
         <div style="display:flex; flex-direction: column;width: 100%">
           My markets
