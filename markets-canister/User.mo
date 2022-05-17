@@ -56,6 +56,7 @@ module {
     public type UserInitData = {
         id: Text;
         handle: Text;
+        name: Text;
         age: Nat;
         city: Text;
         picture: Text;
@@ -97,6 +98,7 @@ module {
     public class User (initData: UserInitData) = this {
         public var id: Text = initData.id;
         public var handle: Text = initData.handle;
+        public var name: Text = initData.name;
         public var picture: Text = initData.picture;
         public var cover: Text = initData.cover;
         public var website: Text = initData.website;
@@ -136,6 +138,7 @@ module {
             });
             let us: UserStable = {
                 id = id;
+                name = name;
                 handle = handle;
                 city = city;
                 age = age;
@@ -165,6 +168,7 @@ module {
 
     public type UserStable = {
         id: Text;
+        name: Text;
         handle: Text;
         age: Nat;
         city: Text;
@@ -192,6 +196,7 @@ module {
     public func unFreezeUser(u: UserStable): User {
         let initData: UserInitData = {
             id = u.id;
+            name = u.name;
             handle = u.handle;
             age = u.age;
             city = u.city;

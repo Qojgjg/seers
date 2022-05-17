@@ -123,6 +123,7 @@ type UserStable =
     lastSeenAt : Time;
     markets : [UserMarket];
     modifiedAt : Time;
+    name : Text;
     picture : Text;
     posts : [Post];
     twitter : Text;

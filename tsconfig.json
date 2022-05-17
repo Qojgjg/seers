@@ -40,6 +40,6 @@
    * Use global.d.ts instead of compilerOptions.types
    * to avoid limiting type declarations.
    */
-  "include": ["frontend/**/*.d.ts", "frontend/**/*.ts", "frontend/**/*.js", "frontend/**/*.svelte"],
+  "include": ["frontend/**/*.d.ts", "frontend/**/*.ts", "frontend/**/*.js", "frontend/**/*.svelte", "utils/stores.js"],
   "exclude": ["frontend/store/*", "frontend/utils/*"]
 }

@@ -30,6 +30,7 @@ type UserStable =
    lastSeenAt: Time;
    markets: vec UserMarket;
    modifiedAt: Time;
+   name: text;
    picture: text;
    posts: vec Post;
    twitter: text;
@@ -60,6 +61,7 @@ type UserInitData =
    discord: text;
    handle: text;
    id: text;
+   name: text;
    picture: text;
    twitter: text;
    website: text;

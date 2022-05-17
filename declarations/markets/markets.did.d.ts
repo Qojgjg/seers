@@ -1,4 +1,6 @@
 import type { Principal } from '@dfinity/principal';
+import type { ActorMethod } from '@dfinity/agent';
+
 export type AccountIdentifier = Array<number>;
 export interface Balance {
   'btc' : number,
@@ -41,36 +43,27 @@ export interface Like {
   'stars' : number,
 }
 export interface Market {
-  'addCommentToMarket' : (arg_0: number, arg_1: string) => Promise<Result_4>,
-  'buyOutcome' : (
-      arg_0: number,
-      arg_1: number,
-      arg_2: bigint,
-      arg_3: boolean,
-    ) => Promise<Result_1>,
-  'callerAccount' : () => Promise<AccountIdentifier>,
-  'canisterAccount' : () => Promise<string>,
-  'canisterFloat' : () => Promise<ICP>,
-  'createMarket' : (arg_0: MarketInitData) => Promise<Result_3>,
-  'createUser' : (arg_0: UserInitData) => Promise<Result_2>,
-  'getUserStable' : (arg_0: string) => Promise<[] | [UserStable]>,
-  'readAllMarkets' : (arg_0: MarketCategory, arg_1: MarketState) => Promise<
-      Array<MarketStable>
-    >,
-  'readAllUsers' : () => Promise<Array<UserStable>>,
-  'readMarket' : (arg_0: number) => Promise<[] | [MarketStable]>,
-  'readUserData' : (arg_0: Array<string>) => Promise<Array<UserData>>,
-  'refreshUser' : () => Promise<Result_2>,
-  'resolveMarket' : (arg_0: number, arg_1: bigint) => Promise<boolean>,
-  'sellOutcome' : (
-      arg_0: number,
-      arg_1: number,
-      arg_2: bigint,
-      arg_3: boolean,
-    ) => Promise<Result_1>,
-  'setMarketState' : (arg_0: number, arg_1: MarketState) => Promise<boolean>,
-  'setUpdating' : (arg_0: boolean) => Promise<undefined>,
-  'submitForecast' : (arg_0: number, arg_1: Forecast) => Promise<Result>,
+  'addCommentToMarket' : ActorMethod<[number, string], Result_4>,
+  'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_1>,
+  'callerAccount' : ActorMethod<[], AccountIdentifier>,
+  'canisterAccount' : ActorMethod<[], string>,
+  'canisterFloat' : ActorMethod<[], ICP>,
+  'createMarket' : ActorMethod<[MarketInitData], Result_3>,
+  'createUser' : ActorMethod<[UserInitData], Result_2>,
+  'getUserStable' : ActorMethod<[string], [] | [UserStable]>,
+  'readAllMarkets' : ActorMethod<
+    [MarketCategory, MarketState],
+    Array<MarketStable>,
+  >,
+  'readAllUsers' : ActorMethod<[], Array<UserStable>>,
+  'readMarket' : ActorMethod<[number], [] | [MarketStable]>,
+  'readUserData' : ActorMethod<[Array<string>], Array<UserData>>,
+  'refreshUser' : ActorMethod<[], Result_2>,
+  'resolveMarket' : ActorMethod<[number, bigint], boolean>,
+  'sellOutcome' : ActorMethod<[number, number, bigint, boolean], Result_1>,
+  'setMarketState' : ActorMethod<[number, MarketState], boolean>,
+  'setUpdating' : ActorMethod<[boolean], undefined>,
+  'submitForecast' : ActorMethod<[number, Forecast], Result>,
 }
 export type MarketCategory = { 'any' : null } |
   { 'entertainment' : null } |
@@ -196,6 +189,7 @@ export interface UserInitData {
   'bio' : string,
   'twitter' : string,
   'city' : string,
+  'name' : string,
   'cover' : string,
   'website' : string,
   'picture' : string,
@@ -227,6 +221,7 @@ export interface UserStable {
   'modifiedAt' : Time,
   'city' : string,
   'feed' : Array<FeedItem>,
+  'name' : string,
   'createdAt' : Time,
   'cover' : string,
   'markets' : Array<UserMarket>,

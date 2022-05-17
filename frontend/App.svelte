@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Router, Route } from "svelte-navigator"
+  import { Router, Route, useNavigate } from "svelte-navigator"
   import { AuthClient } from "@dfinity/auth-client"
 
   import { onMount } from "svelte"
@@ -12,6 +12,7 @@
   import CreateMarket from "./CreateMarket.svelte"
   import Ranking from "./Ranking.svelte"
   import Feed from "./Feed.svelte"
+  import Profile from "./Profile.svelte"
 
   let principal = ""
 
@@ -85,6 +86,9 @@
     </Route>
     <Route path="wallet">
       <Wallet {auth} {principal} {signIn} />
+    </Route>
+    <Route path="profile">
+      <Profile {auth} {principal} {signIn} />
     </Route>
     <Route path="create">
       <CreateMarket {auth} {principal} {signIn} />
