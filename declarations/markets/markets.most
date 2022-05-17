@@ -147,6 +147,7 @@ actor {
   stable var handles :
     {#branch : Branch<Text, Text>; #empty; #leaf : Leaf<Text, Text>};
   stable var nextMarketId : Nat32;
+  stable var stableFeed : [Post];
   stable var stableMarkets : [(Nat32, MarketStable)];
   stable var stableUsers : [(Text, UserStable)];
   stable var updating : Bool

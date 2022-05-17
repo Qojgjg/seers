@@ -2,10 +2,18 @@
   import SvelteMarkdown from "svelte-markdown"
   import inf from "./assets/inf.gif"
 
+  export let auth
+  export let principal
+  export let signIn
+
   let post = ""
   let errorResponse = ""
 
-  const submitPost = () => {}
+  const submitPost = async () => {
+    const r = await $auth.actor.submitPost(post)
+    post = ""
+    console.log(r)
+  }
 </script>
 
 <div

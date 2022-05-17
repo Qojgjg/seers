@@ -97,7 +97,7 @@
       <Ranking {auth} />
     </Route>
     <Route path="feed">
-      <Feed />
+      <Feed {auth} {principal} {signIn} />
     </Route>
     <Route path="markets">
       <ListMarkets {auth} />

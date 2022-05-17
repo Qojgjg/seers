@@ -73,6 +73,12 @@ shared({ caller = initializer }) actor class Market() = this {
     
     private stable var stableUsers: [(Text, U.UserStable)] = [];
     private stable var stableMarkets: [(Nat32, M.MarketStable)] = [];
+    private stable var stableFeed: [Post.Post] = [];
+
+    private var feed: Buffer.Buffer<Post.Post> = do {
+        var feedBuffer: Buffer.Buffer<Post.Post> = Utils.bufferFromArray(stableFeed);
+        feedBuffer
+    };
     
     private var userDataMap: Map.HashMap<Text, Utils.UserData> = do {
         let usersIter = Iter.map<(Text, U.UserStable), (Text, Utils.UserData)>(
@@ -1120,6 +1126,7 @@ shared({ caller = initializer }) actor class Market() = this {
                     createdAt = Time.now();
                 };
 
+                feed.add(post);
                 user.posts.add(post);
 
                 return #ok();

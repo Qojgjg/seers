@@ -172,7 +172,7 @@
         >
           <button
             class="btn-grad"
-            style="background:black"
+            style="background:rgb(25, 27, 31);"
             on:click={() => (editMode = true)}>Edit Profile</button
           >
           <div style="text-align:center;color:red">
@@ -200,219 +200,32 @@
           >
         </div>
       </div>
-
-      {#if user.ownMarkets?.length > 0}
-        <div style="display:flex; flex-direction: column;width: 100%">
-          My markets
-          {#each user.ownMarkets as market}
-            <a href="/market/{market.marketId}">
-              <div
-                style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: column; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
-              >
-                <div style="width: 100%; display: flex">
-                  <div style="width:fit-content; margin-right: 10px">
-                    #{market.marketId}:
-                  </div>
-                  <div style="width: auto">
-                    {market.title}
-                  </div>
-                </div>
-                <div style="width: 100%">
-                  {#each market.labels as label, i}
-                    {#if market.balances[i] > 0.0}
-                      {label +
-                        ": " +
-                        Number(market.balances[i]).toFixed(2) +
-                        "  "}
-                    {/if}
-                  {/each}
-                </div>
-              </div>
-            </a>
-          {/each}
-        </div>
-        <div style="display:flex; flex-direction: column;width: 100%">
-          {#if user.otherMarkets?.length > 0}
-            Portfolio
-            {#each user.otherMarkets as market}
-              <a href="/market/{market.marketId}">
-                <div
-                  style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: column; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
-                >
-                  <div style="width: 100%; display: flex">
-                    <div style="width:fit-content; margin-right: 10px">
-                      #{market.marketId}:
-                    </div>
-                    <div style="width: auto">
-                      {market.title}
-                    </div>
-                  </div>
-                  <div style="width: 100%">
-                    {#each market.labels as label, i}
-                      {#if market.balances[i] > 0.0}
-                        {label +
-                          ": " +
-                          Number(market.balances[i]).toFixed(2) +
-                          "  "}
-                      {/if}
-                    {/each}
-                  </div>
-                </div>
-              </a>
-            {/each}
-          {/if}
-        </div>
-      {/if}
-      {#if user.txs.length}
-        <div
-          style="display:flex; flex-direction: column;width: 100%; margin-top: 20px"
-        >
-          Transactions
-          {#each user.txs as tx, i}
-            <div
-              style="border-radius: 5px; display:flex; align-items: center; align-content: center; flex-direction: column; gap: 10px; margin-top: 10px; padding: 10px; background-color: rgb(220 218 224 / 10%); "
-            >
-              <div style="width: 100%; display: flex; flex-wrap: wrap">
-                <div style="width:fit-content; margin-right: 10px">
-                  #{user.txs.length - i}:
-                </div>
-                <div style="width: auto; margin-right: 10px;">
-                  Market {tx.marketId}
-                </div>
-                <div
-                  style="width: auto;margin-right: 10px; text-transform:capitalize"
-                >
-                  From {tx.src.length > 0
-                    ? getMarketLabel(tx.marketId, tx.src).slice(0, 30)
-                    : "seers"}
-                </div>
-                <div
-                  style="width: auto;margin-right: 10px;text-transform:capitalize"
-                >
-                  To {tx.dest.length > 0
-                    ? getMarketLabel(tx.marketId, tx.dest).slice(0, 30)
-                    : "seers"}
-                </div>
-                <div style="width: auto;margin-right: 10px;">
-                  Price {(tx.sent / tx.recv).toFixed(2)}
-                </div>
-                <div style="width: auto;margin-right: 10px;">
-                  Received {tx.recv.toFixed(2)}
-                </div>
-                <div style="width: auto;margin-right: 10px;">
-                  Spent {tx.sent.toFixed(2)}
-                </div>
-                <div style="width: auto;margin-right: 10px;">
-                  Fee {tx.fee.toFixed(2)}
-                </div>
-                <div style="width: auto;margin-right: 10px;">
-                  Date {new Date(
-                    parseInt(tx.createdAt) / 1_000_000,
-                  ).toLocaleDateString()}
-                </div>
-              </div>
+      <div style="margin-top: 40px; width: 100%">
+        {#each user.posts as post}
+          <div
+            style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 20px 0px; flex-direction:row; border-top: 1px solid grey;"
+          >
+            <div style="padding: 5px; margin: 5px">
+              <img
+                src={user.picture}
+                alt="avatar"
+                style="width: 50px; object-fit: cover; border-radius: 50%"
+              />
             </div>
-          {/each}
-        </div>
-      {/if}
-    {:else if isGetting}
-      Loading
-    {:else if principal !== ""}
-      <div style="display: flex; align-items: center; flex-direction: column">
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Handle:</div>
-          <input
-            bind:value={handle}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Display Name:</div>
-          <input
-            bind:value={name}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Age:</div>
-          <input
-            bind:value={age}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">City:</div>
-          <input
-            bind:value={city}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Picture:</div>
-          <input
-            bind:value={picture}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Cover:</div>
-          <input
-            bind:value={cover}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Twitter:</div>
-          <input
-            bind:value={twitter}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Discord:</div>
-          <input
-            bind:value={discord}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Website:</div>
-          <input
-            bind:value={website}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Bio:</div>
-          <input
-            bind:value={bio}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="width: 100%;display:flex; justify-content:center">
-          <button
-            class="btn-grad"
-            on:input={() => (errorResponse = "")}
-            on:click={() => {
-              createUserData()
-            }}>{createLabel}</button
-          >
-        </div>
-        <br />
-        <div style="text-align:center;color:red">
-          {errorResponse}
-        </div>
-      </div>
-    {:else}
-      <div style="display: flex; align-items: center; flex-direction: column">
-        <div style="width: 100%;display:flex; justify-content:center">
-          <button
-            class="btn-grad"
-            on:click={() => {
-              signIn()
-            }}>Login</button
-          >
-        </div>
+            <div style="flex-grow: 1; justify-content: start; text-align:start">
+              <div style="display:flex; gap: 5px;">
+                <div>{user.name}</div>
+                <div style="color:grey">@{user.handle}</div>
+                <div style="color:grey">
+                  - {new Date(
+                    parseInt(post.createdAt) / 1_000_000,
+                  ).toLocaleString()}
+                </div>
+              </div>
+              <div style="width: 100%; text-align:start">{post.content}</div>
+            </div>
+          </div>
+        {/each}
       </div>
     {/if}
   </div>
