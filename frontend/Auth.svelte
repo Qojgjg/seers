@@ -59,15 +59,15 @@
   <Link to="ranking" style={menuItemStyle}>Ranking</Link>
 
   {#if principal === ""}
-    <a href="https://forms.gle/fYmc9iTc9P46upm47" style={menuItemStyle}>Bugs</a>
-    <button on:click={signIn} style={menuItemStyle}>Login</button>
+    <!-- <a href="https://forms.gle/fYmc9iTc9P46upm47" style={menuItemStyle}>Bugs</a> -->
+    <!-- <button on:click={signIn} style={menuItemStyle}>Login</button> -->
   {/if}
 
   {#if principal !== ""}
     <Link to="profile" style={menuItemStyle}>Profile</Link>
     <Link to="wallet" style={menuItemStyle}>Wallet</Link>
     <Link to="create" style={menuItemStyle}>Create</Link>
-    <a href="https://forms.gle/fYmc9iTc9P46upm47" style={menuItemStyle}>Bugs</a>
+    <!-- <a href="https://forms.gle/fYmc9iTc9P46upm47" style={menuItemStyle}>Bugs</a> -->
 
     <button on:click={signOut} style={menuItemStyle}>Logout</button>
   {/if}
