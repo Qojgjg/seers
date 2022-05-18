@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import SvelteMarkdown from "svelte-markdown"
-  import inf from "./assets/inf.gif"
+  import Fa from "svelte-fa"
+  import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
+  import { faRetweet } from "@fortawesome/free-solid-svg-icons"
 
   export let auth
   export let principal
@@ -14,7 +15,7 @@
   const submitPost = async () => {
     const r = await $auth.actor.submitPost(post)
     post = ""
-    console.log(r)
+    getFeed()
   }
 
   const getFeed = async () => {
@@ -31,7 +32,7 @@
     <div style="width: 100%; margin: 0px; padding: 5px">
       <textarea
         bind:value={post}
-        rows="1"
+        rows="3"
         style="width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
         placeholder="Please share your insights. You can use markdown."
       />
@@ -43,11 +44,49 @@
       </div>
     </div>
   </div>
-  <div style="width: 100%; display:flex; justify-content:center">
+  <div
+    style="width: 100%; display:flex; justify-content:center; flex-direction:column; align-items:center; gap: 10px"
+  >
     {#each feed as item}
       <div class="rowUser">
-        <div style="width: 100%; text-align:start; padding: 5px;">
-          {item.content}
+        <div
+          style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 5px 0px; flex-direction:row; align-items:center"
+        >
+          <div style="padding: 5px; margin: 5px; height: 100%">
+            <img
+              src={item.author.picture}
+              alt="avatar"
+              style="width: 50px; object-fit: cover; border-radius: 50%"
+            />
+          </div>
+          <div style="flex-grow: 1; justify-content: start; text-align:start">
+            <div style="display:flex; gap: 5px;">
+              <div>{item.author.name}</div>
+              <div style="color:grey">@{item.author.handle}</div>
+              <div style="color:grey">
+                - {new Date(
+                  parseInt(item.createdAt) / 1_000_000,
+                ).toLocaleString()}
+              </div>
+            </div>
+            <div style="width: 100%; text-align:start; padding: 5px 0px">
+              {item.content}
+            </div>
+            <div style="width: 100%; display:flex; gap: 30px; padding: 5px 0px">
+              <div style="width: 50px; display:flex; gap: 15px">
+                <div><Fa icon={faComment} /></div>
+                <div>0</div>
+              </div>
+              <div style="width: 50px; display:flex; gap: 15px">
+                <div><Fa icon={faRetweet} /></div>
+                <div>0</div>
+              </div>
+              <div style="width: 50px; display:flex; gap: 15px">
+                <div><Fa icon={faHeart} /></div>
+                <div>0</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     {/each}

@@ -1074,18 +1074,6 @@ shared({ caller = initializer }) actor class Market() = this {
         return feed.toArray();
     };
 
-    // public shared(msg) func cleanTxs(userId: Text): async () {
-    //     assert(msg.caller == initializer); // Root call.
-    //     switch (userMap.get(userId)) {
-    //         case (null) {
-
-    //         };
-    //         case (?user) {
-    //             user.txs := [];
-    //         };
-    //     };
-    // };
-
     // Create user.
     public shared(msg) func createUser(
         initData: U.UserInitData,
@@ -1146,62 +1134,6 @@ shared({ caller = initializer }) actor class Market() = this {
         };
     };
 
-
-    // Tip a user
-    // public shared(msg) func tip(id: Text, value: Float): async ?Float {
-    //     assert(msg.caller == initializer); // Root call.
-
-    //     var user = switch (getUser(id)) {
-    //         case (null) {
-    //             return null;
-    //         };
-    //         case (?user) {
-    //             user;
-    //         };
-    //     };
-    //     user.seerFloat := user.seerFloat + value;
-
-    //     return ?user.seerFloat;
-    // };
-
-    // Edit market image.
-    // public shared(msg) func editMarketImage(marketId: Nat32, newImage: Text): async Bool {
-    //     assert(msg.caller == initializer); // Root call.
-
-    //     let marketOpt = marketMap.get(marketId);
-
-    //     switch (marketOpt) {
-    //         case null {
-    //             return false;
-    //         };
-    //         case (?market) {
-    //             market.imageUrl := newImage;
-    //             return true;
-    //         };
-    //     };
-
-    //     return false;
-    // };
-
-    // Edit market probabilities.
-    // public shared(msg) func editMarketProbs(marketId: Nat32, newProbs: [Float]): async Bool {
-    //     assert(msg.caller == initializer); // Root call.
-
-    //     let marketOpt = marketMap.get(marketId);
-
-    //     switch (marketOpt) {
-    //         case null {
-    //             return false;
-    //         };
-    //         case (?market) {
-    //             market.probabilities := newProbs;
-    //             return true;
-    //         };
-    //     };
-
-    //     return false;
-    // };
-
     // Add a comment to a market.
     public shared(msg) func addCommentToMarket(marketId: Nat32, content: Text): async Result.Result<Comment.CommentStable, M.MarketError> {
         assert(not updating);
@@ -1251,95 +1183,9 @@ shared({ caller = initializer }) actor class Market() = this {
         };
     };
 
-    /**
-    * Utilities
-    */
-
-    // private func marketKey(x: Nat32) : Trie.Key<Nat32> {
-    //     return { hash = x; key = x };
-    // };
-
-    // private func getMarket(k: Nat32, v: Market): Market {
-    //     return v;
-    // };
-
-    // private func keepOpenMarkets(o: (Nat32, Market)): ?M.MarketStable {
-    //     let m = o.1;
-    //     switch (m.state) {
-    //         case (#open) {
-    //             let market = {
-    //                 id = m.id;    
-    //                 title = m.title;
-    //                 description = m.description;
-    //                 labels = m.labels;  
-    //                 images = m.images;
-    //                 probabilities = m.probabilities;
-    //                 liquidity = m.liquidity;
-    //                 reserves = m.reserves;
-    //                 k = m.k;
-    //                 startDate = m.startDate;
-    //                 endDate = m.endDate;
-    //                 author = m.author;
-    //                 blockTimestampLast = m.blockTimestampLast;
-    //                 totalShares = m.totalShares;
-    //                 providers = m.providers;
-    //                 imageUrl = m.imageUrl;
-    //                 state = m.state;
-    //                 volume = m.volume;
-    //                 comments = m.comments;
-    //             };
-    //             return ?market;
-    //         };
-    //         case _ {
-    //             return null;
-    //         };
-    //     };
-    //     return null;
-    // };
-
-    // private func keepPendingMarkets(o: (Nat32, Market)): ?M.MarketStable {
-    //     let m = o.1;
-    //     switch (m.state) {
-    //         case (#pending) {
-    //             let market = {
-    //                 id = m.id;    
-    //                 title = m.title;
-    //                 description = m.description;
-    //                 labels = m.labels;
-    //                 images = m.images;
-    //                 probabilities = m.probabilities;
-    //                 liquidity = m.liquidity;
-    //                 reserves = m.reserves;
-    //                 k = m.k;
-    //                 startDate = m.startDate;
-    //                 endDate = m.endDate;
-    //                 author = m.author;
-    //                 blockTimestampLast = m.blockTimestampLast;
-    //                 totalShares = m.totalShares;
-    //                 providers = m.providers;
-    //                 imageUrl = m.imageUrl;
-    //                 state = m.state;
-    //                 volume = m.volume;
-    //                 comments = m.comments;
-    //             };
-    //             return ?market;
-    //         };
-    //         case _ {
-    //             return null;
-    //         };
-    //     };
-    //     return null;
-    // };
-
     private func getUser(userId: Text): ?U.User {
         userMap.get(userId)
     };
-
-    // private type CreateUserError = {
-    //     #userExist;
-    //     #userIsAnon;
-    // };
-
 
     private func _createUser(
         initData: U.UserInitData,

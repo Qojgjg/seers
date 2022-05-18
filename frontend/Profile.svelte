@@ -10,8 +10,6 @@
   export let signIn
 
   let user = null
-  let createLabel = "Create User"
-
   let id = principal
   let handle = "seers"
   let name = "Seers"
@@ -79,7 +77,6 @@
   }
 
   let createUserData = async () => {
-    createLabel = "Processing..."
     errorResponse = ""
     age = Number(age)
 
@@ -109,7 +106,6 @@
   }
 
   let refreshUser = async () => {
-    refreshLabel = "Processing..."
     response = await $auth.actor.refreshUser()
     if (response["err"]) {
       errorRefresh =
