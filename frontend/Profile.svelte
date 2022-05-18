@@ -105,7 +105,6 @@
     } else {
       user = response["ok"]
     }
-    createLabel = "Create User"
     console.log(user)
   }
 
@@ -247,6 +246,88 @@
             </div>
           </div>
         {/each}
+      </div>
+    {:else if principal !== ""}
+      <div style="display: flex; align-items: center; flex-direction: column">
+        <div style="display:flex; align-items:center">
+          <div style="padding: 10px; margin: 10px">Handle:</div>
+          <input
+            bind:value={handle}
+            style="align-items: center; width:100%; height: 30px"
+          />
+        </div>
+        <div style="display:flex; align-items:center">
+          <div style="padding: 10px; margin: 10px">Name:</div>
+          <input
+            bind:value={name}
+            style="align-items: center; width:100%; height: 30px"
+          />
+        </div>
+        <div style="display:flex; align-items:center">
+          <div style="padding: 10px; margin: 10px">Age:</div>
+          <input
+            bind:value={age}
+            style="align-items: center; width:100%; height: 30px"
+          />
+        </div>
+        <div style="display:flex; align-items:center">
+          <div style="padding: 10px; margin: 10px">City:</div>
+          <input
+            bind:value={city}
+            style="align-items: center; width:100%; height: 30px"
+          />
+        </div>
+        <div style="display:flex; align-items:center">
+          <div style="padding: 10px; margin: 10px">Picture:</div>
+          <input
+            bind:value={picture}
+            style="align-items: center; width:100%; height: 30px"
+          />
+        </div>
+        <div style="display:flex; align-items:center">
+          <div style="padding: 10px; margin: 10px">Cover:</div>
+          <input
+            bind:value={cover}
+            style="align-items: center; width:100%; height: 30px"
+          />
+        </div>
+        <div style="display:flex; align-items:center">
+          <div style="padding: 10px; margin: 10px">Twitter:</div>
+          <input
+            bind:value={twitter}
+            style="align-items: center; width:100%; height: 30px"
+          />
+        </div>
+        <div style="display:flex; align-items:center">
+          <div style="padding: 10px; margin: 10px">Discord:</div>
+          <input
+            bind:value={discord}
+            style="align-items: center; width:100%; height: 30px"
+          />
+        </div>
+        <div style="display:flex; align-items:center">
+          <div style="padding: 10px; margin: 10px">Bio:</div>
+          <input
+            bind:value={bio}
+            style="align-items: center; width:100%; height: 30px"
+          />
+        </div>
+        <div style="display:flex; align-items:center">
+          <div style="padding: 10px; margin: 10px">Website:</div>
+          <input
+            bind:value={website}
+            style="align-items: center; width:100%; height: 30px"
+          />
+        </div>
+        <div style="width: 100%;display:flex; justify-content:center">
+          <button
+            class="btn-grad"
+            on:input={() => (errorResponse = "")}
+            on:click={() => {
+              createUserData()
+            }}>Create Profile</button
+          >
+        </div>
       </div>
     {:else}
       <div style="display: flex; align-items: center; flex-direction: column">

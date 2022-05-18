@@ -25,10 +25,10 @@
 </script>
 
 <div
-  style="justify-content: center; display: flex;width: 100%; margin-top: 20px"
+  style="justify-content: center; display: flex;width: 100%; margin-top: 20px; flex-direction:column; align-items:center; gap: 20px"
 >
   <div class="rowUser">
-    <div style="width: 1000px; margin: 0px; padding: 5px">
+    <div style="width: 100%; margin: 0px; padding: 5px">
       <textarea
         bind:value={post}
         rows="1"
@@ -43,9 +43,13 @@
       </div>
     </div>
   </div>
-  {#each feed as item}
-    <div class="rowUser">
-      {item}
-    </div>
-  {/each}
+  <div style="width: 100%; display:flex; justify-content:center">
+    {#each feed as item}
+      <div class="rowUser">
+        <div style="width: 100%; text-align:start; padding: 5px;">
+          {item.content}
+        </div>
+      </div>
+    {/each}
+  </div>
 </div>
