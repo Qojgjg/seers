@@ -248,6 +248,17 @@
           </div>
         {/each}
       </div>
+    {:else}
+      <div style="display: flex; align-items: center; flex-direction: column">
+        <div style="width: 100%;display:flex; justify-content:center">
+          <button
+            class="btn-grad"
+            on:click={() => {
+              signIn()
+            }}>Login</button
+          >
+        </div>
+      </div>
     {/if}
   </div>
 </div>
