@@ -7,7 +7,7 @@ import Utils "Utils";
 module {
     public type Post = {
         id: Nat32;
-        author: Text;
+        author: Utils.UserData;
         content: Text;
         comments: [Comment.CommentStable];
         likes: [Like.Like];

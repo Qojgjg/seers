@@ -7,6 +7,7 @@ module {
     public type UserData = {
         principal: Text;
         handle: Text;
+        name: Text;
         picture: Text;
     };
 

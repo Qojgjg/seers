@@ -18,7 +18,7 @@ export interface CommentStable {
   'content' : string,
   'modifiedAt' : Time,
   'createdAt' : Time,
-  'author' : string,
+  'author' : UserData,
   'likes' : Array<Like>,
 }
 export type DepositAddr = { 'btc' : string } |
@@ -148,7 +148,7 @@ export interface Post {
   'id' : number,
   'content' : string,
   'createdAt' : Time,
-  'author' : string,
+  'author' : UserData,
   'likes' : Array<Like>,
   'comments' : Array<CommentStable>,
 }
@@ -167,6 +167,7 @@ export type Result_5 = { 'ok' : CommentStable } |
 export type Time = bigint;
 export interface UserData {
   'principal' : string,
+  'name' : string,
   'picture' : string,
   'handle' : string,
 }

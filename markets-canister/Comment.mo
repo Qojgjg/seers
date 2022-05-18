@@ -9,13 +9,13 @@ import Utils "Utils";
 module {
     public type CommentInitData = {
         id: Nat32;
-        author: Text;
+        author: Utils.UserData;
         content: Text;
     };
 
     public type CommentStable = {
         id: Nat32;
-        author: Text;
+        author: Utils.UserData;
         content: Text;
         likes: [Like.Like];
         createdAt: Time.Time;
@@ -38,7 +38,7 @@ module {
 
     public class Comment(initData: CommentInitData) = {
         public var id: Nat32 = initData.id;
-        public var author: Text = initData.author;
+        public var author: Utils.UserData = initData.author;
         public var content: Text = initData.content;
         public var likes: Buffer.Buffer<Like.Like> = Buffer.Buffer<Like.Like>(0);
         public var createdAt: Time.Time = Time.now();

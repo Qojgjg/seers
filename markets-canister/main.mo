@@ -87,6 +87,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 let u = U.unFreezeUser(e.1);
                 let ud: Utils.UserData = {
                     principal = u.id;
+                    name = u.name;
                     handle = u.handle;
                     picture = u.picture;
                 };
@@ -1122,9 +1123,15 @@ shared({ caller = initializer }) actor class Market() = this {
                 return #err(#profileNotCreated);
             };
             case (?user) {
+                let userData: Utils.UserData = {
+                    principal = user.id;
+                    name = user.name;
+                    handle = user.handle;
+                    picture = user.picture;
+                };
                 let post: Post.Post = {
                     id = Nat32.fromNat(user.posts.size());
-                    author = caller;
+                    author = userData;
                     content = content;
                     comments = [];
                     likes = [];
@@ -1223,9 +1230,15 @@ shared({ caller = initializer }) actor class Market() = this {
                         return #err(#marketMissing);
                     };
                     case (?market) {
+                        let userData: Utils.UserData = {
+                            principal = user.id;
+                            handle = user.handle;
+                            name = user.name;
+                            picture = user.picture;
+                        };
                         let initData: Comment.CommentInitData = {
                             id = Nat32.fromNat(market.comments.size());
-                            author = user.id;
+                            author = userData;
                             content = content;
                         };
                         let comment: Comment.Comment = Comment.Comment(initData);
@@ -1337,6 +1350,7 @@ shared({ caller = initializer }) actor class Market() = this {
 
                 let userData: Utils.UserData = {
                     principal = user.id;
+                    name = user.name;
                     handle = user.handle;
                     picture = user.picture;
                 };

@@ -89,6 +89,7 @@ type UserError =
 type UserData = 
  record {
    handle: text;
+   name: text;
    picture: text;
    "principal": text;
  };
@@ -125,7 +126,7 @@ type Result =
  };
 type Post = 
  record {
-   author: text;
+   author: UserData;
    comments: vec CommentStable;
    content: text;
    createdAt: Time;
@@ -282,7 +283,7 @@ type DepositAddr =
  };
 type CommentStable = 
  record {
-   author: text;
+   author: UserData;
    content: text;
    createdAt: Time;
    id: nat32;

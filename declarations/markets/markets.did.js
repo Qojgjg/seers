@@ -1,5 +1,11 @@
 export const idlFactory = ({ IDL }) => {
   const Time = IDL.Int;
+  const UserData = IDL.Record({
+    'principal' : IDL.Text,
+    'name' : IDL.Text,
+    'picture' : IDL.Text,
+    'handle' : IDL.Text,
+  });
   const Like = IDL.Record({
     'createdAt' : Time,
     'author' : IDL.Text,
@@ -10,7 +16,7 @@ export const idlFactory = ({ IDL }) => {
     'content' : IDL.Text,
     'modifiedAt' : Time,
     'createdAt' : Time,
-    'author' : IDL.Text,
+    'author' : UserData,
     'likes' : IDL.Vec(Like),
   });
   const MarketError = IDL.Variant({
@@ -147,7 +153,7 @@ export const idlFactory = ({ IDL }) => {
     'id' : IDL.Nat32,
     'content' : IDL.Text,
     'createdAt' : Time,
-    'author' : IDL.Text,
+    'author' : UserData,
     'likes' : IDL.Vec(Like),
     'comments' : IDL.Vec(CommentStable),
   });
@@ -225,11 +231,6 @@ export const idlFactory = ({ IDL }) => {
     'notEnoughLiquidity' : IDL.Float64,
   });
   const Result_3 = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
-  const UserData = IDL.Record({
-    'principal' : IDL.Text,
-    'picture' : IDL.Text,
-    'handle' : IDL.Text,
-  });
   const Result_1 = IDL.Variant({ 'ok' : IDL.Null, 'err' : MarketError });
   const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : UserError });
   const Market = IDL.Service({
