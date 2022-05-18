@@ -1068,6 +1068,11 @@ shared({ caller = initializer }) actor class Market() = this {
         });
     };
 
+    // Get feed.
+    public query func getFeed(): async [Post.Post] {
+        return feed.toArray();
+    };
+
     // public shared(msg) func cleanTxs(userId: Text): async () {
     //     assert(msg.caller == initializer); // Root call.
     //     switch (userMap.get(userId)) {

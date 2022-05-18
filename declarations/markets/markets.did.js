@@ -244,6 +244,7 @@ export const idlFactory = ({ IDL }) => {
     'canisterFloat' : IDL.Func([], [ICP], []),
     'createMarket' : IDL.Func([MarketInitData], [Result_4], []),
     'createUser' : IDL.Func([UserInitData], [Result_3], []),
+    'getFeed' : IDL.Func([], [IDL.Vec(Post)], ['query']),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
     'readAllMarkets' : IDL.Func(
         [MarketCategory, MarketState],
