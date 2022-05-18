@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte"
   import SvelteMarkdown from "svelte-markdown"
   import inf from "./assets/inf.gif"
 
@@ -8,12 +9,19 @@
 
   let post = ""
   let errorResponse = ""
+  let feed = []
 
   const submitPost = async () => {
     const r = await $auth.actor.submitPost(post)
     post = ""
     console.log(r)
   }
+
+  const getFeed = async () => {
+    feed = await $auth.actor.getFeed()
+  }
+
+  onMount(getFeed)
 </script>
 
 <div
@@ -35,4 +43,9 @@
       </div>
     </div>
   </div>
+  {#each feed as item}
+    <div class="rowUser">
+      {item}
+    </div>
+  {/each}
 </div>
