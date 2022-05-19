@@ -13,6 +13,7 @@
   import Ranking from "./Ranking.svelte"
   import Feed from "./Feed.svelte"
   import Profile from "./Profile.svelte"
+  import ViewPost from "./ViewPost.svelte"
 
   let principal = ""
 
@@ -87,8 +88,14 @@
     <Route path="wallet">
       <Wallet {auth} {principal} {signIn} />
     </Route>
+    <Route path="profile" let:params>
+      <Profile {auth} {principal} {signIn} />
+    </Route>
     <Route path="profile/:principal" let:params>
       <Profile {auth} principal={params.principal} {signIn} />
+    </Route>
+    <Route path="profile/:principal/post/:id" let:params>
+      <ViewPost {auth} principal={params.principal} id={params.id} {signIn} />
     </Route>
     <Route path="create">
       <CreateMarket {auth} {principal} {signIn} />

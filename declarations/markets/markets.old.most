@@ -8,7 +8,7 @@ type BrierScore = {createdAt : Time; score : Float};
 type CollateralType = {#cycles; #icp; #seers};
 type CommentStable =
   {
-    author : Text;
+    author : UserData;
     content : Text;
     createdAt : Time;
     id : Nat32;
@@ -79,7 +79,7 @@ type MarketState =
   {#any; #approved; #closed; #invalid; #open; #pending; #resolved : Nat};
 type Post =
   {
-    author : Text;
+    author : UserData;
     comments : [CommentStable];
     content : Text;
     createdAt : Time;
@@ -88,6 +88,8 @@ type Post =
   };
 type Time = Int;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
+type UserData =
+  {handle : Text; name : Text; picture : Text; principal : Text};
 type UserMarket =
   {
     author : Bool;

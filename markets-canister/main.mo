@@ -221,7 +221,6 @@ shared({ caller = initializer }) actor class Market() = this {
         updating := status;
     };
 
-
     // Delete all users.
     // public shared(msg) func deleteAllUsers(): async () {
     //     assert(msg.caller == initializer); // Root call.
@@ -365,6 +364,24 @@ shared({ caller = initializer }) actor class Market() = this {
         return Option.map(result, func (m: M.Market): M.MarketStable {
             return m.freeze();
         });        
+    };
+
+    // Read a post.
+    public query func getPost(userId: Text, postId: Nat): async Result.Result<Post.Post, U.UserError> {
+        let userOpt = userMap.get(userId);
+        
+        switch (userOpt) {
+            case null {
+                return #err(#profileNotCreated);
+            };
+            case (?user) {
+                if (user.posts.size() <= postId) {
+                    return #err(#postDoesNotExist)
+                } else {
+                    return #ok(user.posts.get(postId));
+                }
+            };
+        };
     };
 
     // // Read user.

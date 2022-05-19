@@ -39,7 +39,7 @@ export const idlFactory = ({ IDL }) => {
     'endDateOlderThanStartDate' : IDL.Null,
     'notEnoughLiquidity' : IDL.Float64,
   });
-  const Result_5 = IDL.Variant({ 'ok' : CommentStable, 'err' : MarketError });
+  const Result_6 = IDL.Variant({ 'ok' : CommentStable, 'err' : MarketError });
   const Result_2 = IDL.Variant({ 'ok' : IDL.Float64, 'err' : MarketError });
   const AccountIdentifier = IDL.Vec(IDL.Nat8);
   const ICP = IDL.Record({ 'e8s' : IDL.Nat64 });
@@ -118,7 +118,7 @@ export const idlFactory = ({ IDL }) => {
     'startDate' : Time,
     'images' : IDL.Vec(IDL.Text),
   });
-  const Result_4 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
+  const Result_5 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
   const UserInitData = IDL.Record({
     'id' : IDL.Text,
     'age' : IDL.Nat,
@@ -234,10 +234,11 @@ export const idlFactory = ({ IDL }) => {
     'notEnoughLiquidity' : IDL.Float64,
   });
   const Result_3 = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
+  const Result_4 = IDL.Variant({ 'ok' : Post, 'err' : UserError });
   const Result_1 = IDL.Variant({ 'ok' : IDL.Null, 'err' : MarketError });
   const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : UserError });
   const Market = IDL.Service({
-    'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_5], []),
+    'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_6], []),
     'buyOutcome' : IDL.Func(
         [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
         [Result_2],
@@ -246,9 +247,10 @@ export const idlFactory = ({ IDL }) => {
     'callerAccount' : IDL.Func([], [AccountIdentifier], []),
     'canisterAccount' : IDL.Func([], [IDL.Text], ['query']),
     'canisterFloat' : IDL.Func([], [ICP], []),
-    'createMarket' : IDL.Func([MarketInitData], [Result_4], []),
+    'createMarket' : IDL.Func([MarketInitData], [Result_5], []),
     'createUser' : IDL.Func([UserInitData], [Result_3], []),
     'getFeed' : IDL.Func([], [IDL.Vec(Post)], ['query']),
+    'getPost' : IDL.Func([IDL.Text, IDL.Nat], [Result_4], ['query']),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
     'readAllMarkets' : IDL.Func(
         [MarketCategory, MarketState],

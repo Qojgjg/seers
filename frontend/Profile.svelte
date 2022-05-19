@@ -92,12 +92,14 @@
   }
 
   let getUserData = async () => {
+    console.log(principal)
     if (principal === "") {
       isGetting = true
       setTimeout(getUserData, 500)
     } else {
       isGetting = true
       user = await $auth.actor.getUserStable(principal)
+      console.log(user)
       if (user) {
         user = user[0]
         if (user) {
