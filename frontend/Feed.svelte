@@ -3,6 +3,8 @@
   import Fa from "svelte-fa"
   import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
   import { faRetweet } from "@fortawesome/free-solid-svg-icons"
+  import inf from "./assets/inf.gif"
+  import SvelteMarkdown from "svelte-markdown"
 
   export let auth
   export let principal
@@ -11,15 +13,19 @@
   let post = ""
   let errorResponse = ""
   let feed = []
+  let processing = false
 
   const submitPost = async () => {
+    processing = true
     const r = await $auth.actor.submitPost(post)
+    processing = false
     post = ""
     getFeed()
   }
 
   const getFeed = async () => {
     feed = await $auth.actor.getFeed()
+    feed = feed.reverse()
   }
 
   function parseTwitterDate(tdate) {
@@ -80,6 +86,23 @@
       {#if principal === ""}
         <div style="display:flex; text-align:end; justify-content:end;">
           <button class="btn-grad" on:click={signIn}>Login</button>
+          <div style="text-align:end;color:red">
+            {errorResponse}
+          </div>
+        </div>
+      {:else if processing}
+        <div style="display:flex; text-align:end; justify-content:end;">
+          <button
+            class="btn-grad"
+            on:click={() => 0}
+            style="width: 100px; overflow:hidden"
+          >
+            <img
+              src={inf}
+              alt="inf"
+              style="width: 150px; height: 400%; margin: -100%;"
+            />
+          </button>
           <div style="text-align:end;color:red">
             {errorResponse}
           </div>
