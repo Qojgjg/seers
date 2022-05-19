@@ -1,10 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte"
   import Fa from "svelte-fa"
+  import { Link } from "svelte-navigator"
+
   import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
   import { faRetweet } from "@fortawesome/free-solid-svg-icons"
   import inf from "./assets/inf.gif"
-  import SvelteMarkdown from "svelte-markdown"
 
   export let auth
   export let principal
@@ -154,9 +155,14 @@
                   - {parseTwitterDate(parseInt(item.createdAt) / 1_000_000)}
                 </div>
               </div>
-              <div style="width: 100%; text-align:start; padding: 5px 0px">
-                {item.content}
-              </div>
+              <Link
+                to={`/profile/${item.author.principal}/post/${item.id}`}
+                style="width: 100%"
+              >
+                <div style="width: 100%; text-align:start; padding: 5px 0px">
+                  {item.content}
+                </div>
+              </Link>
               <div
                 style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
               >
@@ -207,9 +213,14 @@
                   - {parseTwitterDate(parseInt(item.createdAt) / 1_000_000)}
                 </div>
               </div>
-              <div style="width: 100%; text-align:start; padding: 5px 0px">
-                {item.content}
-              </div>
+              <Link
+                to={`/profile/${item.author.principal}/post/${item.id}`}
+                style="width: 100%"
+              >
+                <div style="width: 100%; text-align:start; padding: 5px 0px">
+                  {item.content}
+                </div>
+              </Link>
               <div
                 style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:gray"
               >
