@@ -135,7 +135,11 @@
             </div>
             <div style="flex-grow: 1; justify-content: start; text-align:start">
               <div style="display:flex; gap: 5px;">
-                <div>{item.author.name}</div>
+                <div>
+                  <a href={`/profile/${item.author.principal}`}
+                    >{item.author.name}</a
+                  >
+                </div>
                 <div style="color:grey">@{item.author.handle}</div>
                 <div style="color:grey">
                   - {parseTwitterDate(parseInt(item.createdAt) / 1_000_000)}
@@ -175,7 +179,11 @@
             </div>
             <div style="flex-grow: 1; justify-content: start; text-align:start">
               <div style="display:flex; gap: 5px;">
-                <div>{item.author.name}</div>
+                <div>
+                  <a href={`/profile/${item.author.principal}`}
+                    >{item.author.name}</a
+                  >
+                </div>
                 <div style="color:grey">@{item.author.handle}</div>
                 <div style="color:grey">
                   - {parseTwitterDate(parseInt(item.createdAt) / 1_000_000)}
