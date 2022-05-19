@@ -32,6 +32,47 @@
   let refreshLabel = "Refresh"
   let isGetting = false
 
+  function parseTwitterDate(tdate) {
+    var system_date = new Date(tdate)
+    var user_date = new Date()
+
+    var diff = Math.floor((Number(user_date) - Number(system_date)) / 1000)
+    if (diff <= 1) {
+      return "just now"
+    }
+    if (diff < 20) {
+      return diff + " seconds ago"
+    }
+    if (diff < 40) {
+      return "half a minute ago"
+    }
+    if (diff < 60) {
+      return "less than a minute ago"
+    }
+    if (diff <= 90) {
+      return "one minute ago"
+    }
+    if (diff <= 3540) {
+      return Math.round(diff / 60) + " minutes ago"
+    }
+    if (diff <= 5400) {
+      return "1 hour ago"
+    }
+    if (diff <= 86400) {
+      return Math.round(diff / 3600) + " hours ago"
+    }
+    if (diff <= 129600) {
+      return "1 day ago"
+    }
+    if (diff < 604800) {
+      return Math.round(diff / 86400) + " days ago"
+    }
+    if (diff <= 777600) {
+      return "1 week ago"
+    }
+    return "on " + system_date
+  }
+
   const splitCamelCaseToString = (s) => {
     return s
       .split(/(?=[A-Z])/)
@@ -52,11 +93,11 @@
 
   let getUserData = async () => {
     if (principal === "") {
+      isGetting = true
       setTimeout(getUserData, 500)
     } else {
       isGetting = true
       user = await $auth.actor.getUserStable(principal)
-      isGetting = false
       if (user) {
         user = user[0]
         if (user) {
@@ -70,9 +111,11 @@
           user.ownMarkets = user.markets.filter((m) => m.author)
           user.otherMarkets = user.markets.filter((m) => !m.author)
           user.txs = user.txs.reverse()
+          user.posts = user.posts.reverse()
           console.log(user)
         }
       }
+      isGetting = false
     }
   }
 
@@ -215,16 +258,14 @@
                 <div>{user.name}</div>
                 <div style="color:grey">@{user.handle}</div>
                 <div style="color:grey">
-                  - {new Date(
-                    parseInt(post.createdAt) / 1_000_000,
-                  ).toLocaleString()}
+                  - {parseTwitterDate(Number(post.createdAt) / 1_000_000)}
                 </div>
               </div>
               <div style="width: 100%; text-align:start; padding: 5px 0px">
                 {post.content}
               </div>
               <div
-                style="width: 100%; display:flex; gap: 30px; padding: 5px 0px"
+                style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
               >
                 <div style="width: 50px; display:flex; gap: 15px">
                   <div><Fa icon={faComment} /></div>
@@ -243,7 +284,7 @@
           </div>
         {/each}
       </div>
-    {:else if principal !== ""}
+    {:else if principal !== "" && !isGetting}
       <div style="display: flex; align-items: center; flex-direction: column">
         <div style="display:flex; align-items:center">
           <div style="padding: 10px; margin: 10px">Handle:</div>
@@ -325,7 +366,7 @@
           >
         </div>
       </div>
-    {:else}
+    {:else if !isGetting}
       <div style="display: flex; align-items: center; flex-direction: column">
         <div style="width: 100%;display:flex; justify-content:center">
           <button
@@ -336,6 +377,8 @@
           >
         </div>
       </div>
+    {:else}
+      Loading
     {/if}
   </div>
 </div>
