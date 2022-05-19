@@ -87,8 +87,8 @@
     <Route path="wallet">
       <Wallet {auth} {principal} {signIn} />
     </Route>
-    <Route path="profile">
-      <Profile {auth} {principal} {signIn} />
+    <Route path="profile/:principal" let:params>
+      <Profile {auth} principal={params.principal} {signIn} />
     </Route>
     <Route path="create">
       <CreateMarket {auth} {principal} {signIn} />

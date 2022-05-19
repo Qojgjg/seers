@@ -127,11 +127,13 @@
             style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 1px solid grey"
           >
             <div style="padding: 5px; margin: 5px; height: 100%">
-              <img
-                src={item.author.picture}
-                alt="avatar"
-                style="width: 50px; object-fit: cover; border-radius: 50%"
-              />
+              <a href={`/profile/${item.author.principal}`}>
+                <img
+                  src={item.author.picture}
+                  alt="avatar"
+                  style="width: 50px; object-fit: cover; border-radius: 50%"
+                />
+              </a>
             </div>
             <div style="flex-grow: 1; justify-content: start; text-align:start">
               <div style="display:flex; gap: 5px;">
@@ -140,7 +142,14 @@
                     >{item.author.name}</a
                   >
                 </div>
-                <div style="color:grey">@{item.author.handle}</div>
+                <div style="color:grey">
+                  <a
+                    href={`/profile/${item.author.principal}`}
+                    style="color:grey"
+                  >
+                    @{item.author.handle}
+                  </a>
+                </div>
                 <div style="color:grey">
                   - {parseTwitterDate(parseInt(item.createdAt) / 1_000_000)}
                 </div>
@@ -171,11 +180,13 @@
             style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center;"
           >
             <div style="padding: 5px; margin: 5px; height: 100%">
-              <img
-                src={item.author.picture}
-                alt="avatar"
-                style="width: 50px; object-fit: cover; border-radius: 50%"
-              />
+              <a href={`/profile/${item.author.principal}`}>
+                <img
+                  src={item.author.picture}
+                  alt="avatar"
+                  style="width: 50px; object-fit: cover; border-radius: 50%"
+                />
+              </a>
             </div>
             <div style="flex-grow: 1; justify-content: start; text-align:start">
               <div style="display:flex; gap: 5px;">
@@ -184,7 +195,14 @@
                     >{item.author.name}</a
                   >
                 </div>
-                <div style="color:grey">@{item.author.handle}</div>
+                <div style="color:grey">
+                  <a
+                    href={`/profile/${item.author.principal}`}
+                    style="color:grey"
+                  >
+                    @{item.author.handle}
+                  </a>
+                </div>
                 <div style="color:grey">
                   - {parseTwitterDate(parseInt(item.createdAt) / 1_000_000)}
                 </div>
