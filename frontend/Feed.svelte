@@ -77,12 +77,21 @@
         style="width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
         placeholder="Please share your insights. You can use markdown."
       />
-      <div style="display:flex; text-align:end; justify-content:end;">
-        <button class="btn-grad" on:click={submitPost}>Post</button>
-        <div style="text-align:end;color:red">
-          {errorResponse}
+      {#if principal === ""}
+        <div style="display:flex; text-align:end; justify-content:end;">
+          <button class="btn-grad" on:click={signIn}>Login</button>
+          <div style="text-align:end;color:red">
+            {errorResponse}
+          </div>
         </div>
-      </div>
+      {:else}
+        <div style="display:flex; text-align:end; justify-content:end;">
+          <button class="btn-grad" on:click={submitPost}>Post</button>
+          <div style="text-align:end;color:red">
+            {errorResponse}
+          </div>
+        </div>
+      {/if}
     </div>
   </div>
   <div
