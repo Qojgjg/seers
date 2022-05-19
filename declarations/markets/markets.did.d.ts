@@ -150,7 +150,7 @@ export interface Post {
   'createdAt' : Time,
   'author' : UserData,
   'likes' : Array<Like>,
-  'comments' : Array<CommentStable>,
+  'comments' : Array<Post>,
 }
 export type Result = { 'ok' : null } |
   { 'err' : UserError };

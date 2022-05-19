@@ -1,6 +1,5 @@
 import Time "mo:base/Time";
 
-import Comment "Comment";
 import Like "Like";
 import Utils "Utils";
 
@@ -9,7 +8,7 @@ module {
         id: Nat32;
         author: Utils.UserData;
         content: Text;
-        comments: [Comment.CommentStable];
+        comments: [Post];
         likes: [Like.Like];
         createdAt: Time.Time;
     };

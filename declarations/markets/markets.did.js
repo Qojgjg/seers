@@ -1,4 +1,5 @@
 export const idlFactory = ({ IDL }) => {
+  const Post = IDL.Rec();
   const Time = IDL.Int;
   const UserData = IDL.Record({
     'principal' : IDL.Text,
@@ -149,14 +150,16 @@ export const idlFactory = ({ IDL }) => {
     'cycles' : IDL.Float64,
   });
   const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : CommentStable });
-  const Post = IDL.Record({
-    'id' : IDL.Nat32,
-    'content' : IDL.Text,
-    'createdAt' : Time,
-    'author' : UserData,
-    'likes' : IDL.Vec(Like),
-    'comments' : IDL.Vec(CommentStable),
-  });
+  Post.fill(
+    IDL.Record({
+      'id' : IDL.Nat32,
+      'content' : IDL.Text,
+      'createdAt' : Time,
+      'author' : UserData,
+      'likes' : IDL.Vec(Like),
+      'comments' : IDL.Vec(Post),
+    })
+  );
   const FeedItem = IDL.Variant({
     'bet' : Bet,
     'post' : Post,

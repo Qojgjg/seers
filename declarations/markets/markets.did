@@ -127,7 +127,7 @@ type Result =
 type Post = 
  record {
    author: UserData;
-   comments: vec CommentStable;
+   comments: vec Post;
    content: text;
    createdAt: Time;
    id: nat32;
