@@ -1121,9 +1121,11 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Get feed.
-    // public query func getFeed(): async [Post.PostStable] {
-    //     return feed.toArray();
-    // };
+    public query func getFeed(): async [Post.PostStable] {
+        return Array.map(feed.toArray(), func (p: Post.Post): Post.PostStable {
+            p.freeze()
+        });
+    };
 
     // Create user.
     public shared(msg) func createUser(

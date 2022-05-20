@@ -21,7 +21,7 @@ type FeedItem =
     #bet : Bet;
     #comment : CommentStable;
     #market : MarketStable;
-    #post : Post
+    #post : PostStable
   };
 type Followee = {createdAt : Time; user : Text};
 type Follower = {createdAt : Time; user : Text};
@@ -77,14 +77,15 @@ type MarketStable =
   };
 type MarketState =
   {#any; #approved; #closed; #invalid; #open; #pending; #resolved : Nat};
-type Post =
+type PostStable =
   {
     author : UserData;
-    comments : [Post];
     content : Text;
     createdAt : Time;
     id : Nat32;
-    likes : [Like]
+    likes : [Like];
+    parent : Nat32;
+    replies : [Nat32]
   };
 type Time = Int;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
@@ -127,7 +128,8 @@ type UserStable =
     modifiedAt : Time;
     name : Text;
     picture : Text;
-    posts : [Post];
+    postData : [PostStable];
+    postRoots : [Nat32];
     twitter : Text;
     txs : [UserTx];
     website : Text
@@ -149,7 +151,7 @@ actor {
   stable var handles :
     {#branch : Branch<Text, Text>; #empty; #leaf : Leaf<Text, Text>};
   stable var nextMarketId : Nat32;
-  stable var stableFeed : [Post];
+  stable var stableFeed : [PostStable];
   stable var stableMarkets : [(Nat32, MarketStable)];
   stable var stableUsers : [(Text, UserStable)];
   stable var updating : Bool

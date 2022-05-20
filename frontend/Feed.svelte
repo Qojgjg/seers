@@ -26,8 +26,8 @@
   }
 
   const getFeed = async () => {
-    // feed = await $auth.actor.getFeed()
-    // feed = feed.reverse()
+    feed = await $auth.actor.getFeed()
+    feed = feed.reverse()
   }
 
   function parseTwitterDate(tdate) {
