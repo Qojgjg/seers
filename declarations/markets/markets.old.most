@@ -80,7 +80,7 @@ type MarketState =
 type Post =
   {
     author : UserData;
-    comments : [CommentStable];
+    comments : [Post];
     content : Text;
     createdAt : Time;
     id : Nat32;

@@ -359,7 +359,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Add a reply to a post.
-    public shared(msg) submitReply(userId: Text, treePath: [Nat], ): async Result.Result<Post.Post, U.UserError> {
+    public shared(msg) func submitReply(userId: Text, treePath: [Nat], content: Text): async Result.Result<Post.Post, U.UserError> {
         assert treePath.size() > 0;
 
         switch (userMap.get(userId)) {
@@ -371,7 +371,7 @@ shared({ caller = initializer }) actor class Market() = this {
 
                 for (i in Iter.range(0, treePath.size())) {
                     let post = posts.get(treePath[i]);
-                    posts = post.posts;
+                    posts := post.posts;
                 };
 
                 let userData: Utils.UserData = {
@@ -393,7 +393,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 posts.append(newPost);
             };
         };
-    }
+    };
 
     // Read a market.
     public query func readMarket(marketId: Nat32): async ?M.MarketStable {
