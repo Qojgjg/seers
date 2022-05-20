@@ -4,18 +4,22 @@
   import { Link } from "svelte-navigator"
   import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
   import { faRetweet } from "@fortawesome/free-solid-svg-icons"
+  import inf from "./assets/inf.gif"
 
   export let auth
   export let principal
   export let signIn
   export let id
 
-  let user = null
-
-  let response = null
-  let errorRefresh = ""
-  let isGetting = false
   let post = null
+  let newComment = ""
+  let errorResponse = ""
+  let processing = false
+
+  const submitReply = async () => {
+    const resp = $auth.actor.submitReply(principal, Number(id), newComment)
+    console.log(resp)
+  }
 
   function parseTwitterDate(tdate) {
     var system_date = new Date(tdate)
@@ -80,7 +84,9 @@
   onMount(getPost)
 </script>
 
-<div style="justify-content: center; display: flex;width: 100%">
+<div
+  style="justify-content: center; display: flex;width: 100%; flex-direction:column; align-items:center; margin-top: 50px"
+>
   <div class="rowUser">
     <div
       style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 0px solid grey"
@@ -135,6 +141,48 @@
           </div>
         </div>
       </div>
+    </div>
+    <div
+      style="width: 100%; margin: 15px 0px; padding: 15px 0px; border-top: 1px solid grey"
+    >
+      <textarea
+        bind:value={newComment}
+        rows="3"
+        style="width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
+        placeholder="Please share your insights. You can use markdown."
+      />
+      {#if principal === ""}
+        <div style="display:flex; text-align:end; justify-content:end;">
+          <button class="btn-grad" on:click={signIn}>Login</button>
+          <div style="text-align:end;color:red">
+            {errorResponse}
+          </div>
+        </div>
+      {:else if processing}
+        <div style="display:flex; text-align:end; justify-content:end;">
+          <button
+            class="btn-grad"
+            on:click={() => 0}
+            style="width: 100px; overflow:hidden"
+          >
+            <img
+              src={inf}
+              alt="inf"
+              style="width: 150px; height: 400%; margin: -100%;"
+            />
+          </button>
+          <div style="text-align:end;color:red">
+            {errorResponse}
+          </div>
+        </div>
+      {:else}
+        <div style="display:flex; text-align:end; justify-content:end;">
+          <button class="btn-grad" on:click={submitReply}>Reply</button>
+          <div style="text-align:end;color:red">
+            {errorResponse}
+          </div>
+        </div>
+      {/if}
     </div>
   </div>
 </div>

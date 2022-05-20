@@ -358,6 +358,43 @@ shared({ caller = initializer }) actor class Market() = this {
         return #ok(newMarket.freeze());
     };
 
+    // Add a reply to a post.
+    public shared(msg) submitReply(userId: Text, treePath: [Nat], ): async Result.Result<Post.Post, U.UserError> {
+        assert treePath.size() > 0;
+
+        switch (userMap.get(userId)) {
+            case null {
+                return #err(#profileNotCreated);
+            };
+            case (?user) {
+                var posts = Buffer.Buffer<Post.Post>(0);
+
+                for (i in Iter.range(0, treePath.size())) {
+                    let post = posts.get(treePath[i]);
+                    posts = post.posts;
+                };
+
+                let userData: Utils.UserData = {
+                    principal = user.id;
+                    name = user.name;
+                    handle = user.handle;
+                    picture = user.picture;
+                };
+
+                let newPost: Post.Post = {
+                    id = posts.size();
+                    author = userData;
+                    content = content;
+                    comments = [];
+                    likes = [];
+                    createdAt = Time.now();
+                };
+
+                posts.append(newPost);
+            };
+        };
+    }
+
     // Read a market.
     public query func readMarket(marketId: Nat32): async ?M.MarketStable {
         let result = marketMap.get(marketId);
