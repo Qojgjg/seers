@@ -11,67 +11,55 @@ module {
         id: Nat32;
         author: Utils.UserData;
         content: Text;
+        parent: Nat32;
     };
 
     public class Post (initData: PostInitData) = this {
         public var id: Nat32 = initData.id;
         public var author: Utils.UserData = initData.author;
         public var content: Text = initData.content;
-        public var replies: Buffer.Buffer<Post> = Buffer.Buffer<Post>(0);
+        public var parent: Nat32 = initData.parent;
+        public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var likes: [Like.Like] = [];
         public var createdAt: Time.Time = Time.now();
 
         public func freeze(): PostStable {
-        
-            var stableReplies = Buffer.Buffer<[PostNode]>(replies.size());
-            var children = Buffer.Buffer<Nat32>(replies.size());
-
-            for (reply in replies.vals()) {
-                stableReplies.add(reply.freeze());
-                children.add(reply.id);
-            };
-            
-            let postData: PostData = {
+            let ps: PostStable = {
                 id = id;
                 author = author;
                 content = content;
+                parent = parent;
+                replies = replies.toArray();
                 likes = likes;
                 createdAt = createdAt;
             };
-
-            let newPost: [PostNode] = [(id, postData, children.toArray())];
-            stableReplies.add(newPost);
-
-            let postStable: PostStable = Array.flatten(stableReplies.toArray());
-
-            return postStable;
+            
+            return ps;
         };
     };
 
-    public type PostData = {
+    public type PostStable = {
         id: Nat32;
         author: Utils.UserData;
         content: Text;
+        parent: Nat32;
+        replies: [Nat32];
         likes: [Like.Like];
         createdAt: Time.Time;
     };
 
-    public type PostNode = (Nat32, PostData, [Nat32]);
-    public type PostStable = [PostNode];
+    public func unFreeze(ps: PostStable): Post {
+        let initData: PostInitData = {
+            id = ps.id;
+            author = ps.author;
+            content = ps.content;
+            parent = ps.parent;
+        };
+        var p: Post = Post(initData);
+        p.replies := Utils.bufferFromArray(ps.replies);
+        p.likes := ps.likes;
+        p.createdAt := ps.createdAt;
 
-    // public func unFreeze(ps: PostStable): Post {
-    //     let initData: PostInitData = {
-    //         id = ps.id;
-    //         author = ps.author;
-    //         content = ps.content;
-    //     };
-    //     var p: Post = Post(initData);
-    //     p.comments := Utils.bufferFromArray(Array.map(ps.comments, func (ps: PostStable): Post {
-    //         unFreeze(ps)
-    //     }));
-    //     p.likes := ps.likes;
-    //     p.createdAt := ps.createdAt;
-
-    //     return p;
-    // };
+        return p;
+    };
 }
