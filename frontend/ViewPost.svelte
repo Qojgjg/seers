@@ -16,6 +16,7 @@
   let newComment = ""
   let errorResponse = ""
   let processing = false
+  let replies = []
 
   const submitReply = async () => {
     processing = true
@@ -27,6 +28,7 @@
     processing = false
     newComment = ""
     console.log(resp)
+    getPost()
   }
 
   function parseTwitterDate(tdate) {
@@ -80,13 +82,14 @@
   }
 
   const getPost = async () => {
-    post = await $auth.actor.getPost(postAuthor, Number(id))
+    post = await $auth.actor.getThread(postAuthor, Number(id))
     if ("ok" in post) {
-      post = post["ok"]
+      console.log(post)
+      replies = post["ok"].replies
+      post = post["ok"].main
     } else {
       console.log(post["err"])
     }
-    console.log(post)
   }
 
   onMount(getPost)
@@ -150,6 +153,63 @@
         </div>
       </div>
     </div>
+
+    {#each replies as post}
+      <div
+        style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 0px solid grey"
+      >
+        <div style="padding: 5px; margin: 5px; height: 100%">
+          <a href={`/profile/${post?.author.principal}`}>
+            <img
+              src={post?.author.picture}
+              alt="avatar"
+              style="width: 50px; object-fit: cover; border-radius: 50%"
+            />
+          </a>
+        </div>
+        <div style="flex-grow: 1; justify-content: start; text-align:start">
+          <div style="display:flex; gap: 5px;">
+            <div>
+              <a href={`/profile/${post?.author.principal}`}
+                >{post?.author.name}</a
+              >
+            </div>
+            <div style="color:grey">
+              <a href={`/profile/${post?.author.principal}`} style="color:grey">
+                @{post?.author.handle}
+              </a>
+            </div>
+            <div style="color:grey">
+              - {parseTwitterDate(parseInt(post?.createdAt) / 1_000_000)}
+            </div>
+          </div>
+          <Link
+            to={`/profile/${post?.author.principal}/post/${post?.id}`}
+            style="width: 100%"
+          >
+            <div style="width: 100%; text-align:start; padding: 5px 0px">
+              {post?.content}
+            </div>
+          </Link>
+          <div
+            style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
+          >
+            <div style="width: 50px; display:flex; gap: 15px">
+              <div><Fa icon={faComment} /></div>
+              <div>0</div>
+            </div>
+            <div style="width: 50px; display:flex; gap: 15px">
+              <div><Fa icon={faRetweet} /></div>
+              <div>0</div>
+            </div>
+            <div style="width: 50px; display:flex; gap: 15px">
+              <div><Fa icon={faHeart} /></div>
+              <div>0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {/each}
     <div
       style="width: 100%; margin: 15px 0px; padding: 15px 0px; border-top: 1px solid grey"
     >
