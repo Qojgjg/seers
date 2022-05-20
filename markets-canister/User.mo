@@ -136,6 +136,9 @@ module {
             let stableComments = Array.map(comments.toArray(), func (c: Comment.Comment): Comment.CommentStable {
                 c.freeze()
             });
+            let stablePosts = Array.map(posts.toArray(), func (p: Post.Post): Post.PostStable {
+                p.freeze()
+            });
             let us: UserStable = {
                 id = id;
                 name = name;
@@ -155,7 +158,7 @@ module {
                 markets = markets.toArray();
                 txs = txs.toArray();
                 comments = stableComments;
-                posts = posts.toArray();
+                posts = stablePosts;
                 followers = followees.toArray();
                 followees = followees.toArray();
                 createdAt = createdAt;
@@ -185,7 +188,7 @@ module {
         markets: [UserMarket];
         txs: [Tx.UserTx];
         comments: [Comment.CommentStable];
-        posts: [Post.Post];
+        posts: [Post.PostStable];
         followers: [Follower];
         followees: [Followee];
         createdAt: Time.Time;
@@ -210,6 +213,9 @@ module {
         let comments = Array.map(u.comments, func (c: Comment.CommentStable): Comment.Comment {
             Comment.unFreeze(c)
         });
+        let posts = Array.map(u.posts, func (c: Post.PostStable): Post.Post {
+            Post.unFreeze(c)
+        });
         var user: User = User(initData);
         user.feed := Utils.bufferFromArray(u.feed);
         user.balances := u.balances;
@@ -218,7 +224,7 @@ module {
         user.markets := Utils.bufferFromArray(u.markets);
         user.txs := Utils.bufferFromArray(u.txs);
         user.comments := Utils.bufferFromArray(comments);
-        user.posts := Utils.bufferFromArray(u.posts);
+        user.posts := Utils.bufferFromArray(posts);
         user.followers := Utils.bufferFromArray(u.followers);
         user.followees := Utils.bufferFromArray(u.followees);
         user.createdAt := u.createdAt;
