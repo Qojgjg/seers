@@ -301,6 +301,7 @@ service : {
   canisterFloat: () -> (ICP);
   createMarket: (MarketInitData) -> (Result_4);
   createUser: (UserInitData) -> (Result_3);
+  getFeed: () -> (vec PostStable) query;
   getUserStable: (text) -> (opt UserStable) query;
   readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
   readAllUsers: () -> (vec UserStable) query;

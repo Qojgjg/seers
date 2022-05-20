@@ -67,6 +67,7 @@ export interface Market {
   'setUpdating' : ActorMethod<[boolean], undefined>,
   'submitForecast' : ActorMethod<[number, Forecast], Result_1>,
   'submitPost' : ActorMethod<[string], Result>,
+  'submitReply' : ActorMethod<[string, number, string], Result>,
 }
 export type MarketCategory = { 'any' : null } |
   { 'entertainment' : null } |
@@ -156,7 +157,7 @@ export interface PostStable {
   'replies' : Array<number>,
   'parent' : number,
 }
-export type Result = { 'ok' : null } |
+export type Result = { 'ok' : PostStable } |
   { 'err' : UserError };
 export type Result_1 = { 'ok' : null } |
   { 'err' : MarketError };

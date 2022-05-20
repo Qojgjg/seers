@@ -239,7 +239,7 @@ export const idlFactory = ({ IDL }) => {
   });
   const Result_4 = IDL.Variant({ 'ok' : PostStable, 'err' : PostError });
   const Result_1 = IDL.Variant({ 'ok' : IDL.Null, 'err' : MarketError });
-  const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : UserError });
+  const Result = IDL.Variant({ 'ok' : PostStable, 'err' : UserError });
   const Market = IDL.Service({
     'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_6], []),
     'buyOutcome' : IDL.Func(
@@ -278,6 +278,7 @@ export const idlFactory = ({ IDL }) => {
     'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),
     'submitForecast' : IDL.Func([IDL.Nat32, Forecast], [Result_1], []),
     'submitPost' : IDL.Func([IDL.Text], [Result], []),
+    'submitReply' : IDL.Func([IDL.Text, IDL.Nat32, IDL.Text], [Result], []),
   });
   return Market;
 };

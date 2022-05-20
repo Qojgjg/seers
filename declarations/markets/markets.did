@@ -128,7 +128,7 @@ type Result_1 =
 type Result = 
  variant {
    err: UserError;
-   ok;
+   ok: PostStable;
  };
 type PostStable = 
  record {
@@ -256,6 +256,7 @@ type Market =
    setUpdating: (bool) -> () oneway;
    submitForecast: (nat32, Forecast) -> (Result_1);
    submitPost: (text) -> (Result);
+   submitReply: (text, nat32, text) -> (Result);
  };
 type Like = 
  record {

@@ -356,41 +356,44 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Add a reply to a post.
-    // public shared(msg) func submitReply(userId: Text, treePath: [Nat], content: Text): async Result.Result<Post.PostStable, U.UserError> {
-        // assert treePath.size() > 0;
+    public shared(msg) func submitReply(userId: Text, parent: Nat32, content: Text): async Result.Result<Post.PostStable, U.UserError> {
+        assert(not updating);
 
-        // switch (userMap.get(userId)) {
-        //     case null {
-        //         return #err(#profileNotCreated);
-        //     };
-        //     case (?user) {
-        //         var posts = Buffer.Buffer<Post.Post>(0);
+        let caller = Principal.toText(msg.caller);
+        
+        if (caller == anon) {
+            return #err(#callerIsAnon);
+        };
+        
+        switch (userMap.get(userId)) {
+            case null {
+                return #err(#profileNotCreated);
+            };
+            case (?user) {
+                let userData: Utils.UserData = {
+                    principal = user.id;
+                    name = user.name;
+                    handle = user.handle;
+                    picture = user.picture;
+                };
 
-        //         for (i in Iter.range(0, treePath.size())) {
-        //             let post = posts.get(treePath[i]);
-        //             posts := post.posts;
-        //         };
+                let initData: Post.PostInitData = {
+                    id = Nat32.fromNat(user.postMap.size());
+                    author = userData;
+                    content = content;
+                    parent = parent; 
+                };
 
-        //         let userData: Utils.UserData = {
-        //             principal = user.id;
-        //             name = user.name;
-        //             handle = user.handle;
-        //             picture = user.picture;
-        //         };
+                let post: Post.Post = Post.Post(initData);
 
-        //         let newPost: Post.Post = {
-        //             id = posts.size();
-        //             author = userData;
-        //             content = content;
-        //             comments = [];
-        //             likes = [];
-        //             createdAt = Time.now();
-        //         };
+                feed.add(post);
+                user.postRoots.add(post.id);
+                user.postMap.put(post.id, post);
 
-        //         posts.append(newPost);
-        //     };
-        // };
-    // };
+                return #ok(post.freeze())
+            };
+        };
+    };
 
     // Read a market.
     public query func readMarket(marketId: Nat32): async ?M.MarketStable {
@@ -1157,7 +1160,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Create post and push it to user.
-    public shared(msg) func submitPost(content: Text): async Result.Result<(), U.UserError> {
+    public shared(msg) func submitPost(content: Text): async Result.Result<Post.PostStable, U.UserError> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -1191,7 +1194,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 user.postRoots.add(post.id);
                 user.postMap.put(post.id, post);
 
-                return #ok();
+                return #ok(post.freeze());
             };
         };
     };
