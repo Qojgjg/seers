@@ -227,17 +227,18 @@ module {
         let comments = Array.map(u.comments, func (c: Comment.CommentStable): Comment.Comment {
             Comment.unFreeze(c)
         });
-        let posts = Array.map(u.postData, func (c: Post.PostStable): (Nat32, Post.Post) {
-            (c.id, Post.unFreeze(c))
+        let posts = Array.map<Post.PostStable, (Nat32, Post.Post)>(
+            u.postData, func (c: Post.PostStable): (Nat32, Post.Post) {
+                (c.id, Post.unFreeze(c))
         });
         var user: User = User(initData);
         user.postMap := Map.fromIter<Nat32, Post.Post>(
-            Iter.fromArray(posts.vals()),
+            posts.vals(),
             posts.size(), 
             Nat32.equal, 
             func (x: Nat32): Nat32 { x }
         );
-        user.postRoots := u.postRoots;
+        user.postRoots := Utils.bufferFromArray(u.postRoots);
         user.feed := Utils.bufferFromArray(u.feed);
         user.balances := u.balances;
         user.expBalances := u.expBalances;
@@ -245,7 +246,6 @@ module {
         user.markets := Utils.bufferFromArray(u.markets);
         user.txs := Utils.bufferFromArray(u.txs);
         user.comments := Utils.bufferFromArray(comments);
-        user.posts := Utils.bufferFromArray(posts);
         user.followers := Utils.bufferFromArray(u.followers);
         user.followees := Utils.bufferFromArray(u.followees);
         user.createdAt := u.createdAt;
