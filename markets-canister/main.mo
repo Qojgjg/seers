@@ -356,20 +356,22 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Add a reply to a post.
-    public shared(msg) func submitReply(userId: Text, parent: Nat32, content: Text): async Result.Result<Post.PostStable, U.UserError> {
+    public shared(msg) func submitReply(userId: Text, parent: Nat32, content: Text): async Result.Result<Post.PostStable, Post.PostError> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
         
         if (caller == anon) {
-            return #err(#callerIsAnon);
+            return #err(#notLoggedIn);
         };
         
         switch (userMap.get(userId)) {
             case null {
-                return #err(#profileNotCreated);
+                return #err(#userDoesNotExist);
             };
             case (?user) {
+                let newId = Nat32.fromNat(user.postMap.size());
+
                 let userData: Utils.UserData = {
                     principal = user.id;
                     name = user.name;
@@ -377,19 +379,28 @@ shared({ caller = initializer }) actor class Market() = this {
                     picture = user.picture;
                 };
 
-                let initData: Post.PostInitData = {
-                    id = Nat32.fromNat(user.postMap.size());
-                    author = userData;
-                    content = content;
-                    parent = parent; 
+                switch (user.postMap.get(parent)) {
+                    case null {
+                        return #err(#postDoesNotExist);
+                    };
+                    case (?parentPost) {
+                        parentPost.replies.add(newId);
+
+                        let initData: Post.PostInitData = {
+                            id = newId;
+                            author = userData;
+                            content = content;
+                            parent = parent; 
+                        };
+
+                        let post: Post.Post = Post.Post(initData);
+
+                        user.postRoots.add(post.id);
+                        user.postMap.put(post.id, post);
+
+                        return #ok(post.freeze())
+                    };
                 };
-
-                let post: Post.Post = Post.Post(initData);
-
-                user.postRoots.add(post.id);
-                user.postMap.put(post.id, post);
-
-                return #ok(post.freeze())
             };
         };
     };

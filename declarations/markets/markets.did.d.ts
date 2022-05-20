@@ -44,14 +44,14 @@ export interface Like {
 }
 export interface Market {
   'addCommentToMarket' : ActorMethod<[number, string], Result_6>,
-  'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_2>,
+  'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_3>,
   'callerAccount' : ActorMethod<[], AccountIdentifier>,
   'canisterAccount' : ActorMethod<[], string>,
   'canisterFloat' : ActorMethod<[], ICP>,
   'createMarket' : ActorMethod<[MarketInitData], Result_5>,
-  'createUser' : ActorMethod<[UserInitData], Result_3>,
+  'createUser' : ActorMethod<[UserInitData], Result_4>,
   'getFeed' : ActorMethod<[], Array<PostStable>>,
-  'getPost' : ActorMethod<[string, number], Result_4>,
+  'getPost' : ActorMethod<[string, number], Result>,
   'getUserStable' : ActorMethod<[string], [] | [UserStable]>,
   'readAllMarkets' : ActorMethod<
     [MarketCategory, MarketState],
@@ -60,13 +60,13 @@ export interface Market {
   'readAllUsers' : ActorMethod<[], Array<UserStable>>,
   'readMarket' : ActorMethod<[number], [] | [MarketStable]>,
   'readUserData' : ActorMethod<[Array<string>], Array<UserData>>,
-  'refreshUser' : ActorMethod<[], Result_3>,
+  'refreshUser' : ActorMethod<[], Result_4>,
   'resolveMarket' : ActorMethod<[number, bigint], boolean>,
-  'sellOutcome' : ActorMethod<[number, number, bigint, boolean], Result_2>,
+  'sellOutcome' : ActorMethod<[number, number, bigint, boolean], Result_3>,
   'setMarketState' : ActorMethod<[number, MarketState], boolean>,
   'setUpdating' : ActorMethod<[boolean], undefined>,
-  'submitForecast' : ActorMethod<[number, Forecast], Result_1>,
-  'submitPost' : ActorMethod<[string], Result>,
+  'submitForecast' : ActorMethod<[number, Forecast], Result_2>,
+  'submitPost' : ActorMethod<[string], Result_1>,
   'submitReply' : ActorMethod<[string, number, string], Result>,
 }
 export type MarketCategory = { 'any' : null } |
@@ -146,7 +146,8 @@ export type MarketState = { 'any' : null } |
   { 'invalid' : null } |
   { 'open' : null } |
   { 'approved' : null };
-export type PostError = { 'postDoesNotExist' : null } |
+export type PostError = { 'notLoggedIn' : null } |
+  { 'postDoesNotExist' : null } |
   { 'userDoesNotExist' : null };
 export interface PostStable {
   'id' : number,
@@ -158,15 +159,15 @@ export interface PostStable {
   'parent' : number,
 }
 export type Result = { 'ok' : PostStable } |
-  { 'err' : UserError };
-export type Result_1 = { 'ok' : null } |
-  { 'err' : MarketError };
-export type Result_2 = { 'ok' : number } |
-  { 'err' : MarketError };
-export type Result_3 = { 'ok' : UserStable } |
-  { 'err' : UserError };
-export type Result_4 = { 'ok' : PostStable } |
   { 'err' : PostError };
+export type Result_1 = { 'ok' : PostStable } |
+  { 'err' : UserError };
+export type Result_2 = { 'ok' : null } |
+  { 'err' : MarketError };
+export type Result_3 = { 'ok' : number } |
+  { 'err' : MarketError };
+export type Result_4 = { 'ok' : UserStable } |
+  { 'err' : UserError };
 export type Result_5 = { 'ok' : MarketStable } |
   { 'err' : MarketError };
 export type Result_6 = { 'ok' : CommentStable } |

@@ -8,6 +8,7 @@ import Utils "Utils";
 
 module {
     public type PostError = {
+        #notLoggedIn;
         #postDoesNotExist;
         #userDoesNotExist;
     };
