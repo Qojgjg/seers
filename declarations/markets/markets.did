@@ -32,7 +32,8 @@ type UserStable =
    modifiedAt: Time;
    name: text;
    picture: text;
-   posts: vec Post;
+   postData: vec PostStable;
+   postRoots: vec nat32;
    twitter: text;
    txs: vec UserTx;
    website: text;
@@ -94,20 +95,15 @@ type UserData =
    "principal": text;
  };
 type Time = int;
-type Result_6 = 
+type Result_5 = 
  variant {
    err: MarketError;
    ok: CommentStable;
  };
-type Result_5 = 
+type Result_4 = 
  variant {
    err: MarketError;
    ok: MarketStable;
- };
-type Result_4 = 
- variant {
-   err: UserError;
-   ok: Post;
  };
 type Result_3 = 
  variant {
@@ -129,14 +125,15 @@ type Result =
    err: UserError;
    ok;
  };
-type Post = 
+type PostStable = 
  record {
    author: UserData;
-   comments: vec Post;
    content: text;
    createdAt: Time;
    id: nat32;
    likes: vec Like;
+   parent: nat32;
+   replies: vec nat32;
  };
 type MarketState = 
  variant {
@@ -228,15 +225,13 @@ type MarketCategory =
  };
 type Market = 
  service {
-   addCommentToMarket: (nat32, text) -> (Result_6);
+   addCommentToMarket: (nat32, text) -> (Result_5);
    buyOutcome: (nat32, float64, nat, bool) -> (Result_2);
    callerAccount: () -> (AccountIdentifier);
    canisterAccount: () -> (text) query;
    canisterFloat: () -> (ICP);
-   createMarket: (MarketInitData) -> (Result_5);
+   createMarket: (MarketInitData) -> (Result_4);
    createUser: (UserInitData) -> (Result_3);
-   getFeed: () -> (vec Post) query;
-   getPost: (text, nat) -> (Result_4) query;
    getUserStable: (text) -> (opt UserStable) query;
    readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
    readAllUsers: () -> (vec UserStable) query;
@@ -279,7 +274,7 @@ type FeedItem =
    bet: Bet;
    comment: CommentStable;
    market: MarketStable;
-   post: Post;
+   post: PostStable;
  };
 type DepositAddr = 
  variant {

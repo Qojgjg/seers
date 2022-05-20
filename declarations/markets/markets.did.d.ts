@@ -25,7 +25,7 @@ export type DepositAddr = { 'btc' : string } |
   { 'icp' : string } |
   { 'cycles' : string };
 export type FeedItem = { 'bet' : Bet } |
-  { 'post' : Post } |
+  { 'post' : PostStable } |
   { 'comment' : CommentStable } |
   { 'market' : MarketStable };
 export interface Followee { 'createdAt' : Time, 'user' : string }
@@ -43,15 +43,13 @@ export interface Like {
   'stars' : number,
 }
 export interface Market {
-  'addCommentToMarket' : ActorMethod<[number, string], Result_6>,
+  'addCommentToMarket' : ActorMethod<[number, string], Result_5>,
   'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_2>,
   'callerAccount' : ActorMethod<[], AccountIdentifier>,
   'canisterAccount' : ActorMethod<[], string>,
   'canisterFloat' : ActorMethod<[], ICP>,
-  'createMarket' : ActorMethod<[MarketInitData], Result_5>,
+  'createMarket' : ActorMethod<[MarketInitData], Result_4>,
   'createUser' : ActorMethod<[UserInitData], Result_3>,
-  'getFeed' : ActorMethod<[], Array<Post>>,
-  'getPost' : ActorMethod<[string, bigint], Result_4>,
   'getUserStable' : ActorMethod<[string], [] | [UserStable]>,
   'readAllMarkets' : ActorMethod<
     [MarketCategory, MarketState],
@@ -145,13 +143,14 @@ export type MarketState = { 'any' : null } |
   { 'invalid' : null } |
   { 'open' : null } |
   { 'approved' : null };
-export interface Post {
+export interface PostStable {
   'id' : number,
   'content' : string,
   'createdAt' : Time,
   'author' : UserData,
   'likes' : Array<Like>,
-  'comments' : Array<Post>,
+  'replies' : Array<number>,
+  'parent' : number,
 }
 export type Result = { 'ok' : null } |
   { 'err' : UserError };
@@ -161,11 +160,9 @@ export type Result_2 = { 'ok' : number } |
   { 'err' : MarketError };
 export type Result_3 = { 'ok' : UserStable } |
   { 'err' : UserError };
-export type Result_4 = { 'ok' : Post } |
-  { 'err' : UserError };
-export type Result_5 = { 'ok' : MarketStable } |
+export type Result_4 = { 'ok' : MarketStable } |
   { 'err' : MarketError };
-export type Result_6 = { 'ok' : CommentStable } |
+export type Result_5 = { 'ok' : CommentStable } |
   { 'err' : MarketError };
 export type Time = bigint;
 export interface UserData {
@@ -223,6 +220,7 @@ export interface UserStable {
   'age' : bigint,
   'bio' : string,
   'txs' : Array<UserTx>,
+  'postData' : Array<PostStable>,
   'expBalances' : Balance,
   'twitter' : string,
   'lastSeenAt' : Time,
@@ -235,10 +233,10 @@ export interface UserStable {
   'markets' : Array<UserMarket>,
   'website' : string,
   'picture' : string,
+  'postRoots' : Array<number>,
   'discord' : string,
   'handle' : string,
   'comments' : Array<CommentStable>,
-  'posts' : Array<Post>,
   'followees' : Array<Followee>,
   'followers' : Array<Follower>,
   'depositAddrs' : Array<DepositAddr>,

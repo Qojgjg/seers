@@ -6,7 +6,7 @@ import Market "Market";
 module {
     public type FeedItem = {
         #comment: Comment.CommentStable;
-        #post: Post.Post;
+        #post: Post.PostStable;
         #bet: Bet.Bet;
         #market: Market.MarketStable;
     };

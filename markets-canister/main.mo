@@ -73,12 +73,12 @@ shared({ caller = initializer }) actor class Market() = this {
     
     private stable var stableUsers: [(Text, U.UserStable)] = [];
     private stable var stableMarkets: [(Nat32, M.MarketStable)] = [];
-    private stable var stableFeed: [Post.Post] = [];
+    private stable var stableFeed: [Post.PostStable] = [];
 
-    private var feed: Buffer.Buffer<Post.Post> = do {
-        var feedBuffer: Buffer.Buffer<Post.Post> = Utils.bufferFromArray(stableFeed);
-        feedBuffer
-    };
+    // private var feed: Buffer.Buffer<Post.Post> = do {
+    //     var feedBuffer: Buffer.Buffer<Post.Post> = Utils.bufferFromArray(stableFeed);
+    //     feedBuffer
+    // };
     
     private var userDataMap: Map.HashMap<Text, Utils.UserData> = do {
         let usersIter = Iter.map<(Text, U.UserStable), (Text, Utils.UserData)>(
@@ -359,41 +359,41 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Add a reply to a post.
-    public shared(msg) func submitReply(userId: Text, treePath: [Nat], content: Text): async Result.Result<Post.Post, U.UserError> {
-        assert treePath.size() > 0;
+    // public shared(msg) func submitReply(userId: Text, treePath: [Nat], content: Text): async Result.Result<Post.PostStable, U.UserError> {
+        // assert treePath.size() > 0;
 
-        switch (userMap.get(userId)) {
-            case null {
-                return #err(#profileNotCreated);
-            };
-            case (?user) {
-                var posts = Buffer.Buffer<Post.Post>(0);
+        // switch (userMap.get(userId)) {
+        //     case null {
+        //         return #err(#profileNotCreated);
+        //     };
+        //     case (?user) {
+        //         var posts = Buffer.Buffer<Post.Post>(0);
 
-                for (i in Iter.range(0, treePath.size())) {
-                    let post = posts.get(treePath[i]);
-                    posts := post.posts;
-                };
+        //         for (i in Iter.range(0, treePath.size())) {
+        //             let post = posts.get(treePath[i]);
+        //             posts := post.posts;
+        //         };
 
-                let userData: Utils.UserData = {
-                    principal = user.id;
-                    name = user.name;
-                    handle = user.handle;
-                    picture = user.picture;
-                };
+        //         let userData: Utils.UserData = {
+        //             principal = user.id;
+        //             name = user.name;
+        //             handle = user.handle;
+        //             picture = user.picture;
+        //         };
 
-                let newPost: Post.Post = {
-                    id = posts.size();
-                    author = userData;
-                    content = content;
-                    comments = [];
-                    likes = [];
-                    createdAt = Time.now();
-                };
+        //         let newPost: Post.Post = {
+        //             id = posts.size();
+        //             author = userData;
+        //             content = content;
+        //             comments = [];
+        //             likes = [];
+        //             createdAt = Time.now();
+        //         };
 
-                posts.append(newPost);
-            };
-        };
-    };
+        //         posts.append(newPost);
+        //     };
+        // };
+    // };
 
     // Read a market.
     public query func readMarket(marketId: Nat32): async ?M.MarketStable {
@@ -404,22 +404,22 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Read a post.
-    public query func getPost(userId: Text, postId: Nat): async Result.Result<Post.Post, U.UserError> {
-        let userOpt = userMap.get(userId);
+    // public query func getPost(userId: Text, postId: Nat): async Result.Result<Post.Post, U.UserError> {
+    //     let userOpt = userMap.get(userId);
         
-        switch (userOpt) {
-            case null {
-                return #err(#profileNotCreated);
-            };
-            case (?user) {
-                if (user.posts.size() <= postId) {
-                    return #err(#postDoesNotExist)
-                } else {
-                    return #ok(user.posts.get(postId));
-                }
-            };
-        };
-    };
+    //     switch (userOpt) {
+    //         case null {
+    //             return #err(#profileNotCreated);
+    //         };
+    //         case (?user) {
+    //             if (user.posts.size() <= postId) {
+    //                 return #err(#postDoesNotExist)
+    //             } else {
+    //                 return #ok(user.posts.get(postId));
+    //             }
+    //         };
+    //     };
+    // };
 
     // // Read user.
     // public query func readUser(userId: Text): async ?U.UserStable {
@@ -1124,9 +1124,9 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Get feed.
-    public query func getFeed(): async [Post.Post] {
-        return feed.toArray();
-    };
+    // public query func getFeed(): async [Post.PostStable] {
+    //     return feed.toArray();
+    // };
 
     // Create user.
     public shared(msg) func createUser(
@@ -1152,40 +1152,42 @@ shared({ caller = initializer }) actor class Market() = this {
 
     // Create post and push it to user.
     public shared(msg) func submitPost(content: Text): async Result.Result<(), U.UserError> {
-        assert(not updating);
+        // assert(not updating);
+
+        return #ok();
         
-        let caller = Principal.toText(msg.caller);
+        // let caller = Principal.toText(msg.caller);
         
-        if (caller == anon) {
-            return #err(#callerIsAnon);
-        };
+        // if (caller == anon) {
+        //     return #err(#callerIsAnon);
+        // };
 
-        switch (getUser(caller)) {
-            case null {
-                return #err(#profileNotCreated);
-            };
-            case (?user) {
-                let userData: Utils.UserData = {
-                    principal = user.id;
-                    name = user.name;
-                    handle = user.handle;
-                    picture = user.picture;
-                };
-                let post: Post.Post = {
-                    id = Nat32.fromNat(user.posts.size());
-                    author = userData;
-                    content = content;
-                    comments = [];
-                    likes = [];
-                    createdAt = Time.now();
-                };
+        // switch (getUser(caller)) {
+        //     case null {
+        //         return #err(#profileNotCreated);
+        //     };
+        //     case (?user) {
+        //         let userData: Utils.UserData = {
+        //             principal = user.id;
+        //             name = user.name;
+        //             handle = user.handle;
+        //             picture = user.picture;
+        //         };
+        //         let post: Post.Post = {
+        //             id = Nat32.fromNat(user.posts.size());
+        //             author = userData;
+        //             content = content;
+        //             comments = [];
+        //             likes = [];
+        //             createdAt = Time.now();
+        //         };
 
-                feed.add(post);
-                user.posts.add(post);
+        //         feed.add(post);
+        //         user.posts.add(post);
 
-                return #ok();
-            };
-        };
+        //         return #ok();
+        //     };
+        // };
     };
 
     // Add a comment to a market.

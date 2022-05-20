@@ -1,5 +1,4 @@
 export const idlFactory = ({ IDL }) => {
-  const Post = IDL.Rec();
   const Time = IDL.Int;
   const UserData = IDL.Record({
     'principal' : IDL.Text,
@@ -39,7 +38,7 @@ export const idlFactory = ({ IDL }) => {
     'endDateOlderThanStartDate' : IDL.Null,
     'notEnoughLiquidity' : IDL.Float64,
   });
-  const Result_6 = IDL.Variant({ 'ok' : CommentStable, 'err' : MarketError });
+  const Result_5 = IDL.Variant({ 'ok' : CommentStable, 'err' : MarketError });
   const Result_2 = IDL.Variant({ 'ok' : IDL.Float64, 'err' : MarketError });
   const AccountIdentifier = IDL.Vec(IDL.Nat8);
   const ICP = IDL.Record({ 'e8s' : IDL.Nat64 });
@@ -118,7 +117,7 @@ export const idlFactory = ({ IDL }) => {
     'startDate' : Time,
     'images' : IDL.Vec(IDL.Text),
   });
-  const Result_5 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
+  const Result_4 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
   const UserInitData = IDL.Record({
     'id' : IDL.Text,
     'age' : IDL.Nat,
@@ -143,6 +142,15 @@ export const idlFactory = ({ IDL }) => {
     'marketId' : IDL.Nat32,
     'price' : IDL.Float64,
   });
+  const PostStable = IDL.Record({
+    'id' : IDL.Nat32,
+    'content' : IDL.Text,
+    'createdAt' : Time,
+    'author' : UserData,
+    'likes' : IDL.Vec(Like),
+    'replies' : IDL.Vec(IDL.Nat32),
+    'parent' : IDL.Nat32,
+  });
   const Balance = IDL.Record({
     'btc' : IDL.Float64,
     'icp' : IDL.Float64,
@@ -150,19 +158,9 @@ export const idlFactory = ({ IDL }) => {
     'cycles' : IDL.Float64,
   });
   const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : CommentStable });
-  Post.fill(
-    IDL.Record({
-      'id' : IDL.Nat32,
-      'content' : IDL.Text,
-      'createdAt' : Time,
-      'author' : UserData,
-      'likes' : IDL.Vec(Like),
-      'comments' : IDL.Vec(Post),
-    })
-  );
   const FeedItem = IDL.Variant({
     'bet' : Bet,
-    'post' : Post,
+    'post' : PostStable,
     'comment' : CommentStable,
     'market' : MarketStable,
   });
@@ -193,6 +191,7 @@ export const idlFactory = ({ IDL }) => {
     'age' : IDL.Nat,
     'bio' : IDL.Text,
     'txs' : IDL.Vec(UserTx),
+    'postData' : IDL.Vec(PostStable),
     'expBalances' : Balance,
     'twitter' : IDL.Text,
     'lastSeenAt' : Time,
@@ -205,10 +204,10 @@ export const idlFactory = ({ IDL }) => {
     'markets' : IDL.Vec(UserMarket),
     'website' : IDL.Text,
     'picture' : IDL.Text,
+    'postRoots' : IDL.Vec(IDL.Nat32),
     'discord' : IDL.Text,
     'handle' : IDL.Text,
     'comments' : IDL.Vec(CommentStable),
-    'posts' : IDL.Vec(Post),
     'followees' : IDL.Vec(Followee),
     'followers' : IDL.Vec(Follower),
     'depositAddrs' : IDL.Vec(DepositAddr),
@@ -234,11 +233,10 @@ export const idlFactory = ({ IDL }) => {
     'notEnoughLiquidity' : IDL.Float64,
   });
   const Result_3 = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
-  const Result_4 = IDL.Variant({ 'ok' : Post, 'err' : UserError });
   const Result_1 = IDL.Variant({ 'ok' : IDL.Null, 'err' : MarketError });
   const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : UserError });
   const Market = IDL.Service({
-    'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_6], []),
+    'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_5], []),
     'buyOutcome' : IDL.Func(
         [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
         [Result_2],
@@ -247,10 +245,8 @@ export const idlFactory = ({ IDL }) => {
     'callerAccount' : IDL.Func([], [AccountIdentifier], []),
     'canisterAccount' : IDL.Func([], [IDL.Text], ['query']),
     'canisterFloat' : IDL.Func([], [ICP], []),
-    'createMarket' : IDL.Func([MarketInitData], [Result_5], []),
+    'createMarket' : IDL.Func([MarketInitData], [Result_4], []),
     'createUser' : IDL.Func([UserInitData], [Result_3], []),
-    'getFeed' : IDL.Func([], [IDL.Vec(Post)], ['query']),
-    'getPost' : IDL.Func([IDL.Text, IDL.Nat], [Result_4], ['query']),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
     'readAllMarkets' : IDL.Func(
         [MarketCategory, MarketState],
