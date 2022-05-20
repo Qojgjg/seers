@@ -19,14 +19,15 @@
   const submitPost = async () => {
     processing = true
     const r = await $auth.actor.submitPost(post)
+    console.log(r)
     processing = false
     post = ""
     getFeed()
   }
 
   const getFeed = async () => {
-    feed = await $auth.actor.getFeed()
-    feed = feed.reverse()
+    // feed = await $auth.actor.getFeed()
+    // feed = feed.reverse()
   }
 
   function parseTwitterDate(tdate) {
