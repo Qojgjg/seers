@@ -401,22 +401,29 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Read a post.
-    // public query func getPost(userId: Text, postId: Nat): async Result.Result<Post.Post, U.UserError> {
-    //     let userOpt = userMap.get(userId);
+    public query func getPost(userId: Text, postId: Nat32): async Result.Result<Post.PostStable, Post.PostError> {
+        let userOpt = userMap.get(userId);
         
-    //     switch (userOpt) {
-    //         case null {
-    //             return #err(#profileNotCreated);
-    //         };
-    //         case (?user) {
-    //             if (user.posts.size() <= postId) {
-    //                 return #err(#postDoesNotExist)
-    //             } else {
-    //                 return #ok(user.posts.get(postId));
-    //             }
-    //         };
-    //     };
-    // };
+        switch (userOpt) {
+            case null {
+                return #err(#userDoesNotExist);
+            };
+            case (?user) {
+                if (Nat32.fromNat(user.postMap.size()) <= postId) {
+                    return #err(#postDoesNotExist);
+                } else {
+                    switch (user.postMap.get(postId)) {
+                        case null {
+                            return #err(#postDoesNotExist);
+                        };
+                        case (?post) {
+                            return #ok(post.freeze());
+                        };
+                    };
+                };
+            };
+        };
+    };
 
     // // Read user.
     // public query func readUser(userId: Text): async ?U.UserStable {

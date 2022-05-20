@@ -7,6 +7,11 @@ import Utils "Utils";
 
 
 module {
+    public type PostError = {
+        #postDoesNotExist;
+        #userDoesNotExist;
+    };
+
     public type PostInitData = {
         id: Nat32;
         author: Utils.UserData;

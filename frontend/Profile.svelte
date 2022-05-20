@@ -113,8 +113,7 @@
           user.ownMarkets = user.markets.filter((m) => m.author)
           user.otherMarkets = user.markets.filter((m) => !m.author)
           user.txs = user.txs.reverse()
-          user.posts = []
-          // user.posts = user.posts.reverse()
+          user.posts = user.postRoots.map((idx) => user.postData[idx]).reverse()
           console.log(user)
         }
       }

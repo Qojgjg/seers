@@ -95,15 +95,20 @@ type UserData =
    "principal": text;
  };
 type Time = int;
-type Result_5 = 
+type Result_6 = 
  variant {
    err: MarketError;
    ok: CommentStable;
  };
-type Result_4 = 
+type Result_5 = 
  variant {
    err: MarketError;
    ok: MarketStable;
+ };
+type Result_4 = 
+ variant {
+   err: PostError;
+   ok: PostStable;
  };
 type Result_3 = 
  variant {
@@ -134,6 +139,11 @@ type PostStable =
    likes: vec Like;
    parent: nat32;
    replies: vec nat32;
+ };
+type PostError = 
+ variant {
+   postDoesNotExist;
+   userDoesNotExist;
  };
 type MarketState = 
  variant {
@@ -225,14 +235,15 @@ type MarketCategory =
  };
 type Market = 
  service {
-   addCommentToMarket: (nat32, text) -> (Result_5);
+   addCommentToMarket: (nat32, text) -> (Result_6);
    buyOutcome: (nat32, float64, nat, bool) -> (Result_2);
    callerAccount: () -> (AccountIdentifier);
    canisterAccount: () -> (text) query;
    canisterFloat: () -> (ICP);
-   createMarket: (MarketInitData) -> (Result_4);
+   createMarket: (MarketInitData) -> (Result_5);
    createUser: (UserInitData) -> (Result_3);
    getFeed: () -> (vec PostStable) query;
+   getPost: (text, nat32) -> (Result_4) query;
    getUserStable: (text) -> (opt UserStable) query;
    readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
    readAllUsers: () -> (vec UserStable) query;
