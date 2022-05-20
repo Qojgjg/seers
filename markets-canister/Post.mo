@@ -20,6 +20,11 @@ module {
         parent: Nat32;
     };
 
+    public type ThreadStable = {
+        main: PostStable;
+        replies: [PostStable];
+    };
+
     public class Post (initData: PostInitData) = this {
         public var id: Nat32 = initData.id;
         public var author: Utils.UserData = initData.author;

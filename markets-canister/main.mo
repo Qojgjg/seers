@@ -438,6 +438,47 @@ shared({ caller = initializer }) actor class Market() = this {
         };
     };
 
+    // Read the thread.
+    public query func getThread(userId: Text, postId: Nat32): async Result.Result<Post.ThreadStable, Post.PostError> {
+        switch (userMap.get(userId)) {
+            case null {
+                return #err(#userDoesNotExist);
+            };
+            case (?user) {
+                if (Nat32.fromNat(user.postMap.size()) <= postId) {
+                    return #err(#postDoesNotExist);
+                } else {
+                    switch (user.postMap.get(postId)) {
+                        case null {
+                            return #err(#postDoesNotExist);
+                        };
+                        case (?post) {
+                            var replies = Buffer.Buffer<Post.PostStable>(post.replies.size());
+
+                            for (replyId in post.replies.vals()) {
+                                switch (user.postMap.get(replyId)) {
+                                    case null {
+                                        // Reply missing, continue. 
+                                    };
+                                    case (?reply) {
+                                        replies.add(reply.freeze());
+                                    };
+                                };
+                            };
+
+                            let t: Post.ThreadStable = {
+                                main = post.freeze();
+                                replies = replies.toArray();
+                            };
+
+                            return #ok(t);
+                        };
+                    };
+                };
+            };
+        }
+    };
+
     // // Read user.
     // public query func readUser(userId: Text): async ?U.UserStable {
     //     let result = userMap.get(userId);
