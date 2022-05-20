@@ -8,6 +8,7 @@
 
   export let auth
   export let principal
+  export let postAuthor
   export let signIn
   export let id
 
@@ -17,7 +18,14 @@
   let processing = false
 
   const submitReply = async () => {
-    const resp = $auth.actor.submitReply(principal, Number(id), newComment)
+    processing = true
+    const resp = await $auth.actor.submitReply(
+      postAuthor,
+      Number(id),
+      newComment,
+    )
+    processing = false
+    newComment = ""
     console.log(resp)
   }
 
@@ -72,7 +80,7 @@
   }
 
   const getPost = async () => {
-    post = await $auth.actor.getPost(principal, Number(id))
+    post = await $auth.actor.getPost(postAuthor, Number(id))
     if ("ok" in post) {
       post = post["ok"]
     } else {
@@ -151,7 +159,7 @@
         style="width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
         placeholder="Please share your insights. You can use markdown."
       />
-      {#if principal === ""}
+      {#if principal == ""}
         <div style="display:flex; text-align:end; justify-content:end;">
           <button class="btn-grad" on:click={signIn}>Login</button>
           <div style="text-align:end;color:red">

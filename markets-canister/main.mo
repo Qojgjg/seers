@@ -386,7 +386,6 @@ shared({ caller = initializer }) actor class Market() = this {
 
                 let post: Post.Post = Post.Post(initData);
 
-                feed.add(post);
                 user.postRoots.add(post.id);
                 user.postMap.put(post.id, post);
 

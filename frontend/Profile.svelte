@@ -146,6 +146,7 @@
         splitCamelCaseToString(Object.keys(response["err"]).toString())
     } else {
       user = response["ok"]
+      user.posts = []
     }
     console.log(user)
   }

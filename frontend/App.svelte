@@ -95,7 +95,13 @@
       <Profile {auth} principal={params.principal} {signIn} />
     </Route>
     <Route path="profile/:principal/post/:id" let:params>
-      <ViewPost {auth} principal={params.principal} id={params.id} {signIn} />
+      <ViewPost
+        {auth}
+        postAuthor={params.principal}
+        id={params.id}
+        {principal}
+        {signIn}
+      />
     </Route>
     <Route path="create">
       <CreateMarket {auth} {principal} {signIn} />
