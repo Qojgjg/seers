@@ -36,10 +36,10 @@
 
     var diff = Math.floor((Number(user_date) - Number(system_date)) / 1000)
     if (diff <= 1) {
-      return "just now"
+      return "now"
     }
     if (diff < 60) {
-      return diff + " seconds ago"
+      return diff + "s"
     }
     // if (diff < 40) {
     //   return "half a minute ago"
@@ -169,7 +169,7 @@
               >
                 <div style="width: 50px; display:flex; gap: 15px">
                   <div><Fa icon={faComment} /></div>
-                  <div>0</div>
+                  <div>{item.replies.length}</div>
                 </div>
                 <div style="width: 50px; display:flex; gap: 15px">
                   <div><Fa icon={faRetweet} /></div>
