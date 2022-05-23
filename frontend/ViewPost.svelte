@@ -100,9 +100,9 @@
 >
   <div class="rowUser">
     <div
-      style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 0px solid grey"
+      style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 5px 0px; flex-direction:row; align-items:center; font-size: 1.2em"
     >
-      <div style="padding: 5px; margin: 5px; height: 100%">
+      <div style="padding: 0px 5px; margin: 0px 0px; height: 100%;">
         <a href={`/profile/${post?.author.principal}`}>
           <img
             src={post?.author.picture}
@@ -111,46 +111,54 @@
           />
         </a>
       </div>
-      <div style="flex-grow: 1; justify-content: start; text-align:start">
-        <div style="display:flex; gap: 5px;">
-          <div>
-            <a href={`/profile/${post?.author.principal}`}
-              >{post?.author.name}</a
-            >
-          </div>
-          <div style="color:grey">
-            <a href={`/profile/${post?.author.principal}`} style="color:grey">
-              @{post?.author.handle}
-            </a>
-          </div>
-          <div style="color:grey">
+      <div style="display:flex; flex-direction:column; height: 100%">
+        <a href={`/profile/${post?.author.principal}`}>{post?.author.name}</a>
+        <a href={`/profile/${post?.author.principal}`} style="color:grey">
+          @{post?.author.handle}
+        </a>
+      </div>
+    </div>
+    <div style="flex-grow: 1; justify-content: start; text-align:start">
+      <!-- <div style="display:flex; gap: 5px;">
+        <div style="color:grey">
             - {parseTwitterDate(parseInt(post?.createdAt) / 1_000_000)}
           </div>
-        </div>
-        <Link
-          to={`/profile/${post?.author.principal}/post/${post?.id}`}
-          style="width: 100%"
+      </div> -->
+      <Link
+        to={`/profile/${post?.author.principal}/post/${post?.id}`}
+        style="width: 100%"
+      >
+        <div
+          style="width: 100%; text-align:start; padding: 0px 0px; border-bottom: 1px solid grey;"
         >
-          <div style="width: 100%; text-align:start; padding: 5px 0px">
+          <div style="padding: 10px 0px; font-size: 1.2em">
             {post?.content}
           </div>
-        </Link>
-        <div
-          style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
-        >
-          <div style="width: 50px; display:flex; gap: 15px">
-            <div><Fa icon={faComment} /></div>
-            <div>0</div>
-          </div>
-          <div style="width: 50px; display:flex; gap: 15px">
-            <div><Fa icon={faRetweet} /></div>
-            <div>0</div>
-          </div>
-          <div style="width: 50px; display:flex; gap: 15px">
-            <div><Fa icon={faHeart} /></div>
-            <div>0</div>
+          <div style="color:grey; padding: 5px 0px;">
+            {new Date(parseInt(post?.createdAt) / 1_000_000).toDateString()}
+            -
+            {new Date(
+              parseInt(post?.createdAt) / 1_000_000,
+            ).toLocaleTimeString()}
           </div>
         </div>
+      </Link>
+      <div
+        style="width: 100%; display:flex; gap: 30px; padding: 10px 0px; color:grey; border-bottom: 1px solid grey;"
+      >
+        <div style="width: 50px; display:flex; gap: 15px">
+          <div><Fa icon={faComment} /></div>
+          <div>0</div>
+        </div>
+        <div style="width: 50px; display:flex; gap: 15px">
+          <div><Fa icon={faRetweet} /></div>
+          <div>0</div>
+        </div>
+        <div style="width: 50px; display:flex; gap: 15px">
+          <div><Fa icon={faHeart} /></div>
+          <div>0</div>
+        </div>
+        <!-- </div> -->
       </div>
     </div>
 
@@ -217,7 +225,7 @@
         bind:value={newComment}
         rows="3"
         style="width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
-        placeholder="Please share your insights. You can use markdown."
+        placeholder="Please share your thoughts."
       />
       {#if principal == ""}
         <div style="display:flex; text-align:end; justify-content:end;">
