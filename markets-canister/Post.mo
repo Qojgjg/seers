@@ -21,6 +21,7 @@ module {
     };
 
     public type ThreadStable = {
+        ancestors: [PostStable];
         main: PostStable;
         replies: [PostStable];
     };

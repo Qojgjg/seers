@@ -177,6 +177,7 @@ export type Result_7 = { 'ok' : CommentStable } |
   { 'err' : MarketError };
 export interface ThreadStable {
   'main' : PostStable,
+  'ancestors' : Array<PostStable>,
   'replies' : Array<PostStable>,
 }
 export type Time = bigint;

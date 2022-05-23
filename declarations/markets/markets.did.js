@@ -241,6 +241,7 @@ export const idlFactory = ({ IDL }) => {
   const Result = IDL.Variant({ 'ok' : PostStable, 'err' : PostError });
   const ThreadStable = IDL.Record({
     'main' : PostStable,
+    'ancestors' : IDL.Vec(PostStable),
     'replies' : IDL.Vec(PostStable),
   });
   const Result_5 = IDL.Variant({ 'ok' : ThreadStable, 'err' : PostError });

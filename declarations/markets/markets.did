@@ -97,6 +97,7 @@ type UserData =
 type Time = int;
 type ThreadStable = 
  record {
+   ancestors: vec PostStable;
    main: PostStable;
    replies: vec PostStable;
  };

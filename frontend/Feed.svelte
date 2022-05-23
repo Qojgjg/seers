@@ -227,7 +227,7 @@
               >
                 <div style="width: 50px; display:flex; gap: 15px;">
                   <div><Fa icon={faComment} /></div>
-                  <div>0</div>
+                  <div>{item.replies.length}</div>
                 </div>
                 <div style="width: 50px; display:flex; gap: 15px">
                   <div><Fa icon={faRetweet} /></div>

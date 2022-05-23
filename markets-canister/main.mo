@@ -466,7 +466,22 @@ shared({ caller = initializer }) actor class Market() = this {
                                 };
                             };
 
+                            var parentId = post.parent;
+                            var ancestors = Buffer.Buffer<Post.PostStable>(1);
+                    
+                            while (parentId != 0) {
+                                switch (user.postMap.get(parentId)) {
+                                    case null {
+                                        // This case shouldn't happen, on delete we leave a dummy.
+                                    };
+                                    case (?parent) {
+                                        ancestors.add(parent.freeze());
+                                    };
+                                };
+                            };
+
                             let t: Post.ThreadStable = {
+                                ancestors = ancestors.toArray();
                                 main = post.freeze();
                                 replies = replies.toArray();
                             };
@@ -1233,7 +1248,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 };
 
                 let initData: Post.PostInitData = {
-                    id = Nat32.fromNat(user.postMap.size());
+                    id = Nat32.fromNat(user.postMap.size() + 1);
                     author = userData;
                     content = content;
                     parent = 0; 
