@@ -109,7 +109,7 @@
     <Route path="ranking">
       <Ranking {auth} />
     </Route>
-    <Route path="feed">
+    <Route path="feed" primary={false}>
       <Feed {auth} {principal} {signIn} />
     </Route>
     <Route path="markets">
@@ -140,6 +140,7 @@
   }
 
   html {
+    scroll-behavior: smooth;
     height: 100%;
     background: radial-gradient(
       50% 50% at 50% 50%,

@@ -157,7 +157,7 @@
                 </div>
               </div>
               <Link
-                to={`/profile/${item.author.principal}/post/${item.id}`}
+                to={`/profile/${item.author.principal}/post/${item.id}#main`}
                 style="width: 100%"
               >
                 <div style="width: 100%; text-align:start; padding: 5px 0px">
