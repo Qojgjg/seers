@@ -397,6 +397,18 @@ shared({ caller = initializer }) actor class Market() = this {
 
                         user.postMap.put(post.id, post);
 
+                        if (caller != userId) {
+                            switch (userMap.get(caller)) {
+                                case null {
+                                    return #err(#profileNotCreated);
+                                };
+                                case (?author) {
+                                    let replyId = author.replies.size();
+                                    author.replies.put((userId, replyId), post);
+                                };
+                            };
+                        };
+
                         return #ok(post.freeze())
                     };
                 };

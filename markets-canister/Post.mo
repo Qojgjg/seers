@@ -17,8 +17,10 @@ module {
     public type PostInitData = {
         id: Nat32;
         author: Utils.UserData;
+        treeAuthor: Text;
+        treeId: Nat32;
+        treeParent: Nat32;
         content: Text;
-        parent: Nat32;
     };
 
     public type ThreadStable = {
@@ -30,8 +32,12 @@ module {
     public class Post (initData: PostInitData) = this {
         public var id: Nat32 = initData.id;
         public var author: Utils.UserData = initData.author;
+        
+        public var treeAuthor: Text = initData.treeAuthor;
+        public var treeId: Nat32 = initData.treeId;
+        public var treeParent: Nat32 = initData.treeParent;
+        
         public var content: Text = initData.content;
-        public var parent: Nat32 = initData.parent;
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var likes: Buffer.Buffer<Like.Like> = Buffer.Buffer<Like.Like>(0);
         public var createdAt: Time.Time = Time.now();
@@ -40,8 +46,12 @@ module {
             let ps: PostStable = {
                 id = id;
                 author = author;
+
+                treeAuthor = treeAuthor;
+                treeId = treeId;
+                treeParent = treeParent;
+                
                 content = content;
-                parent = parent;
                 replies = replies.toArray();
                 likes = likes.toArray();
                 createdAt = createdAt;
@@ -54,8 +64,12 @@ module {
     public type PostStable = {
         id: Nat32;
         author: Utils.UserData;
+        
+        treeAuthor: Text;
+        treeId: Nat32;
+        treeParent: Nat32;
+        
         content: Text;
-        parent: Nat32;
         replies: [Nat32];
         likes: [Like.Like];
         createdAt: Time.Time;
@@ -65,8 +79,12 @@ module {
         let initData: PostInitData = {
             id = ps.id;
             author = ps.author;
+
+            treeId = ps.treeId;
+            treeParent = ps.treeParent;
+            treeAuthor = ps.treeAuthor;
+
             content = ps.content;
-            parent = ps.parent;
         };
         var p: Post = Post(initData);
         p.replies := Utils.bufferFromArray(ps.replies);

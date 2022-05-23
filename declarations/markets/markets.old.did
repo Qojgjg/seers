@@ -101,34 +101,39 @@ type ThreadStable =
    main: PostStable;
    replies: vec PostStable;
  };
-type Result_7 = 
+type Result_8 = 
  variant {
    err: MarketError;
    ok: CommentStable;
  };
-type Result_6 = 
+type Result_7 = 
  variant {
    err: MarketError;
    ok: MarketStable;
  };
-type Result_5 = 
+type Result_6 = 
  variant {
    err: PostError;
    ok: ThreadStable;
  };
-type Result_4 = 
+type Result_5 = 
  variant {
    err: UserError;
    ok: UserStable;
  };
-type Result_3 = 
+type Result_4 = 
  variant {
    err: MarketError;
    ok: float64;
  };
-type Result_2 = 
+type Result_3 = 
  variant {
    err: MarketError;
+   ok;
+ };
+type Result_2 = 
+ variant {
+   err: PostError;
    ok;
  };
 type Result_1 = 
@@ -247,9 +252,8 @@ type MarketCategory =
  };
 type Like = 
  record {
-   author: text;
+   author: UserData;
    createdAt: Time;
-   stars: nat32;
  };
 type ICP = record {e8s: nat64;};
 type HistPoint = 
@@ -316,27 +320,28 @@ type Balance =
  };
 type AccountIdentifier = blob;
 service : {
-  addCommentToMarket: (nat32, text) -> (Result_7);
-  buyOutcome: (nat32, float64, nat, bool) -> (Result_3);
+  addCommentToMarket: (nat32, text) -> (Result_8);
+  buyOutcome: (nat32, float64, nat, bool) -> (Result_4);
   callerAccount: () -> (AccountIdentifier);
   canisterAccount: () -> (text) query;
   canisterFloat: () -> (ICP);
-  createMarket: (MarketInitData) -> (Result_6);
-  createUser: (UserInitData) -> (Result_4);
+  createMarket: (MarketInitData) -> (Result_7);
+  createUser: (UserInitData) -> (Result_5);
   getFeed: () -> (vec PostStable) query;
   getPost: (text, nat32) -> (Result) query;
-  getThread: (text, nat32) -> (Result_5) query;
+  getThread: (text, nat32) -> (Result_6) query;
   getUserStable: (text) -> (opt UserStable) query;
   readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
   readAllUsers: () -> (vec UserStable) query;
   readMarket: (nat32) -> (opt MarketStable) query;
   readUserData: (vec text) -> (vec UserData) query;
-  refreshUser: () -> (Result_4);
+  refreshUser: () -> (Result_5);
   resolveMarket: (nat32, nat) -> (bool);
-  sellOutcome: (nat32, float64, nat, bool) -> (Result_3);
+  sellOutcome: (nat32, float64, nat, bool) -> (Result_4);
   setMarketState: (nat32, MarketState) -> (bool);
   setUpdating: (bool) -> () oneway;
-  submitForecast: (nat32, Forecast) -> (Result_2);
+  submitForecast: (nat32, Forecast) -> (Result_3);
+  submitLike: (text, nat32) -> (Result_2);
   submitPost: (text) -> (Result_1);
   submitReply: (text, nat32, text) -> (Result);
 }

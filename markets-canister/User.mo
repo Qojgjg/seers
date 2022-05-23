@@ -132,7 +132,15 @@ module {
         public var postMap: Map.HashMap<Nat32, Post.Post> = do {
             Map.fromIter<Nat32, Post.Post>(
                 Iter.fromArray([]),
-                10, 
+                0, 
+                Nat32.equal, 
+                func (x: Nat32): Nat32 { x }
+            )
+        };
+        public var replies: Map.HashMap<Nat32, Post.Post> = do {   
+            Map.fromIter<Nat32, Post.Post>(    
+                Iter.fromArray([]),
+                0, 
                 Nat32.equal, 
                 func (x: Nat32): Nat32 { x }
             )
@@ -172,6 +180,10 @@ module {
                     postMap.vals(), func (p: Post.Post): Post.PostStable {
                     p.freeze()
                 }));
+                replies = Iter.toArray(Iter.map<Post.Post, Post.PostStable>(
+                    replies.vals(), func (p: Post.Post): Post.PostStable {
+                    p.freeze()
+                }));
                 followers = followees.toArray();
                 followees = followees.toArray();
                 createdAt = createdAt;
@@ -203,6 +215,7 @@ module {
         comments: [Comment.CommentStable];
         postRoots: [Nat32];
         postData: [Post.PostStable];
+        replies: [Post.PostStable];
         followers: [Follower];
         followees: [Followee];
         createdAt: Time.Time;
@@ -229,12 +242,22 @@ module {
         });
         let posts = Array.map<Post.PostStable, (Nat32, Post.Post)>(
             u.postData, func (c: Post.PostStable): (Nat32, Post.Post) {
+                (c.treeId, Post.unFreeze(c))
+        });
+        let replies = Array.map<Post.PostStable, (Nat32, Post.Post)>(
+            u.replies, func (c: Post.PostStable): (Nat32, Post.Post) {
                 (c.id, Post.unFreeze(c))
         });
         var user: User = User(initData);
         user.postMap := Map.fromIter<Nat32, Post.Post>(
             posts.vals(),
             posts.size(), 
+            Nat32.equal, 
+            func (x: Nat32): Nat32 { x }
+        );
+        user.replies := Map.fromIter<Nat32, Post.Post>(
+            replies.vals(),
+            replies.size(), 
             Nat32.equal, 
             func (x: Nat32): Nat32 { x }
         );
