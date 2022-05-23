@@ -31,7 +31,7 @@ type HistPoint =
   {createdAt : Time; liquidity : Float; probabilities : [Float]};
 type Key<K> = {hash : Hash; key : K};
 type Leaf<K, V> = {keyvals : AssocList__1<Key<K>, V>; size : Nat};
-type Like = {author : Text; createdAt : Time; stars : Nat32};
+type Like = {author : UserData; createdAt : Time};
 type List<T> = ?(T, List<T>);
 type MarketCategory =
   {

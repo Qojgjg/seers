@@ -11,6 +11,7 @@ module {
         #notLoggedIn;
         #postDoesNotExist;
         #userDoesNotExist;
+        #alreadyLiked;
     };
 
     public type PostInitData = {
@@ -32,7 +33,7 @@ module {
         public var content: Text = initData.content;
         public var parent: Nat32 = initData.parent;
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
-        public var likes: [Like.Like] = [];
+        public var likes: Buffer.Buffer<Like.Like> = Buffer.Buffer<Like.Like>(0);
         public var createdAt: Time.Time = Time.now();
 
         public func freeze(): PostStable {
@@ -42,7 +43,7 @@ module {
                 content = content;
                 parent = parent;
                 replies = replies.toArray();
-                likes = likes;
+                likes = likes.toArray();
                 createdAt = createdAt;
             };
             
@@ -69,7 +70,7 @@ module {
         };
         var p: Post = Post(initData);
         p.replies := Utils.bufferFromArray(ps.replies);
-        p.likes := ps.likes;
+        p.likes := Utils.bufferFromArray(ps.likes);
         p.createdAt := ps.createdAt;
 
         return p;

@@ -404,6 +404,54 @@ shared({ caller = initializer }) actor class Market() = this {
         };
     };
 
+    // Submit a like.
+    public shared(msg) func submitLike(userId: Text, postId: Nat32): async Result.Result<(), Post.PostError> {
+        assert(not updating);
+
+        let caller = Principal.toText(msg.caller);
+        
+        if (caller == anon) {
+            return #err(#notLoggedIn);
+        };
+        
+        switch (userMap.get(userId)) {
+            case null {
+                return #err(#userDoesNotExist);
+            };
+            case (?user) {
+                switch (user.postMap.get(postId)) {
+                    case null {
+                        return #err(#postDoesNotExist);
+                    };
+                    case (?post) {
+                        for (like in post.likes.vals()) {
+                            if (like.author.principal == caller) {
+                                return #err(#alreadyLiked);
+                            };
+                        };
+
+
+                        let userData: Utils.UserData = {
+                            principal = user.id;
+                            name = user.name;
+                            handle = user.handle;
+                            picture = user.picture;
+                        };
+
+                        let like: Like.Like = {
+                            author = userData;
+                            createdAt = Time.now();
+                        };
+
+                        post.likes.add(like);
+
+                        return #ok()
+                    };
+                };
+            };
+        };
+    };
+
     // Read a market.
     public query func readMarket(marketId: Nat32): async ?M.MarketStable {
         let result = marketMap.get(marketId);

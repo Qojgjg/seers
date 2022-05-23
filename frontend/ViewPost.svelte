@@ -5,6 +5,7 @@
   import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
   import { faRetweet } from "@fortawesome/free-solid-svg-icons"
   import inf from "./assets/inf.gif"
+  import { LogarithmicScale } from "chart.js"
 
   export let auth
   export let principal
@@ -30,6 +31,11 @@
     newComment = ""
     console.log(resp)
     getPost()
+  }
+
+  const submitLike = async (userId, postId) => {
+    console.log(userId, postId)
+    const resp = await $auth.actor.submitLike(userId, Number(postId))
   }
 
   function parseTwitterDate(tdate) {
@@ -154,13 +160,22 @@
                   <div>{post?.replies.length}</div>
                 </div>
               </a>
+
               <div class="icon-retweet">
                 <div><Fa icon={faRetweet} /></div>
                 <div>0</div>
               </div>
+
               <div class="icon-heart">
-                <div><Fa icon={faHeart} /></div>
-                <div>0</div>
+                <div>
+                  <button
+                    style="all:unset"
+                    on:click={() =>
+                      submitLike(post?.author.principal, post?.id)}
+                    ><Fa icon={faHeart} />
+                  </button>
+                </div>
+                <div>{post?.likes.length}</div>
               </div>
             </div>
           </div>

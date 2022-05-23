@@ -177,7 +177,7 @@
                 </div>
                 <div style="width: 50px; display:flex; gap: 15px">
                   <div><Fa icon={faHeart} /></div>
-                  <div>0</div>
+                  <div>{item.likes.length}</div>
                 </div>
               </div>
             </div>
@@ -235,7 +235,7 @@
                 </div>
                 <div style="width: 50px; display:flex; gap: 15px">
                   <div><Fa icon={faHeart} /></div>
-                  <div>0</div>
+                  <div>{item.likes.length}</div>
                 </div>
               </div>
             </div>
