@@ -82,6 +82,7 @@
   }
 
   const getPost = async () => {
+    console.log("getting post")
     post = await $auth.actor.getThread(postAuthor, Number(id))
     if ("ok" in post) {
       console.log(post)
@@ -233,20 +234,20 @@
               - {parseTwitterDate(parseInt(post?.createdAt) / 1_000_000)}
             </div>
           </div>
-          <Link
-            to={`/profile/${post?.author.principal}/post/${post?.id}`}
+          <a
+            href={`/profile/${post?.author.principal}/post/${post?.id}`}
             style="width: 100%"
           >
             <div style="width: 100%; text-align:start; padding: 5px 0px">
               {post?.content}
             </div>
-          </Link>
+          </a>
           <div
             style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
           >
             <div style="width: 50px; display:flex; gap: 15px">
               <div><Fa icon={faComment} /></div>
-              <div>0</div>
+              <div>{post?.replies.length}</div>
             </div>
             <div style="width: 50px; display:flex; gap: 15px">
               <div><Fa icon={faRetweet} /></div>

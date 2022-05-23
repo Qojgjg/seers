@@ -94,7 +94,7 @@
     <Route path="profile/:principal" let:params>
       <Profile {auth} principal={params.principal} {signIn} />
     </Route>
-    <Route path="profile/:principal/post/:id" let:params>
+    <Route path="profile/:principal/post/:id" let:params primary={false}>
       <ViewPost
         {auth}
         postAuthor={params.principal}

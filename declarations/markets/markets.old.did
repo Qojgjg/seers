@@ -95,15 +95,26 @@ type UserData =
    "principal": text;
  };
 type Time = int;
-type Result_6 = 
+type ThreadStable = 
+ record {
+   ancestors: vec PostStable;
+   main: PostStable;
+   replies: vec PostStable;
+ };
+type Result_7 = 
  variant {
    err: MarketError;
    ok: CommentStable;
  };
-type Result_5 = 
+type Result_6 = 
  variant {
    err: MarketError;
    ok: MarketStable;
+ };
+type Result_5 = 
+ variant {
+   err: PostError;
+   ok: ThreadStable;
  };
 type Result_4 = 
  variant {
@@ -305,15 +316,16 @@ type Balance =
  };
 type AccountIdentifier = blob;
 service : {
-  addCommentToMarket: (nat32, text) -> (Result_6);
+  addCommentToMarket: (nat32, text) -> (Result_7);
   buyOutcome: (nat32, float64, nat, bool) -> (Result_3);
   callerAccount: () -> (AccountIdentifier);
   canisterAccount: () -> (text) query;
   canisterFloat: () -> (ICP);
-  createMarket: (MarketInitData) -> (Result_5);
+  createMarket: (MarketInitData) -> (Result_6);
   createUser: (UserInitData) -> (Result_4);
   getFeed: () -> (vec PostStable) query;
   getPost: (text, nat32) -> (Result) query;
+  getThread: (text, nat32) -> (Result_5) query;
   getUserStable: (text) -> (opt UserStable) query;
   readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
   readAllUsers: () -> (vec UserStable) query;

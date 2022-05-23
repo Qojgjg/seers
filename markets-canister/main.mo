@@ -370,7 +370,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 return #err(#userDoesNotExist);
             };
             case (?user) {
-                let newId = Nat32.fromNat(user.postMap.size());
+                let newId = Nat32.fromNat(user.postMap.size() + 1);
 
                 let userData: Utils.UserData = {
                     principal = user.id;
@@ -395,7 +395,6 @@ shared({ caller = initializer }) actor class Market() = this {
 
                         let post: Post.Post = Post.Post(initData);
 
-                        user.postRoots.add(post.id);
                         user.postMap.put(post.id, post);
 
                         return #ok(post.freeze())
@@ -445,7 +444,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 return #err(#userDoesNotExist);
             };
             case (?user) {
-                if (Nat32.fromNat(user.postMap.size()) <= postId) {
+                if (Nat32.fromNat(user.postMap.size() + 1) <= postId) {
                     return #err(#postDoesNotExist);
                 } else {
                     switch (user.postMap.get(postId)) {
@@ -473,8 +472,10 @@ shared({ caller = initializer }) actor class Market() = this {
                                 switch (user.postMap.get(parentId)) {
                                     case null {
                                         // This case shouldn't happen, on delete we leave a dummy.
+                                        parentId := 0;
                                     };
                                     case (?parent) {
+                                        parentId := parent.parent;
                                         ancestors.add(parent.freeze());
                                     };
                                 };
