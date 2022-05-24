@@ -269,7 +269,7 @@ export const idlFactory = ({ IDL }) => {
     'createUser' : IDL.Func([UserInitData], [Result_4], []),
     'getFeed' : IDL.Func([], [IDL.Vec(PostStable)], ['query']),
     'getPost' : IDL.Func([IDL.Nat32], [Result], ['query']),
-    'getThread' : IDL.Func([IDL.Text, IDL.Nat32], [Result_5], ['query']),
+    'getThread' : IDL.Func([IDL.Nat32], [Result_5], ['query']),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
     'readAllMarkets' : IDL.Func(
         [MarketCategory, MarketState],

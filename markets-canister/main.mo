@@ -544,61 +544,69 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Read the thread.
-    public query func getThread(userId: Text, postId: Nat32): async Result.Result<Post.ThreadStable, Post.PostError> {
-        // switch (userMap.get(userId)) {
-        //     case null {
-                return #err(#userDoesNotExist);
-        //     };
-        //     case (?user) {
-        //         if (Nat32.fromNat(user.postMap.size() + 1) <= postId) {
-        //             return #err(#postDoesNotExist);
-        //         } else {
-        //             switch (user.postMap.get(postId)) {
-        //                 case null {
-        //                     return #err(#postDoesNotExist);
-        //                 };
-        //                 case (?post) {
-        //                     var replies = Buffer.Buffer<Post.PostStable>(post.replies.size());
+    public query func getThread(postId: Nat32): async Result.Result<Post.ThreadStable, Post.PostError> {
+        switch (postMap.get(postId)) {
+            case null {
+                return #err(#postDoesNotExist);
+            };
+            case (?post) {
+                var replies = Buffer.Buffer<Post.PostStable>(post.replies.size());
 
-        //                     for (replyId in post.replies.vals()) {
-        //                         switch (user.postMap.get(replyId)) {
-        //                             case null {
-        //                                 // Reply missing, continue. 
-        //                             };
-        //                             case (?reply) {
-        //                                 replies.add(reply.freeze());
-        //                             };
-        //                         };
-        //                     };
+                for (replyId in post.replies.vals()) {
+                    switch (postMap.get(replyId)) {
+                        case null {
+                            // Reply missing, continue. 
+                        };
+                        case (?reply) {
+                            replies.add(reply.freeze());
+                        };
+                    };
+                };
 
-        //                     var parentId = post.treeParent;
-        //                     var ancestors = Buffer.Buffer<Post.PostStable>(1);
-                    
-        //                     while (parentId != 0) {
-        //                         switch (user.postMap.get(parentId)) {
-        //                             case null {
-        //                                 // This case shouldn't happen, on delete we leave a dummy.
-        //                                 parentId := 0;
-        //                             };
-        //                             case (?parent) {
-        //                                 parentId := parent.treeParent;
-        //                                 ancestors.add(parent.freeze());
-        //                             };
-        //                         };
-        //                     };
+                var exit = false;
+                var ancestors = Buffer.Buffer<Post.PostStable>(1);
+                var current = post;
+                            
+                while (not exit) {
+                    switch (current.postType) {
+                        case (#post) {
+                            exit := true;
+                        };
+                        case (#reply(parent)) {
+                            switch (postMap.get(parent)) {
+                                case null {
+                                    // This case shouldn't happen, on delete we leave a dummy.
+                                    exit := true;
+                                };
+                                case (?ancestor) {
+                                    ancestors.add(ancestor.freeze());
+                                    current := ancestor;
+                                };
+                            };
+                        };
+                        case (#retweet(cited)) {
+                            switch (postMap.get(cited)) {
+                                case null {
+                                    // This case shouldn't happen, on delete we leave a dummy.
+                                    exit := true;
+                                };
+                                case (?post) {
+                                    current := post;
+                                };
+                            };
+                        };    
+                    };
+                };
 
-        //                     let t: Post.ThreadStable = {
-        //                         ancestors = ancestors.toArray();
-        //                         main = post.freeze();
-        //                         replies = replies.toArray();
-        //                     };
-
-        //                     return #ok(t);
-        //                 };
-        //             };
-        //         };
-        //     };
-        // }
+                let t: Post.ThreadStable = {
+                    ancestors = ancestors.toArray();
+                    main = post.freeze();
+                    replies = replies.toArray();
+                };
+                
+                return #ok(t);
+            };
+        };
     };
 
     // // Read user.
