@@ -293,7 +293,7 @@ export const idlFactory = ({ IDL }) => {
     'setMarketState' : IDL.Func([IDL.Nat32, MarketState], [IDL.Bool], []),
     'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),
     'submitForecast' : IDL.Func([IDL.Nat32, Forecast], [Result_2], []),
-    'submitLike' : IDL.Func([IDL.Text, IDL.Nat32], [Result_1], []),
+    'submitLike' : IDL.Func([IDL.Nat32], [Result_1], []),
     'submitPost' : IDL.Func([PostInitData], [Result], []),
   });
   return Market;

@@ -63,7 +63,7 @@ export interface Market {
   'setMarketState' : ActorMethod<[number, MarketState], boolean>,
   'setUpdating' : ActorMethod<[boolean], undefined>,
   'submitForecast' : ActorMethod<[number, Forecast], Result_2>,
-  'submitLike' : ActorMethod<[string, number], Result_1>,
+  'submitLike' : ActorMethod<[number], Result_1>,
   'submitPost' : ActorMethod<[PostInitData], Result>,
 }
 export type MarketCategory = { 'any' : null } |

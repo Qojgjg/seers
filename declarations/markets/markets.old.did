@@ -155,6 +155,7 @@ type PostStable =
    likes: vec Like;
    postType: PostType;
    replies: vec nat32;
+   retweets: vec nat32;
  };
 type PostInitData = 
  record {

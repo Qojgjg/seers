@@ -37,9 +37,8 @@
     getPost()
   }
 
-  const submitLike = async (userId, postId) => {
-    console.log(userId, postId)
-    const resp = await $auth.actor.submitLike(userId, Number(postId))
+  const submitLike = async (postId) => {
+    const resp = await $auth.actor.submitLike(Number(postId))
     getPost()
   }
 
@@ -175,7 +174,7 @@
                 <div>
                   <button
                     style="all:unset"
-                    on:click={() => submitLike(post?.treeAuthor, post?.treeId)}
+                    on:click={() => submitLike(post?.treeId)}
                     ><Fa icon={faHeart} />
                   </button>
                 </div>

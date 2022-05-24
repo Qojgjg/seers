@@ -439,103 +439,88 @@ shared({ caller = initializer }) actor class Market() = this {
                         };
                     };
                     case (#retweet(cited)) {
-                        return #err(#userDoesNotExist);
+                        switch (postMap.get(cited)) {
+                            case null {
+                                return #err(#postDoesNotExist);
+                            };
+                            case (?citedPost) {
+                                
+                                let newInitData: Post.PostInitData = {
+                                    id = id;
+                                    author = authorData;
+                                    content = initData.content;
+                                    postType = #retweet(cited);
+                                };
+
+                                let post: Post.Post = Post.Post(newInitData);
+                                
+                                citedPost.retweets.add(id);
+                                author.posts.add(id);
+                                postMap.put(id, post);
+                                feed.add(post);
+
+                                return #ok(post.freeze());
+                            };
+                        };
                     };
                 };
-
-                // switch (userMap.get(initData.treeAuthor)) {
-                //     case null {
-                //         return #err(#userDoesNotExist);
-                //     };
-                //     case (?treeAuthor) {
-
-                //         switch (treeAuthor.postMap.get(initData.treeParent)) {
-                //             case null {
-                //                 return #err(#postDoesNotExist);
-                //             };
-                //             case (?parentPost) {
-                                
-                //                 let treeId = Nat32.fromNat(treeAuthor.postMap.size() + 1);
-
-                //                 let authorData: Utils.UserData = {
-                //                     principal = author.id;
-                //                     name = author.name;
-                //                     handle = author.handle;
-                //                     picture = author.picture;
-                //                 };
-
-                //                 parentPost.replies.add(treeId);
-                //                 let id = Nat32.fromNat(author.replies.size());
-
-                //                 let newInitData: Post.PostInitData = {
-                //                     id = id;
-                //                     author = authorData;
-                //                     content = initData.content;
-
-                //                     treeAuthor = treeAuthor.id;
-                //                     treeId = treeId;
-                //                     treeParent = initData.treeParent; 
-                //                 };
-
-                //                 let post: Post.Post = Post.Post(newInitData);
-                //                 author.replies.put(id, post);
-                //                 treeAuthor.postMap.put(treeId, post);
-
-                //                 return #ok(post.freeze());
-                //             };
-                //         };
-                //     };
-                // };
             };
         };
     };
 
     // Submit a like.
-    public shared(msg) func submitLike(userId: Text, postId: Nat32): async Result.Result<(), Post.PostError> {
+    public shared(msg) func submitLike(postId: Nat32): async Result.Result<(), Post.PostError> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
         
-        // if (caller == anon) {
+        if (caller == anon) {
             return #err(#notLoggedIn);
-        // };
+        };
         
-        // switch (userMap.get(userId)) {
-        //     case null {
-        //         return #err(#userDoesNotExist);
-        //     };
-        //     case (?user) {
-        //         switch (user.postMap.get(postId)) {
-        //             case null {
-        //                 return #err(#postDoesNotExist);
-        //             };
-        //             case (?post) {
-        //                 for (like in post.likes.vals()) {
-        //                     if (like.author.principal == caller) {
-        //                         return #err(#alreadyLiked);
-        //                     };
-        //                 };
+        switch (userMap.get(caller)) {
+            case null {
+                return #err(#userDoesNotExist);
+            };
+            case (?user) {
+                switch (postMap.get(postId)) {
+                    case null {
+                        return #err(#postDoesNotExist);
+                    };
+                    case (?post) {
+                        var newLikes = Buffer.Buffer<Like.Like>(post.likes.size());
+                        var found: Bool = false;
 
+                        for (like in post.likes.vals()) {
+                            if (like.author.principal != caller) {
+                                newLikes.add(like);
+                            } else {
+                                // Unlike case, we remove.
+                                found := true;
+                            };
+                        };
 
-        //                 let userData: Utils.UserData = {
-        //                     principal = user.id;
-        //                     name = user.name;
-        //                     handle = user.handle;
-        //                     picture = user.picture;
-        //                 };
+                        if (not found) {
+                            let userData: Utils.UserData = {
+                                principal = user.id;
+                                name = user.name;
+                                handle = user.handle;
+                                picture = user.picture;
+                            };
+                            let newLike: Like.Like = {
+                                author = userData;
+                                createdAt = Time.now();
+                            };
+                            newLikes.add(newLike);
+                        };
 
-        //                 let like: Like.Like = {
-        //                     author = userData;
-        //                     createdAt = Time.now();
-        //                 };
+                        post.likes := newLikes;
 
-        //                 post.likes.add(like);
-
-        //                 return #ok()
-        //             };
-        //         };
-        //     };
-        // };
+                        return #ok()
+                    };
+                };
+            };
+        };
     };
 
     // Read a market.

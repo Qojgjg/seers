@@ -282,7 +282,7 @@ type Market =
    setMarketState: (nat32, MarketState) -> (bool);
    setUpdating: (bool) -> () oneway;
    submitForecast: (nat32, Forecast) -> (Result_2);
-   submitLike: (text, nat32) -> (Result_1);
+   submitLike: (nat32) -> (Result_1);
    submitPost: (PostInitData) -> (Result);
  };
 type Like = 

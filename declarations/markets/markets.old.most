@@ -85,7 +85,8 @@ type PostStable =
     id : Nat32;
     likes : [Like];
     postType : PostType;
-    replies : [Nat32]
+    replies : [Nat32];
+    retweets : [Nat32]
   };
 type PostType = {#post; #reply : Nat32; #retweet : Nat32};
 type Time = Int;
