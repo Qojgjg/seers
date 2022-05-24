@@ -40,6 +40,7 @@
   const submitLike = async (userId, postId) => {
     console.log(userId, postId)
     const resp = await $auth.actor.submitLike(userId, Number(postId))
+    getPost()
   }
 
   function parseTwitterDate(tdate) {
@@ -376,48 +377,93 @@
       </div>
     {/if}
 
-    <div
-      style="width: 100%; margin: 15px 0px; padding: 15px 0px; border-bottom: 1px solid grey"
-    >
-      <textarea
-        bind:value={newComment}
-        rows="3"
-        style="width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
-        placeholder="Please share your thoughts."
-      />
-      {#if principal == ""}
-        <div style="display:flex; text-align:end; justify-content:end;">
-          <button class="btn-grad" on:click={signIn}>Login</button>
-          <div style="text-align:end;color:red">
-            {errorResponse}
+    {#if replies.length > 0}
+      <div
+        style="width: 100%; margin: 15px 0px; padding: 15px 0px; border-bottom: 1px solid grey"
+      >
+        <textarea
+          bind:value={newComment}
+          rows="3"
+          style="width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
+          placeholder="Please share your thoughts."
+        />
+        {#if principal == ""}
+          <div style="display:flex; text-align:end; justify-content:end;">
+            <button class="btn-grad" on:click={signIn}>Login</button>
+            <div style="text-align:end;color:red">
+              {errorResponse}
+            </div>
           </div>
-        </div>
-      {:else if processing}
-        <div style="display:flex; text-align:end; justify-content:end;">
-          <button
-            class="btn-grad"
-            on:click={() => 0}
-            style="width: 100px; overflow:hidden"
-          >
-            <img
-              src={inf}
-              alt="inf"
-              style="width: 150px; height: 400%; margin: -100%;"
-            />
-          </button>
-          <div style="text-align:end;color:red">
-            {errorResponse}
+        {:else if processing}
+          <div style="display:flex; text-align:end; justify-content:end;">
+            <button
+              class="btn-grad"
+              on:click={() => 0}
+              style="width: 100px; overflow:hidden"
+            >
+              <img
+                src={inf}
+                alt="inf"
+                style="width: 150px; height: 400%; margin: -100%;"
+              />
+            </button>
+            <div style="text-align:end;color:red">
+              {errorResponse}
+            </div>
           </div>
-        </div>
-      {:else}
-        <div style="display:flex; text-align:end; justify-content:end;">
-          <button class="btn-grad" on:click={submitReply}>Reply</button>
-          <div style="text-align:end;color:red">
-            {errorResponse}
+        {:else}
+          <div style="display:flex; text-align:end; justify-content:end;">
+            <button class="btn-grad" on:click={submitReply}>Reply</button>
+            <div style="text-align:end;color:red">
+              {errorResponse}
+            </div>
           </div>
-        </div>
-      {/if}
-    </div>
+        {/if}
+      </div>
+    {:else}
+      <div
+        style="width: 100%; margin: 15px 0px; padding: 15px 0px; border-bottom: 0px solid grey"
+      >
+        <textarea
+          bind:value={newComment}
+          rows="3"
+          style="width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
+          placeholder="Please share your thoughts."
+        />
+        {#if principal == ""}
+          <div style="display:flex; text-align:end; justify-content:end;">
+            <button class="btn-grad" on:click={signIn}>Login</button>
+            <div style="text-align:end;color:red">
+              {errorResponse}
+            </div>
+          </div>
+        {:else if processing}
+          <div style="display:flex; text-align:end; justify-content:end;">
+            <button
+              class="btn-grad"
+              on:click={() => 0}
+              style="width: 100px; overflow:hidden"
+            >
+              <img
+                src={inf}
+                alt="inf"
+                style="width: 150px; height: 400%; margin: -100%;"
+              />
+            </button>
+            <div style="text-align:end;color:red">
+              {errorResponse}
+            </div>
+          </div>
+        {:else}
+          <div style="display:flex; text-align:end; justify-content:end;">
+            <button class="btn-grad" on:click={submitReply}>Reply</button>
+            <div style="text-align:end;color:red">
+              {errorResponse}
+            </div>
+          </div>
+        {/if}
+      </div>
+    {/if}
 
     {#each replies as post}
       <div
