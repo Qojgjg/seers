@@ -5,7 +5,6 @@
   import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
   import { faRetweet } from "@fortawesome/free-solid-svg-icons"
   import inf from "./assets/inf.gif"
-  import { LogarithmicScale } from "chart.js"
 
   export let auth
   export let principal
@@ -22,11 +21,16 @@
 
   const submitReply = async () => {
     processing = true
-    const resp = await $auth.actor.submitReply(
-      postAuthor,
-      Number(id),
-      newComment,
-    )
+    const initData = {
+      id: Number(id),
+      content: newComment,
+      author: post.author,
+      treeId: Number(id),
+      treeAuthor: postAuthor,
+      treeParent: Number(id),
+    }
+
+    const resp = await $auth.actor.submitReply(initData)
     processing = false
     newComment = ""
     console.log(resp)
@@ -142,7 +146,7 @@
               </div>
             </div>
             <a
-              href={`/profile/${post?.author.principal}/post/${post?.id}#main`}
+              href={`/profile/${post?.treeAuthor}/post/${post?.treeId}#main`}
               style="width: 100%"
             >
               <div style="width: 100%; text-align:start; padding: 5px 0px">
@@ -153,7 +157,7 @@
               style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
             >
               <a
-                href={`/profile/${post?.author.principal}/post/${post?.id}#main`}
+                href={`/profile/${post?.treeAuthor}/post/${post?.treeId}#main`}
               >
                 <div class="icon-comment">
                   <div><Fa icon={faComment} /></div>
@@ -170,8 +174,7 @@
                 <div>
                   <button
                     style="all:unset"
-                    on:click={() =>
-                      submitLike(post?.author.principal, post?.id)}
+                    on:click={() => submitLike(post?.treeAuthor, post?.treeId)}
                     ><Fa icon={faHeart} />
                   </button>
                 </div>
@@ -213,7 +216,7 @@
               </div>
             </div>
             <a
-              href={`/profile/${post?.author.principal}/post/${post?.id}#main`}
+              href={`/profile/${post?.treeAuthor}/post/${post?.treeId}#main`}
               style="width: 100%"
             >
               <div style="width: 100%; text-align:start; padding: 5px 0px">
@@ -269,7 +272,7 @@
         </div>
         <div style="flex-grow: 1; justify-content: start; text-align:start">
           <Link
-            to={`/profile/${post?.author.principal}/post/${post?.id}`}
+            to={`/profile/${post?.treeAuthor}/post/${post?.treeId}`}
             style="width: 100%"
           >
             <div
@@ -334,7 +337,7 @@
         </div>
         <div style="flex-grow: 1; justify-content: start; text-align:start">
           <Link
-            to={`/profile/${post?.author.principal}/post/${post?.id}`}
+            to={`/profile/${post?.treeAuthor}/post/${post?.treeId}`}
             style="width: 100%"
           >
             <div
@@ -446,7 +449,7 @@
             </div>
           </div>
           <a
-            href={`/profile/${post?.author.principal}/post/${post?.id}#main`}
+            href={`/profile/${post?.treeAuthor}/post/${post?.treeId}#main`}
             style="width: 100%"
           >
             <div style="width: 100%; text-align:start; padding: 5px 0px">
