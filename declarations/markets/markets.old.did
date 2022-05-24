@@ -158,6 +158,7 @@ type PostStable =
  };
 type PostError = 
  variant {
+   alreadyLiked;
    notLoggedIn;
    postDoesNotExist;
    userDoesNotExist;

@@ -128,24 +128,8 @@ module {
         public var forecasts: Buffer.Buffer<Forecast.Forecast> = Buffer.Buffer<Forecast.Forecast>(5);
         public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(5);
 
-        public var postRoots: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
-        public var postMap: Map.HashMap<Nat32, Post.Post> = do {
-            Map.fromIter<Nat32, Post.Post>(
-                Iter.fromArray([]),
-                0, 
-                Nat32.equal, 
-                func (x: Nat32): Nat32 { x }
-            )
-        };
-        public var replies: Map.HashMap<Nat32, Post.Post> = do {   
-            Map.fromIter<Nat32, Post.Post>(    
-                Iter.fromArray([]),
-                0, 
-                Nat32.equal, 
-                func (x: Nat32): Nat32 { x }
-            )
-        };
-
+        public var posts: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
+        
         public var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
         public var followees: Buffer.Buffer<Followee> = Buffer.Buffer<Followee>(5);
         public var createdAt: Time.Time = Time.now();
@@ -175,15 +159,8 @@ module {
                 markets = markets.toArray();
                 txs = txs.toArray();
                 comments = stableComments;
-                postRoots = postRoots.toArray();
-                postData = Iter.toArray(Iter.map<Post.Post, Post.PostStable>(
-                    postMap.vals(), func (p: Post.Post): Post.PostStable {
-                    p.freeze()
-                }));
-                replies = Iter.toArray(Iter.map<Post.Post, Post.PostStable>(
-                    replies.vals(), func (p: Post.Post): Post.PostStable {
-                    p.freeze()
-                }));
+                posts = posts.toArray();
+                
                 followers = followees.toArray();
                 followees = followees.toArray();
                 createdAt = createdAt;
@@ -213,9 +190,7 @@ module {
         markets: [UserMarket];
         txs: [Tx.UserTx];
         comments: [Comment.CommentStable];
-        postRoots: [Nat32];
-        postData: [Post.PostStable];
-        replies: [Post.PostStable];
+        posts: [Nat32];
         followers: [Follower];
         followees: [Followee];
         createdAt: Time.Time;
@@ -240,28 +215,9 @@ module {
         let comments = Array.map(u.comments, func (c: Comment.CommentStable): Comment.Comment {
             Comment.unFreeze(c)
         });
-        let posts = Array.map<Post.PostStable, (Nat32, Post.Post)>(
-            u.postData, func (c: Post.PostStable): (Nat32, Post.Post) {
-                (c.treeId, Post.unFreeze(c))
-        });
-        let replies = Array.map<Post.PostStable, (Nat32, Post.Post)>(
-            u.replies, func (c: Post.PostStable): (Nat32, Post.Post) {
-                (c.id, Post.unFreeze(c))
-        });
         var user: User = User(initData);
-        user.postMap := Map.fromIter<Nat32, Post.Post>(
-            posts.vals(),
-            posts.size(), 
-            Nat32.equal, 
-            func (x: Nat32): Nat32 { x }
-        );
-        user.replies := Map.fromIter<Nat32, Post.Post>(
-            replies.vals(),
-            replies.size(), 
-            Nat32.equal, 
-            func (x: Nat32): Nat32 { x }
-        );
-        user.postRoots := Utils.bufferFromArray(u.postRoots);
+        
+        user.posts := Utils.bufferFromArray(u.posts);
         user.feed := Utils.bufferFromArray(u.feed);
         user.balances := u.balances;
         user.expBalances := u.expBalances;

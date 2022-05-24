@@ -14,13 +14,18 @@ module {
         #alreadyLiked;
     };
 
+    public type PostType = {
+        #post;
+        #reply;
+        #retweet;
+    };
+
     public type PostInitData = {
         id: Nat32;
         author: Utils.UserData;
-        treeAuthor: Text;
-        treeId: Nat32;
-        treeParent: Nat32;
+        parent: Nat32;
         content: Text;
+        postType: PostType;
     };
 
     public type ThreadStable = {
@@ -32,29 +37,23 @@ module {
     public class Post (initData: PostInitData) = this {
         public var id: Nat32 = initData.id;
         public var author: Utils.UserData = initData.author;
-        
-        public var treeAuthor: Text = initData.treeAuthor;
-        public var treeId: Nat32 = initData.treeId;
-        public var treeParent: Nat32 = initData.treeParent;
-        
         public var content: Text = initData.content;
+        public var parent: Nat32 = initData.parent;
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var likes: Buffer.Buffer<Like.Like> = Buffer.Buffer<Like.Like>(0);
         public var createdAt: Time.Time = Time.now();
+        public var postType: PostType = initData.postType;
 
         public func freeze(): PostStable {
             let ps: PostStable = {
                 id = id;
                 author = author;
-
-                treeAuthor = treeAuthor;
-                treeId = treeId;
-                treeParent = treeParent;
-                
+                parent = parent;
                 content = content;
                 replies = replies.toArray();
                 likes = likes.toArray();
                 createdAt = createdAt;
+                postType = postType;
             };
             
             return ps;
@@ -64,29 +63,25 @@ module {
     public type PostStable = {
         id: Nat32;
         author: Utils.UserData;
-        
-        treeAuthor: Text;
-        treeId: Nat32;
-        treeParent: Nat32;
-        
+        parent: Nat32;
         content: Text;
         replies: [Nat32];
         likes: [Like.Like];
         createdAt: Time.Time;
+        postType: PostType;
     };
 
     public func unFreeze(ps: PostStable): Post {
         let initData: PostInitData = {
             id = ps.id;
             author = ps.author;
-
-            treeId = ps.treeId;
-            treeParent = ps.treeParent;
-            treeAuthor = ps.treeAuthor;
-
+            parent = ps.parent;
             content = ps.content;
+            postType = ps.postType;
         };
+
         var p: Post = Post(initData);
+        
         p.replies := Utils.bufferFromArray(ps.replies);
         p.likes := Utils.bufferFromArray(ps.likes);
         p.createdAt := ps.createdAt;
