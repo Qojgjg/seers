@@ -16,14 +16,13 @@ module {
 
     public type PostType = {
         #post;
-        #reply;
-        #retweet;
+        #reply: Nat32;
+        #retweet: Nat32;
     };
 
     public type PostInitData = {
         id: Nat32;
         author: Utils.UserData;
-        parent: Nat32;
         content: Text;
         postType: PostType;
     };
@@ -38,7 +37,6 @@ module {
         public var id: Nat32 = initData.id;
         public var author: Utils.UserData = initData.author;
         public var content: Text = initData.content;
-        public var parent: Nat32 = initData.parent;
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var likes: Buffer.Buffer<Like.Like> = Buffer.Buffer<Like.Like>(0);
         public var createdAt: Time.Time = Time.now();
@@ -48,7 +46,6 @@ module {
             let ps: PostStable = {
                 id = id;
                 author = author;
-                parent = parent;
                 content = content;
                 replies = replies.toArray();
                 likes = likes.toArray();
@@ -63,7 +60,6 @@ module {
     public type PostStable = {
         id: Nat32;
         author: Utils.UserData;
-        parent: Nat32;
         content: Text;
         replies: [Nat32];
         likes: [Like.Like];
@@ -75,7 +71,6 @@ module {
         let initData: PostInitData = {
             id = ps.id;
             author = ps.author;
-            parent = ps.parent;
             content = ps.content;
             postType = ps.postType;
         };

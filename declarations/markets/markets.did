@@ -32,9 +32,7 @@ type UserStable =
    modifiedAt: Time;
    name: text;
    picture: text;
-   postData: vec PostStable;
-   postRoots: vec nat32;
-   replies: vec PostStable;
+   posts: vec nat32;
    twitter: text;
    txs: vec UserTx;
    website: text;
@@ -102,50 +100,51 @@ type ThreadStable =
    main: PostStable;
    replies: vec PostStable;
  };
-type Result_8 = 
+type Result_7 = 
  variant {
    err: MarketError;
    ok: CommentStable;
  };
-type Result_7 = 
+type Result_6 = 
  variant {
    err: MarketError;
    ok: MarketStable;
  };
-type Result_6 = 
+type Result_5 = 
  variant {
    err: PostError;
    ok: ThreadStable;
  };
-type Result_5 = 
+type Result_4 = 
  variant {
    err: UserError;
    ok: UserStable;
  };
-type Result_4 = 
+type Result_3 = 
  variant {
    err: MarketError;
    ok: float64;
  };
-type Result_3 = 
+type Result_2 = 
  variant {
    err: MarketError;
    ok;
  };
-type Result_2 = 
+type Result_1 = 
  variant {
    err: PostError;
    ok;
- };
-type Result_1 = 
- variant {
-   err: UserError;
-   ok: PostStable;
  };
 type Result = 
  variant {
    err: PostError;
    ok: PostStable;
+ };
+type PostType = 
+ variant {
+   post;
+   reply: nat32;
+   retweet: nat32;
  };
 type PostStable = 
  record {
@@ -154,19 +153,15 @@ type PostStable =
    createdAt: Time;
    id: nat32;
    likes: vec Like;
+   postType: PostType;
    replies: vec nat32;
-   treeAuthor: text;
-   treeId: nat32;
-   treeParent: nat32;
  };
 type PostInitData = 
  record {
    author: UserData;
    content: text;
    id: nat32;
-   treeAuthor: text;
-   treeId: nat32;
-   treeParent: nat32;
+   postType: PostType;
  };
 type PostError = 
  variant {
@@ -265,30 +260,29 @@ type MarketCategory =
  };
 type Market = 
  service {
-   addCommentToMarket: (nat32, text) -> (Result_8);
-   buyOutcome: (nat32, float64, nat, bool) -> (Result_4);
+   addCommentToMarket: (nat32, text) -> (Result_7);
+   buyOutcome: (nat32, float64, nat, bool) -> (Result_3);
    callerAccount: () -> (AccountIdentifier);
    canisterAccount: () -> (text) query;
    canisterFloat: () -> (ICP);
-   createMarket: (MarketInitData) -> (Result_7);
-   createUser: (UserInitData) -> (Result_5);
+   createMarket: (MarketInitData) -> (Result_6);
+   createUser: (UserInitData) -> (Result_4);
    getFeed: () -> (vec PostStable) query;
-   getPost: (text, nat32) -> (Result) query;
-   getThread: (text, nat32) -> (Result_6) query;
+   getPost: (nat32) -> (Result) query;
+   getThread: (text, nat32) -> (Result_5) query;
    getUserStable: (text) -> (opt UserStable) query;
    readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
    readAllUsers: () -> (vec UserStable) query;
    readMarket: (nat32) -> (opt MarketStable) query;
    readUserData: (vec text) -> (vec UserData) query;
-   refreshUser: () -> (Result_5);
+   refreshUser: () -> (Result_4);
    resolveMarket: (nat32, nat) -> (bool);
-   sellOutcome: (nat32, float64, nat, bool) -> (Result_4);
+   sellOutcome: (nat32, float64, nat, bool) -> (Result_3);
    setMarketState: (nat32, MarketState) -> (bool);
    setUpdating: (bool) -> () oneway;
-   submitForecast: (nat32, Forecast) -> (Result_3);
-   submitLike: (text, nat32) -> (Result_2);
-   submitPost: (text) -> (Result_1);
-   submitReply: (PostInitData) -> (Result);
+   submitForecast: (nat32, Forecast) -> (Result_2);
+   submitLike: (text, nat32) -> (Result_1);
+   submitPost: (PostInitData) -> (Result);
  };
 type Like = 
  record {

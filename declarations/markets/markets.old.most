@@ -84,8 +84,10 @@ type PostStable =
     createdAt : Time;
     id : Nat32;
     likes : [Like];
-    parent : Nat32;
-    replies : [Nat32]
+    replies : [Nat32];
+    treeAuthor : Text;
+    treeId : Nat32;
+    treeParent : Nat32
   };
 type Time = Int;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
@@ -130,6 +132,7 @@ type UserStable =
     picture : Text;
     postData : [PostStable];
     postRoots : [Nat32];
+    replies : [PostStable];
     twitter : Text;
     txs : [UserTx];
     website : Text

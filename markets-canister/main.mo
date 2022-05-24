@@ -74,6 +74,7 @@ shared({ caller = initializer }) actor class Market() = this {
     private stable var stableUsers: [(Text, U.UserStable)] = [];
     private stable var stableMarkets: [(Nat32, M.MarketStable)] = [];
     private stable var stableFeed: [Post.PostStable] = [];
+    private stable var stablePosts: [(Nat32, Post.PostStable)] = [];
 
     private var feed: Buffer.Buffer<Post.Post> = Buffer.Buffer<Post.Post>(10);
     
@@ -127,6 +128,23 @@ shared({ caller = initializer }) actor class Market() = this {
         
         Map.fromIter<Nat32, M.Market>(
             marketIter,
+            10, 
+            Nat32.equal, 
+            func (x: Nat32): Nat32 { x } 
+        )
+    };
+
+    private var postMap: Map.HashMap<Nat32, Post.Post> = do {
+        let postIter = Iter.map<(Nat32, Post.PostStable), (Nat32, Post.Post)>(
+            stablePosts.vals(), 
+            func (e: (Nat32, Post.PostStable)): (Nat32, Post.Post) {
+                let v = Post.unFreeze(e.1);
+                return (e.0, v);
+            }
+        );
+        
+        Map.fromIter<Nat32, Post.Post>(
+            postIter,
             10, 
             Nat32.equal, 
             func (x: Nat32): Nat32 { x } 
@@ -355,8 +373,8 @@ shared({ caller = initializer }) actor class Market() = this {
         return #ok(newMarket.freeze());
     };
 
-    // Add a reply to a post.
-    public shared(msg) func submitReply(initData: Post.PostInitData): async Result.Result<Post.PostStable, Post.PostError> {
+    // Submit a post of any type.
+    public shared(msg) func submitPost(initData: Post.PostInitData): async Result.Result<Post.PostStable, Post.PostError> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -370,50 +388,82 @@ shared({ caller = initializer }) actor class Market() = this {
                 return #err(#userDoesNotExist);
             };
             case (?author) {
+                let authorData: Utils.UserData = {
+                    principal = author.id;
+                    name = author.name;
+                    handle = author.handle;
+                    picture = author.picture;
+                };
 
-                switch (userMap.get(initData.treeAuthor)) {
-                    case null {
+                let id = Nat32.fromNat(postMap.size());
+
+                switch (initData.postType) {                    
+                    case (#post) {
+                        let newInitData: Post.PostInitData = {
+                            id = id;
+                            author = authorData;
+                            content = initData.content;
+                            postType = #post;
+                        };
+
+                        let post: Post.Post = Post.Post(newInitData);
+                        author.posts.add(id);
+                        postMap.put(id, post);
+                        feed.add(post);
+
+                        return #ok(post.freeze());
+                    };
+                    case (#reply(parent)) {
                         return #err(#userDoesNotExist);
                     };
-                    case (?treeAuthor) {
-
-                        switch (treeAuthor.postMap.get(initData.treeParent)) {
-                            case null {
-                                return #err(#postDoesNotExist);
-                            };
-                            case (?parentPost) {
-                                
-                                let treeId = Nat32.fromNat(treeAuthor.postMap.size() + 1);
-
-                                let authorData: Utils.UserData = {
-                                    principal = author.id;
-                                    name = author.name;
-                                    handle = author.handle;
-                                    picture = author.picture;
-                                };
-
-                                parentPost.replies.add(treeId);
-                                let id = Nat32.fromNat(author.replies.size());
-
-                                let newInitData: Post.PostInitData = {
-                                    id = id;
-                                    author = authorData;
-                                    content = initData.content;
-
-                                    treeAuthor = treeAuthor.id;
-                                    treeId = treeId;
-                                    treeParent = initData.treeParent; 
-                                };
-
-                                let post: Post.Post = Post.Post(newInitData);
-                                author.replies.put(id, post);
-                                treeAuthor.postMap.put(treeId, post);
-
-                                return #ok(post.freeze());
-                            };
-                        };
+                    case (#retweet(cited)) {
+                        return #err(#userDoesNotExist);
                     };
                 };
+
+                // switch (userMap.get(initData.treeAuthor)) {
+                //     case null {
+                //         return #err(#userDoesNotExist);
+                //     };
+                //     case (?treeAuthor) {
+
+                //         switch (treeAuthor.postMap.get(initData.treeParent)) {
+                //             case null {
+                //                 return #err(#postDoesNotExist);
+                //             };
+                //             case (?parentPost) {
+                                
+                //                 let treeId = Nat32.fromNat(treeAuthor.postMap.size() + 1);
+
+                //                 let authorData: Utils.UserData = {
+                //                     principal = author.id;
+                //                     name = author.name;
+                //                     handle = author.handle;
+                //                     picture = author.picture;
+                //                 };
+
+                //                 parentPost.replies.add(treeId);
+                //                 let id = Nat32.fromNat(author.replies.size());
+
+                //                 let newInitData: Post.PostInitData = {
+                //                     id = id;
+                //                     author = authorData;
+                //                     content = initData.content;
+
+                //                     treeAuthor = treeAuthor.id;
+                //                     treeId = treeId;
+                //                     treeParent = initData.treeParent; 
+                //                 };
+
+                //                 let post: Post.Post = Post.Post(newInitData);
+                //                 author.replies.put(id, post);
+                //                 treeAuthor.postMap.put(treeId, post);
+
+                //                 return #ok(post.freeze());
+                //             };
+                //         };
+                //     };
+                // };
             };
         };
     };
@@ -424,46 +474,46 @@ shared({ caller = initializer }) actor class Market() = this {
 
         let caller = Principal.toText(msg.caller);
         
-        if (caller == anon) {
+        // if (caller == anon) {
             return #err(#notLoggedIn);
-        };
+        // };
         
-        switch (userMap.get(userId)) {
-            case null {
-                return #err(#userDoesNotExist);
-            };
-            case (?user) {
-                switch (user.postMap.get(postId)) {
-                    case null {
-                        return #err(#postDoesNotExist);
-                    };
-                    case (?post) {
-                        for (like in post.likes.vals()) {
-                            if (like.author.principal == caller) {
-                                return #err(#alreadyLiked);
-                            };
-                        };
+        // switch (userMap.get(userId)) {
+        //     case null {
+        //         return #err(#userDoesNotExist);
+        //     };
+        //     case (?user) {
+        //         switch (user.postMap.get(postId)) {
+        //             case null {
+        //                 return #err(#postDoesNotExist);
+        //             };
+        //             case (?post) {
+        //                 for (like in post.likes.vals()) {
+        //                     if (like.author.principal == caller) {
+        //                         return #err(#alreadyLiked);
+        //                     };
+        //                 };
 
 
-                        let userData: Utils.UserData = {
-                            principal = user.id;
-                            name = user.name;
-                            handle = user.handle;
-                            picture = user.picture;
-                        };
+        //                 let userData: Utils.UserData = {
+        //                     principal = user.id;
+        //                     name = user.name;
+        //                     handle = user.handle;
+        //                     picture = user.picture;
+        //                 };
 
-                        let like: Like.Like = {
-                            author = userData;
-                            createdAt = Time.now();
-                        };
+        //                 let like: Like.Like = {
+        //                     author = userData;
+        //                     createdAt = Time.now();
+        //                 };
 
-                        post.likes.add(like);
+        //                 post.likes.add(like);
 
-                        return #ok()
-                    };
-                };
-            };
-        };
+        //                 return #ok()
+        //             };
+        //         };
+        //     };
+        // };
     };
 
     // Read a market.
@@ -475,86 +525,73 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Read a post.
-    public query func getPost(userId: Text, postId: Nat32): async Result.Result<Post.PostStable, Post.PostError> {
-        let userOpt = userMap.get(userId);
-        
-        switch (userOpt) {
+    public query func getPost(postId: Nat32): async Result.Result<Post.PostStable, Post.PostError> {
+        switch (postMap.get(postId)) {
             case null {
                 return #err(#userDoesNotExist);
             };
-            case (?user) {
-                if (Nat32.fromNat(user.postMap.size()) <= postId) {
-                    return #err(#postDoesNotExist);
-                } else {
-                    switch (user.postMap.get(postId)) {
-                        case null {
-                            return #err(#postDoesNotExist);
-                        };
-                        case (?post) {
-                            return #ok(post.freeze());
-                        };
-                    };
-                };
+            case (?post) {
+                return #ok(post.freeze());
             };
         };
     };
 
     // Read the thread.
     public query func getThread(userId: Text, postId: Nat32): async Result.Result<Post.ThreadStable, Post.PostError> {
-        switch (userMap.get(userId)) {
-            case null {
+        // switch (userMap.get(userId)) {
+        //     case null {
                 return #err(#userDoesNotExist);
-            };
-            case (?user) {
-                if (Nat32.fromNat(user.postMap.size() + 1) <= postId) {
-                    return #err(#postDoesNotExist);
-                } else {
-                    switch (user.postMap.get(postId)) {
-                        case null {
-                            return #err(#postDoesNotExist);
-                        };
-                        case (?post) {
-                            var replies = Buffer.Buffer<Post.PostStable>(post.replies.size());
+        //     };
+        //     case (?user) {
+        //         if (Nat32.fromNat(user.postMap.size() + 1) <= postId) {
+        //             return #err(#postDoesNotExist);
+        //         } else {
+        //             switch (user.postMap.get(postId)) {
+        //                 case null {
+        //                     return #err(#postDoesNotExist);
+        //                 };
+        //                 case (?post) {
+        //                     var replies = Buffer.Buffer<Post.PostStable>(post.replies.size());
 
-                            for (replyId in post.replies.vals()) {
-                                switch (user.postMap.get(replyId)) {
-                                    case null {
-                                        // Reply missing, continue. 
-                                    };
-                                    case (?reply) {
-                                        replies.add(reply.freeze());
-                                    };
-                                };
-                            };
+        //                     for (replyId in post.replies.vals()) {
+        //                         switch (user.postMap.get(replyId)) {
+        //                             case null {
+        //                                 // Reply missing, continue. 
+        //                             };
+        //                             case (?reply) {
+        //                                 replies.add(reply.freeze());
+        //                             };
+        //                         };
+        //                     };
 
-                            var parentId = post.treeParent;
-                            var ancestors = Buffer.Buffer<Post.PostStable>(1);
+        //                     var parentId = post.treeParent;
+        //                     var ancestors = Buffer.Buffer<Post.PostStable>(1);
                     
-                            while (parentId != 0) {
-                                switch (user.postMap.get(parentId)) {
-                                    case null {
-                                        // This case shouldn't happen, on delete we leave a dummy.
-                                        parentId := 0;
-                                    };
-                                    case (?parent) {
-                                        parentId := parent.treeParent;
-                                        ancestors.add(parent.freeze());
-                                    };
-                                };
-                            };
+        //                     while (parentId != 0) {
+        //                         switch (user.postMap.get(parentId)) {
+        //                             case null {
+        //                                 // This case shouldn't happen, on delete we leave a dummy.
+        //                                 parentId := 0;
+        //                             };
+        //                             case (?parent) {
+        //                                 parentId := parent.treeParent;
+        //                                 ancestors.add(parent.freeze());
+        //                             };
+        //                         };
+        //                     };
 
-                            let t: Post.ThreadStable = {
-                                ancestors = ancestors.toArray();
-                                main = post.freeze();
-                                replies = replies.toArray();
-                            };
+        //                     let t: Post.ThreadStable = {
+        //                         ancestors = ancestors.toArray();
+        //                         main = post.freeze();
+        //                         replies = replies.toArray();
+        //                     };
 
-                            return #ok(t);
-                        };
-                    };
-                };
-            };
-        }
+        //                     return #ok(t);
+        //                 };
+        //             };
+        //         };
+        //     };
+        // }
     };
 
     // // Read user.
@@ -1289,50 +1326,50 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Create post and push it to user.
-    public shared(msg) func submitPost(content: Text): async Result.Result<Post.PostStable, U.UserError> {
-        assert(not updating);
+    // public shared(msg) func submitPost(content: Text): async Result.Result<Post.PostStable, U.UserError> {
+    //     assert(not updating);
 
-        let caller = Principal.toText(msg.caller);
+    //     let caller = Principal.toText(msg.caller);
         
-        if (caller == anon) {
-            return #err(#callerIsAnon);
-        };
+    //     if (caller == anon) {
+    //         return #err(#callerIsAnon);
+    //     };
 
-        switch (getUser(caller)) {
-            case null {
-                return #err(#profileNotCreated);
-            };
-            case (?user) {
-                let authorData: Utils.UserData = {
-                    principal = user.id;
-                    name = user.name;
-                    handle = user.handle;
-                    picture = user.picture;
-                };
+    //     switch (getUser(caller)) {
+    //         case null {
+    //             return #err(#profileNotCreated);
+    //         };
+    //         case (?user) {
+    //             let authorData: Utils.UserData = {
+    //                 principal = user.id;
+    //                 name = user.name;
+    //                 handle = user.handle;
+    //                 picture = user.picture;
+    //             };
 
-                let treeId = Nat32.fromNat(user.postMap.size() + 1);
-                let id = treeId;
+    //             let treeId = Nat32.fromNat(user.postMap.size() + 1);
+    //             let id = treeId;
 
-                let initData: Post.PostInitData = {
-                    id = id;
-                    author = authorData;
-                    content = content;
+    //             let initData: Post.PostInitData = {
+    //                 id = id;
+    //                 author = authorData;
+    //                 content = content;
 
-                    treeParent = 0;
-                    treeId = treeId;
-                    treeAuthor = authorData.principal;
-                };
+    //                 treeParent = 0;
+    //                 treeId = treeId;
+    //                 treeAuthor = authorData.principal;
+    //             };
 
-                let post: Post.Post = Post.Post(initData);
+    //             let post: Post.Post = Post.Post(initData);
 
-                feed.add(post);
-                user.postRoots.add(post.id);
-                user.postMap.put(post.id, post);
+    //             feed.add(post);
+    //             user.postRoots.add(post.id);
+    //             user.postMap.put(post.id, post);
 
-                return #ok(post.freeze());
-            };
-        };
-    };
+    //             return #ok(post.freeze());
+    //         };
+    //     };
+    // };
 
     // Add a comment to a market.
     public shared(msg) func addCommentToMarket(marketId: Nat32, content: Text): async Result.Result<Comment.CommentStable, M.MarketError> {

@@ -18,7 +18,18 @@
 
   const submitPost = async () => {
     processing = true
-    const r = await $auth.actor.submitPost(post)
+    let initData = {
+      id: 0,
+      author: {
+        principal,
+        picture: "",
+        handle: "",
+        name: "",
+      },
+      content: post,
+      postType: { post: null },
+    }
+    const r = await $auth.actor.submitPost(initData)
     console.log(r)
     processing = false
     post = ""
