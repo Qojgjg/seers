@@ -34,6 +34,7 @@ type UserStable =
    picture: text;
    postData: vec PostStable;
    postRoots: vec nat32;
+   replies: vec PostStable;
    twitter: text;
    txs: vec UserTx;
    website: text;
@@ -153,8 +154,19 @@ type PostStable =
    createdAt: Time;
    id: nat32;
    likes: vec Like;
-   parent: nat32;
    replies: vec nat32;
+   treeAuthor: text;
+   treeId: nat32;
+   treeParent: nat32;
+ };
+type PostInitData = 
+ record {
+   author: UserData;
+   content: text;
+   id: nat32;
+   treeAuthor: text;
+   treeId: nat32;
+   treeParent: nat32;
  };
 type PostError = 
  variant {
@@ -276,7 +288,7 @@ type Market =
    submitForecast: (nat32, Forecast) -> (Result_3);
    submitLike: (text, nat32) -> (Result_2);
    submitPost: (text) -> (Result_1);
-   submitReply: (text, nat32, text) -> (Result);
+   submitReply: (PostInitData) -> (Result);
  };
 type Like = 
  record {

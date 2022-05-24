@@ -65,7 +65,7 @@ export interface Market {
   'submitForecast' : ActorMethod<[number, Forecast], Result_3>,
   'submitLike' : ActorMethod<[string, number], Result_2>,
   'submitPost' : ActorMethod<[string], Result_1>,
-  'submitReply' : ActorMethod<[string, number, string], Result>,
+  'submitReply' : ActorMethod<[PostInitData], Result>,
 }
 export type MarketCategory = { 'any' : null } |
   { 'entertainment' : null } |
@@ -148,14 +148,24 @@ export type PostError = { 'notLoggedIn' : null } |
   { 'alreadyLiked' : null } |
   { 'postDoesNotExist' : null } |
   { 'userDoesNotExist' : null };
+export interface PostInitData {
+  'id' : number,
+  'content' : string,
+  'treeParent' : number,
+  'treeId' : number,
+  'author' : UserData,
+  'treeAuthor' : string,
+}
 export interface PostStable {
   'id' : number,
   'content' : string,
+  'treeParent' : number,
+  'treeId' : number,
   'createdAt' : Time,
   'author' : UserData,
   'likes' : Array<Like>,
   'replies' : Array<number>,
-  'parent' : number,
+  'treeAuthor' : string,
 }
 export type Result = { 'ok' : PostStable } |
   { 'err' : PostError };
@@ -250,6 +260,7 @@ export interface UserStable {
   'website' : string,
   'picture' : string,
   'postRoots' : Array<number>,
+  'replies' : Array<PostStable>,
   'discord' : string,
   'handle' : string,
   'comments' : Array<CommentStable>,

@@ -141,11 +141,13 @@ export const idlFactory = ({ IDL }) => {
   const PostStable = IDL.Record({
     'id' : IDL.Nat32,
     'content' : IDL.Text,
+    'treeParent' : IDL.Nat32,
+    'treeId' : IDL.Nat32,
     'createdAt' : Time,
     'author' : UserData,
     'likes' : IDL.Vec(Like),
     'replies' : IDL.Vec(IDL.Nat32),
-    'parent' : IDL.Nat32,
+    'treeAuthor' : IDL.Text,
   });
   const Balance = IDL.Record({
     'btc' : IDL.Float64,
@@ -201,6 +203,7 @@ export const idlFactory = ({ IDL }) => {
     'website' : IDL.Text,
     'picture' : IDL.Text,
     'postRoots' : IDL.Vec(IDL.Nat32),
+    'replies' : IDL.Vec(PostStable),
     'discord' : IDL.Text,
     'handle' : IDL.Text,
     'comments' : IDL.Vec(CommentStable),
@@ -245,6 +248,14 @@ export const idlFactory = ({ IDL }) => {
   const Result_3 = IDL.Variant({ 'ok' : IDL.Null, 'err' : MarketError });
   const Result_2 = IDL.Variant({ 'ok' : IDL.Null, 'err' : PostError });
   const Result_1 = IDL.Variant({ 'ok' : PostStable, 'err' : UserError });
+  const PostInitData = IDL.Record({
+    'id' : IDL.Nat32,
+    'content' : IDL.Text,
+    'treeParent' : IDL.Nat32,
+    'treeId' : IDL.Nat32,
+    'author' : UserData,
+    'treeAuthor' : IDL.Text,
+  });
   const Market = IDL.Service({
     'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_8], []),
     'buyOutcome' : IDL.Func(
@@ -285,7 +296,7 @@ export const idlFactory = ({ IDL }) => {
     'submitForecast' : IDL.Func([IDL.Nat32, Forecast], [Result_3], []),
     'submitLike' : IDL.Func([IDL.Text, IDL.Nat32], [Result_2], []),
     'submitPost' : IDL.Func([IDL.Text], [Result_1], []),
-    'submitReply' : IDL.Func([IDL.Text, IDL.Nat32, IDL.Text], [Result], []),
+    'submitReply' : IDL.Func([PostInitData], [Result], []),
   });
   return Market;
 };

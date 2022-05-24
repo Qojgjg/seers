@@ -356,7 +356,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Add a reply to a post.
-    public shared(msg) func submitReply(userId: Text, parent: Nat32, content: Text): async Result.Result<Post.PostStable, Post.PostError> {
+    public shared(msg) func submitReply(initData: Post.PostInitData): async Result.Result<Post.PostStable, Post.PostError> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -365,51 +365,53 @@ shared({ caller = initializer }) actor class Market() = this {
             return #err(#notLoggedIn);
         };
         
-        switch (userMap.get(userId)) {
+        switch (userMap.get(caller)) {
             case null {
                 return #err(#userDoesNotExist);
             };
-            case (?user) {
-                let newId = Nat32.fromNat(user.postMap.size() + 1);
+            case (?author) {
 
-                let userData: Utils.UserData = {
-                    principal = user.id;
-                    name = user.name;
-                    handle = user.handle;
-                    picture = user.picture;
-                };
-
-                switch (user.postMap.get(parent)) {
+                switch (userMap.get(initData.treeAuthor)) {
                     case null {
-                        return #err(#postDoesNotExist);
+                        return #err(#userDoesNotExist);
                     };
-                    case (?parentPost) {
-                        parentPost.replies.add(newId);
+                    case (?treeAuthor) {
 
-                        let initData: Post.PostInitData = {
-                            id = newId;
-                            author = userData;
-                            content = content;
-                            parent = parent; 
-                        };
+                        switch (treeAuthor.postMap.get(initData.treeParent)) {
+                            case null {
+                                return #err(#postDoesNotExist);
+                            };
+                            case (?parentPost) {
+                                
+                                let treeId = Nat32.fromNat(treeAuthor.postMap.size() + 1);
 
-                        let post: Post.Post = Post.Post(initData);
-
-                        user.postMap.put(post.id, post);
-
-                        if (caller != userId) {
-                            switch (userMap.get(caller)) {
-                                case null {
-                                    return #err(#profileNotCreated);
+                                let authorData: Utils.UserData = {
+                                    principal = author.id;
+                                    name = author.name;
+                                    handle = author.handle;
+                                    picture = author.picture;
                                 };
-                                case (?author) {
-                                    let replyId = author.replies.size();
-                                    author.replies.put((userId, replyId), post);
+
+                                parentPost.replies.add(treeId);
+                                let id = Nat32.fromNat(author.replies.size());
+
+                                let newInitData: Post.PostInitData = {
+                                    id = id;
+                                    author = authorData;
+                                    content = initData.content;
+
+                                    treeAuthor = treeAuthor.id;
+                                    treeId = treeId;
+                                    treeParent = initData.treeParent; 
                                 };
+
+                                let post: Post.Post = Post.Post(newInitData);
+                                author.replies.put(id, post);
+                                treeAuthor.postMap.put(treeId, post);
+
+                                return #ok(post.freeze());
                             };
                         };
-
-                        return #ok(post.freeze())
                     };
                 };
             };
@@ -525,7 +527,7 @@ shared({ caller = initializer }) actor class Market() = this {
                                 };
                             };
 
-                            var parentId = post.parent;
+                            var parentId = post.treeParent;
                             var ancestors = Buffer.Buffer<Post.PostStable>(1);
                     
                             while (parentId != 0) {
@@ -535,7 +537,7 @@ shared({ caller = initializer }) actor class Market() = this {
                                         parentId := 0;
                                     };
                                     case (?parent) {
-                                        parentId := parent.parent;
+                                        parentId := parent.treeParent;
                                         ancestors.add(parent.freeze());
                                     };
                                 };
@@ -1301,18 +1303,24 @@ shared({ caller = initializer }) actor class Market() = this {
                 return #err(#profileNotCreated);
             };
             case (?user) {
-                let userData: Utils.UserData = {
+                let authorData: Utils.UserData = {
                     principal = user.id;
                     name = user.name;
                     handle = user.handle;
                     picture = user.picture;
                 };
 
+                let treeId = Nat32.fromNat(user.postMap.size() + 1);
+                let id = treeId;
+
                 let initData: Post.PostInitData = {
-                    id = Nat32.fromNat(user.postMap.size() + 1);
-                    author = userData;
+                    id = id;
+                    author = authorData;
                     content = content;
-                    parent = 0; 
+
+                    treeParent = 0;
+                    treeId = treeId;
+                    treeAuthor = authorData.principal;
                 };
 
                 let post: Post.Post = Post.Post(initData);
