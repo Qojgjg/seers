@@ -155,6 +155,7 @@ export interface PostInitData {
 }
 export interface PostStable {
   'id' : number,
+  'retweets' : Array<number>,
   'postType' : PostType,
   'content' : string,
   'createdAt' : Time,

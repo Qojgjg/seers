@@ -414,7 +414,29 @@ shared({ caller = initializer }) actor class Market() = this {
                         return #ok(post.freeze());
                     };
                     case (#reply(parent)) {
-                        return #err(#userDoesNotExist);
+                        switch (postMap.get(parent)) {
+                            case null {
+                                return #err(#postDoesNotExist);
+                            };
+                            case (?parentPost) {
+                                
+                                let newInitData: Post.PostInitData = {
+                                    id = id;
+                                    author = authorData;
+                                    content = initData.content;
+                                    postType = #reply(parent);
+                                };
+
+                                let post: Post.Post = Post.Post(newInitData);
+                                
+                                parentPost.replies.add(id);
+                                author.posts.add(id);
+                                postMap.put(id, post);
+                                feed.add(post);
+
+                                return #ok(post.freeze());
+                            };
+                        };
                     };
                     case (#retweet(cited)) {
                         return #err(#userDoesNotExist);

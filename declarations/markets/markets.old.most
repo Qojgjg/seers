@@ -84,11 +84,10 @@ type PostStable =
     createdAt : Time;
     id : Nat32;
     likes : [Like];
-    replies : [Nat32];
-    treeAuthor : Text;
-    treeId : Nat32;
-    treeParent : Nat32
+    postType : PostType;
+    replies : [Nat32]
   };
+type PostType = {#post; #reply : Nat32; #retweet : Nat32};
 type Time = Int;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type UserData =
@@ -130,9 +129,7 @@ type UserStable =
     modifiedAt : Time;
     name : Text;
     picture : Text;
-    postData : [PostStable];
-    postRoots : [Nat32];
-    replies : [PostStable];
+    posts : [Nat32];
     twitter : Text;
     txs : [UserTx];
     website : Text
@@ -156,6 +153,7 @@ actor {
   stable var nextMarketId : Nat32;
   stable var stableFeed : [PostStable];
   stable var stableMarkets : [(Nat32, MarketStable)];
+  stable var stablePosts : [(Nat32, PostStable)];
   stable var stableUsers : [(Text, UserStable)];
   stable var updating : Bool
 };

@@ -38,6 +38,7 @@ module {
         public var author: Utils.UserData = initData.author;
         public var content: Text = initData.content;
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
+        public var retweets: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var likes: Buffer.Buffer<Like.Like> = Buffer.Buffer<Like.Like>(0);
         public var createdAt: Time.Time = Time.now();
         public var postType: PostType = initData.postType;
@@ -48,6 +49,7 @@ module {
                 author = author;
                 content = content;
                 replies = replies.toArray();
+                retweets = retweets.toArray();
                 likes = likes.toArray();
                 createdAt = createdAt;
                 postType = postType;
@@ -62,6 +64,7 @@ module {
         author: Utils.UserData;
         content: Text;
         replies: [Nat32];
+        retweets: [Nat32];
         likes: [Like.Like];
         createdAt: Time.Time;
         postType: PostType;
@@ -78,6 +81,7 @@ module {
         var p: Post = Post(initData);
         
         p.replies := Utils.bufferFromArray(ps.replies);
+        p.retweets := Utils.bufferFromArray(ps.retweets);
         p.likes := Utils.bufferFromArray(ps.likes);
         p.createdAt := ps.createdAt;
 
