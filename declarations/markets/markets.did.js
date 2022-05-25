@@ -150,12 +150,23 @@ export const idlFactory = ({ IDL }) => {
     'post' : IDL.Null,
     'reply' : IDL.Nat32,
   });
+  const Retweet = IDL.Record({
+    'id' : IDL.Nat32,
+    'retweets' : IDL.Vec(IDL.Nat32),
+    'postType' : PostType,
+    'content' : IDL.Text,
+    'createdAt' : Time,
+    'author' : UserData,
+    'likes' : IDL.Vec(Like),
+    'replies' : IDL.Vec(IDL.Nat32),
+  });
   const PostStable = IDL.Record({
     'id' : IDL.Nat32,
     'retweets' : IDL.Vec(IDL.Nat32),
     'postType' : PostType,
     'content' : IDL.Text,
     'createdAt' : Time,
+    'citing' : IDL.Opt(Retweet),
     'author' : UserData,
     'likes' : IDL.Vec(Like),
     'replies' : IDL.Vec(IDL.Nat32),

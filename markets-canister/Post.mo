@@ -1,6 +1,7 @@
 import Time "mo:base/Time";
 import Buffer "mo:base/Buffer";
 import Array "mo:base/Array";
+import Option "mo:base/Option";
 
 import Like "Like";
 import Utils "Utils";
@@ -39,6 +40,7 @@ module {
         public var content: Text = initData.content;
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var retweets: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
+        public var citing: ?Retweet = null;
         public var likes: Buffer.Buffer<Like.Like> = Buffer.Buffer<Like.Like>(0);
         public var createdAt: Time.Time = Time.now();
         public var postType: PostType = initData.postType;
@@ -50,6 +52,7 @@ module {
                 content = content;
                 replies = replies.toArray();
                 retweets = retweets.toArray();
+                citing = citing;
                 likes = likes.toArray();
                 createdAt = createdAt;
                 postType = postType;
@@ -59,12 +62,24 @@ module {
         };
     };
 
+    public type Retweet = {
+        id: Nat32;
+        author: Utils.UserData;
+        content: Text;
+        replies: [Nat32];
+        retweets: [Nat32];
+        likes: [Like.Like];
+        createdAt: Time.Time;
+        postType: PostType;
+    };
+
     public type PostStable = {
         id: Nat32;
         author: Utils.UserData;
         content: Text;
         replies: [Nat32];
         retweets: [Nat32];
+        citing: ?Retweet;
         likes: [Like.Like];
         createdAt: Time.Time;
         postType: PostType;
@@ -83,6 +98,7 @@ module {
         p.replies := Utils.bufferFromArray(ps.replies);
         p.retweets := Utils.bufferFromArray(ps.retweets);
         p.likes := Utils.bufferFromArray(ps.likes);
+        p.citing := ps.citing;
         p.createdAt := ps.createdAt;
 
         return p;

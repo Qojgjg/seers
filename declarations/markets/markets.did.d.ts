@@ -160,6 +160,7 @@ export interface PostStable {
   'postType' : PostType,
   'content' : string,
   'createdAt' : Time,
+  'citing' : [] | [Retweet],
   'author' : UserData,
   'likes' : Array<Like>,
   'replies' : Array<number>,
@@ -185,6 +186,16 @@ export type Result_7 = { 'ok' : MarketStable } |
   { 'err' : MarketError };
 export type Result_8 = { 'ok' : CommentStable } |
   { 'err' : MarketError };
+export interface Retweet {
+  'id' : number,
+  'retweets' : Array<number>,
+  'postType' : PostType,
+  'content' : string,
+  'createdAt' : Time,
+  'author' : UserData,
+  'likes' : Array<Like>,
+  'replies' : Array<number>,
+}
 export interface ThreadStable {
   'main' : PostStable,
   'ancestors' : Array<PostStable>,

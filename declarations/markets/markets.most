@@ -80,6 +80,7 @@ type MarketState =
 type PostStable =
   {
     author : UserData;
+    citing : ?Retweet;
     content : Text;
     createdAt : Time;
     id : Nat32;
@@ -89,6 +90,17 @@ type PostStable =
     retweets : [Nat32]
   };
 type PostType = {#post; #reply : Nat32; #retweet : Nat32};
+type Retweet =
+  {
+    author : UserData;
+    content : Text;
+    createdAt : Time;
+    id : Nat32;
+    likes : [Like];
+    postType : PostType;
+    replies : [Nat32];
+    retweets : [Nat32]
+  };
 type Time = Int;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type UserData =

@@ -1340,7 +1340,20 @@ shared({ caller = initializer }) actor class Market() = this {
                                             // do nothing
                                         };
                                         case (?citedPost) {
-                                            posts.add(citedPost.freeze());
+                                            let cs = citedPost.freeze();
+                                            let retweeted: Post.Retweet = {
+                                                id = cs.id;
+                                                author = cs.author;
+                                                content = cs.content;
+                                                replies = cs.replies;
+                                                retweets = cs.retweets;
+                                                likes = cs.likes;
+                                                createdAt = cs.createdAt;
+                                                postType = cs.postType;
+                                            };
+                                            post.citing := ?retweeted;
+                                            var stablePost = post.freeze();
+                                            posts.add(stablePost);
                                         };
                                     };
                                 };
