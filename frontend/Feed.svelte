@@ -93,7 +93,7 @@
       <textarea
         bind:value={post}
         rows="3"
-        style="width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
+        style="width: 100%; font-size: 1.3em; background: black;color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
         placeholder="Please share your thoughts."
       />
       {#if principal === ""}

@@ -366,7 +366,7 @@
         <textarea
           bind:value={newComment}
           rows="3"
-          style="width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
+          style="width: 100%; font-size: 1.3em; background: black;color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
           placeholder="Please share your thoughts."
         />
         {#if principal == ""}
@@ -409,7 +409,7 @@
         <textarea
           bind:value={newComment}
           rows="3"
-          style="width: 100%; font-size: 1.3em; background: rgb(25, 27, 31);color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
+          style="width: 100%; font-size: 1.3em; background: black;color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
           placeholder="Please share your thoughts."
         />
         {#if principal == ""}
@@ -512,9 +512,10 @@
     min-width: 200px;
     max-width: 800px;
     width: 80%;
-    background-color: rgb(25, 27, 31);
+    background-color: black;
+    /* background-color: rgb(25, 27, 31);
     border: 1px solid rgb(90, 58, 81);
-    box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
+    box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46); */
 
     border-radius: 16px;
     justify-content: center;
