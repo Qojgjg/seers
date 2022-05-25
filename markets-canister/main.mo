@@ -1311,6 +1311,32 @@ shared({ caller = initializer }) actor class Market() = this {
         });
     };
 
+
+    // Get user with posts.
+    public query func getUserWithPosts(userId: Text): async Result.Result<(U.UserStable, [Post.PostStable]), U.UserError> {
+        switch (userMap.get(userId)) {
+            case null {
+                return #err(#profileNotCreated);
+            };
+            case (?user) {
+                var posts = Buffer.Buffer<Post.PostStable>(user.posts.size());
+
+                for (postId in user.posts.vals()) {
+                    switch (postMap.get(postId)) {
+                        case null {
+                            // Shouldn't happen, but it doesn't matter.
+                        };
+                        case (?post) {
+                            posts.add(post.freeze());
+                        };
+                    };
+                };
+
+                return #ok((user.freeze(), posts.toArray()));
+            };
+        };
+    };
+
     // Get feed.
     public query func getFeed(): async [Post.PostStable] {
         return Array.map(feed.toArray(), func (p: Post.Post): Post.PostStable {

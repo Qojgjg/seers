@@ -39,17 +39,18 @@ export interface HistPoint {
 export interface ICP { 'e8s' : bigint }
 export interface Like { 'createdAt' : Time, 'author' : UserData }
 export interface Market {
-  'addCommentToMarket' : ActorMethod<[number, string], Result_7>,
+  'addCommentToMarket' : ActorMethod<[number, string], Result_8>,
   'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_3>,
   'callerAccount' : ActorMethod<[], AccountIdentifier>,
   'canisterAccount' : ActorMethod<[], string>,
   'canisterFloat' : ActorMethod<[], ICP>,
-  'createMarket' : ActorMethod<[MarketInitData], Result_6>,
+  'createMarket' : ActorMethod<[MarketInitData], Result_7>,
   'createUser' : ActorMethod<[UserInitData], Result_4>,
   'getFeed' : ActorMethod<[], Array<PostStable>>,
   'getPost' : ActorMethod<[number], Result>,
-  'getThread' : ActorMethod<[number], Result_5>,
+  'getThread' : ActorMethod<[number], Result_6>,
   'getUserStable' : ActorMethod<[string], [] | [UserStable]>,
+  'getUserWithPosts' : ActorMethod<[string], Result_5>,
   'readAllMarkets' : ActorMethod<
     [MarketCategory, MarketState],
     Array<MarketStable>,
@@ -176,11 +177,13 @@ export type Result_3 = { 'ok' : number } |
   { 'err' : MarketError };
 export type Result_4 = { 'ok' : UserStable } |
   { 'err' : UserError };
-export type Result_5 = { 'ok' : ThreadStable } |
+export type Result_5 = { 'ok' : [UserStable, Array<PostStable>] } |
+  { 'err' : UserError };
+export type Result_6 = { 'ok' : ThreadStable } |
   { 'err' : PostError };
-export type Result_6 = { 'ok' : MarketStable } |
+export type Result_7 = { 'ok' : MarketStable } |
   { 'err' : MarketError };
-export type Result_7 = { 'ok' : CommentStable } |
+export type Result_8 = { 'ok' : CommentStable } |
   { 'err' : MarketError };
 export interface ThreadStable {
   'main' : PostStable,
