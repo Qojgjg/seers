@@ -94,14 +94,8 @@
     <Route path="profile/:principal" let:params>
       <Profile {auth} principal={params.principal} {signIn} />
     </Route>
-    <Route path="profile/:principal/post/:id" let:params primary={false}>
-      <ViewPost
-        {auth}
-        postAuthor={params.principal}
-        id={params.id}
-        {principal}
-        {signIn}
-      />
+    <Route path="profile/post/:id" let:params primary={false}>
+      <ViewPost {auth} id={params.id} {principal} {signIn} />
     </Route>
     <Route path="create">
       <CreateMarket {auth} {principal} {signIn} />

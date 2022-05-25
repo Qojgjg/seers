@@ -8,7 +8,6 @@
 
   export let auth
   export let principal
-  export let postAuthor
   export let signIn
   export let id
 
@@ -25,12 +24,10 @@
       id: Number(id),
       content: newComment,
       author: post.author,
-      treeId: Number(id),
-      treeAuthor: postAuthor,
-      treeParent: Number(id),
+      postType: { reply: Number(id) },
     }
 
-    const resp = await $auth.actor.submitReply(initData)
+    const resp = await $auth.actor.submitPost(initData)
     processing = false
     newComment = ""
     console.log(resp)
@@ -94,7 +91,7 @@
 
   const getPost = async () => {
     console.log("getting post")
-    post = await $auth.actor.getThread(postAuthor, Number(id))
+    post = await $auth.actor.getThread(Number(id))
     if ("ok" in post) {
       console.log(post)
       replies = post["ok"].replies.reverse()
@@ -145,10 +142,7 @@
                 - {parseTwitterDate(parseInt(post?.createdAt) / 1_000_000)}
               </div>
             </div>
-            <a
-              href={`/profile/${post?.treeAuthor}/post/${post?.treeId}#main`}
-              style="width: 100%"
-            >
+            <a href={`/profile/post/${post?.id}#main`} style="width: 100%">
               <div style="width: 100%; text-align:start; padding: 5px 0px">
                 {post?.content}
               </div>
@@ -156,9 +150,7 @@
             <div
               style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
             >
-              <a
-                href={`/profile/${post?.treeAuthor}/post/${post?.treeId}#main`}
-              >
+              <a href={`/profile/post/${post?.id}#main`}>
                 <div class="icon-comment">
                   <div><Fa icon={faComment} /></div>
                   <div>{post?.replies.length}</div>
@@ -174,7 +166,7 @@
                 <div>
                   <button
                     style="all:unset"
-                    on:click={() => submitLike(post?.treeId)}
+                    on:click={() => submitLike(post?.id)}
                     ><Fa icon={faHeart} />
                   </button>
                 </div>
@@ -215,10 +207,7 @@
                 - {parseTwitterDate(parseInt(post?.createdAt) / 1_000_000)}
               </div>
             </div>
-            <a
-              href={`/profile/${post?.treeAuthor}/post/${post?.treeId}#main`}
-              style="width: 100%"
-            >
+            <a href={`/profile/post/${post?.id}#main`} style="width: 100%">
               <div style="width: 100%; text-align:start; padding: 5px 0px">
                 {post?.content}
               </div>
@@ -271,10 +260,7 @@
           </div>
         </div>
         <div style="flex-grow: 1; justify-content: start; text-align:start">
-          <Link
-            to={`/profile/${post?.treeAuthor}/post/${post?.treeId}`}
-            style="width: 100%"
-          >
+          <Link to={`/profile/post/${post?.id}`} style="width: 100%">
             <div
               style="width: 100%; text-align:start; padding: 0px 0px; border-bottom: 1px solid grey;"
             >
@@ -336,10 +322,7 @@
           </div>
         </div>
         <div style="flex-grow: 1; justify-content: start; text-align:start">
-          <Link
-            to={`/profile/${post?.treeAuthor}/post/${post?.treeId}`}
-            style="width: 100%"
-          >
+          <Link to={`/profile/post/${post?.id}`} style="width: 100%">
             <div
               style="width: 100%; text-align:start; padding: 0px 0px; border-bottom: 1px solid grey;"
             >
@@ -493,10 +476,7 @@
               - {parseTwitterDate(parseInt(post?.createdAt) / 1_000_000)}
             </div>
           </div>
-          <a
-            href={`/profile/${post?.treeAuthor}/post/${post?.treeId}#main`}
-            style="width: 100%"
-          >
+          <a href={`/profile/post/${post?.id}#main`} style="width: 100%">
             <div style="width: 100%; text-align:start; padding: 5px 0px">
               {post?.content}
             </div>
