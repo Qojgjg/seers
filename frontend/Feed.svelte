@@ -144,7 +144,7 @@
                 <img
                   src={item.author.picture}
                   alt="avatar"
-                  style="width: 50px; object-fit: cover; border-radius: 50%"
+                  style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
                 />
               </a>
             </div>
@@ -199,7 +199,7 @@
                 <img
                   src={item.author.picture}
                   alt="avatar"
-                  style="width: 50px; object-fit: cover; border-radius: 50%"
+                  style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
                 />
               </a>
             </div>

@@ -256,7 +256,7 @@
               <img
                 src={user.picture}
                 alt="avatar"
-                style="width: 50px; object-fit: cover; border-radius: 50%"
+                style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
               />
             </div>
             <div style="flex-grow: 1; justify-content: start; text-align:start">
