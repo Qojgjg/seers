@@ -254,15 +254,15 @@
           >
             <div style="padding: 5px; margin: 5px">
               <img
-                src={user.picture}
+                src={post.author.picture}
                 alt="avatar"
                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
               />
             </div>
             <div style="flex-grow: 1; justify-content: start; text-align:start">
               <div style="display:flex; gap: 5px;">
-                <div>{user.name}</div>
-                <div style="color:grey">@{user.handle}</div>
+                <div>{post.author.name}</div>
+                <div style="color:grey">@{post.author.handle}</div>
                 <div style="color:grey">
                   - {parseTwitterDate(Number(post.createdAt) / 1_000_000)}
                 </div>

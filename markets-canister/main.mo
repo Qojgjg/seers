@@ -1327,7 +1327,24 @@ shared({ caller = initializer }) actor class Market() = this {
                             // Shouldn't happen, but it doesn't matter.
                         };
                         case (?post) {
-                            posts.add(post.freeze());
+                            switch (post.postType) {
+                                case (#post) {
+                                    posts.add(post.freeze());
+                                };
+                                case (#reply(_)) {
+                                    posts.add(post.freeze());
+                                };
+                                case (#retweet(postId)) {
+                                    switch (postMap.get(postId)) {
+                                        case null {
+                                            // do nothing
+                                        };
+                                        case (?citedPost) {
+                                            posts.add(citedPost.freeze());
+                                        };
+                                    };
+                                };
+                            };
                         };
                     };
                 };

@@ -39,6 +39,17 @@
     getPost()
   }
 
+  const submitRetweet = async (postId) => {
+    const initData = {
+      id: Number(id),
+      content: "",
+      author: post.author,
+      postType: { retweet: Number(postId) },
+    }
+    const resp = await $auth.actor.submitPost(initData)
+    console.log(resp)
+  }
+
   function parseTwitterDate(tdate) {
     var system_date = new Date(tdate)
     var user_date = new Date()
@@ -158,8 +169,14 @@
               </a>
 
               <div class="icon-retweet">
-                <div><Fa icon={faRetweet} /></div>
-                <div>0</div>
+                <div>
+                  <button
+                    style="all:unset"
+                    on:click={() => submitRetweet(post?.id)}
+                    ><Fa icon={faRetweet} />
+                  </button>
+                </div>
+                <div>{post?.retweets.length}</div>
               </div>
 
               <div class="icon-heart">
