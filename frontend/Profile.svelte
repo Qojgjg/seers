@@ -31,6 +31,7 @@
   let errorRefresh = ""
   let refreshLabel = "Refresh"
   let isGetting = false
+  let posts = []
 
   function parseTwitterDate(tdate) {
     var system_date = new Date(tdate)
@@ -98,10 +99,12 @@
       setTimeout(getUserData, 500)
     } else {
       isGetting = true
-      user = await $auth.actor.getUserStable(principal)
-      console.log(user)
-      if (user) {
-        user = user[0]
+      const resp = await $auth.actor.getUserWithPosts(principal)
+      console.log(resp)
+      if ("ok" in resp) {
+        const data = resp["ok"]
+        user = data[0]
+        posts = data[1]
         if (user) {
           user.markets = user.markets.sort(function (a, b) {
             var keyA = Number(a.marketId),
@@ -113,7 +116,7 @@
           user.ownMarkets = user.markets.filter((m) => m.author)
           user.otherMarkets = user.markets.filter((m) => !m.author)
           user.txs = user.txs.reverse()
-          user.posts = user.postRoots.map((idx) => user.postData[idx]).reverse()
+          user.posts = posts.reverse()
           console.log(user)
         }
       }
