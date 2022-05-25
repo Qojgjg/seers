@@ -1369,9 +1369,42 @@ shared({ caller = initializer }) actor class Market() = this {
 
     // Get feed.
     public query func getFeed(): async [Post.PostStable] {
-        return Array.map(feed.toArray(), func (p: Post.Post): Post.PostStable {
-            p.freeze()
-        });
+        var posts = Buffer.Buffer<Post.PostStable>(feed.size());
+        for (p in feed.vals()) {
+            switch (p.postType) {
+                case (#post) {
+                    posts.add(p.freeze());
+                };
+                case (#reply(parent)) {
+                    posts.add(p.freeze());
+                };
+                case (#retweet(cited)) {
+                    switch (postMap.get(cited)) {
+                        case null {
+                            // do nothing
+                        };
+                        case (?citedPost) {
+                            let cs = citedPost.freeze();
+                            let retweeted: Post.Retweet = {
+                                id = cs.id;
+                                author = cs.author;
+                                content = cs.content;
+                                replies = cs.replies;
+                                retweets = cs.retweets;
+                                likes = cs.likes;
+                                createdAt = cs.createdAt;
+                                postType = cs.postType;
+                            };
+                            p.citing := ?retweeted;
+                            var stablePost = p.freeze();
+                            posts.add(stablePost);
+                        };
+                    };
+                };
+            };
+        };
+
+        return posts.toArray();
     };
 
     // Create user.

@@ -136,60 +136,121 @@
     <div class="rowUser">
       {#each feed as item, i}
         {#if i != feed.length - 1}
-          <div
-            style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 1px solid grey"
-          >
-            <div style="padding: 5px; margin: 5px; height: 100%">
-              <a href={`/profile/${item.author.principal}`}>
-                <img
-                  src={item.author.picture}
-                  alt="avatar"
-                  style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
-                />
-              </a>
-            </div>
-            <div style="flex-grow: 1; justify-content: start; text-align:start">
-              <div style="display:flex; gap: 5px;">
-                <div>
-                  <a href={`/profile/${item.author.principal}`}
-                    >{item.author.name}</a
-                  >
-                </div>
-                <div style="color:grey">
-                  <a
-                    href={`/profile/${item.author.principal}`}
-                    style="color:grey"
-                  >
-                    @{item.author.handle}
-                  </a>
-                </div>
-                <div style="color:grey">
-                  - {parseTwitterDate(parseInt(item.createdAt) / 1_000_000)}
-                </div>
+          {#if item.citing != null}
+            <div
+              style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 1px solid grey"
+            >
+              <div style="padding: 5px; margin: 5px; height: 100%">
+                <a href={`/profile/${item.author.principal}`}>
+                  <img
+                    src={item.author.picture}
+                    alt="avatar"
+                    style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
+                  />
+                </a>
               </div>
-              <Link to={`/profile/post/${item.id}#main`} style="width: 100%">
-                <div style="width: 100%; text-align:start; padding: 5px 0px">
-                  {item.content}
-                </div>
-              </Link>
               <div
-                style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
+                style="flex-grow: 1; justify-content: start; text-align:start"
               >
-                <div style="width: 50px; display:flex; gap: 15px">
-                  <div><Fa icon={faComment} /></div>
-                  <div>{item.replies.length}</div>
+                <div style="display:flex; gap: 5px;">
+                  <div>
+                    <a href={`/profile/${item.author.principal}`}
+                      >{item.author.name}</a
+                    >
+                  </div>
+                  <div style="color:grey">
+                    <a
+                      href={`/profile/${item.author.principal}`}
+                      style="color:grey"
+                    >
+                      @{item.author.handle}
+                    </a>
+                  </div>
+                  <div style="color:grey">
+                    - {parseTwitterDate(parseInt(item.createdAt) / 1_000_000)}
+                  </div>
                 </div>
-                <div style="width: 50px; display:flex; gap: 15px">
-                  <div><Fa icon={faRetweet} /></div>
-                  <div>0</div>
-                </div>
-                <div style="width: 50px; display:flex; gap: 15px">
-                  <div><Fa icon={faHeart} /></div>
-                  <div>{item.likes.length}</div>
+                <Link to={`/profile/post/${item.id}#main`} style="width: 100%">
+                  <div style="width: 100%; text-align:start; padding: 5px 0px">
+                    {JSON.stringify(item.citing)}
+                  </div>
+                </Link>
+                <div
+                  style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
+                >
+                  <div style="width: 50px; display:flex; gap: 15px">
+                    <div><Fa icon={faComment} /></div>
+                    <div>{item.replies.length}</div>
+                  </div>
+                  <div style="width: 50px; display:flex; gap: 15px">
+                    <div><Fa icon={faRetweet} /></div>
+                    <div>0</div>
+                  </div>
+                  <div style="width: 50px; display:flex; gap: 15px">
+                    <div><Fa icon={faHeart} /></div>
+                    <div>{item.likes.length}</div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          {:else}
+            <div
+              style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 1px solid grey"
+            >
+              <div style="padding: 5px; margin: 5px; height: 100%">
+                <a href={`/profile/${item.author.principal}`}>
+                  <img
+                    src={item.author.picture}
+                    alt="avatar"
+                    style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
+                  />
+                </a>
+              </div>
+              <div
+                style="flex-grow: 1; justify-content: start; text-align:start"
+              >
+                <div style="display:flex; gap: 5px;">
+                  <div>
+                    <a href={`/profile/${item.author.principal}`}
+                      >{item.author.name}</a
+                    >
+                  </div>
+                  <div style="color:grey">
+                    <a
+                      href={`/profile/${item.author.principal}`}
+                      style="color:grey"
+                    >
+                      @{item.author.handle}
+                    </a>
+                  </div>
+                  <div style="color:grey">
+                    - {parseTwitterDate(parseInt(item.createdAt) / 1_000_000)}
+                  </div>
+                </div>
+                <Link to={`/profile/post/${item.id}#main`} style="width: 100%">
+                  <div style="width: 100%; text-align:start; padding: 5px 0px">
+                    {item.content}
+                  </div>
+                </Link>
+                <div
+                  style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
+                >
+                  <div style="width: 50px; display:flex; gap: 15px">
+                    <div><Fa icon={faComment} /></div>
+                    <div>{item.replies.length}</div>
+                  </div>
+                  <div style="width: 50px; display:flex; gap: 15px">
+                    <div><Fa icon={faRetweet} /></div>
+                    <div>0</div>
+                  </div>
+                  <div style="width: 50px; display:flex; gap: 15px">
+                    <div><Fa icon={faHeart} /></div>
+                    <div>{item.likes.length}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {/if}
         {:else}
           <div
             style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center;"

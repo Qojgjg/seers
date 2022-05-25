@@ -100,6 +100,17 @@ type ThreadStable =
    main: PostStable;
    replies: vec PostStable;
  };
+type Retweet = 
+ record {
+   author: UserData;
+   content: text;
+   createdAt: Time;
+   id: nat32;
+   likes: vec Like;
+   postType: PostType;
+   replies: vec nat32;
+   retweets: vec nat32;
+ };
 type Result_8 = 
  variant {
    err: MarketError;
@@ -157,6 +168,7 @@ type PostType =
 type PostStable = 
  record {
    author: UserData;
+   citing: opt Retweet;
    content: text;
    createdAt: Time;
    id: nat32;
