@@ -48,7 +48,7 @@
         bind:value={comment}
         rows="5"
         style="height: auto; width: 95%; font-size: 1.3em; background: black;color:white;border: 0px solid rgb(90, 58, 81); padding: 10px"
-        placeholder="Please share your insights. You can use markdown."
+        placeholder="Please share your thoughts."
       />
       <div style="display:flex; justify-content: right; width: 95%">
         {#if principal === ""}
