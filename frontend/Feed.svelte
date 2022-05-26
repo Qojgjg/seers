@@ -302,6 +302,92 @@
     style="width: 100%; display:flex; justify-content:center; flex-direction:column; align-items:center; gap: 10px"
   >
     <div class="rowUser">
+      <div
+        style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 1px solid grey"
+      >
+        <div style="padding: 5px; margin: 5px; height: 100%">
+          <a href={`/profile/principal`}>
+            <img
+              src="http://pa1.narvii.com/6694/f16bc252592bb4f3dc37520e28e16a06ee8dda18_00.gif"
+              alt="avatar"
+              style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
+            />
+          </a>
+        </div>
+        <div style="flex-grow: 1; justify-content: start; text-align:start">
+          <div style="display:flex; gap: 5px;">
+            <div>
+              <a href={`/profile/principal`}>Motoko</a>
+            </div>
+            <div style="color:grey">
+              <a href={`/profile/principal`} style="color:grey"> @motoko </a>
+            </div>
+            <div style="color:grey">
+              - {parseTwitterDate(parseInt("4200000000000000000") / 1_000_000)}
+            </div>
+            <div style="color:grey">- Retweeted</div>
+          </div>
+          <Link to={`/profile/post/10#main`} style="width: 100%">
+            <div style="width: 100%; text-align:start; padding: 5px 0px">
+              What will be the price of ETH on September 2022?
+            </div>
+          </Link>
+          <div>
+            <div style="width: 100%; display:flex">
+              <div
+                style="background: skyblue; width: 80%; padding: 5px; margin: 2px; border: 1px solid rgb(90, 58, 81); border-radius: 5px; color:black"
+              >
+                <span style="width: 50px">-></span> Less than 3k
+              </div>
+              <div
+                style="flex-grow: 1; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
+              >
+                0.80 &Sigma;
+              </div>
+            </div>
+            <div style="width: 100%; display:flex">
+              <div
+                style="background: pink; width: 20%; padding: 5px; margin: 2px; border: 1px solid grey; border-radius: 5px; color:black"
+              >
+                <span style="min-width: 200px">&nbsp;</span> More than 3k
+              </div>
+              <div
+                style="flex-grow: 1; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
+              >
+                0.20 &Sigma;
+              </div>
+            </div>
+            <div
+              style="display:flex; text-align:end; justify-content:start; flex-grow: 1"
+            >
+              <button
+                class="btn-grad"
+                style="background: black; padding: 5px; margin: 15px 0px; color: white"
+                on:click={signIn}>Buy</button
+              >
+              <div style="text-align:end;color:red">
+                {errorResponse}
+              </div>
+            </div>
+          </div>
+          <div
+            style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
+          >
+            <div style="width: 50px; display:flex; gap: 15px">
+              <div><Fa icon={faComment} /></div>
+              <div>15</div>
+            </div>
+            <div style="width: 50px; display:flex; gap: 15px">
+              <div><Fa icon={faRetweet} /></div>
+              <div>40</div>
+            </div>
+            <div style="width: 50px; display:flex; gap: 15px">
+              <div><Fa icon={faHeart} /></div>
+              <div>80</div>
+            </div>
+          </div>
+        </div>
+      </div>
       {#each feed as item, i}
         {#if i != feed.length - 1}
           {#if item.citing.length > 0}
