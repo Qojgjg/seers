@@ -102,13 +102,13 @@
         placeholder="Ask a question..."
       />
       <div
-        style="display:flex; width: 100%; height: 200px; border: 2px solid grey; border-radius: 10px"
+        style="display:flex; width: 100%; height: 200px; border: 1px solid rgb(47, 51, 54);; border-radius: 16px"
       >
         <div
           style="display: flex; flex-direction:column; flex-grow: 1; justify-content:space-evenly"
         >
           <div
-            style="height: 50px; border: 2px solid grey; border-radius:10px; padding: 5px; margin: 15px"
+            style="height: 50px; border: 1px solid rgb(51, 54, 57); border-radius:4px; padding: 5px; margin: 15px"
           >
             <input
               type="text"
@@ -117,7 +117,7 @@
             />
           </div>
           <div
-            style="height: 50px; border: 2px solid grey; border-radius: 10px; padding: 5px; margin: 15px; "
+            style="height: 50px; border: 1px solid rgb(51, 54, 57); border-radius: 4px; padding: 5px; margin: 15px; "
           >
             <input
               type="text"
@@ -129,7 +129,7 @@
         <div
           style="width: 50px; height: 100%; display:flex; justify-content:center; align-items:flex-end; "
         >
-          <div style="height: 50px"><Fa icon={faPlus} scale={1.3} /></div>
+          <div style="height: 62px"><Fa icon={faPlus} scale={1.3} /></div>
         </div>
       </div>
       <div style="display:flex">
