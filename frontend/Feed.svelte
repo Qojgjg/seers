@@ -8,8 +8,9 @@
     faHeart,
     faChartBar,
     faImage,
+    faFilePdf,
   } from "@fortawesome/free-regular-svg-icons"
-  import { faRetweet, faPlus } from "@fortawesome/free-solid-svg-icons"
+  import { faRetweet, faPlus, faVideo } from "@fortawesome/free-solid-svg-icons"
   import inf from "./assets/inf.gif"
 
   export let auth
@@ -256,12 +257,28 @@
         >
           <Fa icon={faChartBar} scale={1.2} />
         </div>
+        <div
+          style="display:flex; text-align:center; align-items:center; width: 70px"
+          on:click={() => {
+            showBetForm = showBetForm ? false : true
+          }}
+        >
+          <Fa icon={faFilePdf} scale={1.2} />
+        </div>
+        <div
+          style="display:flex; text-align:center; align-items:center; width: 70px"
+          on:click={() => {
+            showBetForm = showBetForm ? false : true
+          }}
+        >
+          <Fa icon={faVideo} scale={1.2} />
+        </div>
 
         {#if principal === ""}
           <div
             style="display:flex; text-align:end; justify-content:end; flex-grow: 1"
           >
-            <button class="btn-grad" on:click={signIn}>Login</button>
+            <button class="btn-grad" on:click={signIn}>Post</button>
             <div style="text-align:end;color:red">
               {errorResponse}
             </div>
@@ -372,7 +389,7 @@
               <button
                 class="btn-grad"
                 style="background: black; padding: 5px; margin: 15px 0px; color: white"
-                on:click={signIn}>Buy</button
+                on:click={signIn}>Bet</button
               >
               <div style="text-align:end;color:red">
                 {errorResponse}
