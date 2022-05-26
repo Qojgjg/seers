@@ -325,10 +325,10 @@
             <div style="color:grey">
               - {parseTwitterDate(parseInt("4200000000000000000") / 1_000_000)}
             </div>
-            <div style="color:grey">- Retweeted</div>
+            <div style="color:grey">- retweeted by @marcio</div>
           </div>
           <Link to={`/profile/post/10#main`} style="width: 100%">
-            <div style="width: 100%; text-align:start; padding: 5px 0px">
+            <div style="width: 100%; text-align:start; padding: 15px 0px">
               What will be the price of ETH on September 2022?
             </div>
           </Link>
@@ -384,6 +384,113 @@
             <div style="width: 50px; display:flex; gap: 15px">
               <div><Fa icon={faHeart} /></div>
               <div>80</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 1px solid grey"
+      >
+        <div style="padding: 5px; margin: 5px; height: 100%">
+          <a href={`/profile/principal`}>
+            <img
+              src="http://pa1.narvii.com/6694/f16bc252592bb4f3dc37520e28e16a06ee8dda18_00.gif"
+              alt="avatar"
+              style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
+            />
+          </a>
+        </div>
+        <div style="flex-grow: 1; justify-content: start; text-align:start">
+          <div style="display:flex; gap: 5px;">
+            <div>
+              <a href={`/profile/principal`}>Motoko</a>
+            </div>
+            <div style="color:grey">
+              <a href={`/profile/principal`} style="color:grey"> @motoko </a>
+            </div>
+            <div style="color:grey">
+              - {parseTwitterDate(parseInt("4200000000000000000") / 1_000_000)}
+            </div>
+            <div style="color:grey">- retweeted by @dom</div>
+          </div>
+          <Link to={`/profile/post/10#main`} style="width: 100%">
+            <div style="width: 100%; text-align:start; padding: 15px 0px">
+              New pic, hope you like my new glasses.
+            </div>
+          </Link>
+          <div>
+            <img
+              src="https://es.web.img3.acsta.net/newsv7/19/06/14/14/41/2417858.jpg"
+              alt="motoko"
+              style="width: 80%; border-radius: 15px"
+            />
+          </div>
+          <div
+            style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
+          >
+            <div style="width: 50px; display:flex; gap: 15px">
+              <div><Fa icon={faComment} /></div>
+              <div>300</div>
+            </div>
+            <div style="width: 50px; display:flex; gap: 15px">
+              <div><Fa icon={faRetweet} /></div>
+              <div>20</div>
+            </div>
+            <div style="width: 50px; display:flex; gap: 15px">
+              <div><Fa icon={faHeart} /></div>
+              <div>30</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 1px solid grey"
+      >
+        <div style="padding: 5px; margin: 5px; height: 100%">
+          <a href={`/profile/principal`}>
+            <img
+              src="http://pa1.narvii.com/6694/f16bc252592bb4f3dc37520e28e16a06ee8dda18_00.gif"
+              alt="avatar"
+              style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
+            />
+          </a>
+        </div>
+        <div style="flex-grow: 1; justify-content: start; text-align:start">
+          <div style="display:flex; gap: 5px;">
+            <div>
+              <a href={`/profile/principal`}>Motoko</a>
+            </div>
+            <div style="color:grey">
+              <a href={`/profile/principal`} style="color:grey"> @motoko </a>
+            </div>
+            <div style="color:grey">
+              - {parseTwitterDate(parseInt("4200000000000000000") / 1_000_000)}
+            </div>
+            <div style="color:grey">- retweeted by @dom</div>
+          </div>
+          <Link to={`/profile/post/10#main`} style="width: 100%">
+            <div style="width: 100%; text-align:start; padding: 15px 0px">
+              Binance Bahrain has received a Category 4 license as a
+              crypto-asset service provider (CASP) from the Central Bank of
+              Bahrain (CBB). The Category 4 license will allow Binance Bahrain
+              to provide a full range of crypto-asset exchange services.
+              https://binance.com/en/blog/ecosys
+            </div>
+          </Link>
+          <div
+            style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
+          >
+            <div style="width: 50px; display:flex; gap: 15px">
+              <div><Fa icon={faComment} /></div>
+              <div>300</div>
+            </div>
+            <div style="width: 50px; display:flex; gap: 15px">
+              <div><Fa icon={faRetweet} /></div>
+              <div>20</div>
+            </div>
+            <div style="width: 50px; display:flex; gap: 15px">
+              <div><Fa icon={faHeart} /></div>
+              <div>30</div>
             </div>
           </div>
         </div>
