@@ -7,6 +7,7 @@
     faComment,
     faHeart,
     faChartBar,
+    faImage,
   } from "@fortawesome/free-regular-svg-icons"
   import { faRetweet, faPlus } from "@fortawesome/free-solid-svg-icons"
   import inf from "./assets/inf.gif"
@@ -240,7 +241,15 @@
       {/if}
       <div style="display:flex">
         <div
-          style="display:flex; text-align:center; align-items:center; width: 50px"
+          style="display:flex; text-align:center; align-items:center; width: 70px; margin-left: 50px "
+          on:click={() => {
+            showBetForm = showBetForm ? false : true
+          }}
+        >
+          <Fa icon={faImage} scale={1.2} />
+        </div>
+        <div
+          style="display:flex; text-align:center; align-items:center; width: 70px"
           on:click={() => {
             showBetForm = showBetForm ? false : true
           }}
@@ -335,7 +344,7 @@
           <div>
             <div style="width: 100%; display:flex">
               <div
-                style="background: skyblue; width: 80%; padding: 5px; margin: 2px; border: 1px solid rgb(90, 58, 81); border-radius: 5px; color:black"
+                style="background: #39CCCC; width: 80%; padding: 5px; margin: 2px; border: 1px solid black; border-radius: 5px; color:black"
               >
                 <span style="width: 50px">-></span> Less than 3k
               </div>
@@ -347,7 +356,7 @@
             </div>
             <div style="width: 100%; display:flex">
               <div
-                style="background: pink; width: 20%; padding: 5px; margin: 2px; border: 1px solid grey; border-radius: 5px; color:black"
+                style="background: #01FF70; width: 20%; padding: 5px; margin: 2px; border: 1px solid black; border-radius: 5px; color:black"
               >
                 <span style="min-width: 200px">&nbsp;</span> More than 3k
               </div>
@@ -419,6 +428,15 @@
             </div>
           </Link>
           <div>
+            <!-- <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/uBFdSyDkPOU"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            /> -->
             <img
               src="https://es.web.img3.acsta.net/newsv7/19/06/14/14/41/2417858.jpg"
               alt="motoko"
