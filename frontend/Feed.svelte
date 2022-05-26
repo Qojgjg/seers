@@ -19,6 +19,10 @@
   let errorResponse = ""
   let feed = []
   let processing = false
+  let outcomes = [
+    { id: 1, label: "Outcome 1", value: "" },
+    { id: 2, label: "Outcome 2", value: "" },
+  ]
 
   const submitPost = async () => {
     processing = true
@@ -102,34 +106,41 @@
         placeholder="Ask a question..."
       />
       <div
-        style="display:flex; width: 100%; height: 200px; border: 1px solid rgb(47, 51, 54);; border-radius: 16px"
+        style="display:flex; width: 100%; height: fit-content; border: 1px solid rgb(47, 51, 54);; border-radius: 16px; align-items:flex-end"
       >
         <div
           style="display: flex; flex-direction:column; flex-grow: 1; justify-content:space-evenly"
         >
-          <div
-            style="height: 50px; border: 1px solid rgb(51, 54, 57); border-radius:4px; padding: 5px; margin: 15px"
-          >
-            <input
-              type="text"
-              placeholder="Outcome 1"
-              style="background: black; border: 0px; width: 100%; height: 100%; color:white; font-size: 1.2em;"
-            />
-          </div>
-          <div
-            style="height: 50px; border: 1px solid rgb(51, 54, 57); border-radius: 4px; padding: 5px; margin: 15px; "
-          >
-            <input
-              type="text"
-              placeholder="Outcome 2"
-              style="background: black; border: 0px; width: 100%; height: 100%; color:white; font-size: 1.2em;"
-            />
-          </div>
+          {#each outcomes as outcome (outcome.id)}
+            <div
+              style="height: 50px; border: 1px solid rgb(51, 54, 57); border-radius:4px; padding: 5px; margin: 15px"
+            >
+              <input
+                bind:value={outcome.value}
+                type="text"
+                placeholder={outcome.label}
+                style="background: black; border: 0px; width: 100%; height: 100%; color:white; font-size: 1.2em;"
+              />
+            </div>
+          {/each}
         </div>
         <div
-          style="width: 50px; height: 100%; display:flex; justify-content:center; align-items:flex-end; "
+          style="width: 50px; height: 60px; display:flex; justify-content:center; align-items:flex-end; "
         >
-          <div style="height: 62px"><Fa icon={faPlus} scale={1.3} /></div>
+          <div
+            style="height: 100%"
+            on:click={() => {
+              outcomes.push({
+                id: outcomes.length + 1,
+                label: `Outcome ${outcomes.length + 1}`,
+                value: "",
+              })
+              outcomes = outcomes
+              console.log(outcomes)
+            }}
+          >
+            <Fa icon={faPlus} scale={1.3} />
+          </div>
         </div>
       </div>
       <div style="display:flex">
