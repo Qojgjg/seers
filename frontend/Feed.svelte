@@ -19,6 +19,7 @@
   let errorResponse = ""
   let feed = []
   let processing = false
+  let showBetForm = false
   let outcomes = [
     { id: 1, label: "Outcome 1", value: "" },
     { id: 2, label: "Outcome 2", value: "" },
@@ -103,98 +104,103 @@
         bind:value={post}
         rows="3"
         style="width: 100%; font-size: 1.3em; background: black;color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
-        placeholder="Ask a question..."
+        placeholder={showBetForm ? "Ask a question..." : "What's happening?"}
       />
-      <div
-        style="display:flex; flex-direction: column; width: 100%; height: fit-content; border: 1px solid rgb(47, 51, 54); border-radius: 16px; align-items:flex-end"
-      >
+      {#if showBetForm}
         <div
-          style="display:flex; width: 100%; height: fit-content; border: 0px solid rgb(47, 51, 54); align-items:flex-end"
+          style="display:flex; flex-direction: column; width: 100%; height: fit-content; border: 1px solid rgb(47, 51, 54); border-radius: 16px; align-items:flex-end"
         >
           <div
-            style="display: flex; flex-direction:column; flex-grow: 1; justify-content:space-evenly"
+            style="display:flex; width: 100%; height: fit-content; border: 0px solid rgb(47, 51, 54); align-items:flex-end"
           >
-            {#each outcomes as outcome (outcome.id)}
+            <div
+              style="display: flex; flex-direction:column; flex-grow: 1; justify-content:space-evenly"
+            >
+              {#each outcomes as outcome (outcome.id)}
+                <div
+                  style="height: 50px; border: 1px solid rgb(51, 54, 57); border-radius:4px; padding: 5px; margin: 15px"
+                >
+                  <input
+                    bind:value={outcome.value}
+                    type="text"
+                    placeholder={outcome.label}
+                    style="background: black; border: 0px; width: 100%; height: 100%; color:white; font-size: 1.2em;"
+                  />
+                </div>
+              {/each}
+            </div>
+
+            <div
+              style="width: 50px; height: 60px  ; display:flex; justify-content:center; align-items:flex-end; "
+            >
               <div
-                style="height: 50px; border: 1px solid rgb(51, 54, 57); border-radius:4px; padding: 5px; margin: 15px"
+                style="height: 100%"
+                on:click={() => {
+                  outcomes.push({
+                    id: outcomes.length + 1,
+                    label: `Outcome ${outcomes.length + 1}`,
+                    value: "",
+                  })
+                  outcomes = outcomes
+                  console.log(outcomes)
+                }}
               >
+                <Fa icon={faPlus} scale={1.3} />
+              </div>
+            </div>
+          </div>
+          <div
+            style="display:flex; width: 100%; height: 70px; border-top: 1px solid rgb(47, 51, 54); align-items:flex-end;"
+          >
+            <div
+              style="display:flex; width: 100%; height: 100%; padding: 0px 5px;"
+            >
+              <div
+                style="width: 50%; height: 100%; border-right: 1px solid rgb(47, 51, 54); display:flex; flex-direction:column; justify-content:center; padding: 0px 10px"
+              >
+                <label for="start" style="width: 100%; color:grey"
+                  >Start date:</label
+                >
+
                 <input
-                  bind:value={outcome.value}
-                  type="text"
-                  placeholder={outcome.label}
-                  style="background: black; border: 0px; width: 100%; height: 100%; color:white; font-size: 1.2em;"
+                  type="date"
+                  id="start"
+                  name="trip-start"
+                  value="2022-01-01"
+                  min="2022-01-01"
+                  max="2050-01-01"
+                  style="background: black; color:grey; border: 0px; font-size: 1.5em"
                 />
               </div>
-            {/each}
-          </div>
+              <div
+                style="width: 50%; height: 100%; border-right: 0px solid rgb(47, 51, 54); display:flex; flex-direction:column; justify-content:center; padding: 0px 10px"
+              >
+                <label for="start" style="width: 100%; color:grey"
+                  >End date:</label
+                >
 
-          <div
-            style="width: 50px; height: 60px  ; display:flex; justify-content:center; align-items:flex-end; "
-          >
-            <div
-              style="height: 100%"
-              on:click={() => {
-                outcomes.push({
-                  id: outcomes.length + 1,
-                  label: `Outcome ${outcomes.length + 1}`,
-                  value: "",
-                })
-                outcomes = outcomes
-                console.log(outcomes)
-              }}
-            >
-              <Fa icon={faPlus} scale={1.3} />
+                <input
+                  type="date"
+                  id="end"
+                  name="trip-end"
+                  value="2022-01-01"
+                  min="2022-01-01"
+                  max="2050-01-01"
+                  style="background: black; color:grey; border: 0px; font-size: 1.5em"
+                />
+              </div>
             </div>
           </div>
         </div>
-        <div
-          style="display:flex; width: 100%; height: 70px; border-top: 1px solid rgb(47, 51, 54); align-items:flex-end;"
-        >
-          <div
-            style="display:flex; width: 100%; height: 100%; padding: 0px 5px;"
-          >
-            <div
-              style="width: 50%; height: 100%; border-right: 1px solid rgb(47, 51, 54); display:flex; flex-direction:column; justify-content:center; padding: 0px 10px"
-            >
-              <label for="start" style="width: 100%; color:grey"
-                >Start date:</label
-              >
-
-              <input
-                type="date"
-                id="start"
-                name="trip-start"
-                value="2022-01-01"
-                min="2022-01-01"
-                max="2050-01-01"
-                style="background: black; color:grey; border: 0px; font-size: 1.5em"
-              />
-            </div>
-            <div
-              style="width: 50%; height: 100%; border-right: 0px solid rgb(47, 51, 54); display:flex; flex-direction:column; justify-content:center; padding: 0px 10px"
-            >
-              <label for="start" style="width: 100%; color:grey"
-                >End date:</label
-              >
-
-              <input
-                type="date"
-                id="end"
-                name="trip-end"
-                value="2022-01-01"
-                min="2022-01-01"
-                max="2050-01-01"
-                style="background: black; color:grey; border: 0px; font-size: 1.5em"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      {/if}
       <div style="display:flex">
         <div
           style="display:flex; text-align:center; align-items:center; width: 50px"
+          on:click={() => {
+            showBetForm = showBetForm ? false : true
+          }}
         >
-          <Fa icon={faChartBar} />
+          <Fa icon={faChartBar} scale={1.2} />
         </div>
 
         {#if principal === ""}
