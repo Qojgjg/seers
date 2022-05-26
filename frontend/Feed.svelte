@@ -20,6 +20,8 @@
   let feed = []
   let processing = false
   let showBetForm = false
+  let startDate = ""
+  let endDate = ""
   let outcomes = [
     { id: 1, label: "Outcome 1", value: "" },
     { id: 2, label: "Outcome 2", value: "" },
@@ -43,6 +45,51 @@
     processing = false
     post = ""
     getFeed()
+  }
+
+  const splitCamelCaseToString = (s) => {
+    return s
+      .split(/(?=[A-Z])/)
+      .map((p) => {
+        return p[0].toUpperCase() + p.slice(1)
+      })
+      .join(" ")
+  }
+
+  const submitMarket = async () => {
+    processing = true
+    let labels = outcomes.map((o) => o.value)
+
+    let i = 0
+    let probabilities = []
+    for (; i < labels.length; i++) {
+      probabilities.push(1.0 / labels.length)
+    }
+
+    const marketInitData = {
+      id: 0,
+      title: post,
+      description: post,
+      labels,
+      images: [],
+      probabilities: probabilities,
+      category: { crypto: null },
+      liquidity: 1000,
+      startDate: Date.parse(startDate) * 1_000_000,
+      endDate: Date.parse(endDate) * 1_000_000,
+      imageUrl: "nothing",
+      collateralType: { seers: null },
+      author: "",
+    }
+    const resp = await $auth.actor.createMarket(marketInitData)
+    processing = false
+
+    if (resp["err"]) {
+      errorResponse =
+        "Error: " + splitCamelCaseToString(Object.keys(resp["err"]).toString())
+    } else {
+      console.log(resp)
+    }
   }
 
   const getFeed = async () => {
@@ -165,8 +212,7 @@
                 <input
                   type="date"
                   id="start"
-                  name="trip-start"
-                  value="2022-01-01"
+                  bind:value={startDate}
                   min="2022-01-01"
                   max="2050-01-01"
                   style="background: black; color:grey; border: 0px; font-size: 1.5em"
@@ -182,8 +228,7 @@
                 <input
                   type="date"
                   id="end"
-                  name="trip-end"
-                  value="2022-01-01"
+                  bind:value={endDate}
                   min="2022-01-01"
                   max="2050-01-01"
                   style="background: black; color:grey; border: 0px; font-size: 1.5em"
@@ -235,7 +280,16 @@
           <div
             style="display:flex; text-align:end; justify-content:end; flex-grow: 1"
           >
-            <button class="btn-grad" on:click={submitPost}>Post</button>
+            <button
+              class="btn-grad"
+              on:click={() => {
+                if (showBetForm) {
+                  submitMarket()
+                } else {
+                  submitPost()
+                }
+              }}>Post</button
+            >
             <div style="text-align:end;color:red">
               {errorResponse}
             </div>
