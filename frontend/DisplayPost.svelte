@@ -122,6 +122,14 @@
           </div>
         </div>
       </div>
+    {:else if "image" in post.postType}
+      <div>
+        <img
+          src={post.image[0]}
+          alt="main"
+          style="width: 90%; border-radius: 15px; object-fit:cover"
+        />
+      </div>
     {/if}
     <div
       style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
