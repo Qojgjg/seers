@@ -65,7 +65,10 @@ export interface Market {
   'setUpdating' : ActorMethod<[boolean], undefined>,
   'submitForecast' : ActorMethod<[number, Forecast], Result_2>,
   'submitLike' : ActorMethod<[number], Result_1>,
-  'submitPost' : ActorMethod<[PostInitData], Result>,
+  'submitPost' : ActorMethod<
+    [PostInitData, [] | [MarketInitData], [] | [string]],
+    Result,
+  >,
 }
 export type MarketCategory = { 'any' : null } |
   { 'entertainment' : null } |

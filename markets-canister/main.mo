@@ -398,7 +398,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Submit a post of any type.
-    public shared(msg) func submitPost(initData: Post.PostInitData): async Result.Result<Post.PostStable, Post.PostError> {
+    public shared(msg) func submitPost(initData: Post.PostInitData, marketInitData: ?M.MarketInitData, imageInitData: ?Text): async Result.Result<Post.PostStable, Post.PostError> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -483,7 +483,16 @@ shared({ caller = initializer }) actor class Market() = this {
                             };
                         };
                     };
-                    case (#image(imageId)) {
+                    case (#image(_)) {
+                        let imageId = Nat32.fromNat(imageMap.size());
+                        switch (imageInitData) {
+                            case null {
+                                return #err(#imageNotFound);
+                            };
+                            case (?imageUrl) {
+                                imageMap.put(imageId, imageUrl);
+                            };
+                        };
                         switch (imageMap.get(imageId)) {
                             case null {
                                 return #err(#imageNotFound);
@@ -508,7 +517,24 @@ shared({ caller = initializer }) actor class Market() = this {
                             };
                         };
                     };
-                    case (#market(marketId)) {
+                    case (#market(_)) {
+                        var marketId: Nat32 = 0;
+
+                        switch (marketInitData) {
+                            case null {
+                                return #err(#marketNotFound);
+                            };
+                            case (?market) {
+                                switch (_createMarket(caller, market)) {
+                                    case (#err(_)) {
+                                        return #err(#marketNotFound);
+                                    };
+                                    case (#ok(marketStable)) {
+                                        marketId := marketStable.id;
+                                    };
+                                };
+                            };
+                        };
                         switch (marketMap.get(marketId)) {
                             case null {
                                 return #err(#marketNotFound);
