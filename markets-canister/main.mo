@@ -659,6 +659,17 @@ shared({ caller = initializer }) actor class Market() = this {
                                     current := post;
                                 };
                             };
+                        };
+                        case (#image(_)) {
+                            switch (postMap.get(cited)) {
+                                case null {
+                                    // This case shouldn't happen, on delete we leave a dummy.
+                                    exit := true;
+                                };
+                                case (?post) {
+                                    current := post;
+                                };
+                            };
                         };    
                     };
                 };

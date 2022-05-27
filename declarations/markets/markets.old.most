@@ -84,12 +84,15 @@ type PostStable =
     content : Text;
     createdAt : Time;
     id : Nat32;
+    image : ?Text;
     likes : [Like];
+    market : ?MarketStable;
     postType : PostType;
     replies : [Nat32];
     retweets : [Nat32]
   };
-type PostType = {#post; #reply : Nat32; #retweet : Nat32};
+type PostType =
+  {#image : Nat32; #market : Nat32; #post; #reply : Nat32; #retweet : Nat32};
 type Retweet =
   {
     author : UserData;

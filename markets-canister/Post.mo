@@ -19,8 +19,7 @@ module {
     };
 
     public type PostType = {
-        #post;
-        #reply: Nat32;
+        #simple;
         #retweet: Nat32;
         #market: Nat32;
         #image: Nat32;
@@ -30,6 +29,7 @@ module {
         id: Nat32;
         author: Utils.UserData;
         content: Text;
+        parent: Nat32;
         postType: PostType;
     };
 
@@ -43,6 +43,7 @@ module {
         public var id: Nat32 = initData.id;
         public var author: Utils.UserData = initData.author;
         public var content: Text = initData.content;
+        public var parent: Nat32 = initData.parent;
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var retweets: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var citing: ?Retweet = null;
@@ -57,6 +58,7 @@ module {
                 id = id;
                 author = author;
                 content = content;
+                parent = parent;
                 replies = replies.toArray();
                 retweets = retweets.toArray();
                 citing = citing;
@@ -77,6 +79,7 @@ module {
         id: Nat32;
         author: Utils.UserData;
         content: Text;
+        parent: Nat32;
         replies: [Nat32];
         retweets: [Nat32];
         likes: [Like.Like];
@@ -88,6 +91,7 @@ module {
         id: Nat32;
         author: Utils.UserData;
         content: Text;
+        parent: Nat32;
         replies: [Nat32];
         retweets: [Nat32];
         citing: ?Retweet;
@@ -103,6 +107,7 @@ module {
             id = ps.id;
             author = ps.author;
             content = ps.content;
+            parent = ps.parent;
             postType = ps.postType;
         };
 

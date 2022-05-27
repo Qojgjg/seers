@@ -161,6 +161,8 @@ type Result =
  };
 type PostType = 
  variant {
+   image: nat32;
+   market: nat32;
    post;
    reply: nat32;
    retweet: nat32;
@@ -172,7 +174,9 @@ type PostStable =
    content: text;
    createdAt: Time;
    id: nat32;
+   image: opt text;
    likes: vec Like;
+   market: opt MarketStable;
    postType: PostType;
    replies: vec nat32;
    retweets: vec nat32;
