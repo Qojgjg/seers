@@ -191,6 +191,8 @@ type PostInitData =
 type PostError = 
  variant {
    alreadyLiked;
+   imageNotFound;
+   marketNotFound;
    notLoggedIn;
    postDoesNotExist;
    userDoesNotExist;

@@ -251,6 +251,8 @@ export const idlFactory = ({ IDL }) => {
   const Result_4 = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
   const PostError = IDL.Variant({
     'notLoggedIn' : IDL.Null,
+    'marketNotFound' : IDL.Null,
+    'imageNotFound' : IDL.Null,
     'alreadyLiked' : IDL.Null,
     'postDoesNotExist' : IDL.Null,
     'userDoesNotExist' : IDL.Null,

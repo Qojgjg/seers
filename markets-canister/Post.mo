@@ -14,6 +14,8 @@ module {
         #postDoesNotExist;
         #userDoesNotExist;
         #alreadyLiked;
+        #marketNotFound;
+        #imageNotFound;
     };
 
     public type PostType = {

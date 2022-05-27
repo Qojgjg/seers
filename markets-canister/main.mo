@@ -483,20 +483,7 @@ shared({ caller = initializer }) actor class Market() = this {
                     case (#image(imageId)) {
                         switch (imageMap.get(imageId)) {
                             case null {
-                                let newInitData: Post.PostInitData = {
-                                    id = id;
-                                    author = authorData;
-                                    content = initData.content;
-                                    postType = #post;
-                                };
-
-                                let post: Post.Post = Post.Post(newInitData);
-                                
-                                author.posts.add(id);
-                                postMap.put(id, post);
-                                feed.add(post);
-
-                                return #ok(post.freeze());
+                                return #err(#imageNotFound);
                             };
                             case (?image) {
                                 let newInitData: Post.PostInitData = {
@@ -508,6 +495,30 @@ shared({ caller = initializer }) actor class Market() = this {
 
                                 var post: Post.Post = Post.Post(newInitData);
                                 post.image := ?image;
+
+                                author.posts.add(id);
+                                postMap.put(id, post);
+                                feed.add(post);
+
+                                return #ok(post.freeze());
+                            };
+                        };
+                    };
+                    case (#market(marketId)) {
+                        switch (marketMap.get(marketId)) {
+                            case null {
+                                return #err(#marketNotFound);
+                            };
+                            case (?market) {
+                                let newInitData: Post.PostInitData = {
+                                    id = id;
+                                    author = authorData;
+                                    content = initData.content;
+                                    postType = #market(marketId);
+                                };
+
+                                var post: Post.Post = Post.Post(newInitData);
+                                post.market := ?market;
 
                                 author.posts.add(id);
                                 postMap.put(id, post);

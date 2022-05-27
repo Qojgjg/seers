@@ -145,6 +145,8 @@ export type MarketState = { 'any' : null } |
   { 'open' : null } |
   { 'approved' : null };
 export type PostError = { 'notLoggedIn' : null } |
+  { 'marketNotFound' : null } |
+  { 'imageNotFound' : null } |
   { 'alreadyLiked' : null } |
   { 'postDoesNotExist' : null } |
   { 'userDoesNotExist' : null };
