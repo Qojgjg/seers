@@ -320,15 +320,9 @@ shared({ caller = initializer }) actor class Market() = this {
         return #ok(());
     };
 
-    // Create a new AMM market.
-    public shared(msg) func createMarket(marketInitData: M.MarketInitData): async Result.Result<M.MarketStable, M.MarketError> {
-        assert(not updating);
-        let author = Principal.toText(msg.caller);        
-        
-        if (author == anon) {
-            return #err(#callerIsAnon);
-        };
 
+    private func _createMarket(author: Text, marketInitData: M.MarketInitData): Result.Result<M.MarketStable, M.MarketError> {
+        
         switch (checkMarketInitData(marketInitData)) {
             case (#err(e)) {
                 return #err(e);
@@ -389,6 +383,18 @@ shared({ caller = initializer }) actor class Market() = this {
         marketMap.put(marketId, newMarket);
 
         return #ok(newMarket.freeze());
+    };
+
+    // Create a new AMM market.
+    public shared(msg) func createMarket(marketInitData: M.MarketInitData): async Result.Result<M.MarketStable, M.MarketError> {
+        assert(not updating);
+        let author = Principal.toText(msg.caller);        
+        
+        if (author == anon) {
+            return #err(#callerIsAnon);
+        };
+
+        return _createMarket(author, marketInitData);
     };
 
     // Submit a post of any type.

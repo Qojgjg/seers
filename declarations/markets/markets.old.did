@@ -106,10 +106,8 @@ type Retweet =
    content: text;
    createdAt: Time;
    id: nat32;
-   likes: vec Like;
+   parent: nat32;
    postType: PostType;
-   replies: vec nat32;
-   retweets: vec nat32;
  };
 type Result_8 = 
  variant {
@@ -163,9 +161,8 @@ type PostType =
  variant {
    image: nat32;
    market: nat32;
-   post;
-   reply: nat32;
    retweet: nat32;
+   simple;
  };
 type PostStable = 
  record {
@@ -177,6 +174,7 @@ type PostStable =
    image: opt text;
    likes: vec Like;
    market: opt MarketStable;
+   parent: nat32;
    postType: PostType;
    replies: vec nat32;
    retweets: vec nat32;
@@ -186,6 +184,7 @@ type PostInitData =
    author: UserData;
    content: text;
    id: nat32;
+   parent: nat32;
    postType: PostType;
  };
 type PostError = 
@@ -194,6 +193,7 @@ type PostError =
    imageNotFound;
    marketNotFound;
    notLoggedIn;
+   parentDoesNotExist;
    postDoesNotExist;
    userDoesNotExist;
  };
