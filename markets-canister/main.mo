@@ -75,6 +75,7 @@ shared({ caller = initializer }) actor class Market() = this {
     private stable var stableMarkets: [(Nat32, M.MarketStable)] = [];
     private stable var stableFeed: [Post.PostStable] = [];
     private stable var stablePosts: [(Nat32, Post.PostStable)] = [];
+    private stable var stableImages: [(Nat32, Text)] = [];
 
     private var feed: Buffer.Buffer<Post.Post> = Buffer.Buffer<Post.Post>(10);
     
@@ -145,6 +146,23 @@ shared({ caller = initializer }) actor class Market() = this {
         
         Map.fromIter<Nat32, Post.Post>(
             postIter,
+            10, 
+            Nat32.equal, 
+            func (x: Nat32): Nat32 { x } 
+        )
+    };
+
+    private var imageMap: Map.HashMap<Nat32, Text> = do {
+        let imageIter = Iter.map<(Nat32, Text), (Nat32, Text)>(
+            stableImages.vals(), 
+            func (e: (Nat32, Text)): (Nat32, Text) {
+                // let v = Post.unFreeze(e.1);
+                return e;
+            }
+        );
+        
+        Map.fromIter<Nat32, Text>(
+            imageIter,
             10, 
             Nat32.equal, 
             func (x: Nat32): Nat32 { x } 
@@ -444,7 +462,6 @@ shared({ caller = initializer }) actor class Market() = this {
                                 return #err(#postDoesNotExist);
                             };
                             case (?citedPost) {
-                                
                                 let newInitData: Post.PostInitData = {
                                     id = id;
                                     author = authorData;
@@ -455,6 +472,43 @@ shared({ caller = initializer }) actor class Market() = this {
                                 let post: Post.Post = Post.Post(newInitData);
                                 
                                 citedPost.retweets.add(id);
+                                author.posts.add(id);
+                                postMap.put(id, post);
+                                feed.add(post);
+
+                                return #ok(post.freeze());
+                            };
+                        };
+                    };
+                    case (#image(imageId)) {
+                        switch (imageMap.get(imageId)) {
+                            case null {
+                                let newInitData: Post.PostInitData = {
+                                    id = id;
+                                    author = authorData;
+                                    content = initData.content;
+                                    postType = #post;
+                                };
+
+                                let post: Post.Post = Post.Post(newInitData);
+                                
+                                author.posts.add(id);
+                                postMap.put(id, post);
+                                feed.add(post);
+
+                                return #ok(post.freeze());
+                            };
+                            case (?image) {
+                                let newInitData: Post.PostInitData = {
+                                    id = id;
+                                    author = authorData;
+                                    content = initData.content;
+                                    postType = #image(imageId);
+                                };
+
+                                var post: Post.Post = Post.Post(newInitData);
+                                post.image := ?image;
+
                                 author.posts.add(id);
                                 postMap.put(id, post);
                                 feed.add(post);
