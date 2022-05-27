@@ -13,6 +13,7 @@
   export let post
 
   let errorResponse = ""
+  let processing = false
 
   const splitCamelCaseToString = (s) => {
     return s
@@ -57,6 +58,13 @@
     }
     return "on " + system_date
   }
+
+  const submitBuy = async (marketId, selected) => {
+    processing = true
+    const resp = await $auth.actor.buyOutcome(marketId, 100, selected, true)
+    processing = false
+    console.log(resp)
+  }
 </script>
 
 <div
@@ -94,29 +102,64 @@
     {#if "market" in post.postType}
       <div>
         {#each post.market[0].labels as label, i}
-          <div style="width: 100%; display:flex">
+          <div
+            style="width: 100%; display:flex; cursor:pointer; margin: 0; padding: 0;"
+          >
             <div
               style={`background: #39CCCC; width: ${
                 post.market[0].probabilities[i] * 100.0
               }%; padding: 5px; margin: 2px; border: 1px solid black; border-radius: 5px; color:black`}
             >
-              {label}
+              <button
+                style="all:unset; width: 100%"
+                on:click={() => {
+                  post.market[0].selected = i
+                }}
+              >
+                {label}
+              </button>
             </div>
             <div
               style="flex-grow: 1; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
             >
-              {post.market[0].probabilities[i]} &Sigma;
+              {post.market[0].probabilities[i].toFixed(2)} &Sigma;
             </div>
           </div>
         {/each}
         <div
           style="display:flex; text-align:end; justify-content:start; flex-grow: 1"
         >
-          <button
-            class="btn-grad"
-            style="background: black; padding: 5px; margin: 15px 0px; color: white"
-            on:click={signIn}>Bet</button
-          >
+          {#if processing}
+            <button
+              class="btn-grad"
+              style="background: black;width: 100px; margin: 15px 0px; color:white;overflow:hidden;"
+              on:click={() => {
+                if (principal === "") {
+                  signIn()
+                } else {
+                  submitBuy(post.market[0].id, post.market[0].selected)
+                }
+              }}
+            >
+              <img
+                src={inf}
+                alt="inf"
+                style="width: 150px; height: 400%; margin: -100%;"
+              />
+            </button>
+          {:else}
+            <button
+              class="btn-grad"
+              style="background: black; padding: 5px; margin: 15px 0px; color: white"
+              on:click={() => {
+                if (principal === "") {
+                  signIn()
+                } else {
+                  submitBuy(post.market[0].id, post.market[0].selected)
+                }
+              }}>Bet</button
+            >
+          {/if}
           <div style="text-align:end;color:red">
             {errorResponse}
           </div>
