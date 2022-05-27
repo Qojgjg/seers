@@ -12,6 +12,7 @@
   } from "@fortawesome/free-regular-svg-icons"
   import { faRetweet, faPlus, faVideo } from "@fortawesome/free-solid-svg-icons"
   import inf from "./assets/inf.gif"
+  import DisplayPost from "./DisplayPost.svelte"
 
   export let auth
   export let principal
@@ -40,9 +41,10 @@
         name: "",
       },
       content: post,
-      postType: { post: null },
+      parent: 0,
+      postType: { simple: null },
     }
-    const r = await $auth.actor.submitPost(initData)
+    const r = await $auth.actor.submitPost(initData, [], [])
     console.log(r)
     processing = false
     post = ""
@@ -123,12 +125,6 @@
     if (diff < 60) {
       return diff + "s"
     }
-    // if (diff < 40) {
-    //   return "half a minute ago"
-    // }
-    // if (diff < 60) {
-    //   return "less than a minute ago"
-    // }
     if (diff <= 90) {
       return "1m"
     }
@@ -340,7 +336,7 @@
     style="width: 100%; display:flex; justify-content:center; flex-direction:column; align-items:center; gap: 10px"
   >
     <div class="rowUser">
-      <div
+      <!-- <div
         style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 1px solid grey"
       >
         <div style="padding: 5px; margin: 5px; height: 100%">
@@ -425,8 +421,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div
+      </div> -->
+      <!-- <div
         style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 1px solid grey"
       >
         <div style="padding: 5px; margin: 5px; height: 100%">
@@ -457,15 +453,6 @@
             </div>
           </Link>
           <div>
-            <!-- <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/uBFdSyDkPOU"
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            /> -->
             <img
               src="https://es.web.img3.acsta.net/newsv7/19/06/14/14/41/2417858.jpg"
               alt="motoko"
@@ -489,8 +476,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div
+      </div> -->
+      <!-- <div
         style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 1px solid grey"
       >
         <div style="padding: 5px; margin: 5px; height: 100%">
@@ -541,127 +528,10 @@
             </div>
           </div>
         </div>
-      </div>
-      {#each feed as item, i}
-        {#if i != feed.length - 1}
-          {#if item.citing.length > 0}
-            <div
-              style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 1px solid grey"
-            >
-              <div style="padding: 5px; margin: 5px; height: 100%">
-                <a href={`/profile/${item.author.principal}`}>
-                  <img
-                    src={item.author.picture}
-                    alt="avatar"
-                    style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
-                  />
-                </a>
-              </div>
-              <div
-                style="flex-grow: 1; justify-content: start; text-align:start"
-              >
-                <div style="display:flex; gap: 5px;">
-                  <div>
-                    <a href={`/profile/${item.author.principal}`}
-                      >{item.author.name}</a
-                    >
-                  </div>
-                  <div style="color:grey">
-                    <a
-                      href={`/profile/${item.author.principal}`}
-                      style="color:grey"
-                    >
-                      @{item.author.handle}
-                    </a>
-                  </div>
-                  <div style="color:grey">
-                    - {parseTwitterDate(parseInt(item.createdAt) / 1_000_000)}
-                  </div>
-                  <div style="color:grey">- Retweeted</div>
-                </div>
-                <Link to={`/profile/post/${item.id}#main`} style="width: 100%">
-                  <div style="width: 100%; text-align:start; padding: 5px 0px">
-                    {item.citing[0].content}
-                  </div>
-                </Link>
-                <div
-                  style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
-                >
-                  <div style="width: 50px; display:flex; gap: 15px">
-                    <div><Fa icon={faComment} /></div>
-                    <div>{item.replies.length}</div>
-                  </div>
-                  <div style="width: 50px; display:flex; gap: 15px">
-                    <div><Fa icon={faRetweet} /></div>
-                    <div>0</div>
-                  </div>
-                  <div style="width: 50px; display:flex; gap: 15px">
-                    <div><Fa icon={faHeart} /></div>
-                    <div>{item.likes.length}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {:else}
-            <div
-              style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 1px solid grey"
-            >
-              <div style="padding: 5px; margin: 5px; height: 100%">
-                <a href={`/profile/${item.author.principal}`}>
-                  <img
-                    src={item.author.picture}
-                    alt="avatar"
-                    style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
-                  />
-                </a>
-              </div>
-              <div
-                style="flex-grow: 1; justify-content: start; text-align:start"
-              >
-                <div style="display:flex; gap: 5px;">
-                  <div>
-                    <a href={`/profile/${item.author.principal}`}
-                      >{item.author.name}</a
-                    >
-                  </div>
-                  <div style="color:grey">
-                    <a
-                      href={`/profile/${item.author.principal}`}
-                      style="color:grey"
-                    >
-                      @{item.author.handle}
-                    </a>
-                  </div>
-                  <div style="color:grey">
-                    - {parseTwitterDate(parseInt(item.createdAt) / 1_000_000)}
-                  </div>
-                </div>
-                <Link to={`/profile/post/${item.id}#main`} style="width: 100%">
-                  <div style="width: 100%; text-align:start; padding: 5px 0px">
-                    {item.content}
-                  </div>
-                </Link>
-                <div
-                  style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
-                >
-                  <div style="width: 50px; display:flex; gap: 15px">
-                    <div><Fa icon={faComment} /></div>
-                    <div>{item.replies.length}</div>
-                  </div>
-                  <div style="width: 50px; display:flex; gap: 15px">
-                    <div><Fa icon={faRetweet} /></div>
-                    <div>0</div>
-                  </div>
-                  <div style="width: 50px; display:flex; gap: 15px">
-                    <div><Fa icon={faHeart} /></div>
-                    <div>{item.likes.length}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {/if}
-        {:else if item.citing.length > 0}
-          <div
+      </div> -->
+      {#each feed as post, i}
+        <DisplayPost {auth} {principal} {signIn} {post} />
+        <!-- <div
             style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center;"
           >
             <div style="padding: 5px; margin: 5px; height: 100%">
@@ -771,7 +641,7 @@
               </div>
             </div>
           </div>
-        {/if}
+        {/if} -->
       {/each}
     </div>
   </div>
