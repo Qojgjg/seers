@@ -26,7 +26,11 @@
   let showImageForm = false
   let startDate = ""
   let endDate = ""
-  let image = { label: "Image URL", value: "" }
+  let image = {
+    label: "Image URL",
+    value:
+      "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544808?k=20&m=1147544808&s=612x612&w=0&h=8CUTlOdLd2d5HqO7p6kREJHyxDyAH0VeFA6u7mOQXbo=",
+  }
   let outcomes = [
     { id: 1, label: "Outcome 1", value: "" },
     { id: 2, label: "Outcome 2", value: "" },
@@ -60,6 +64,28 @@
         return p[0].toUpperCase() + p.slice(1)
       })
       .join(" ")
+  }
+
+  const submitImage = async () => {
+    processing = true
+    let initData = {
+      id: 0,
+      author: {
+        principal,
+        picture: "",
+        handle: "",
+        name: "",
+      },
+      content: post,
+      parent: 0,
+      postType: { image: 0 },
+    }
+    const r = await $auth.actor.submitPost(initData, [], [image.value])
+    showImageForm = false
+    console.log(r)
+    processing = false
+    post = ""
+    getFeed()
   }
 
   const submitMarket = async () => {
@@ -266,6 +292,15 @@
                 style="background: black; border: 0px; width: 100%; height: 100%; color:white; font-size: 1.2em;"
               />
             </div>
+            <div
+              style="height: fit-content; border: 0px solid rgb(51, 54, 57); border-radius:14px; padding: 5px 15px; margin: 15px"
+            >
+              <img
+                src={image.value}
+                alt="preview"
+                style="max-height: 150px; max-width: 80%; border-radius: 3px"
+              />
+            </div>
           </div>
         </div>
       {/if}
@@ -340,6 +375,8 @@
               on:click={() => {
                 if (showBetForm) {
                   submitMarket()
+                } else if (showImageForm) {
+                  submitImage()
                 } else {
                   submitPost()
                 }
