@@ -23,8 +23,10 @@
   let feed = []
   let processing = false
   let showBetForm = false
+  let showImageForm = false
   let startDate = ""
   let endDate = ""
+  let image = { label: "Image URL", value: "" }
   let outcomes = [
     { id: 1, label: "Outcome 1", value: "" },
     { id: 2, label: "Outcome 2", value: "" },
@@ -247,12 +249,31 @@
             </div>
           </div>
         </div>
+      {:else if showImageForm}
+        <div
+          style="display:flex; width: 100%; height: fit-content; border: 0px solid rgb(47, 51, 54); align-items:flex-end"
+        >
+          <div
+            style="display: flex; flex-direction:column; flex-grow: 1; justify-content:space-evenly"
+          >
+            <div
+              style="height: 50px; border: 1px solid rgb(51, 54, 57); border-radius:14px; padding: 5px 15px; margin: 15px"
+            >
+              <input
+                bind:value={image.value}
+                type="text"
+                placeholder={image.label}
+                style="background: black; border: 0px; width: 100%; height: 100%; color:white; font-size: 1.2em;"
+              />
+            </div>
+          </div>
+        </div>
       {/if}
       <div style="display:flex">
         <div
           style="display:flex; text-align:center; align-items:center; width: 70px; margin-left: 50px "
           on:click={() => {
-            showBetForm = showBetForm ? false : true
+            showImageForm = showImageForm ? false : true
           }}
         >
           <Fa icon={faImage} scale={1.2} />
@@ -265,7 +286,7 @@
         >
           <Fa icon={faChartBar} scale={1.2} />
         </div>
-        <div
+        <!-- <div
           style="display:flex; text-align:center; align-items:center; width: 70px"
           on:click={() => {
             showBetForm = showBetForm ? false : true
@@ -280,7 +301,7 @@
           }}
         >
           <Fa icon={faVideo} scale={1.2} />
-        </div>
+        </div> -->
 
         {#if principal === ""}
           <div
