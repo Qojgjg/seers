@@ -164,9 +164,13 @@ export interface PostStable {
   'author' : UserData,
   'likes' : Array<Like>,
   'replies' : Array<number>,
+  'market' : [] | [MarketStable],
+  'image' : [] | [string],
 }
 export type PostType = { 'retweet' : number } |
   { 'post' : null } |
+  { 'market' : number } |
+  { 'image' : number } |
   { 'reply' : number };
 export type Result = { 'ok' : PostStable } |
   { 'err' : PostError };

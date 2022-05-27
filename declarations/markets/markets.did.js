@@ -148,6 +148,8 @@ export const idlFactory = ({ IDL }) => {
   const PostType = IDL.Variant({
     'retweet' : IDL.Nat32,
     'post' : IDL.Null,
+    'market' : IDL.Nat32,
+    'image' : IDL.Nat32,
     'reply' : IDL.Nat32,
   });
   const Retweet = IDL.Record({
@@ -170,6 +172,8 @@ export const idlFactory = ({ IDL }) => {
     'author' : UserData,
     'likes' : IDL.Vec(Like),
     'replies' : IDL.Vec(IDL.Nat32),
+    'market' : IDL.Opt(MarketStable),
+    'image' : IDL.Opt(IDL.Text),
   });
   const FeedItem = IDL.Variant({
     'bet' : Bet,

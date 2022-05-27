@@ -5,6 +5,7 @@ import Option "mo:base/Option";
 
 import Like "Like";
 import Utils "Utils";
+import Market "Market";
 
 
 module {
@@ -19,6 +20,8 @@ module {
         #post;
         #reply: Nat32;
         #retweet: Nat32;
+        #market: Nat32;
+        #image: Nat32;
     };
 
     public type PostInitData = {
@@ -41,6 +44,8 @@ module {
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var retweets: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var citing: ?Retweet = null;
+        public var market: ?Market.Market = null;
+        public var image: ?Text = null;
         public var likes: Buffer.Buffer<Like.Like> = Buffer.Buffer<Like.Like>(0);
         public var createdAt: Time.Time = Time.now();
         public var postType: PostType = initData.postType;
@@ -53,6 +58,10 @@ module {
                 replies = replies.toArray();
                 retweets = retweets.toArray();
                 citing = citing;
+                market = Option.map(market, func (m: Market.Market): Market.MarketStable {
+                    m.freeze()
+                });
+                image = image;
                 likes = likes.toArray();
                 createdAt = createdAt;
                 postType = postType;
@@ -80,6 +89,8 @@ module {
         replies: [Nat32];
         retweets: [Nat32];
         citing: ?Retweet;
+        market: ?Market.MarketStable;
+        image: ?Text;
         likes: [Like.Like];
         createdAt: Time.Time;
         postType: PostType;
