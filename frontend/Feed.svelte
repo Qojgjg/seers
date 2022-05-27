@@ -83,7 +83,19 @@
       collateralType: { seers: null },
       author: "",
     }
-    const resp = await $auth.actor.createMarket(marketInitData)
+    const initData = {
+      id: 0,
+      author: {
+        principal,
+        name: "",
+        picture: "",
+        handle: "",
+      },
+      parent: 0,
+      content: post,
+      postType: { market: 0 },
+    }
+    const resp = await $auth.actor.submitPost(initData, [marketInitData], [])
     processing = false
 
     if (resp["err"]) {
