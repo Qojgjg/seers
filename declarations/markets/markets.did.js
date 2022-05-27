@@ -147,20 +147,17 @@ export const idlFactory = ({ IDL }) => {
   const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : CommentStable });
   const PostType = IDL.Variant({
     'retweet' : IDL.Nat32,
-    'post' : IDL.Null,
+    'simple' : IDL.Null,
     'market' : IDL.Nat32,
     'image' : IDL.Nat32,
-    'reply' : IDL.Nat32,
   });
   const Retweet = IDL.Record({
     'id' : IDL.Nat32,
-    'retweets' : IDL.Vec(IDL.Nat32),
     'postType' : PostType,
     'content' : IDL.Text,
     'createdAt' : Time,
     'author' : UserData,
-    'likes' : IDL.Vec(Like),
-    'replies' : IDL.Vec(IDL.Nat32),
+    'parent' : IDL.Nat32,
   });
   const PostStable = IDL.Record({
     'id' : IDL.Nat32,
@@ -174,6 +171,7 @@ export const idlFactory = ({ IDL }) => {
     'replies' : IDL.Vec(IDL.Nat32),
     'market' : IDL.Opt(MarketStable),
     'image' : IDL.Opt(IDL.Text),
+    'parent' : IDL.Nat32,
   });
   const FeedItem = IDL.Variant({
     'bet' : Bet,
@@ -251,6 +249,7 @@ export const idlFactory = ({ IDL }) => {
   const Result_4 = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
   const PostError = IDL.Variant({
     'notLoggedIn' : IDL.Null,
+    'parentDoesNotExist' : IDL.Null,
     'marketNotFound' : IDL.Null,
     'imageNotFound' : IDL.Null,
     'alreadyLiked' : IDL.Null,
@@ -275,6 +274,7 @@ export const idlFactory = ({ IDL }) => {
     'postType' : PostType,
     'content' : IDL.Text,
     'author' : UserData,
+    'parent' : IDL.Nat32,
   });
   const Market = IDL.Service({
     'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_8], []),

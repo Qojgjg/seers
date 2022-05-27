@@ -16,6 +16,7 @@ module {
         #alreadyLiked;
         #marketNotFound;
         #imageNotFound;
+        #parentDoesNotExist;
     };
 
     public type PostType = {
@@ -80,9 +81,6 @@ module {
         author: Utils.UserData;
         content: Text;
         parent: Nat32;
-        replies: [Nat32];
-        retweets: [Nat32];
-        likes: [Like.Like];
         createdAt: Time.Time;
         postType: PostType;
     };

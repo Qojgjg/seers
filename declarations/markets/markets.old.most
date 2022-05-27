@@ -168,6 +168,7 @@ actor {
     {#branch : Branch<Text, Text>; #empty; #leaf : Leaf<Text, Text>};
   stable var nextMarketId : Nat32;
   stable var stableFeed : [PostStable];
+  stable var stableImages : [(Nat32, Text)];
   stable var stableMarkets : [(Nat32, MarketStable)];
   stable var stablePosts : [(Nat32, PostStable)];
   stable var stableUsers : [(Text, UserStable)];

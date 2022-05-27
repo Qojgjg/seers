@@ -401,6 +401,16 @@ shared({ caller = initializer }) actor class Market() = this {
             return #err(#notLoggedIn);
         };
         
+        if (initData.parent != 0) {
+            switch (postMap.get(initData.parent)) {
+                case null {
+                    return #err(#parentDoesNotExist);
+                };
+                case (_) { // all good
+                };
+            };
+        };
+
         switch (userMap.get(caller)) {
             case null {
                 return #err(#userDoesNotExist);
@@ -416,48 +426,25 @@ shared({ caller = initializer }) actor class Market() = this {
                 let id = Nat32.fromNat(postMap.size());
 
                 switch (initData.postType) {                    
-                    case (#post) {
+                    case (#simple) {
                         let newInitData: Post.PostInitData = {
                             id = id;
                             author = authorData;
                             content = initData.content;
-                            postType = #post;
+                            parent = initData.parent;
+                            postType = initData.postType;
                         };
 
                         let post: Post.Post = Post.Post(newInitData);
+
                         author.posts.add(id);
                         postMap.put(id, post);
                         feed.add(post);
 
                         return #ok(post.freeze());
                     };
-                    case (#reply(parent)) {
-                        switch (postMap.get(parent)) {
-                            case null {
-                                return #err(#postDoesNotExist);
-                            };
-                            case (?parentPost) {
-                                
-                                let newInitData: Post.PostInitData = {
-                                    id = id;
-                                    author = authorData;
-                                    content = initData.content;
-                                    postType = #reply(parent);
-                                };
-
-                                let post: Post.Post = Post.Post(newInitData);
-                                
-                                parentPost.replies.add(id);
-                                author.posts.add(id);
-                                postMap.put(id, post);
-                                feed.add(post);
-
-                                return #ok(post.freeze());
-                            };
-                        };
-                    };
-                    case (#retweet(cited)) {
-                        switch (postMap.get(cited)) {
+                    case (#retweet(citedId)) {
+                        switch (postMap.get(citedId)) {
                             case null {
                                 return #err(#postDoesNotExist);
                             };
@@ -466,11 +453,21 @@ shared({ caller = initializer }) actor class Market() = this {
                                     id = id;
                                     author = authorData;
                                     content = initData.content;
-                                    postType = #retweet(cited);
+                                    parent = initData.parent;
+                                    postType = initData.postType;
                                 };
 
                                 let post: Post.Post = Post.Post(newInitData);
                                 
+                                let retweet: Post.Retweet = {
+                                    id = citedPost.id;
+                                    author = citedPost.author;
+                                    content = citedPost.content;
+                                    parent = citedPost.parent;
+                                    createdAt = citedPost.createdAt;
+                                    postType = citedPost.postType;
+                                };
+
                                 citedPost.retweets.add(id);
                                 author.posts.add(id);
                                 postMap.put(id, post);
@@ -490,6 +487,7 @@ shared({ caller = initializer }) actor class Market() = this {
                                     id = id;
                                     author = authorData;
                                     content = initData.content;
+                                    parent = initData.parent;
                                     postType = #image(imageId);
                                 };
 
@@ -514,6 +512,7 @@ shared({ caller = initializer }) actor class Market() = this {
                                     id = id;
                                     author = authorData;
                                     content = initData.content;
+                                    parent = initData.parent;
                                     postType = #market(marketId);
                                 };
 
@@ -633,12 +632,12 @@ shared({ caller = initializer }) actor class Market() = this {
                 var current = post;
                             
                 while (not exit) {
-                    switch (current.postType) {
-                        case (#post) {
+                    switch (current.parent) {
+                        case (0) {
                             exit := true;
                         };
-                        case (#reply(parent)) {
-                            switch (postMap.get(parent)) {
+                        case (parentId) {
+                            switch (postMap.get(parentId)) {
                                 case null {
                                     // This case shouldn't happen, on delete we leave a dummy.
                                     exit := true;
@@ -646,28 +645,6 @@ shared({ caller = initializer }) actor class Market() = this {
                                 case (?ancestor) {
                                     ancestors.add(ancestor.freeze());
                                     current := ancestor;
-                                };
-                            };
-                        };
-                        case (#retweet(cited)) {
-                            switch (postMap.get(cited)) {
-                                case null {
-                                    // This case shouldn't happen, on delete we leave a dummy.
-                                    exit := true;
-                                };
-                                case (?post) {
-                                    current := post;
-                                };
-                            };
-                        };
-                        case (#image(_)) {
-                            switch (postMap.get(cited)) {
-                                case null {
-                                    // This case shouldn't happen, on delete we leave a dummy.
-                                    exit := true;
-                                };
-                                case (?post) {
-                                    current := post;
                                 };
                             };
                         };    
@@ -1403,37 +1380,8 @@ shared({ caller = initializer }) actor class Market() = this {
                             // Shouldn't happen, but it doesn't matter.
                         };
                         case (?post) {
-                            switch (post.postType) {
-                                case (#post) {
-                                    posts.add(post.freeze());
-                                };
-                                case (#reply(_)) {
-                                    posts.add(post.freeze());
-                                };
-                                case (#retweet(postId)) {
-                                    switch (postMap.get(postId)) {
-                                        case null {
-                                            // do nothing
-                                        };
-                                        case (?citedPost) {
-                                            let cs = citedPost.freeze();
-                                            let retweeted: Post.Retweet = {
-                                                id = cs.id;
-                                                author = cs.author;
-                                                content = cs.content;
-                                                replies = cs.replies;
-                                                retweets = cs.retweets;
-                                                likes = cs.likes;
-                                                createdAt = cs.createdAt;
-                                                postType = cs.postType;
-                                            };
-                                            post.citing := ?retweeted;
-                                            var stablePost = post.freeze();
-                                            posts.add(stablePost);
-                                        };
-                                    };
-                                };
-                            };
+                            var stablePost = post.freeze();
+                            posts.add(stablePost);
                         };
                     };
                 };
@@ -1447,37 +1395,8 @@ shared({ caller = initializer }) actor class Market() = this {
     public query func getFeed(): async [Post.PostStable] {
         var posts = Buffer.Buffer<Post.PostStable>(feed.size());
         for (p in feed.vals()) {
-            switch (p.postType) {
-                case (#post) {
-                    posts.add(p.freeze());
-                };
-                case (#reply(parent)) {
-                    posts.add(p.freeze());
-                };
-                case (#retweet(cited)) {
-                    switch (postMap.get(cited)) {
-                        case null {
-                            // do nothing
-                        };
-                        case (?citedPost) {
-                            let cs = citedPost.freeze();
-                            let retweeted: Post.Retweet = {
-                                id = cs.id;
-                                author = cs.author;
-                                content = cs.content;
-                                replies = cs.replies;
-                                retweets = cs.retweets;
-                                likes = cs.likes;
-                                createdAt = cs.createdAt;
-                                postType = cs.postType;
-                            };
-                            p.citing := ?retweeted;
-                            var stablePost = p.freeze();
-                            posts.add(stablePost);
-                        };
-                    };
-                };
-            };
+            var stablePost = p.freeze();
+            posts.add(stablePost);
         };
 
         return posts.toArray();

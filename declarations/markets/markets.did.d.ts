@@ -145,6 +145,7 @@ export type MarketState = { 'any' : null } |
   { 'open' : null } |
   { 'approved' : null };
 export type PostError = { 'notLoggedIn' : null } |
+  { 'parentDoesNotExist' : null } |
   { 'marketNotFound' : null } |
   { 'imageNotFound' : null } |
   { 'alreadyLiked' : null } |
@@ -155,6 +156,7 @@ export interface PostInitData {
   'postType' : PostType,
   'content' : string,
   'author' : UserData,
+  'parent' : number,
 }
 export interface PostStable {
   'id' : number,
@@ -168,12 +170,12 @@ export interface PostStable {
   'replies' : Array<number>,
   'market' : [] | [MarketStable],
   'image' : [] | [string],
+  'parent' : number,
 }
 export type PostType = { 'retweet' : number } |
-  { 'post' : null } |
+  { 'simple' : null } |
   { 'market' : number } |
-  { 'image' : number } |
-  { 'reply' : number };
+  { 'image' : number };
 export type Result = { 'ok' : PostStable } |
   { 'err' : PostError };
 export type Result_1 = { 'ok' : null } |
@@ -194,13 +196,11 @@ export type Result_8 = { 'ok' : CommentStable } |
   { 'err' : MarketError };
 export interface Retweet {
   'id' : number,
-  'retweets' : Array<number>,
   'postType' : PostType,
   'content' : string,
   'createdAt' : Time,
   'author' : UserData,
-  'likes' : Array<Like>,
-  'replies' : Array<number>,
+  'parent' : number,
 }
 export interface ThreadStable {
   'main' : PostStable,

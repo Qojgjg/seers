@@ -87,22 +87,20 @@ type PostStable =
     image : ?Text;
     likes : [Like];
     market : ?MarketStable;
+    parent : Nat32;
     postType : PostType;
     replies : [Nat32];
     retweets : [Nat32]
   };
-type PostType =
-  {#image : Nat32; #market : Nat32; #post; #reply : Nat32; #retweet : Nat32};
+type PostType = {#image : Nat32; #market : Nat32; #retweet : Nat32; #simple};
 type Retweet =
   {
     author : UserData;
     content : Text;
     createdAt : Time;
     id : Nat32;
-    likes : [Like];
-    postType : PostType;
-    replies : [Nat32];
-    retweets : [Nat32]
+    parent : Nat32;
+    postType : PostType
   };
 type Time = Int;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
