@@ -14,6 +14,7 @@
 
   let errorResponse = ""
   let processing = false
+  let isThread = false
 
   const splitCamelCaseToString = (s) => {
     return s
@@ -68,28 +69,27 @@
 </script>
 
 <div
-  style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 0px 0px; flex-direction:row; align-items:center; border-bottom: 0px solid grey"
+  style={`display:flex; justify-content:start; text-align:start; width: 100%; padding: 0px 0px; flex-direction:row; align-items:center; border-bottom: ${
+    isThread ? 0 : 1
+  }px solid grey`}
 >
   <div
     style="display:flex; flex-direction:column; padding: 0px; margin: 5px; height: 100%"
   >
-    <div style="display:flex; justify-content:center; height: 15px">
-      <div style="width: 2px; height: 100%; background:rgb(51, 54, 57)">
-        &nbsp;
-      </div>
-    </div>
     <a href={`/profile/${post.author.principal}`}>
       <img
         src={post.author.picture}
         alt="avatar"
-        style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; padding: 5px 0px 0px 0px;"
+        style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; padding: 15px 0px 0px 0px;"
       />
     </a>
-    <div style="display:flex; justify-content:center; flex-grow: 1">
-      <div style="width: 2px; height: 100%; background:rgb(51, 54, 57)">
-        &nbsp;
+    {#if isThread}
+      <div style="display:flex; justify-content:center; flex-grow: 1">
+        <div style="width: 2px; height: 100%; background:rgb(51, 54, 57)">
+          &nbsp;
+        </div>
       </div>
-    </div>
+    {/if}
   </div>
   <div
     style="flex-grow: 1; justify-content: start; text-align:start; padding: 15px 0px;"
