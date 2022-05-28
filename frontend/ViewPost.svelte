@@ -141,7 +141,7 @@
         bind:value={newComment}
         rows="3"
         style="width: 100%; font-size: 1.3em; background: black;color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
-        placeholder="Please share your thoughts."
+        placeholder="Write your reply."
       />
       {#if principal == ""}
         <div style="display:flex; text-align:end; justify-content:end;">

@@ -63,6 +63,7 @@
 
   const submitBuy = async (marketId, selected) => {
     processing = true
+    selected = selected === undefined ? 0 : selected
     const resp = await $auth.actor.buyOutcome(marketId, 100, selected, true)
     processing = false
     console.log(resp)
