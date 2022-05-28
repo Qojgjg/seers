@@ -131,59 +131,7 @@
       id="main"
       style="padding: 0px 0px 0px 0px; width: 100%; border-top: 0px solid grey; "
     >
-      <div
-        style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 5px 0px; flex-direction:row; align-items:center; font-size: 1.2em; "
-      >
-        <div style="padding: 0px 0px; margin: 0px 5px; height: 100%;">
-          <a href={`/profile/${post?.author.principal}`}>
-            <img
-              src={post?.author.picture}
-              alt="avatar"
-              style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
-            />
-          </a>
-        </div>
-        <div style="display:flex; flex-direction:column; height: 100%">
-          <a href={`/profile/${post?.author.principal}`}>{post?.author.name}</a>
-          <a href={`/profile/${post?.author.principal}`} style="color:grey">
-            @{post?.author.handle}
-          </a>
-        </div>
-      </div>
-      <div style="flex-grow: 1; justify-content: start; text-align:start">
-        <Link to={`/profile/post/${post?.id}`} style="width: 100%">
-          <div
-            style="width: 100%; text-align:start; padding: 0px 0px; border-bottom: 1px solid grey;"
-          >
-            <div style="padding: 10px 0px; font-size: 1.2em">
-              {post?.content}
-            </div>
-            <div style="color:grey; padding: 5px 0px;">
-              {new Date(parseInt(post?.createdAt) / 1_000_000).toDateString()}
-              -
-              {new Date(
-                parseInt(post?.createdAt) / 1_000_000,
-              ).toLocaleTimeString()}
-            </div>
-          </div>
-        </Link>
-        <div
-          style="width: 100%; display:flex; gap: 30px; padding: 10px 0px; color:grey; border-bottom: 1px solid grey;"
-        >
-          <div style="width: 50px; display:flex; gap: 15px">
-            <div><Fa icon={faComment} /></div>
-            <div>0</div>
-          </div>
-          <div style="width: 50px; display:flex; gap: 15px">
-            <div><Fa icon={faRetweet} /></div>
-            <div>0</div>
-          </div>
-          <div style="width: 50px; display:flex; gap: 15px">
-            <div><Fa icon={faHeart} /></div>
-            <div>0</div>
-          </div>
-        </div>
-      </div>
+      <DisplayPost {auth} {principal} {signIn} {post} isMain={true} />
     </div>
 
     <div
