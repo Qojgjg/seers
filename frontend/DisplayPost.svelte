@@ -5,17 +5,16 @@
   import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
   import { faRetweet } from "@fortawesome/free-solid-svg-icons"
   import inf from "./assets/inf.gif"
-  import ListMarkets from "./ListMarkets.svelte"
 
   export let auth
   export let principal
   export let signIn
   export let post
+  export let isThread = false
+  export let doNotShowBorder = false
 
   let errorResponse = ""
   let processing = false
-  let isThread = false
-  let doNotShowBorder = false
 
   const splitCamelCaseToString = (s) => {
     return s
