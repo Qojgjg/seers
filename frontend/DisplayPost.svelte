@@ -203,17 +203,17 @@
     <div
       style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
     >
-      <div style="width: 50px; display:flex; gap: 15px">
+      <div style="width: 46px; display:flex; gap: 15px">
         <div><Fa icon={faComment} /></div>
-        <div>{post.replies.length}</div>
+        {#if post.replies.length > 0}<div>{post.replies.length}</div>{/if}
       </div>
       <div style="width: 50px; display:flex; gap: 15px">
         <div><Fa icon={faRetweet} /></div>
-        <div>{post.retweets.length}</div>
+        {#if post.retweets.length > 0}<div>{post.retweets.length}</div>{/if}
       </div>
       <div style="width: 50px; display:flex; gap: 15px">
         <div><Fa icon={faHeart} /></div>
-        <div>{post.likes.length}</div>
+        {#if post.likes.length > 0}<div>{post.likes.length}</div>{/if}
       </div>
     </div>
   </div>
