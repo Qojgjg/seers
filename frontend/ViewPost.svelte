@@ -531,7 +531,7 @@
     min-width: 200px;
     max-width: 800px;
     width: 80%;
-    background-color: black;
+    /* background-color: black; */
     /* background-color: rgb(25, 27, 31);
     border: 1px solid rgb(90, 58, 81);
     box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46); */
