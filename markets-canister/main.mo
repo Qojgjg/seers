@@ -407,29 +407,31 @@ shared({ caller = initializer }) actor class Market() = this {
             return #err(#notLoggedIn);
         };
         
-        if (initData.parent != 0) {
-            switch (postMap.get(initData.parent)) {
-                case null {
-                    return #err(#parentDoesNotExist);
-                };
-                case (_) { // all good
-                };
-            };
-        };
-
         switch (userMap.get(caller)) {
             case null {
                 return #err(#userDoesNotExist);
             };
             case (?author) {
+
+                let id = Nat32.fromNat(postMap.size() + 1);
+
+                if (initData.parent != 0) {
+                    switch (postMap.get(initData.parent)) {
+                        case null {
+                            return #err(#parentDoesNotExist);
+                        };
+                        case (?parentPost) {
+                            parentPost.replies.add(id);
+                        };
+                    };
+                };
+        
                 let authorData: Utils.UserData = {
                     principal = author.id;
                     name = author.name;
                     handle = author.handle;
                     picture = author.picture;
                 };
-
-                let id = Nat32.fromNat(postMap.size());
 
                 switch (initData.postType) {                    
                     case (#simple) {

@@ -378,5 +378,5 @@ service : {
   setUpdating: (bool) -> () oneway;
   submitForecast: (nat32, Forecast) -> (Result_2);
   submitLike: (nat32) -> (Result_1);
-  submitPost: (PostInitData) -> (Result);
+  submitPost: (PostInitData, opt MarketInitData, opt text) -> (Result);
 }

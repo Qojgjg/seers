@@ -24,10 +24,11 @@
       id: Number(id),
       content: newComment,
       author: post.author,
-      postType: { reply: Number(id) },
+      parent: Number(id),
+      postType: { simple: null },
     }
 
-    const resp = await $auth.actor.submitPost(initData)
+    const resp = await $auth.actor.submitPost(initData, [], [])
     processing = false
     newComment = ""
     console.log(resp)
@@ -44,9 +45,10 @@
       id: Number(id),
       content: "",
       author: post.author,
+      parent: 0,
       postType: { retweet: Number(postId) },
     }
-    const resp = await $auth.actor.submitPost(initData)
+    const resp = await $auth.actor.submitPost(initData, [], [])
     console.log(resp)
   }
 

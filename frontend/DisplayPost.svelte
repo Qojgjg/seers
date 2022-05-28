@@ -106,9 +106,7 @@
             style="width: 100%; display:flex; cursor:pointer; margin: 0; padding: 0;"
           >
             <div
-              style={`background: #39CCCC; width: ${
-                post.market[0].probabilities[i] * 100.0
-              }%; padding: 5px; margin: 2px; border: 1px solid black; border-radius: 5px; color:black`}
+              style={`background: #39CCCC; width: fit-content; padding: 5px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black`}
             >
               <button
                 style="all:unset; width: 100%"
@@ -119,8 +117,22 @@
                 {label}
               </button>
             </div>
+            <div style="flex-grow: 1;">
+              <div
+                style={`background: #39CCCC; width: ${
+                  post.market[0].probabilities[i] * 100.0
+                }%; padding: 5px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 0px 5px 5px 0px; color:black`}
+              >
+                <button
+                  style="all:unset; width: 100%"
+                  on:click={() => {
+                    post.market[0].selected = i
+                  }}
+                />
+              </div>
+            </div>
             <div
-              style="flex-grow: 1; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
+              style="width: 60px; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
             >
               {post.market[0].probabilities[i].toFixed(2)} &Sigma;
             </div>
@@ -170,7 +182,7 @@
         <img
           src={post.image[0]}
           alt="main"
-          style="width: 90%; border-radius: 15px; object-fit:cover"
+          style="width: 60%; border-radius: 15px; object-fit:cover"
         />
       </div>
     {/if}
