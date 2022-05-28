@@ -15,6 +15,7 @@
   let errorResponse = ""
   let processing = false
   let isThread = false
+  let doNotShowBorder = false
 
   const splitCamelCaseToString = (s) => {
     return s
@@ -70,7 +71,7 @@
 
 <div
   style={`display:flex; justify-content:start; text-align:start; width: 100%; padding: 0px 0px; flex-direction:row; align-items:center; border-bottom: ${
-    isThread ? 0 : 1
+    isThread || doNotShowBorder ? 0 : 1
   }px solid grey`}
 >
   <div
