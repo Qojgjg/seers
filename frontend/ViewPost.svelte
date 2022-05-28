@@ -186,146 +186,58 @@
       </div>
     </div>
 
-    {#if replies.length > 0}
-      <div
-        style="width: 100%; margin: 15px 0px; padding: 15px 0px; border-bottom: 1px solid grey"
-      >
-        <textarea
-          bind:value={newComment}
-          rows="3"
-          style="width: 100%; font-size: 1.3em; background: black;color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
-          placeholder="Please share your thoughts."
-        />
-        {#if principal == ""}
-          <div style="display:flex; text-align:end; justify-content:end;">
-            <button class="btn-grad" on:click={signIn}>Login</button>
-            <div style="text-align:end;color:red">
-              {errorResponse}
-            </div>
+    <div
+      style="width: 100%; margin: 15px 0px; padding: 15px 0px; border-bottom: 1px solid grey"
+    >
+      <textarea
+        bind:value={newComment}
+        rows="3"
+        style="width: 100%; font-size: 1.3em; background: black;color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
+        placeholder="Please share your thoughts."
+      />
+      {#if principal == ""}
+        <div style="display:flex; text-align:end; justify-content:end;">
+          <button class="btn-grad" on:click={signIn}>Reply</button>
+          <div style="text-align:end;color:red">
+            {errorResponse}
           </div>
-        {:else if processing}
-          <div style="display:flex; text-align:end; justify-content:end;">
-            <button
-              class="btn-grad"
-              on:click={() => 0}
-              style="width: 100px; overflow:hidden"
-            >
-              <img
-                src={inf}
-                alt="inf"
-                style="width: 150px; height: 400%; margin: -100%;"
-              />
-            </button>
-            <div style="text-align:end;color:red">
-              {errorResponse}
-            </div>
-          </div>
-        {:else}
-          <div style="display:flex; text-align:end; justify-content:end;">
-            <button class="btn-grad" on:click={submitReply}>Reply</button>
-            <div style="text-align:end;color:red">
-              {errorResponse}
-            </div>
-          </div>
-        {/if}
-      </div>
-    {:else}
-      <div
-        style="width: 100%; margin: 15px 0px; padding: 15px 0px; border-bottom: 0px solid grey"
-      >
-        <textarea
-          bind:value={newComment}
-          rows="3"
-          style="width: 100%; font-size: 1.3em; background: black;color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
-          placeholder="Please share your thoughts."
-        />
-        {#if principal == ""}
-          <div style="display:flex; text-align:end; justify-content:end;">
-            <button class="btn-grad" on:click={signIn}>Reply</button>
-            <div style="text-align:end;color:red">
-              {errorResponse}
-            </div>
-          </div>
-        {:else if processing}
-          <div style="display:flex; text-align:end; justify-content:end;">
-            <button
-              class="btn-grad"
-              on:click={() => 0}
-              style="width: 100px; overflow:hidden"
-            >
-              <img
-                src={inf}
-                alt="inf"
-                style="width: 150px; height: 400%; margin: -100%;"
-              />
-            </button>
-            <div style="text-align:end;color:red">
-              {errorResponse}
-            </div>
-          </div>
-        {:else}
-          <div style="display:flex; text-align:end; justify-content:end;">
-            <button class="btn-grad" on:click={submitReply}>Reply</button>
-            <div style="text-align:end;color:red">
-              {errorResponse}
-            </div>
-          </div>
-        {/if}
-      </div>
-    {/if}
-
-    {#each replies as post}
-      <div
-        style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 15px 0px; flex-direction:row; align-items:center; border-bottom: 0px solid grey"
-      >
-        <div style="padding: 5px; margin: 5px; height: 100%">
-          <a href={`/profile/${post?.author.principal}`}>
-            <img
-              src={post?.author.picture}
-              alt="avatar"
-              style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
-            />
-          </a>
         </div>
-        <div style="flex-grow: 1; justify-content: start; text-align:start">
-          <div style="display:flex; gap: 5px;">
-            <div>
-              <a href={`/profile/${post?.author.principal}`}
-                >{post?.author.name}</a
-              >
-            </div>
-            <div style="color:grey">
-              <a href={`/profile/${post?.author.principal}`} style="color:grey">
-                @{post?.author.handle}
-              </a>
-            </div>
-            <div style="color:grey">
-              - {parseTwitterDate(parseInt(post?.createdAt) / 1_000_000)}
-            </div>
-          </div>
-          <a href={`/profile/post/${post?.id}#main`} style="width: 100%">
-            <div style="width: 100%; text-align:start; padding: 5px 0px">
-              {post?.content}
-            </div>
-          </a>
-          <div
-            style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
+      {:else if processing}
+        <div style="display:flex; text-align:end; justify-content:end;">
+          <button
+            class="btn-grad"
+            on:click={() => 0}
+            style="width: 100px; overflow:hidden"
           >
-            <div style="width: 50px; display:flex; gap: 15px">
-              <div><Fa icon={faComment} /></div>
-              <div>{post?.replies.length}</div>
-            </div>
-            <div style="width: 50px; display:flex; gap: 15px">
-              <div><Fa icon={faRetweet} /></div>
-              <div>0</div>
-            </div>
-            <div style="width: 50px; display:flex; gap: 15px">
-              <div><Fa icon={faHeart} /></div>
-              <div>0</div>
-            </div>
+            <img
+              src={inf}
+              alt="inf"
+              style="width: 150px; height: 400%; margin: -100%;"
+            />
+          </button>
+          <div style="text-align:end;color:red">
+            {errorResponse}
           </div>
         </div>
-      </div>
+      {:else}
+        <div style="display:flex; text-align:end; justify-content:end;">
+          <button class="btn-grad" on:click={submitReply}>Reply</button>
+          <div style="text-align:end;color:red">
+            {errorResponse}
+          </div>
+        </div>
+      {/if}
+    </div>
+
+    {#each replies as post, i}
+      <DisplayPost
+        {auth}
+        {principal}
+        {signIn}
+        {post}
+        isThread={false}
+        doNotShowBorder={i < replies.length - 1 ? false : true}
+      />
     {/each}
   </div>
 </div>

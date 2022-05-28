@@ -395,7 +395,13 @@
   >
     <div class="rowUser">
       {#each feed as post, i}
-        <DisplayPost {auth} {principal} {signIn} {post} />
+        <DisplayPost
+          {auth}
+          {principal}
+          {signIn}
+          {post}
+          doNotShowBorder={i < feed.length - 1 ? false : true}
+        />
       {/each}
     </div>
   </div>
