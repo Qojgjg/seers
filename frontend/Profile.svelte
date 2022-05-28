@@ -396,7 +396,7 @@
     padding: 1em;
     justify-content: start;
     min-width: 200px;
-    max-width: 800px;
+    max-width: 600px;
     width: 80%;
     /* background-color: black; */
     /* background-color: rgb(25, 27, 31);
