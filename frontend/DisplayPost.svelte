@@ -96,29 +96,114 @@
     <div style="flex-grow: 1; justify-content: start; text-align:start">
       <Link to={`/profile/post/${post?.id}`} style="width: 100%">
         <div
-          style="width: 100%; text-align:start; padding: 0px 0px; border-bottom: 1px solid grey;"
+          style="width: 100%; text-align:start; padding: 0px 0px; border-bottom: 0px solid grey;"
         >
           <div style="padding: 10px 0px; font-size: 1.2em">
             {post?.content}
           </div>
-          <div style="color:grey; padding: 5px 0px;">
-            {new Date(parseInt(post?.createdAt) / 1_000_000).toDateString()}
-            -
-            {new Date(
-              parseInt(post?.createdAt) / 1_000_000,
-            ).toLocaleTimeString()}
-          </div>
         </div>
       </Link>
+      {#if post && "market" in post?.postType}
+        <div>
+          {#each post.market[0].labels as label, i}
+            <div
+              style="width: 100%; display:flex; cursor:pointer; margin: 0; padding: 0;"
+            >
+              <div
+                style={`background: #39CCCC; width: 60px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
+              >
+                <button
+                  style="all:unset; width: 100%"
+                  on:click={() => {
+                    post.market[0].selected = i
+                  }}
+                >
+                  {label}
+                </button>
+              </div>
+              <div style="flex-grow: 1;">
+                <div
+                  style={`background: #39CCCC; width: ${
+                    post.market[0].probabilities[i] * 100.0
+                  }%; padding: 5px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 0px 5px 5px 0px; color:black`}
+                >
+                  <button
+                    style="all:unset; width: 100%"
+                    on:click={() => {
+                      post.market[0].selected = i
+                    }}
+                  />
+                </div>
+              </div>
+              <div
+                style="width: 60px; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
+              >
+                {post.market[0].probabilities[i].toFixed(2)} &Sigma;
+              </div>
+            </div>
+          {/each}
+          <div
+            style="display:flex; text-align:end; justify-content:start; flex-grow: 1"
+          >
+            {#if processing}
+              <button
+                class="btn-grad"
+                style="background: black;width: 100px; margin: 15px 0px; color:white;overflow:hidden;"
+                on:click={() => {
+                  if (principal === "") {
+                    signIn()
+                  } else {
+                    submitBuy(post.market[0].id, post.market[0].selected)
+                  }
+                }}
+              >
+                <img
+                  src={inf}
+                  alt="inf"
+                  style="width: 150px; height: 400%; margin: -100%;"
+                />
+              </button>
+            {:else}
+              <button
+                class="btn-grad"
+                style="background: black; padding: 5px; margin: 15px 0px; color: white"
+                on:click={() => {
+                  if (principal === "") {
+                    signIn()
+                  } else {
+                    submitBuy(post.market[0].id, post.market[0].selected)
+                  }
+                }}>Bet</button
+              >
+            {/if}
+            <div style="text-align:end;color:red">
+              {errorResponse}
+            </div>
+          </div>
+        </div>
+      {:else if post && "image" in post?.postType}
+        <div>
+          <img
+            src={post.image[0]}
+            alt="main"
+            style="width: 95%; border-radius: 15px; object-fit:cover"
+          />
+        </div>
+      {/if}
+      <div style="color:grey; padding: 5px 0px;border-bottom: 1px solid grey;">
+        {new Date(parseInt(post?.createdAt) / 1_000_000).toDateString()}
+        -
+        {new Date(parseInt(post?.createdAt) / 1_000_000).toLocaleTimeString()}
+      </div>
       <div
         style="width: 100%; display:flex; gap: 30px; padding: 10px 0px; color:grey; border-bottom: 1px solid grey;"
       >
         <div style="width: 100px; display:flex; gap: 15px">
-          <div style="color:white">69</div>
+          <div style="color:white">{post?.retweets.length}</div>
           <div>Retweets</div>
         </div>
         <div style="width: 100px; display:flex; gap: 15px">
-          <div style="color:white">42</div>
+          <div style="color:white">{post?.likes.length}</div>
           <div>Likes</div>
         </div>
       </div>
