@@ -264,7 +264,7 @@
               }}
               style={`color:${
                 post?.likes.find((like) => like.author.principal == principal)
-                  ? "red"
+                  ? "#e81c4f"
                   : "grey"
               }`}
               class="like-bt"
@@ -464,7 +464,7 @@
               }}
               style={`color:${
                 post?.likes.find((like) => like.author.principal == principal)
-                  ? "red"
+                  ? "#e81c4f"
                   : "grey"
               }`}
               class="like-bt"
@@ -481,7 +481,7 @@
             <div
               style={`color:${
                 post?.likes.find((like) => like.author.principal == principal)
-                  ? "red"
+                  ? "#e81c4f"
                   : "grey"
               }`}
             >
@@ -500,6 +500,6 @@
     cursor: pointer;
   }
   .like-bt:hover {
-    color: red;
+    color: #e81c4f;
   }
 </style>
