@@ -3,8 +3,12 @@
   import { Link } from "svelte-navigator"
 
   import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
-  import { faRetweet } from "@fortawesome/free-solid-svg-icons"
+  import {
+    faRetweet,
+    faHeart as faSolidHeart,
+  } from "@fortawesome/free-solid-svg-icons"
   import inf from "./assets/inf.gif"
+  import ListMarkets from "./ListMarkets.svelte"
 
   export let auth
   export let principal
@@ -67,6 +71,12 @@
     const resp = await $auth.actor.buyOutcome(marketId, 100, selected, true)
     processing = false
     console.log(resp)
+  }
+
+  const submitLike = async (postId) => {
+    const resp = await $auth.actor.submitLike(Number(postId))
+    console.log(resp)
+    // getPost()
   }
 </script>
 
@@ -218,7 +228,56 @@
           <div><Fa icon={faRetweet} /></div>
         </div>
         <div style="width: 50px; display:flex; gap: 15px">
-          <div><Fa icon={faHeart} /></div>
+          <div>
+            <button
+              on:click={() => {
+                if (principal === "") signIn()
+                else {
+                  const like = {
+                    author: {
+                      principal,
+                      handle: "dummy",
+                      name: "dummy",
+                      picture: "dummy",
+                    },
+                    createdAt: Date.now(),
+                  }
+                  const liked = post.likes.find(
+                    (like) => like.author.principal == principal,
+                  )
+
+                  console.log(liked)
+
+                  console.log(post.likes.length)
+                  if (liked) {
+                    post.likes = post.likes.filter(
+                      (like) => like.author.principal != principal,
+                    )
+                  } else {
+                    post.likes.push(like)
+                    post.likes = post.likes
+                  }
+
+                  console.log(post.likes.length)
+                  submitLike(post.id)
+                }
+              }}
+              style={`color:${
+                post?.likes.find((like) => like.author.principal == principal)
+                  ? "red"
+                  : "grey"
+              }`}
+              class="like-bt"
+            >
+              <Fa
+                icon={post?.likes.find(
+                  (like) => like.author.principal == principal,
+                )
+                  ? faSolidHeart
+                  : faHeart}
+              />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -368,10 +427,79 @@
           {#if post.retweets.length > 0}<div>{post.retweets.length}</div>{/if}
         </div>
         <div style="width: 50px; display:flex; gap: 15px">
-          <div><Fa icon={faHeart} /></div>
-          {#if post.likes.length > 0}<div>{post.likes.length}</div>{/if}
+          <div>
+            <button
+              on:click={() => {
+                if (principal === "") {
+                  signIn()
+                } else {
+                  const like = {
+                    author: {
+                      principal,
+                      handle: "dummy",
+                      name: "dummy",
+                      picture: "dummy",
+                    },
+                    createdAt: Date.now(),
+                  }
+                  const liked = post.likes.find(
+                    (like) => like.author.principal == principal,
+                  )
+
+                  console.log(liked)
+
+                  console.log(post.likes.length)
+                  if (liked) {
+                    post.likes = post.likes.filter(
+                      (like) => like.author.principal != principal,
+                    )
+                  } else {
+                    post.likes.push(like)
+                    post.likes = post.likes
+                  }
+
+                  console.log(post.likes.length)
+                  submitLike(post.id)
+                }
+              }}
+              style={`color:${
+                post?.likes.find((like) => like.author.principal == principal)
+                  ? "red"
+                  : "grey"
+              }`}
+              class="like-bt"
+              ><Fa
+                icon={post?.likes.find(
+                  (like) => like.author.principal == principal,
+                )
+                  ? faSolidHeart
+                  : faHeart}
+              /></button
+            >
+          </div>
+          {#if post.likes.length > 0}
+            <div
+              style={`color:${
+                post?.likes.find((like) => like.author.principal == principal)
+                  ? "red"
+                  : "grey"
+              }`}
+            >
+              {post.likes.length}
+            </div>
+          {/if}
         </div>
       </div>
     </div>
   </div>
 {/if}
+
+<style>
+  .like-bt {
+    all: unset;
+    cursor: pointer;
+  }
+  .like-bt:hover {
+    color: red;
+  }
+</style>
