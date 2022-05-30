@@ -35,7 +35,7 @@ export const idlFactory = ({ IDL }) => {
     'notEnoughLiquidity' : IDL.Float64,
   });
   const Result_8 = IDL.Variant({ 'ok' : CommentStable, 'err' : MarketError });
-  const Result_3 = IDL.Variant({ 'ok' : IDL.Float64, 'err' : MarketError });
+  const Result_2 = IDL.Variant({ 'ok' : IDL.Float64, 'err' : MarketError });
   const AccountIdentifier = IDL.Vec(IDL.Nat8);
   const ICP = IDL.Record({ 'e8s' : IDL.Nat64 });
   const CollateralType = IDL.Variant({
@@ -240,7 +240,7 @@ export const idlFactory = ({ IDL }) => {
     'endDateOlderThanStartDate' : IDL.Null,
     'notEnoughLiquidity' : IDL.Float64,
   });
-  const Result_4 = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
+  const Result_3 = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
   const PostError = IDL.Variant({
     'notLoggedIn' : IDL.Null,
     'parentDoesNotExist' : IDL.Null,
@@ -251,19 +251,19 @@ export const idlFactory = ({ IDL }) => {
     'alreadyRetweeted' : IDL.Null,
     'userDoesNotExist' : IDL.Null,
   });
-  const Result = IDL.Variant({ 'ok' : PostStable, 'err' : PostError });
+  const Result_6 = IDL.Variant({ 'ok' : PostStable, 'err' : PostError });
   const ThreadStable = IDL.Record({
     'main' : PostStable,
     'ancestors' : IDL.Vec(PostStable),
     'replies' : IDL.Vec(PostStable),
   });
-  const Result_6 = IDL.Variant({ 'ok' : ThreadStable, 'err' : PostError });
-  const Result_5 = IDL.Variant({
+  const Result_5 = IDL.Variant({ 'ok' : ThreadStable, 'err' : PostError });
+  const Result_4 = IDL.Variant({
     'ok' : IDL.Tuple(UserStable, IDL.Vec(PostStable)),
     'err' : UserError,
   });
-  const Result_2 = IDL.Variant({ 'ok' : IDL.Null, 'err' : MarketError });
-  const Result_1 = IDL.Variant({ 'ok' : IDL.Null, 'err' : PostError });
+  const Result_1 = IDL.Variant({ 'ok' : IDL.Null, 'err' : MarketError });
+  const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : PostError });
   const PostInitData = IDL.Record({
     'id' : IDL.Nat32,
     'retweet' : IDL.Opt(Retweet),
@@ -277,19 +277,19 @@ export const idlFactory = ({ IDL }) => {
     'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_8], []),
     'buyOutcome' : IDL.Func(
         [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
-        [Result_3],
+        [Result_2],
         [],
       ),
     'callerAccount' : IDL.Func([], [AccountIdentifier], []),
     'canisterAccount' : IDL.Func([], [IDL.Text], ['query']),
     'canisterFloat' : IDL.Func([], [ICP], []),
     'createMarket' : IDL.Func([MarketInitData], [Result_7], []),
-    'createUser' : IDL.Func([UserInitData], [Result_4], []),
+    'createUser' : IDL.Func([UserInitData], [Result_3], []),
     'getFeed' : IDL.Func([], [IDL.Vec(PostStable)], ['query']),
-    'getPost' : IDL.Func([IDL.Nat32], [Result], ['query']),
-    'getThread' : IDL.Func([IDL.Nat32], [Result_6], ['query']),
+    'getPost' : IDL.Func([IDL.Nat32], [Result_6], ['query']),
+    'getThread' : IDL.Func([IDL.Nat32], [Result_5], ['query']),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
-    'getUserWithPosts' : IDL.Func([IDL.Text], [Result_5], ['query']),
+    'getUserWithPosts' : IDL.Func([IDL.Text], [Result_4], ['query']),
     'readAllMarkets' : IDL.Func(
         [MarketCategory, MarketState],
         [IDL.Vec(MarketStable)],
@@ -302,17 +302,17 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(UserData)],
         ['query'],
       ),
-    'refreshUser' : IDL.Func([], [Result_4], []),
+    'refreshUser' : IDL.Func([], [Result_3], []),
     'resolveMarket' : IDL.Func([IDL.Nat32, IDL.Nat], [IDL.Bool], []),
     'sellOutcome' : IDL.Func(
         [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
-        [Result_3],
+        [Result_2],
         [],
       ),
     'setMarketState' : IDL.Func([IDL.Nat32, MarketState], [IDL.Bool], []),
     'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),
-    'submitForecast' : IDL.Func([IDL.Nat32, Forecast], [Result_2], []),
-    'submitLike' : IDL.Func([IDL.Nat32], [Result_1], []),
+    'submitForecast' : IDL.Func([IDL.Nat32, Forecast], [Result_1], []),
+    'submitLike' : IDL.Func([IDL.Nat32], [Result], []),
     'submitPost' : IDL.Func(
         [PostInitData, IDL.Opt(MarketInitData)],
         [Result],

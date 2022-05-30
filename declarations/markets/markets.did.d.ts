@@ -40,17 +40,17 @@ export interface ICP { 'e8s' : bigint }
 export interface Like { 'createdAt' : Time, 'author' : UserData }
 export interface Market {
   'addCommentToMarket' : ActorMethod<[number, string], Result_8>,
-  'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_3>,
+  'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_2>,
   'callerAccount' : ActorMethod<[], AccountIdentifier>,
   'canisterAccount' : ActorMethod<[], string>,
   'canisterFloat' : ActorMethod<[], ICP>,
   'createMarket' : ActorMethod<[MarketInitData], Result_7>,
-  'createUser' : ActorMethod<[UserInitData], Result_4>,
+  'createUser' : ActorMethod<[UserInitData], Result_3>,
   'getFeed' : ActorMethod<[], Array<PostStable>>,
-  'getPost' : ActorMethod<[number], Result>,
-  'getThread' : ActorMethod<[number], Result_6>,
+  'getPost' : ActorMethod<[number], Result_6>,
+  'getThread' : ActorMethod<[number], Result_5>,
   'getUserStable' : ActorMethod<[string], [] | [UserStable]>,
-  'getUserWithPosts' : ActorMethod<[string], Result_5>,
+  'getUserWithPosts' : ActorMethod<[string], Result_4>,
   'readAllMarkets' : ActorMethod<
     [MarketCategory, MarketState],
     Array<MarketStable>,
@@ -58,13 +58,13 @@ export interface Market {
   'readAllUsers' : ActorMethod<[], Array<UserStable>>,
   'readMarket' : ActorMethod<[number], [] | [MarketStable]>,
   'readUserData' : ActorMethod<[Array<string>], Array<UserData>>,
-  'refreshUser' : ActorMethod<[], Result_4>,
+  'refreshUser' : ActorMethod<[], Result_3>,
   'resolveMarket' : ActorMethod<[number, bigint], boolean>,
-  'sellOutcome' : ActorMethod<[number, number, bigint, boolean], Result_3>,
+  'sellOutcome' : ActorMethod<[number, number, bigint, boolean], Result_2>,
   'setMarketState' : ActorMethod<[number, MarketState], boolean>,
   'setUpdating' : ActorMethod<[boolean], undefined>,
-  'submitForecast' : ActorMethod<[number, Forecast], Result_2>,
-  'submitLike' : ActorMethod<[number], Result_1>,
+  'submitForecast' : ActorMethod<[number, Forecast], Result_1>,
+  'submitLike' : ActorMethod<[number], Result>,
   'submitPost' : ActorMethod<[PostInitData, [] | [MarketInitData]], Result>,
 }
 export type MarketCategory = { 'any' : null } |
@@ -175,19 +175,19 @@ export interface PostStable {
   'image' : [] | [string],
   'parent' : [] | [ParentData],
 }
-export type Result = { 'ok' : PostStable } |
+export type Result = { 'ok' : null } |
   { 'err' : PostError };
 export type Result_1 = { 'ok' : null } |
+  { 'err' : MarketError };
+export type Result_2 = { 'ok' : number } |
+  { 'err' : MarketError };
+export type Result_3 = { 'ok' : UserStable } |
+  { 'err' : UserError };
+export type Result_4 = { 'ok' : [UserStable, Array<PostStable>] } |
+  { 'err' : UserError };
+export type Result_5 = { 'ok' : ThreadStable } |
   { 'err' : PostError };
-export type Result_2 = { 'ok' : null } |
-  { 'err' : MarketError };
-export type Result_3 = { 'ok' : number } |
-  { 'err' : MarketError };
-export type Result_4 = { 'ok' : UserStable } |
-  { 'err' : UserError };
-export type Result_5 = { 'ok' : [UserStable, Array<PostStable>] } |
-  { 'err' : UserError };
-export type Result_6 = { 'ok' : ThreadStable } |
+export type Result_6 = { 'ok' : PostStable } |
   { 'err' : PostError };
 export type Result_7 = { 'ok' : MarketStable } |
   { 'err' : MarketError };

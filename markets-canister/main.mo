@@ -398,7 +398,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Submit a post of any type.
-    public shared(msg) func submitPost(initData: Post.PostInitData, marketInitData: ?M.MarketInitData): async Result.Result<Post.PostStable, Post.PostError> {
+    public shared(msg) func submitPost(initData: Post.PostInitData, marketInitData: ?M.MarketInitData): async Result.Result<(), Post.PostError> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -481,6 +481,8 @@ shared({ caller = initializer }) actor class Market() = this {
                                             newRetweets.add(retweet);
                                         };
                                         realOther.retweets := newRetweets;
+
+                                        if (post.content == "" and exist) return #ok();
                                     };
                                     case (?moreRetweet) {
                                         switch (postMap.get(moreRetweet.id)) {
@@ -505,8 +507,9 @@ shared({ caller = initializer }) actor class Market() = this {
                                                     };
                                                     newRetweets.add(retweet);
                                                 };
-
                                                 realMoreRetweet.retweets := newRetweets;
+
+                                                if (post.content == "" and exist) return #ok();
                                             };
                                         };
                                         post.retweet := ?moreRetweet;
@@ -548,7 +551,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 postMap.put(id, post);
                 feed.add(post);
 
-                return #ok(post.freeze());
+                return #ok();
             };
         };
     };
