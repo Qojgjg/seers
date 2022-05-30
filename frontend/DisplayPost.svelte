@@ -77,15 +77,30 @@
     // getPost()
   }
 
-  const submitRetweet = async (postId) => {
+  const submitRetweet = async () => {
     const initData = {
       id: 0,
       content: "",
-      author: post.author,
-      parent: 0,
-      postType: { retweet: Number(postId) },
+      author: {
+        principal,
+        picture: "",
+        handle: "",
+        name: "",
+      },
+      parent: [],
+      image: [],
+      market: [],
+      retweet: [
+        {
+          id: post.id,
+          author: post.author,
+          content: post.content,
+          parent: post.parent,
+          createdAt: post.createdAt,
+        },
+      ],
     }
-    const resp = await $auth.actor.submitPost(initData, [], [])
+    const resp = await $auth.actor.submitPost(initData, [])
     console.log(resp)
   }
 </script>
@@ -451,7 +466,7 @@
                 if (principal === "") {
                   signIn()
                 } else {
-                  submitRetweet(post.id)
+                  submitRetweet()
                 }
               }}><Fa icon={faRetweet} /></button
             >
