@@ -339,8 +339,8 @@
       </div>
       <a href={`/profile/post/${post.id}#main`} style="width: 100%">
         <div style="width: 100%; text-align:start; padding: 15px 0px">
-          {#if "retweet" in post.postType}
-            {post.retweet[0].content}
+          {#if post.citing.length > 0}
+            {post.citing[0].content}
           {:else}
             {post.content}
           {/if}

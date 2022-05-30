@@ -467,13 +467,38 @@ shared({ caller = initializer }) actor class Market() = this {
 
                                 var post: Post.Post = Post.Post(newInitData);
                                 
-                                let retweet: Post.Retweet = {
-                                    id = citedPost.id;
-                                    author = citedPost.author;
-                                    content = citedPost.content;
-                                    parent = citedPost.parent;
-                                    createdAt = citedPost.createdAt;
-                                    postType = citedPost.postType;
+                                let retweet: Post.Retweet = if (citedPost.content == "") {
+                                    switch (citedPost.citing) {
+                                        case null {
+                                            {
+                                                id = citedPost.id;
+                                                author = citedPost.author;
+                                                content = citedPost.content;
+                                                parent = citedPost.parent;
+                                                createdAt = citedPost.createdAt;
+                                                postType = citedPost.postType;
+                                            };
+                                        };
+                                        case (?other) {
+                                            {
+                                                id = other.id;
+                                                author = other.author;
+                                                content = other.content;
+                                                parent = other.parent;
+                                                createdAt = other.createdAt;
+                                                postType = other.postType;
+                                            };
+                                        };
+                                    };
+                                } else {
+                                    {
+                                        id = citedPost.id;
+                                        author = citedPost.author;
+                                        content = citedPost.content;
+                                        parent = citedPost.parent;
+                                        createdAt = citedPost.createdAt;
+                                        postType = citedPost.postType;
+                                    };
                                 };
 
                                 citedPost.retweets.add(id);
