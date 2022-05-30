@@ -19,19 +19,11 @@ module {
         #parentDoesNotExist;
     };
 
-    public type PostType = {
-        #simple;
-        #retweet: Nat32;
-        #market: Nat32;
-        #image: Nat32;
-    };
-
     public type PostInitData = {
         id: Nat32;
         author: Utils.UserData;
         content: Text;
-        parent: Nat32;
-        postType: PostType;
+        parent: Utils.UserData;
     };
 
     public type ThreadStable = {
@@ -44,7 +36,7 @@ module {
         public var id: Nat32 = initData.id;
         public var author: Utils.UserData = initData.author;
         public var content: Text = initData.content;
-        public var parent: Nat32 = initData.parent;
+        public var parent: Utils.UserData = initData.parent;
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var retweets: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var citing: ?Retweet = null;
@@ -52,8 +44,7 @@ module {
         public var image: ?Text = null;
         public var likes: Buffer.Buffer<Like.Like> = Buffer.Buffer<Like.Like>(0);
         public var createdAt: Time.Time = Time.now();
-        public var postType: PostType = initData.postType;
-
+        
         public func freeze(): PostStable {
             let ps: PostStable = {
                 id = id;
@@ -69,7 +60,6 @@ module {
                 image = image;
                 likes = likes.toArray();
                 createdAt = createdAt;
-                postType = postType;
             };
             
             return ps;
@@ -82,14 +72,13 @@ module {
         content: Text;
         parent: Nat32;
         createdAt: Time.Time;
-        postType: PostType;
     };
 
     public type PostStable = {
         id: Nat32;
         author: Utils.UserData;
         content: Text;
-        parent: Nat32;
+        parent: Utils.UserData;
         replies: [Nat32];
         retweets: [Nat32];
         citing: ?Retweet;
@@ -97,7 +86,6 @@ module {
         image: ?Text;
         likes: [Like.Like];
         createdAt: Time.Time;
-        postType: PostType;
     };
 
     public func unFreeze(ps: PostStable): Post {
@@ -106,7 +94,6 @@ module {
             author = ps.author;
             content = ps.content;
             parent = ps.parent;
-            postType = ps.postType;
         };
 
         var p: Post = Post(initData);
