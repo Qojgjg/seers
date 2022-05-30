@@ -426,19 +426,16 @@
         </div>
       {/if}
       <div
-        style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
+        style="width: 280px; display:flex; padding: 5px 0px; color:grey; justify-content:space-between"
       >
-        <a
-          href={`/profile/post/${post.id}#main`}
-          style="width: 50px; color:grey"
-        >
-          <div style="width: 100%; display:flex; gap: 15px;">
+        <a href={`/profile/post/${post.id}#main`} style="color:grey">
+          <div style="display:flex; gap: 15px;">
             <div><button class="reply-bt"><Fa icon={faComment} /></button></div>
             {#if post.replies.length > 0}<div>{post.replies.length}</div>{/if}
           </div>
         </a>
 
-        <div style="width: 50px; display:flex; gap: 15px">
+        <div style="width: fit-content; display:flex; gap: 15px">
           <div>
             <button
               class="retweet-bt"
