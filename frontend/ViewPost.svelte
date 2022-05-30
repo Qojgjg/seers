@@ -23,14 +23,26 @@
   const submitReply = async () => {
     processing = true
     const initData = {
-      id: Number(id),
+      id: 0,
       content: newComment,
-      author: post.author,
-      parent: Number(id),
-      postType: { simple: null },
+      author: {
+        principal,
+        picture: "",
+        handle: "",
+        name: "",
+      },
+      parent: [
+        {
+          id: Number(post.id),
+          authorName: post.author.handle,
+        },
+      ],
+      retweet: [],
+      image: [],
+      market: [],
     }
 
-    const resp = await $auth.actor.submitPost(initData, [], [])
+    const resp = await $auth.actor.submitPost(initData, [])
     processing = false
     newComment = ""
     console.log(resp)
