@@ -460,8 +460,23 @@ shared({ caller = initializer }) actor class Market() = this {
                             case null {
 
                             };
-                            case (?other) {
-                                other.retweets.add(post.id);      
+                            case (?realOther) {
+                                switch (realOther.retweet) {
+                                    case null {
+                                        realOther.retweets.add(post.id);
+                                    };
+                                    case (?moreRetweet) {
+                                        switch (postMap.get(moreRetweet.id)) {
+                                            case null {
+
+                                            };
+                                            case (?realMoreRetweet) {
+                                                realMoreRetweet.retweets.add(post.id);
+                                            };
+                                        };
+                                        post.retweet := ?moreRetweet;
+                                    };
+                                };
                             };
                         };
                     };
