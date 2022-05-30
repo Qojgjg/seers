@@ -47,10 +47,12 @@
         name: "",
       },
       content: post,
-      parent: 0,
-      postType: { simple: null },
+      parent: [],
+      image: [],
+      market: [],
+      retweet: [],
     }
-    const r = await $auth.actor.submitPost(initData, [], [])
+    const r = await $auth.actor.submitPost(initData, [])
     console.log(r)
     processing = false
     post = ""

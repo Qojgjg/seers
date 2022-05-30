@@ -124,7 +124,7 @@
           </div>
         </div>
       </a>
-      {#if post && "market" in post?.postType}
+      {#if post && post.market.length > 0}
         <div>
           {#each post.market[0].labels as label, i}
             <div
@@ -202,7 +202,7 @@
             </div>
           </div>
         </div>
-      {:else if post && "image" in post?.postType}
+      {:else if post && post.image.length > 0}
         <div>
           <img
             src={post.image[0]}
@@ -331,7 +331,7 @@
         <div style="color:grey">
           - {parseTwitterDate(parseInt(post.createdAt) / 1_000_000)}
         </div>
-        {#if "retweet" in post.postType}
+        {#if post && post.retweet.length > 0}
           <div style="color:grey">
             - retweeted by @{post.author.handle}
           </div>
@@ -339,14 +339,14 @@
       </div>
       <a href={`/profile/post/${post.id}#main`} style="width: 100%">
         <div style="width: 100%; text-align:start; padding: 15px 0px">
-          {#if post.citing.length > 0}
-            {post.citing[0].content}
+          {#if post.retweet.length > 0}
+            {post.retweet[0].content}
           {:else}
             {post.content}
           {/if}
         </div>
       </a>
-      {#if "market" in post.postType}
+      {#if post && post.market.length > 0}
         <div>
           {#each post.market[0].labels as label, i}
             <div
@@ -424,7 +424,7 @@
             </div>
           </div>
         </div>
-      {:else if "image" in post.postType}
+      {:else if post && post.image.length > 0}
         <div>
           <img
             src={post.image[0]}
