@@ -421,13 +421,13 @@
           style="width: 50px; color:grey"
         >
           <div style="width: 100%; display:flex; gap: 15px;">
-            <div><Fa icon={faComment} /></div>
+            <div><button class="reply-bt"><Fa icon={faComment} /></button></div>
             {#if post.replies.length > 0}<div>{post.replies.length}</div>{/if}
           </div>
         </a>
 
         <div style="width: 50px; display:flex; gap: 15px">
-          <div><Fa icon={faRetweet} /></div>
+          <div><button class="retweet-bt"><Fa icon={faRetweet} /></button></div>
           {#if post.retweets.length > 0}<div>{post.retweets.length}</div>{/if}
         </div>
         <div style="width: 50px; display:flex; gap: 15px">
@@ -505,5 +505,21 @@
   }
   .like-bt:hover {
     color: #e81c4f;
+  }
+
+  .retweet-bt {
+    all: unset;
+    cursor: pointer;
+  }
+  .retweet-bt:hover {
+    color: #19cf86;
+  }
+
+  .reply-bt {
+    all: unset;
+    cursor: pointer;
+  }
+  .reply-bt:hover {
+    color: #1da1f2;
   }
 </style>
