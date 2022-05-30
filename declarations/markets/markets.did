@@ -100,6 +100,11 @@ type ThreadStable =
    main: PostStable;
    replies: vec PostStable;
  };
+type Retweeters = 
+ record {
+   author: UserData;
+   id: nat32;
+ };
 type Retweet = 
  record {
    author: UserData;
@@ -168,7 +173,7 @@ type PostStable =
    parent: opt ParentData;
    replies: vec nat32;
    retweet: opt Retweet;
-   retweets: vec nat32;
+   retweets: vec Retweeters;
  };
 type PostInitData = 
  record {
@@ -183,6 +188,7 @@ type PostInitData =
 type PostError = 
  variant {
    alreadyLiked;
+   alreadyRetweeted;
    imageNotFound;
    marketNotFound;
    notLoggedIn;
@@ -192,7 +198,7 @@ type PostError =
  };
 type ParentData = 
  record {
-   authorName: text;
+   author: UserData;
    id: nat32;
  };
 type MarketState = 

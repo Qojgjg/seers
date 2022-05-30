@@ -17,11 +17,12 @@ module {
         #marketNotFound;
         #imageNotFound;
         #parentDoesNotExist;
+        #alreadyRetweeted;
     };
 
     public type ParentData = {
         id: Nat32;
-        authorName: Text;
+        author: Utils.UserData;
     };
 
     public type PostInitData = {
@@ -46,7 +47,7 @@ module {
         public var content: Text = initData.content;
         public var parent: ?ParentData = initData.parent;
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
-        public var retweets: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
+        public var retweets: Buffer.Buffer<Retweeters> = Buffer.Buffer<Retweeters>(0);
         public var retweet: ?Retweet = initData.retweet;
         public var market: ?Market.Market = null;
         public var image: ?Text = initData.image;
@@ -74,6 +75,11 @@ module {
         };
     };
 
+    public type Retweeters = {
+        id: Nat32;
+        author: Utils.UserData;
+    };
+
     public type Retweet = {
         id: Nat32;
         author: Utils.UserData;
@@ -88,7 +94,7 @@ module {
         content: Text;
         parent: ?ParentData;
         replies: [Nat32];
-        retweets: [Nat32];
+        retweets: [Retweeters];
         retweet: ?Retweet;
         market: ?Market.MarketStable;
         image: ?Text;
@@ -108,7 +114,7 @@ module {
         };
 
         var p: Post = Post(initData);
-        
+
         p.market := Option.map(ps.market, func (m: Market.MarketStable): Market.Market { Market.unFreeze(m) });
         p.replies := Utils.bufferFromArray(ps.replies);
         p.retweets := Utils.bufferFromArray(ps.retweets);

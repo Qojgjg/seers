@@ -100,14 +100,18 @@ type ThreadStable =
    main: PostStable;
    replies: vec PostStable;
  };
+type Retweeters = 
+ record {
+   author: UserData;
+   id: nat32;
+ };
 type Retweet = 
  record {
    author: UserData;
    content: text;
    createdAt: Time;
    id: nat32;
-   parent: nat32;
-   postType: PostType;
+   parent: opt ParentData;
  };
 type Result_8 = 
  variant {
@@ -157,35 +161,29 @@ type Result =
    err: PostError;
    ok: PostStable;
  };
-type PostType = 
- variant {
-   image: nat32;
-   market: nat32;
-   retweet: nat32;
-   simple;
- };
 type PostStable = 
  record {
    author: UserData;
-   citing: opt Retweet;
    content: text;
    createdAt: Time;
    id: nat32;
    image: opt text;
    likes: vec Like;
    market: opt MarketStable;
-   parent: nat32;
-   postType: PostType;
+   parent: opt ParentData;
    replies: vec nat32;
-   retweets: vec nat32;
+   retweet: opt Retweet;
+   retweets: vec Retweeters;
  };
 type PostInitData = 
  record {
    author: UserData;
    content: text;
    id: nat32;
-   parent: nat32;
-   postType: PostType;
+   image: opt text;
+   market: opt MarketInitData;
+   parent: opt ParentData;
+   retweet: opt Retweet;
  };
 type PostError = 
  variant {
@@ -196,6 +194,11 @@ type PostError =
    parentDoesNotExist;
    postDoesNotExist;
    userDoesNotExist;
+ };
+type ParentData = 
+ record {
+   author: UserData;
+   id: nat32;
  };
 type MarketState = 
  variant {
@@ -378,5 +381,5 @@ service : {
   setUpdating: (bool) -> () oneway;
   submitForecast: (nat32, Forecast) -> (Result_2);
   submitLike: (nat32) -> (Result_1);
-  submitPost: (PostInitData, opt MarketInitData, opt text) -> (Result);
+  submitPost: (PostInitData, opt MarketInitData) -> (Result);
 }

@@ -145,7 +145,7 @@ export const idlFactory = ({ IDL }) => {
     'cycles' : IDL.Float64,
   });
   const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : CommentStable });
-  const ParentData = IDL.Record({ 'id' : IDL.Nat32, 'authorName' : IDL.Text });
+  const ParentData = IDL.Record({ 'id' : IDL.Nat32, 'author' : UserData });
   const Retweet = IDL.Record({
     'id' : IDL.Nat32,
     'content' : IDL.Text,
@@ -153,10 +153,11 @@ export const idlFactory = ({ IDL }) => {
     'author' : UserData,
     'parent' : IDL.Opt(ParentData),
   });
+  const Retweeters = IDL.Record({ 'id' : IDL.Nat32, 'author' : UserData });
   const PostStable = IDL.Record({
     'id' : IDL.Nat32,
     'retweet' : IDL.Opt(Retweet),
-    'retweets' : IDL.Vec(IDL.Nat32),
+    'retweets' : IDL.Vec(Retweeters),
     'content' : IDL.Text,
     'createdAt' : Time,
     'author' : UserData,
@@ -247,6 +248,7 @@ export const idlFactory = ({ IDL }) => {
     'imageNotFound' : IDL.Null,
     'alreadyLiked' : IDL.Null,
     'postDoesNotExist' : IDL.Null,
+    'alreadyRetweeted' : IDL.Null,
     'userDoesNotExist' : IDL.Null,
   });
   const Result = IDL.Variant({ 'ok' : PostStable, 'err' : PostError });

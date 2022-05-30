@@ -458,20 +458,55 @@ shared({ caller = initializer }) actor class Market() = this {
                     case (?other) {
                         switch (postMap.get(other.id)) {
                             case null {
-
+                                return #err(#postDoesNotExist);
                             };
                             case (?realOther) {
                                 switch (realOther.retweet) {
                                     case null {
-                                        realOther.retweets.add(post.id);
+                                        var exist = false;
+                                        var newRetweets = Buffer.Buffer<Post.Retweeters>(realOther.retweets.size());
+
+                                        for (r in realOther.retweets.vals()) {
+                                            if (r.author.principal == caller) {
+                                                exist := true;
+                                            } else {
+                                                newRetweets.add(r);
+                                            };
+                                        };
+                                        if (not exist) {
+                                            let retweet: Post.Retweeters = {
+                                                id = post.id;
+                                                author = authorData;
+                                            };
+                                            realOther.retweets.add(retweet);
+                                        };
+                                        realOther.retweets := newRetweets;
                                     };
                                     case (?moreRetweet) {
                                         switch (postMap.get(moreRetweet.id)) {
                                             case null {
-
+                                                return #err(#postDoesNotExist);
                                             };
                                             case (?realMoreRetweet) {
-                                                realMoreRetweet.retweets.add(post.id);
+                                                var exist = false;
+                                                var newRetweets = Buffer.Buffer<Post.Retweeters>(realMoreRetweet.retweets.size());
+
+                                                for (r in realMoreRetweet.retweets.vals()) {
+                                                    if (r.author.principal == caller) {
+                                                        exist := true; 
+                                                    } else {
+                                                        newRetweets.add(r);
+                                                    };
+                                                };
+                                                if (not exist) {
+                                                    let retweet: Post.Retweeters = {
+                                                        id = post.id;
+                                                        author = authorData;
+                                                    };
+                                                    realMoreRetweet.retweets.add(retweet);
+                                                };
+
+                                                realMoreRetweet.retweets := newRetweets;
                                             };
                                         };
                                         post.retweet := ?moreRetweet;
@@ -1409,53 +1444,6 @@ shared({ caller = initializer }) actor class Market() = this {
             };
         };
     };
-
-    // Create post and push it to user.
-    // public shared(msg) func submitPost(content: Text): async Result.Result<Post.PostStable, U.UserError> {
-    //     assert(not updating);
-
-    //     let caller = Principal.toText(msg.caller);
-        
-    //     if (caller == anon) {
-    //         return #err(#callerIsAnon);
-    //     };
-
-    //     switch (getUser(caller)) {
-    //         case null {
-    //             return #err(#profileNotCreated);
-    //         };
-    //         case (?user) {
-    //             let authorData: Utils.UserData = {
-    //                 principal = user.id;
-    //                 name = user.name;
-    //                 handle = user.handle;
-    //                 picture = user.picture;
-    //             };
-
-    //             let treeId = Nat32.fromNat(user.postMap.size() + 1);
-    //             let id = treeId;
-
-    //             let initData: Post.PostInitData = {
-    //                 id = id;
-    //                 author = authorData;
-    //                 content = content;
-
-    //                 treeParent = 0;
-    //                 treeId = treeId;
-    //                 treeAuthor = authorData.principal;
-    //             };
-
-    //             let post: Post.Post = Post.Post(initData);
-
-    //             feed.add(post);
-    //             user.postRoots.add(post.id);
-    //             user.postMap.put(post.id, post);
-
-    //             return #ok(post.freeze());
-    //         };
-    //     };
-    // };
-
     // Add a comment to a market.
     public shared(msg) func addCommentToMarket(marketId: Nat32, content: Text): async Result.Result<Comment.CommentStable, M.MarketError> {
         assert(not updating);

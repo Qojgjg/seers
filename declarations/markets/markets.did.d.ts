@@ -144,13 +144,14 @@ export type MarketState = { 'any' : null } |
   { 'invalid' : null } |
   { 'open' : null } |
   { 'approved' : null };
-export interface ParentData { 'id' : number, 'authorName' : string }
+export interface ParentData { 'id' : number, 'author' : UserData }
 export type PostError = { 'notLoggedIn' : null } |
   { 'parentDoesNotExist' : null } |
   { 'marketNotFound' : null } |
   { 'imageNotFound' : null } |
   { 'alreadyLiked' : null } |
   { 'postDoesNotExist' : null } |
+  { 'alreadyRetweeted' : null } |
   { 'userDoesNotExist' : null };
 export interface PostInitData {
   'id' : number,
@@ -164,7 +165,7 @@ export interface PostInitData {
 export interface PostStable {
   'id' : number,
   'retweet' : [] | [Retweet],
-  'retweets' : Array<number>,
+  'retweets' : Array<Retweeters>,
   'content' : string,
   'createdAt' : Time,
   'author' : UserData,
@@ -199,6 +200,7 @@ export interface Retweet {
   'author' : UserData,
   'parent' : [] | [ParentData],
 }
+export interface Retweeters { 'id' : number, 'author' : UserData }
 export interface ThreadStable {
   'main' : PostStable,
   'ancestors' : Array<PostStable>,
