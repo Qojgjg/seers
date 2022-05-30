@@ -188,6 +188,7 @@ type PostInitData =
 type PostError = 
  variant {
    alreadyLiked;
+   alreadyRetweeted;
    imageNotFound;
    marketNotFound;
    notLoggedIn;

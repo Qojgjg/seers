@@ -478,7 +478,7 @@ shared({ caller = initializer }) actor class Market() = this {
                                                 id = post.id;
                                                 author = authorData;
                                             };
-                                            realOther.retweets.add(retweet);
+                                            newRetweets.add(retweet);
                                         };
                                         realOther.retweets := newRetweets;
                                     };
@@ -503,7 +503,7 @@ shared({ caller = initializer }) actor class Market() = this {
                                                         id = post.id;
                                                         author = authorData;
                                                     };
-                                                    realMoreRetweet.retweets.add(retweet);
+                                                    newRetweets.add(retweet);
                                                 };
 
                                                 realMoreRetweet.retweets := newRetweets;
