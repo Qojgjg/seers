@@ -60,7 +60,7 @@
 
   {#if principal === ""}
     <!-- <a href="https://forms.gle/fYmc9iTc9P46upm47" style={menuItemStyle}>Bugs</a> -->
-    <!-- <button on:click={signIn} style={menuItemStyle}>Login</button> -->
+    <button on:click={signIn} style={menuItemStyle}>Login</button>
   {/if}
 
   {#if principal !== ""}

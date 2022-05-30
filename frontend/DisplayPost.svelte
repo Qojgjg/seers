@@ -105,7 +105,7 @@
       </div>
     </div>
     <div style="flex-grow: 1; justify-content: start; text-align:start">
-      <Link to={`/profile/post/${post?.id}`} style="width: 100%">
+      <a href={`/profile/post/${post?.id}#main`} style="width: 100%">
         <div
           style="width: 100%; text-align:start; padding: 0px 0px; border-bottom: 0px solid grey;"
         >
@@ -113,7 +113,7 @@
             {post?.content}
           </div>
         </div>
-      </Link>
+      </a>
       {#if post && "market" in post?.postType}
         <div>
           {#each post.market[0].labels as label, i}
@@ -323,11 +323,11 @@
         </div>
         <!-- <div style="color:grey">- retweeted by @marcio</div> -->
       </div>
-      <Link to={`/profile/post/${post.id}#main`} style="width: 100%">
+      <a href={`/profile/post/${post.id}#main`} style="width: 100%">
         <div style="width: 100%; text-align:start; padding: 15px 0px">
           {post.content}
         </div>
-      </Link>
+      </a>
       {#if "market" in post.postType}
         <div>
           {#each post.market[0].labels as label, i}
