@@ -129,6 +129,9 @@ module {
         public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(5);
 
         public var posts: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
+        public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
+        public var likes: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
+        public var retweets: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         
         public var followers: Buffer.Buffer<Follower> = Buffer.Buffer<Follower>(5);
         public var followees: Buffer.Buffer<Followee> = Buffer.Buffer<Followee>(5);
@@ -159,7 +162,11 @@ module {
                 markets = markets.toArray();
                 txs = txs.toArray();
                 comments = stableComments;
+                
                 posts = posts.toArray();
+                replies = replies.toArray();
+                retweets = retweets.toArray();
+                likes = likes.toArray();
                 
                 followers = followees.toArray();
                 followees = followees.toArray();
@@ -191,6 +198,9 @@ module {
         txs: [Tx.UserTx];
         comments: [Comment.CommentStable];
         posts: [Nat32];
+        replies: [Nat32];
+        retweets: [Nat32];
+        likes: [Nat32];
         followers: [Follower];
         followees: [Followee];
         createdAt: Time.Time;
@@ -218,6 +228,10 @@ module {
         var user: User = User(initData);
         
         user.posts := Utils.bufferFromArray(u.posts);
+        user.replies := Utils.bufferFromArray(u.replies);
+        user.retweets := Utils.bufferFromArray(u.retweets);
+        user.likes := Utils.bufferFromArray(u.likes);
+        
         user.feed := Utils.bufferFromArray(u.feed);
         user.balances := u.balances;
         user.expBalances := u.expBalances;

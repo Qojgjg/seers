@@ -449,6 +449,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 };
 
                 var post: Post.Post = Post.Post(newInitData);
+                var isRetweet = false;
 
                 // Retweet.
                 switch (initData.retweet) {
@@ -483,6 +484,7 @@ shared({ caller = initializer }) actor class Market() = this {
                                         realOther.retweets := newRetweets;
 
                                         if (post.content == "" and exist) return #ok();
+                                        isRetweet := true;
                                     };
                                     case (?moreRetweet) {
                                         switch (postMap.get(moreRetweet.id)) {
@@ -510,6 +512,7 @@ shared({ caller = initializer }) actor class Market() = this {
                                                 realMoreRetweet.retweets := newRetweets;
 
                                                 if (post.content == "" and exist) return #ok();
+                                                isRetweet := true;
                                             };
                                         };
                                         post.retweet := ?moreRetweet;
@@ -547,7 +550,11 @@ shared({ caller = initializer }) actor class Market() = this {
                     };
                 };
 
-                author.posts.add(id);
+                if (isRetweet) {
+                    author.retweets.add(id);
+                } else {
+                    author.posts.add(id);
+                };
                 postMap.put(id, post);
                 feed.add(post);
 
