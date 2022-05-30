@@ -331,11 +331,19 @@
         <div style="color:grey">
           - {parseTwitterDate(parseInt(post.createdAt) / 1_000_000)}
         </div>
-        <!-- <div style="color:grey">- retweeted by @marcio</div> -->
+        {#if "retweet" in post.postType}
+          <div style="color:grey">
+            - retweeted by @{post.author.handle}
+          </div>
+        {/if}
       </div>
       <a href={`/profile/post/${post.id}#main`} style="width: 100%">
         <div style="width: 100%; text-align:start; padding: 15px 0px">
-          {post.content}
+          {#if "retweet" in post.postType}
+            {post.retweet[0].content}
+          {:else}
+            {post.content}
+          {/if}
         </div>
       </a>
       {#if "market" in post.postType}

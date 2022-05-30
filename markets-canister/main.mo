@@ -465,7 +465,7 @@ shared({ caller = initializer }) actor class Market() = this {
                                     postType = initData.postType;
                                 };
 
-                                let post: Post.Post = Post.Post(newInitData);
+                                var post: Post.Post = Post.Post(newInitData);
                                 
                                 let retweet: Post.Retweet = {
                                     id = citedPost.id;
@@ -478,6 +478,7 @@ shared({ caller = initializer }) actor class Market() = this {
 
                                 citedPost.retweets.add(id);
                                 author.posts.add(id);
+                                post.citing := ?retweet;
                                 postMap.put(id, post);
                                 feed.add(post);
 
