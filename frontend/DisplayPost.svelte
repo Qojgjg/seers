@@ -1,6 +1,5 @@
 <script lang="ts">
   import Fa from "svelte-fa"
-  import { Link } from "svelte-navigator"
 
   import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
   import {
@@ -8,7 +7,6 @@
     faHeart as faSolidHeart,
   } from "@fortawesome/free-solid-svg-icons"
   import inf from "./assets/inf.gif"
-  import ListMarkets from "./ListMarkets.svelte"
 
   export let auth
   export let principal
@@ -418,10 +416,16 @@
       <div
         style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
       >
-        <div style="width: 46px; display:flex; gap: 15px">
-          <div><Fa icon={faComment} /></div>
-          {#if post.replies.length > 0}<div>{post.replies.length}</div>{/if}
-        </div>
+        <a
+          href={`/profile/post/${post.id}#main`}
+          style="width: 50px; color:grey"
+        >
+          <div style="width: 100%; display:flex; gap: 15px;">
+            <div><Fa icon={faComment} /></div>
+            {#if post.replies.length > 0}<div>{post.replies.length}</div>{/if}
+          </div>
+        </a>
+
         <div style="width: 50px; display:flex; gap: 15px">
           <div><Fa icon={faRetweet} /></div>
           {#if post.retweets.length > 0}<div>{post.retweets.length}</div>{/if}
