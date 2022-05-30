@@ -23,7 +23,7 @@ module {
         id: Nat32;
         author: Utils.UserData;
         content: Text;
-        parent: Utils.UserData;
+        parent: ?Utils.UserData;
     };
 
     public type ThreadStable = {
@@ -36,7 +36,7 @@ module {
         public var id: Nat32 = initData.id;
         public var author: Utils.UserData = initData.author;
         public var content: Text = initData.content;
-        public var parent: Utils.UserData = initData.parent;
+        public var parent: ?Utils.UserData = initData.parent;
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var retweets: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
         public var citing: ?Retweet = null;
@@ -70,7 +70,7 @@ module {
         id: Nat32;
         author: Utils.UserData;
         content: Text;
-        parent: Nat32;
+        parent: ?Utils.UserData;
         createdAt: Time.Time;
     };
 
@@ -78,7 +78,7 @@ module {
         id: Nat32;
         author: Utils.UserData;
         content: Text;
-        parent: Utils.UserData;
+        parent: ?Utils.UserData;
         replies: [Nat32];
         retweets: [Nat32];
         citing: ?Retweet;
