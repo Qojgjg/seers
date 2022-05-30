@@ -76,6 +76,18 @@
     console.log(resp)
     // getPost()
   }
+
+  const submitRetweet = async (postId) => {
+    const initData = {
+      id: 0,
+      content: "",
+      author: post.author,
+      parent: 0,
+      postType: { retweet: Number(postId) },
+    }
+    const resp = await $auth.actor.submitPost(initData, [], [])
+    console.log(resp)
+  }
 </script>
 
 {#if isMain}
@@ -427,7 +439,18 @@
         </a>
 
         <div style="width: 50px; display:flex; gap: 15px">
-          <div><button class="retweet-bt"><Fa icon={faRetweet} /></button></div>
+          <div>
+            <button
+              class="retweet-bt"
+              on:click={() => {
+                if (principal === "") {
+                  signIn()
+                } else {
+                  submitRetweet(post.id)
+                }
+              }}><Fa icon={faRetweet} /></button
+            >
+          </div>
           {#if post.retweets.length > 0}<div>{post.retweets.length}</div>{/if}
         </div>
         <div style="width: 50px; display:flex; gap: 15px">
