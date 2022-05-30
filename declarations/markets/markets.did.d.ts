@@ -65,10 +65,7 @@ export interface Market {
   'setUpdating' : ActorMethod<[boolean], undefined>,
   'submitForecast' : ActorMethod<[number, Forecast], Result_2>,
   'submitLike' : ActorMethod<[number], Result_1>,
-  'submitPost' : ActorMethod<
-    [PostInitData, [] | [MarketInitData], [] | [string]],
-    Result,
-  >,
+  'submitPost' : ActorMethod<[PostInitData, [] | [MarketInitData]], Result>,
 }
 export type MarketCategory = { 'any' : null } |
   { 'entertainment' : null } |
@@ -147,6 +144,7 @@ export type MarketState = { 'any' : null } |
   { 'invalid' : null } |
   { 'open' : null } |
   { 'approved' : null };
+export interface ParentData { 'id' : number, 'authorName' : string }
 export type PostError = { 'notLoggedIn' : null } |
   { 'parentDoesNotExist' : null } |
   { 'marketNotFound' : null } |
@@ -156,29 +154,26 @@ export type PostError = { 'notLoggedIn' : null } |
   { 'userDoesNotExist' : null };
 export interface PostInitData {
   'id' : number,
-  'postType' : PostType,
+  'retweet' : [] | [Retweet],
   'content' : string,
   'author' : UserData,
-  'parent' : number,
+  'market' : [] | [MarketInitData],
+  'image' : [] | [string],
+  'parent' : [] | [ParentData],
 }
 export interface PostStable {
   'id' : number,
+  'retweet' : [] | [Retweet],
   'retweets' : Array<number>,
-  'postType' : PostType,
   'content' : string,
   'createdAt' : Time,
-  'citing' : [] | [Retweet],
   'author' : UserData,
   'likes' : Array<Like>,
   'replies' : Array<number>,
   'market' : [] | [MarketStable],
   'image' : [] | [string],
-  'parent' : number,
+  'parent' : [] | [ParentData],
 }
-export type PostType = { 'retweet' : number } |
-  { 'simple' : null } |
-  { 'market' : number } |
-  { 'image' : number };
 export type Result = { 'ok' : PostStable } |
   { 'err' : PostError };
 export type Result_1 = { 'ok' : null } |
@@ -199,11 +194,10 @@ export type Result_8 = { 'ok' : CommentStable } |
   { 'err' : MarketError };
 export interface Retweet {
   'id' : number,
-  'postType' : PostType,
   'content' : string,
   'createdAt' : Time,
   'author' : UserData,
-  'parent' : number,
+  'parent' : [] | [ParentData],
 }
 export interface ThreadStable {
   'main' : PostStable,

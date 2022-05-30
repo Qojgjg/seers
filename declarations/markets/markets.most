@@ -77,30 +77,28 @@ type MarketStable =
   };
 type MarketState =
   {#any; #approved; #closed; #invalid; #open; #pending; #resolved : Nat};
+type ParentData = {authorName : Text; id : Nat32};
 type PostStable =
   {
     author : UserData;
-    citing : ?Retweet;
     content : Text;
     createdAt : Time;
     id : Nat32;
     image : ?Text;
     likes : [Like];
     market : ?MarketStable;
-    parent : Nat32;
-    postType : PostType;
+    parent : ?ParentData;
     replies : [Nat32];
+    retweet : ?Retweet;
     retweets : [Nat32]
   };
-type PostType = {#image : Nat32; #market : Nat32; #retweet : Nat32; #simple};
 type Retweet =
   {
     author : UserData;
     content : Text;
     createdAt : Time;
     id : Nat32;
-    parent : Nat32;
-    postType : PostType
+    parent : ?ParentData
   };
 type Time = Int;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};

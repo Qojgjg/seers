@@ -196,7 +196,7 @@ module {
         modifiedAt: Time.Time;
     };
 
-    public func unFreezeMarket(m: MarketStable): Market {
+    public func unFreeze(m: MarketStable): Market {
         let initData: MarketInitData = {
             id = m.id;
             title = m.title;

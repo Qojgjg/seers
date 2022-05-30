@@ -122,7 +122,7 @@ shared({ caller = initializer }) actor class Market() = this {
         let marketIter = Iter.map<(Nat32, M.MarketStable), (Nat32, M.Market)>(
             stableMarkets.vals(), 
             func (e: (Nat32, M.MarketStable)): (Nat32, M.Market) {
-                let v = M.unFreezeMarket(e.1);
+                let v = M.unFreeze(e.1);
                 return (e.0, v);
             }
         );
@@ -398,7 +398,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Submit a post of any type.
-    public shared(msg) func submitPost(initData: Post.PostInitData, marketInitData: ?M.MarketInitData, imageInitData: ?Text): async Result.Result<Post.PostStable, Post.PostError> {
+    public shared(msg) func submitPost(initData: Post.PostInitData, marketInitData: ?M.MarketInitData): async Result.Result<Post.PostStable, Post.PostError> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -415,13 +415,18 @@ shared({ caller = initializer }) actor class Market() = this {
 
                 let id = Nat32.fromNat(postMap.size() + 1);
 
-                if (initData.parent != 0) {
-                    switch (postMap.get(initData.parent)) {
-                        case null {
-                            return #err(#parentDoesNotExist);
-                        };
-                        case (?parentPost) {
-                            parentPost.replies.add(id);
+                switch (initData.parent) {
+                    case null {
+                        // do nothing
+                    };
+                    case (?parentData) {
+                        switch (postMap.get(parentData.id)) {
+                            case null {
+                                return #err(#parentDoesNotExist);
+                            };
+                            case (?parentPost) {
+                                parentPost.replies.add(id);
+                            };
                         };
                     };
                 };
@@ -433,161 +438,67 @@ shared({ caller = initializer }) actor class Market() = this {
                     picture = author.picture;
                 };
 
-                switch (initData.postType) {                    
-                    case (#simple) {
-                        let newInitData: Post.PostInitData = {
-                            id = id;
-                            author = authorData;
-                            content = initData.content;
-                            parent = initData.parent;
-                            postType = initData.postType;
-                        };
+                var newInitData: Post.PostInitData = {
+                    id = id;
+                    author = authorData;
+                    content = initData.content;
+                    parent = initData.parent;
+                    image = initData.image;
+                    market = initData.market;
+                    retweet = initData.retweet;
+                };
 
-                        let post: Post.Post = Post.Post(newInitData);
+                var post: Post.Post = Post.Post(newInitData);
 
-                        author.posts.add(id);
-                        postMap.put(id, post);
-                        feed.add(post);
-
-                        return #ok(post.freeze());
+                // Retweet.
+                switch (initData.retweet) {
+                    case null {
+                        // do nothing
                     };
-                    case (#retweet(citedId)) {
-                        switch (postMap.get(citedId)) {
+                    case (?other) {
+                        switch (postMap.get(other.id)) {
                             case null {
-                                return #err(#postDoesNotExist);
+
                             };
-                            case (?citedPost) {
-                                let newInitData: Post.PostInitData = {
-                                    id = id;
-                                    author = authorData;
-                                    content = initData.content;
-                                    parent = initData.parent;
-                                    postType = initData.postType;
-                                };
-
-                                var post: Post.Post = Post.Post(newInitData);
-                                
-                                let retweet: Post.Retweet = if (citedPost.content == "") {
-                                    switch (citedPost.citing) {
-                                        case null {
-                                            {
-                                                id = citedPost.id;
-                                                author = citedPost.author;
-                                                content = citedPost.content;
-                                                parent = citedPost.parent;
-                                                createdAt = citedPost.createdAt;
-                                                postType = citedPost.postType;
-                                            };
-                                        };
-                                        case (?other) {
-                                            {
-                                                id = other.id;
-                                                author = other.author;
-                                                content = other.content;
-                                                parent = other.parent;
-                                                createdAt = other.createdAt;
-                                                postType = other.postType;
-                                            };
-                                        };
-                                    };
-                                } else {
-                                    {
-                                        id = citedPost.id;
-                                        author = citedPost.author;
-                                        content = citedPost.content;
-                                        parent = citedPost.parent;
-                                        createdAt = citedPost.createdAt;
-                                        postType = citedPost.postType;
-                                    };
-                                };
-
-                                citedPost.retweets.add(id);
-                                author.posts.add(id);
-                                post.citing := ?retweet;
-                                postMap.put(id, post);
-                                feed.add(post);
-
-                                return #ok(post.freeze());
-                            };
-                        };
-                    };
-                    case (#image(_)) {
-                        let imageId = Nat32.fromNat(imageMap.size());
-                        switch (imageInitData) {
-                            case null {
-                                return #err(#imageNotFound);
-                            };
-                            case (?imageUrl) {
-                                imageMap.put(imageId, imageUrl);
-                            };
-                        };
-                        switch (imageMap.get(imageId)) {
-                            case null {
-                                return #err(#imageNotFound);
-                            };
-                            case (?image) {
-                                let newInitData: Post.PostInitData = {
-                                    id = id;
-                                    author = authorData;
-                                    content = initData.content;
-                                    parent = initData.parent;
-                                    postType = #image(imageId);
-                                };
-
-                                var post: Post.Post = Post.Post(newInitData);
-                                post.image := ?image;
-
-                                author.posts.add(id);
-                                postMap.put(id, post);
-                                feed.add(post);
-
-                                return #ok(post.freeze());
-                            };
-                        };
-                    };
-                    case (#market(_)) {
-                        var marketId: Nat32 = 0;
-
-                        switch (marketInitData) {
-                            case null {
-                                return #err(#marketNotFound);
-                            };
-                            case (?market) {
-                                switch (_createMarket(caller, market)) {
-                                    case (#err(_)) {
-                                        return #err(#marketNotFound);
-                                    };
-                                    case (#ok(marketStable)) {
-                                        marketId := marketStable.id;
-                                    };
-                                };
-                            };
-                        };
-                        switch (marketMap.get(marketId)) {
-                            case null {
-                                return #err(#marketNotFound);
-                            };
-                            case (?market) {
-                                let newInitData: Post.PostInitData = {
-                                    id = id;
-                                    author = authorData;
-                                    content = initData.content;
-                                    parent = initData.parent;
-                                    postType = #market(marketId);
-                                };
-
-                                var post: Post.Post = Post.Post(newInitData);
-                                post.market := ?market;
-
-                                author.posts.add(id);
-                                postMap.put(id, post);
-                                feed.add(post);
-
-                                return #ok(post.freeze());
+                            case (?other) {
+                                other.retweets.add(post.id);      
                             };
                         };
                     };
                 };
+
+                // Image.
+                switch (post.image) {
+                    case null {
+                        // do nothing
+                    };
+                    case (?image) {
+                        imageMap.put(Nat32.fromNat(imageMap.size()), image);
+                    };
+                };
+
+                // Market.
+                switch (marketInitData) {
+                    case null {
+                        // do nothing
+                    };
+                    case (?marketInitData) {
+                        switch (_createMarket(caller, marketInitData)) {
+                            case (#err(_)) {
+                                return #err(#marketNotFound);
+                            };
+                            case (#ok(marketStable)) {
+                                post.market := marketMap.get(marketStable.id);
+                            };
+                        };
+                    };
+                };
+
+                author.posts.add(id);
+                postMap.put(id, post);
+                feed.add(post);
+
+                return #ok(post.freeze());
             };
         };
     };
@@ -693,11 +604,11 @@ shared({ caller = initializer }) actor class Market() = this {
                             
                 while (not exit) {
                     switch (current.parent) {
-                        case (0) {
+                        case null {
                             exit := true;
                         };
-                        case (parentId) {
-                            switch (postMap.get(parentId)) {
+                        case (?parent) {
+                            switch (postMap.get(parent.id)) {
                                 case null {
                                     // This case shouldn't happen, on delete we leave a dummy.
                                     exit := true;

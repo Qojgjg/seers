@@ -145,33 +145,26 @@ export const idlFactory = ({ IDL }) => {
     'cycles' : IDL.Float64,
   });
   const Bet = IDL.Record({ 'tx' : UserTx, 'comment' : CommentStable });
-  const PostType = IDL.Variant({
-    'retweet' : IDL.Nat32,
-    'simple' : IDL.Null,
-    'market' : IDL.Nat32,
-    'image' : IDL.Nat32,
-  });
+  const ParentData = IDL.Record({ 'id' : IDL.Nat32, 'authorName' : IDL.Text });
   const Retweet = IDL.Record({
     'id' : IDL.Nat32,
-    'postType' : PostType,
     'content' : IDL.Text,
     'createdAt' : Time,
     'author' : UserData,
-    'parent' : IDL.Nat32,
+    'parent' : IDL.Opt(ParentData),
   });
   const PostStable = IDL.Record({
     'id' : IDL.Nat32,
+    'retweet' : IDL.Opt(Retweet),
     'retweets' : IDL.Vec(IDL.Nat32),
-    'postType' : PostType,
     'content' : IDL.Text,
     'createdAt' : Time,
-    'citing' : IDL.Opt(Retweet),
     'author' : UserData,
     'likes' : IDL.Vec(Like),
     'replies' : IDL.Vec(IDL.Nat32),
     'market' : IDL.Opt(MarketStable),
     'image' : IDL.Opt(IDL.Text),
-    'parent' : IDL.Nat32,
+    'parent' : IDL.Opt(ParentData),
   });
   const FeedItem = IDL.Variant({
     'bet' : Bet,
@@ -271,10 +264,12 @@ export const idlFactory = ({ IDL }) => {
   const Result_1 = IDL.Variant({ 'ok' : IDL.Null, 'err' : PostError });
   const PostInitData = IDL.Record({
     'id' : IDL.Nat32,
-    'postType' : PostType,
+    'retweet' : IDL.Opt(Retweet),
     'content' : IDL.Text,
     'author' : UserData,
-    'parent' : IDL.Nat32,
+    'market' : IDL.Opt(MarketInitData),
+    'image' : IDL.Opt(IDL.Text),
+    'parent' : IDL.Opt(ParentData),
   });
   const Market = IDL.Service({
     'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_8], []),
@@ -317,7 +312,7 @@ export const idlFactory = ({ IDL }) => {
     'submitForecast' : IDL.Func([IDL.Nat32, Forecast], [Result_2], []),
     'submitLike' : IDL.Func([IDL.Nat32], [Result_1], []),
     'submitPost' : IDL.Func(
-        [PostInitData, IDL.Opt(MarketInitData), IDL.Opt(IDL.Text)],
+        [PostInitData, IDL.Opt(MarketInitData)],
         [Result],
         [],
       ),

@@ -106,8 +106,7 @@ type Retweet =
    content: text;
    createdAt: Time;
    id: nat32;
-   parent: nat32;
-   postType: PostType;
+   parent: opt ParentData;
  };
 type Result_8 = 
  variant {
@@ -157,26 +156,18 @@ type Result =
    err: PostError;
    ok: PostStable;
  };
-type PostType = 
- variant {
-   image: nat32;
-   market: nat32;
-   retweet: nat32;
-   simple;
- };
 type PostStable = 
  record {
    author: UserData;
-   citing: opt Retweet;
    content: text;
    createdAt: Time;
    id: nat32;
    image: opt text;
    likes: vec Like;
    market: opt MarketStable;
-   parent: nat32;
-   postType: PostType;
+   parent: opt ParentData;
    replies: vec nat32;
+   retweet: opt Retweet;
    retweets: vec nat32;
  };
 type PostInitData = 
@@ -184,8 +175,10 @@ type PostInitData =
    author: UserData;
    content: text;
    id: nat32;
-   parent: nat32;
-   postType: PostType;
+   image: opt text;
+   market: opt MarketInitData;
+   parent: opt ParentData;
+   retweet: opt Retweet;
  };
 type PostError = 
  variant {
@@ -196,6 +189,11 @@ type PostError =
    parentDoesNotExist;
    postDoesNotExist;
    userDoesNotExist;
+ };
+type ParentData = 
+ record {
+   authorName: text;
+   id: nat32;
  };
 type MarketState = 
  variant {
@@ -310,7 +308,7 @@ type Market =
    setUpdating: (bool) -> () oneway;
    submitForecast: (nat32, Forecast) -> (Result_2);
    submitLike: (nat32) -> (Result_1);
-   submitPost: (PostInitData, opt MarketInitData, opt text) -> (Result);
+   submitPost: (PostInitData, opt MarketInitData) -> (Result);
  };
 type Like = 
  record {
