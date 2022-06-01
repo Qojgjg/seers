@@ -78,29 +78,7 @@
   }
 
   const submitRetweet = async () => {
-    const initData = {
-      id: 0,
-      content: "",
-      author: {
-        principal,
-        picture: "",
-        handle: "",
-        name: "",
-      },
-      parent: [],
-      image: [],
-      market: [],
-      retweet: [
-        {
-          id: post.id,
-          author: post.author,
-          content: post.content,
-          parent: post.parent,
-          createdAt: post.createdAt,
-        },
-      ],
-    }
-    const resp = await $auth.actor.submitPost(initData, [])
+    const resp = await $auth.actor.submitRetweet(Number(post.id))
     console.log(resp)
   }
 </script>

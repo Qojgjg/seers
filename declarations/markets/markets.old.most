@@ -85,6 +85,7 @@ type PostStable =
     createdAt : Time;
     id : Nat32;
     image : ?Text;
+    isRetweet : Bool;
     likes : [Like];
     market : ?MarketStable;
     parent : ?ParentData;

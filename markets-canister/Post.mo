@@ -80,6 +80,28 @@ module {
             
             return ps;
         };
+
+        public func clone(): Post {
+            let c: PostInitData = {
+                id = id;
+                author = author;
+                content = content;
+                parent = parent;
+                retweet = retweet;
+                market = null;
+                image = image;
+                isRetweet = null;
+            };
+
+            var p: Post = Post(initData);
+            p.market := market;
+            p.replies := replies;
+            p.retweeters := retweeters;
+            p.likes := likes;
+            p.createdAt := createdAt;
+
+            return p;
+        };
     };
 
     public type Retweet = {

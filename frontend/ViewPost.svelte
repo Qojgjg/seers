@@ -41,6 +41,7 @@
       retweet: [],
       image: [],
       market: [],
+      isRetweet: [],
     }
 
     const resp = await $auth.actor.submitPost(initData, [])
