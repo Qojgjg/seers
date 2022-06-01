@@ -28,11 +28,14 @@ type UserStable =
    handle: text;
    id: text;
    lastSeenAt: Time;
+   likes: vec nat32;
    markets: vec UserMarket;
    modifiedAt: Time;
    name: text;
    picture: text;
    posts: vec nat32;
+   replies: vec nat32;
+   retweets: vec nat32;
    twitter: text;
    txs: vec UserTx;
    website: text;

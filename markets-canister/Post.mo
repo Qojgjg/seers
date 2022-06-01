@@ -45,13 +45,16 @@ module {
         public var id: Nat32 = initData.id;
         public var author: Utils.UserData = initData.author;
         public var content: Text = initData.content;
+        
         public var parent: ?ParentData = initData.parent;
-        public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
-        public var retweets: Buffer.Buffer<Retweeters> = Buffer.Buffer<Retweeters>(0);
         public var retweet: ?Retweet = initData.retweet;
         public var market: ?Market.Market = null;
         public var image: ?Text = initData.image;
+        
         public var likes: Buffer.Buffer<Like.Like> = Buffer.Buffer<Like.Like>(0);
+        public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
+        public var retweets: Buffer.Buffer<Retweeters> = Buffer.Buffer<Retweeters>(0);
+        
         public var createdAt: Time.Time = Time.now();
         
         public func freeze(): PostStable {

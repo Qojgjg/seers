@@ -138,11 +138,14 @@ type UserStable =
     handle : Text;
     id : Text;
     lastSeenAt : Time;
+    likes : [Nat32];
     markets : [UserMarket];
     modifiedAt : Time;
     name : Text;
     picture : Text;
     posts : [Nat32];
+    replies : [Nat32];
+    retweets : [Nat32];
     twitter : Text;
     txs : [UserTx];
     website : Text
