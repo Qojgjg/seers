@@ -224,7 +224,7 @@
   }
   select {
     border: 1px solid rgb(90, 58, 81);
-    background-color: rgb(25, 27, 31);
+    background-color: black;
     color: rgb(255, 255, 255);
     height: 30px;
     margin-top: 10px;

@@ -219,7 +219,7 @@
         >
           <button
             class="btn-grad"
-            style="background:rgb(25, 27, 31);"
+            style="background: black;"
             on:click={() => (editMode = true)}>Edit Profile</button
           >
           <div style="text-align:center;color:red">

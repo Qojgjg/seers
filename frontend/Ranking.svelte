@@ -78,7 +78,7 @@
     justify-content: start;
     min-width: 50%;
     max-width: 800px;
-    background-color: rgb(25, 27, 31);
+    background-color: black;
     border: 1px solid rgb(90, 58, 81);
     box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
 

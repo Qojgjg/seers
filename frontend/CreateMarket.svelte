@@ -129,12 +129,17 @@
       </div>
       {#if principal !== ""}
         <div style="width: 100%;text-align:center; ">
-          <button class="btn-grad" on:click={createMarket}>{buttonLabel}</button
+          <button
+            class="btn-grad"
+            on:click={createMarket}
+            style="background: black">{buttonLabel}</button
           >
         </div>
       {:else}
         <div style="width: 100%;text-align:center; ">
-          <button class="btn-grad" on:click={signIn}>Please login</button>
+          <button class="btn-grad" on:click={signIn} style="background:black"
+            >Please login</button
+          >
         </div>
       {/if}
       <div style="width: 100%;text-align:center;color:red">
@@ -166,7 +171,7 @@
     justify-content: center;
     width: 500px;
 
-    background-color: rgb(25, 27, 31);
+    background-color: black;
     border: 1px solid rgb(90, 58, 81);
     box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
 
