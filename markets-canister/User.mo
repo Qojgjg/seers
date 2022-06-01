@@ -42,6 +42,7 @@ module {
 
         #commentIsEmpty;
 
+        #userDoesNotExist;
         #userAlreadyExist;
     };
    

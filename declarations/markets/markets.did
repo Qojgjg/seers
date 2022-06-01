@@ -88,6 +88,7 @@ type UserError =
    startDateOld;
    titleMissing;
    userAlreadyExist;
+   userDoesNotExist;
  };
 type UserData = 
  record {

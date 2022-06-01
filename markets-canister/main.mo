@@ -1482,7 +1482,7 @@ shared({ caller = initializer }) actor class Market() = this {
 
         let caller = Principal.toText(msg.caller);
 
-        if (caller == anon) {
+        if (caller == anon or caller != initData.id) {
             return #err(#callerIsAnon);
         };
         
@@ -1559,7 +1559,7 @@ shared({ caller = initializer }) actor class Market() = this {
     private func _createUser(
         initData: U.UserInitData,
     ): Result.Result<U.User, U.UserError> {
-        switch (userMap.get(initData.handle)) {
+        switch (handlesMap.get(initData.id)) {
             case (null) {
                 let user: U.User = U.User(initData);
 
@@ -1576,26 +1576,33 @@ shared({ caller = initializer }) actor class Market() = this {
 
                 return #ok(user);
             };
-            case (?oldUser) {
+            case (?userHandle) {
                 switch (userMap.get(initData.handle)) {
                     case null {
-                        oldUser.handle := initData.handle;
-                        oldUser.name := initData.name;
-                        oldUser.picture := initData.picture;
-                        oldUser.cover := initData.cover;
-                
-                        let userData: Utils.UserData = {
-                            principal = oldUser.id;
-                            name = oldUser.name;
-                            handle = oldUser.handle;
-                            picture = oldUser.picture;
+                        switch (userMap.get(userHandle)) {
+                            case null {
+                                return #err(#userDoesNotExist);
+                            };
+                            case (?oldUser) {
+                                oldUser.handle := initData.handle;
+                                oldUser.name := initData.name;
+                                oldUser.picture := initData.picture;
+                                oldUser.cover := initData.cover;
+                        
+                                let userData: Utils.UserData = {
+                                    principal = oldUser.id;
+                                    name = oldUser.name;
+                                    handle = oldUser.handle;
+                                    picture = oldUser.picture;
+                                };
+
+                                handlesMap.put(oldUser.id, oldUser.handle);
+                                userMap.put(oldUser.handle, oldUser);
+                                userDataMap.put(oldUser.id, userData);
+
+                                return #ok(oldUser);
+                            };
                         };
-
-                        handlesMap.put(oldUser.id, oldUser.handle);
-                        userMap.put(oldUser.handle, oldUser);
-                        userDataMap.put(oldUser.id, userData);
-
-                        return #ok(oldUser);
                     };
                     case (_) {
                         return #err(#userAlreadyExist);

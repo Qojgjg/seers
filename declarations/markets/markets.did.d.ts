@@ -228,6 +228,7 @@ export type UserError = { 'callerIsAnon' : null } |
   { 'startDateOld' : null } |
   { 'marketNotOpen' : null } |
   { 'commentIsEmpty' : null } |
+  { 'userDoesNotExist' : null } |
   { 'endDateOld' : null } |
   { 'newtonFailed' : null } |
   { 'endDateOlderThanStartDate' : null } |

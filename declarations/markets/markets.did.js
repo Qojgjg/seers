@@ -238,6 +238,7 @@ export const idlFactory = ({ IDL }) => {
     'startDateOld' : IDL.Null,
     'marketNotOpen' : IDL.Null,
     'commentIsEmpty' : IDL.Null,
+    'userDoesNotExist' : IDL.Null,
     'endDateOld' : IDL.Null,
     'newtonFailed' : IDL.Null,
     'endDateOlderThanStartDate' : IDL.Null,
