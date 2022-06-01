@@ -171,6 +171,7 @@ type PostStable =
    createdAt: Time;
    id: nat32;
    image: opt text;
+   isRetweet: bool;
    likes: vec Like;
    market: opt MarketStable;
    parent: opt ParentData;
@@ -184,6 +185,7 @@ type PostInitData =
    content: text;
    id: nat32;
    image: opt text;
+   isRetweet: bool;
    market: opt MarketInitData;
    parent: opt ParentData;
    retweet: opt Retweet;

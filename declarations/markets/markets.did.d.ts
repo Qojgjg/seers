@@ -156,6 +156,7 @@ export type PostError = { 'notLoggedIn' : null } |
 export interface PostInitData {
   'id' : number,
   'retweet' : [] | [Retweet],
+  'isRetweet' : boolean,
   'content' : string,
   'author' : UserData,
   'market' : [] | [MarketInitData],
@@ -165,6 +166,7 @@ export interface PostInitData {
 export interface PostStable {
   'id' : number,
   'retweet' : [] | [Retweet],
+  'isRetweet' : boolean,
   'retweets' : Array<Retweeters>,
   'content' : string,
   'createdAt' : Time,

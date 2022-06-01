@@ -157,6 +157,7 @@ export const idlFactory = ({ IDL }) => {
   const PostStable = IDL.Record({
     'id' : IDL.Nat32,
     'retweet' : IDL.Opt(Retweet),
+    'isRetweet' : IDL.Bool,
     'retweets' : IDL.Vec(Retweeters),
     'content' : IDL.Text,
     'createdAt' : Time,
@@ -270,6 +271,7 @@ export const idlFactory = ({ IDL }) => {
   const PostInitData = IDL.Record({
     'id' : IDL.Nat32,
     'retweet' : IDL.Opt(Retweet),
+    'isRetweet' : IDL.Bool,
     'content' : IDL.Text,
     'author' : UserData,
     'market' : IDL.Opt(MarketInitData),

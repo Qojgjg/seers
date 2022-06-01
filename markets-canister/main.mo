@@ -446,6 +446,7 @@ shared({ caller = initializer }) actor class Market() = this {
                     image = initData.image;
                     market = initData.market;
                     retweet = initData.retweet;
+                    isRetweet = initData.isRetweet;
                 };
 
                 var post: Post.Post = Post.Post(newInitData);

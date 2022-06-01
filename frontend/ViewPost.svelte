@@ -21,6 +21,7 @@
   let ancestors = []
 
   const submitReply = async () => {
+    console.log(post.author)
     processing = true
     const initData = {
       id: 0,
@@ -34,7 +35,7 @@
       parent: [
         {
           id: Number(post.id),
-          authorName: post.author.handle,
+          author: post.author,
         },
       ],
       retweet: [],
