@@ -400,6 +400,7 @@ shared({ caller = initializer }) actor class Market() = this {
     // Submit a retweet.
     public shared(msg) func submitRetweet(postId: Nat32): async Result.Result<(), Post.PostError> {
         assert(not updating);
+
         let caller = Principal.toText(msg.caller);
         
         if (caller == anon) {
@@ -411,7 +412,56 @@ shared({ caller = initializer }) actor class Market() = this {
                 return #err(#userDoesNotExist);
             };
             case (?author) {
-                author.retweets.add(postId);
+                switch (postMap.get(postId)) {
+                    case null {
+                        #err(#postDoesNotExist);
+                    };
+                    case (?post) {
+                        var newRetweeters = Buffer.Buffer<Utils.UserData>(post.retweeters.size());
+                        var exist: Bool = false;
+
+                        for (r in post.retweeters.vals()) {
+                            if (r.principal == caller) {
+                                exist := true;
+                            } else {
+                                newRetweeters.add(r);
+                            };
+                        };
+
+                        let authorData: Utils.UserData = {
+                            principal = author.id;
+                            handle = author.handle;
+                            name = author.name;
+                            picture = author.picture;
+                        };
+                            
+
+                        // Remove it from user if it exist (un-retweet).
+                        if (exist) {
+                            var newRetweets = Buffer.Buffer<Nat32>(author.retweets.size());
+
+                            for (r in author.retweets.vals()) {
+                                if (r != postId) {
+                                    newRetweets.add(r);
+                                };
+                            };
+
+                            author.retweets := newRetweets;
+                        } else {
+                        // We add it to the post and the user if it doesn't exist (retweet).
+                            newRetweeters.add(authorData);
+                            author.retweets.add(post.id);
+                        };
+
+                        post.retweeters := newRetweeters;
+                        var retweet = post;
+                        retweet.isRetweet := ?authorData;
+
+                        feed.add(post);
+
+                        return #ok();
+                    };
+                };
             };
         };
     };

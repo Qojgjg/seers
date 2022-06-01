@@ -33,7 +33,7 @@ module {
         retweet: ?Retweet;
         market: ?Market.MarketInitData;
         image: ?Text;
-        isRetweet: Bool;
+        isRetweet: ?Utils.UserData;
     };
 
     public type ThreadStable = {
@@ -54,9 +54,9 @@ module {
         
         public var likes: Buffer.Buffer<Like.Like> = Buffer.Buffer<Like.Like>(0);
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
-        public var retweeters: Buffer.Buffer<Retweeters> = Buffer.Buffer<Retweeters>(0);
+        public var retweeters: Buffer.Buffer<Utils.UserData> = Buffer.Buffer<Utils.UserData>(0);
 
-        public var isRetweet: Bool = initData.isRetweet;
+        public var isRetweet: ?Utils.UserData = initData.isRetweet;
         
         public var createdAt: Time.Time = Time.now();
         
@@ -82,11 +82,6 @@ module {
         };
     };
 
-    public type Retweeters = {
-        id: Nat32;
-        author: Utils.UserData;
-    };
-
     public type Retweet = {
         id: Nat32;
         author: Utils.UserData;
@@ -101,12 +96,12 @@ module {
         content: Text;
         parent: ?ParentData;
         replies: [Nat32];
-        retweeters: [Retweeters];
+        retweeters: [Utils.UserData];
         retweet: ?Retweet;
         market: ?Market.MarketStable;
         image: ?Text;
         likes: [Like.Like];
-        isRetweet: Bool;
+        isRetweet: ?Utils.UserData;
         createdAt: Time.Time;
     };
 
