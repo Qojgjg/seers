@@ -483,7 +483,7 @@ shared({ caller = initializer }) actor class Market() = this {
             case (?author) {
 
                 let id = Nat32.fromNat(postMap.size() + 1);
-
+                var isReply = false;
                 switch (initData.parent) {
                     case null {
                         // do nothing
@@ -494,6 +494,7 @@ shared({ caller = initializer }) actor class Market() = this {
                                 return #err(#parentDoesNotExist);
                             };
                             case (?parentPost) {
+                                isReply := true;
                                 parentPost.replies.add(id);
                             };
                         };
@@ -579,7 +580,12 @@ shared({ caller = initializer }) actor class Market() = this {
                     };
                 };
 
-                author.posts.add(id);
+                if (isReply) {
+                    author.replies.add(id);
+                } else {
+                    author.posts.add(id);
+                };
+
                 postMap.put(id, post);
                 feed.add(post);
 

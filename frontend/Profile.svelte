@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import { init } from "svelte/internal"
   import Fa from "svelte-fa"
   import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
   import { faRetweet } from "@fortawesome/free-solid-svg-icons"
+  import DisplayPost from "./DisplayPost.svelte"
 
   export let auth
   export let principal
@@ -248,46 +248,14 @@
         </div>
       </div>
       <div style="margin-top: 40px; width: 100%">
-        {#each user.posts as post}
-          <div
-            style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 20px 0px; flex-direction:row; border-top: 1px solid grey;"
-          >
-            <div style="padding: 5px; margin: 5px">
-              <img
-                src={post.author.picture}
-                alt="avatar"
-                style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
-              />
-            </div>
-            <div style="flex-grow: 1; justify-content: start; text-align:start">
-              <div style="display:flex; gap: 5px;">
-                <div>{post.author.name}</div>
-                <div style="color:grey">@{post.author.handle}</div>
-                <div style="color:grey">
-                  - {parseTwitterDate(Number(post.createdAt) / 1_000_000)}
-                </div>
-              </div>
-              <div style="width: 100%; text-align:start; padding: 5px 0px">
-                {post.content}
-              </div>
-              <div
-                style="width: 100%; display:flex; gap: 30px; padding: 5px 0px; color:grey"
-              >
-                <div style="width: 50px; display:flex; gap: 15px">
-                  <div><Fa icon={faComment} /></div>
-                  <div>0</div>
-                </div>
-                <div style="width: 50px; display:flex; gap: 15px">
-                  <div><Fa icon={faRetweet} /></div>
-                  <div>0</div>
-                </div>
-                <div style="width: 50px; display:flex; gap: 15px">
-                  <div><Fa icon={faHeart} /></div>
-                  <div>0</div>
-                </div>
-              </div>
-            </div>
-          </div>
+        {#each user.posts as post, i}
+          <DisplayPost
+            {auth}
+            {principal}
+            {signIn}
+            {post}
+            doNotShowBorder={i < user.posts.length - 1 ? false : true}
+          />
         {/each}
       </div>
     {:else if principal !== "" && !isGetting}
