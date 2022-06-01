@@ -345,7 +345,9 @@
           <div
             style="display:flex; text-align:end; justify-content:end; flex-grow: 1"
           >
-            <button class="btn-grad" on:click={signIn}>Post</button>
+            <button class="btn-grad" style="background: black" on:click={signIn}
+              >Post</button
+            >
             <div style="text-align:end;color:red">
               {errorResponse}
             </div>
@@ -355,9 +357,9 @@
             style="display:flex; text-align:end; justify-content:end; flex-grow: 1"
           >
             <button
-              class="btn-grad"
               on:click={() => 0}
-              style="width: 100px; overflow:hidden"
+              class="btn-grad"
+              style="width: 100px; overflow:hidden; background: black"
             >
               <img
                 src={inf}
@@ -375,6 +377,7 @@
           >
             <button
               class="btn-grad"
+              style="background: black"
               on:click={() => {
                 if (showBetForm) {
                   submitMarket()
