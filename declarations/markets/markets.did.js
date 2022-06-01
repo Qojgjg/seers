@@ -153,12 +153,10 @@ export const idlFactory = ({ IDL }) => {
     'author' : UserData,
     'parent' : IDL.Opt(ParentData),
   });
-  const Retweeters = IDL.Record({ 'id' : IDL.Nat32, 'author' : UserData });
   const PostStable = IDL.Record({
     'id' : IDL.Nat32,
     'retweet' : IDL.Opt(Retweet),
-    'isRetweet' : IDL.Bool,
-    'retweets' : IDL.Vec(Retweeters),
+    'isRetweet' : IDL.Opt(UserData),
     'content' : IDL.Text,
     'createdAt' : Time,
     'author' : UserData,
@@ -167,6 +165,7 @@ export const idlFactory = ({ IDL }) => {
     'market' : IDL.Opt(MarketStable),
     'image' : IDL.Opt(IDL.Text),
     'parent' : IDL.Opt(ParentData),
+    'retweeters' : IDL.Vec(UserData),
   });
   const FeedItem = IDL.Variant({
     'bet' : Bet,
@@ -271,7 +270,7 @@ export const idlFactory = ({ IDL }) => {
   const PostInitData = IDL.Record({
     'id' : IDL.Nat32,
     'retweet' : IDL.Opt(Retweet),
-    'isRetweet' : IDL.Bool,
+    'isRetweet' : IDL.Opt(UserData),
     'content' : IDL.Text,
     'author' : UserData,
     'market' : IDL.Opt(MarketInitData),
@@ -323,6 +322,7 @@ export const idlFactory = ({ IDL }) => {
         [Result],
         [],
       ),
+    'submitRetweet' : IDL.Func([IDL.Nat32], [Result], []),
   });
   return Market;
 };

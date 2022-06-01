@@ -532,62 +532,21 @@ shared({ caller = initializer }) actor class Market() = this {
                                 return #err(#postDoesNotExist);
                             };
                             case (?realOther) {
-                                switch (realOther.retweet) {
-                                    case null {
-                                        var exist = false;
-                                        var newRetweets = Buffer.Buffer<Post.Retweeters>(realOther.retweets.size());
+                                var exist = false;
+                                var newRetweeters = Buffer.Buffer<Utils.UserData>(realOther.retweeters.size());
 
-                                        for (r in realOther.retweets.vals()) {
-                                            if (r.author.principal == caller) {
-                                                exist := true;
-                                            } else {
-                                                newRetweets.add(r);
-                                            };
-                                        };
-                                        if (not exist) {
-                                            let retweet: Post.Retweeters = {
-                                                id = post.id;
-                                                author = authorData;
-                                            };
-                                            newRetweets.add(retweet);
-                                        };
-                                        realOther.retweets := newRetweets;
-
-                                        if (post.content == "" and exist) return #ok();
-                                        isRetweet := true;
-                                    };
-                                    case (?moreRetweet) {
-                                        switch (postMap.get(moreRetweet.id)) {
-                                            case null {
-                                                return #err(#postDoesNotExist);
-                                            };
-                                            case (?realMoreRetweet) {
-                                                var exist = false;
-                                                var newRetweets = Buffer.Buffer<Post.Retweeters>(realMoreRetweet.retweets.size());
-
-                                                for (r in realMoreRetweet.retweets.vals()) {
-                                                    if (r.author.principal == caller) {
-                                                        exist := true; 
-                                                    } else {
-                                                        newRetweets.add(r);
-                                                    };
-                                                };
-                                                if (not exist) {
-                                                    let retweet: Post.Retweeters = {
-                                                        id = post.id;
-                                                        author = authorData;
-                                                    };
-                                                    newRetweets.add(retweet);
-                                                };
-                                                realMoreRetweet.retweets := newRetweets;
-
-                                                if (post.content == "" and exist) return #ok();
-                                                isRetweet := true;
-                                            };
-                                        };
-                                        post.retweet := ?moreRetweet;
+                                for (r in realOther.retweeters.vals()) {
+                                    if (r.principal == caller) {
+                                        exist := true;
+                                    } else {
+                                        newRetweeters.add(r);
                                     };
                                 };
+                                if (not exist) {
+                                    let retweeter: Utils.UserData = authorData;
+                                    newRetweeters.add(retweeter);
+                                };
+                                realOther.retweeters := newRetweeters;
                             };
                         };
                     };
@@ -620,11 +579,7 @@ shared({ caller = initializer }) actor class Market() = this {
                     };
                 };
 
-                if (isRetweet) {
-                    author.retweets.add(id);
-                } else {
-                    author.posts.add(id);
-                };
+                author.posts.add(id);
                 postMap.put(id, post);
                 feed.add(post);
 

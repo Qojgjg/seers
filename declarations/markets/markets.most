@@ -85,13 +85,13 @@ type PostStable =
     createdAt : Time;
     id : Nat32;
     image : ?Text;
-    isRetweet : Bool;
+    isRetweet : ?UserData;
     likes : [Like];
     market : ?MarketStable;
     parent : ?ParentData;
     replies : [Nat32];
     retweet : ?Retweet;
-    retweets : [Retweeters]
+    retweeters : [UserData]
   };
 type Retweet =
   {
@@ -101,7 +101,6 @@ type Retweet =
     id : Nat32;
     parent : ?ParentData
   };
-type Retweeters = {author : UserData; id : Nat32};
 type Time = Int;
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type UserData =

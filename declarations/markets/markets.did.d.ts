@@ -66,6 +66,7 @@ export interface Market {
   'submitForecast' : ActorMethod<[number, Forecast], Result_1>,
   'submitLike' : ActorMethod<[number], Result>,
   'submitPost' : ActorMethod<[PostInitData, [] | [MarketInitData]], Result>,
+  'submitRetweet' : ActorMethod<[number], Result>,
 }
 export type MarketCategory = { 'any' : null } |
   { 'entertainment' : null } |
@@ -156,7 +157,7 @@ export type PostError = { 'notLoggedIn' : null } |
 export interface PostInitData {
   'id' : number,
   'retweet' : [] | [Retweet],
-  'isRetweet' : boolean,
+  'isRetweet' : [] | [UserData],
   'content' : string,
   'author' : UserData,
   'market' : [] | [MarketInitData],
@@ -166,8 +167,7 @@ export interface PostInitData {
 export interface PostStable {
   'id' : number,
   'retweet' : [] | [Retweet],
-  'isRetweet' : boolean,
-  'retweets' : Array<Retweeters>,
+  'isRetweet' : [] | [UserData],
   'content' : string,
   'createdAt' : Time,
   'author' : UserData,
@@ -176,6 +176,7 @@ export interface PostStable {
   'market' : [] | [MarketStable],
   'image' : [] | [string],
   'parent' : [] | [ParentData],
+  'retweeters' : Array<UserData>,
 }
 export type Result = { 'ok' : null } |
   { 'err' : PostError };
@@ -202,7 +203,6 @@ export interface Retweet {
   'author' : UserData,
   'parent' : [] | [ParentData],
 }
-export interface Retweeters { 'id' : number, 'author' : UserData }
 export interface ThreadStable {
   'main' : PostStable,
   'ancestors' : Array<PostStable>,
