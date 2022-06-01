@@ -275,20 +275,6 @@
           />
         </div>
         <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Age:</div>
-          <input
-            bind:value={age}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">City:</div>
-          <input
-            bind:value={city}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
           <div style="padding: 10px; margin: 10px">Picture:</div>
           <input
             bind:value={picture}
@@ -303,36 +289,16 @@
           />
         </div>
         <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Twitter:</div>
-          <input
-            bind:value={twitter}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Discord:</div>
-          <input
-            bind:value={discord}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
-        <div style="display:flex; align-items:center">
           <div style="padding: 10px; margin: 10px">Bio:</div>
           <input
             bind:value={bio}
             style="align-items: center; width:100%; height: 30px"
           />
         </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Website:</div>
-          <input
-            bind:value={website}
-            style="align-items: center; width:100%; height: 30px"
-          />
-        </div>
         <div style="width: 100%;display:flex; justify-content:center">
           <button
             class="btn-grad"
+            style="background:black"
             on:input={() => (errorResponse = "")}
             on:click={() => {
               createUserData()
@@ -370,7 +336,7 @@
     /* background-color: rgb(25, 27, 31);
     border: 1px solid rgb(90, 58, 81);
     box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46); */
-    border: 1px solid rgb(90, 58, 81);
+    border: 1px solid grey;
 
     /* border: 2px solid rgb(25, 27, 31); */
     border-radius: 16px;
