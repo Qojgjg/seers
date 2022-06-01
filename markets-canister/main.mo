@@ -69,7 +69,6 @@ shared({ caller = initializer }) actor class Market() = this {
     
     private stable var updating: Bool = false;
     private stable var nextMarketId: Nat32 = 0;
-    private stable var handles: Trie.Trie<Text, Text> = Trie.empty();
     
     private stable var stableUsers: [(Text, U.UserStable)] = [];
     private stable var stableMarkets: [(Nat32, M.MarketStable)] = [];
@@ -1485,6 +1484,7 @@ shared({ caller = initializer }) actor class Market() = this {
             };
         };
     };
+    
     // Add a comment to a market.
     public shared(msg) func addCommentToMarket(marketId: Nat32, content: Text): async Result.Result<Comment.CommentStable, M.MarketError> {
         assert(not updating);
@@ -1552,20 +1552,25 @@ shared({ caller = initializer }) actor class Market() = this {
                     picture = user.picture;
                 };
 
-                handles := Trie.replace(
-                    handles,
-                    U.userKey(user.handle),
-                    Text.equal,
-                    ?user.handle,
-                ).0;
-
-                userMap.put(user.id, user);
+                userMap.put(user.handle, user);
                 userDataMap.put(user.id, userData);
 
                 return #ok(user);
             };
-            case _ {
-                return #err(#userAlreadyExist);
+            case (?oldUser) {
+                switch (userMap.get(initData.handle)) {
+                    case null {
+                        oldUser.handle := initData.handle;
+                        oldUser.name := initData.name;
+                        oldUser.picture := initData.picture;
+                        oldUser.cover := initData.cover;
+
+                        return #ok(oldUser);
+                    };
+                    case (_) {
+                        return #err(#userAlreadyExist);
+                    };
+                };
             };
         };
     };

@@ -129,7 +129,7 @@
     age = Number(age)
 
     let initData = {
-      id,
+      id: principal,
       handle,
       name,
       age,
