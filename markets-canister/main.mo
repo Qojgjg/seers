@@ -457,7 +457,7 @@ shared({ caller = initializer }) actor class Market() = this {
                         var retweet = post.clone();
                         retweet.isRetweet := ?authorData;
 
-                        feed.add(post);
+                        feed.add(retweet);
 
                         return #ok();
                     };

@@ -103,11 +103,6 @@ type ThreadStable =
    main: PostStable;
    replies: vec PostStable;
  };
-type Retweeters = 
- record {
-   author: UserData;
-   id: nat32;
- };
 type Retweet = 
  record {
    author: UserData;
@@ -171,13 +166,13 @@ type PostStable =
    createdAt: Time;
    id: nat32;
    image: opt text;
-   isRetweet: bool;
+   isRetweet: opt UserData;
    likes: vec Like;
    market: opt MarketStable;
    parent: opt ParentData;
    replies: vec nat32;
    retweet: opt Retweet;
-   retweets: vec Retweeters;
+   retweeters: vec UserData;
  };
 type PostInitData = 
  record {
@@ -185,7 +180,7 @@ type PostInitData =
    content: text;
    id: nat32;
    image: opt text;
-   isRetweet: bool;
+   isRetweet: opt UserData;
    market: opt MarketInitData;
    parent: opt ParentData;
    retweet: opt Retweet;
@@ -388,4 +383,5 @@ service : {
   submitForecast: (nat32, Forecast) -> (Result_1);
   submitLike: (nat32) -> (Result);
   submitPost: (PostInitData, opt MarketInitData) -> (Result);
+  submitRetweet: (nat32) -> (Result);
 }
