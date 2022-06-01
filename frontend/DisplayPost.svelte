@@ -235,7 +235,7 @@
         style="width: 100%; display:flex; gap: 30px; padding: 10px 0px; color:grey; border-bottom: 1px solid grey;"
       >
         <div style="width: 100px; display:flex; gap: 15px">
-          <div style="color:white">{post?.retweets.length}</div>
+          <div style="color:white">{post?.retweeters.length}</div>
           <div>Retweets</div>
         </div>
         <div style="width: 100px; display:flex; gap: 15px">
@@ -471,7 +471,9 @@
               }}><Fa icon={faRetweet} /></button
             >
           </div>
-          {#if post.retweets.length > 0}<div>{post.retweets.length}</div>{/if}
+          {#if post.retweeters.length > 0}<div>
+              {post.retweeters.length}
+            </div>{/if}
         </div>
         <div style="width: 50px; display:flex; gap: 15px">
           <div>
