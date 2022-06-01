@@ -397,6 +397,25 @@ shared({ caller = initializer }) actor class Market() = this {
         return _createMarket(author, marketInitData);
     };
 
+    // Submit a retweet.
+    public shared(msg) func submitRetweet(postId: Nat32): async Result.Result<(), Post.PostError> {
+        assert(not updating);
+        let caller = Principal.toText(msg.caller);
+        
+        if (caller == anon) {
+            return #err(#notLoggedIn);
+        };
+        
+        switch (userMap.get(caller)) {
+            case null {
+                return #err(#userDoesNotExist);
+            };
+            case (?author) {
+                author.retweets.add(postId);
+            };
+        };
+    };
+
     // Submit a post of any type.
     public shared(msg) func submitPost(initData: Post.PostInitData, marketInitData: ?M.MarketInitData): async Result.Result<(), Post.PostError> {
         assert(not updating);

@@ -54,7 +54,7 @@ module {
         
         public var likes: Buffer.Buffer<Like.Like> = Buffer.Buffer<Like.Like>(0);
         public var replies: Buffer.Buffer<Nat32> = Buffer.Buffer<Nat32>(0);
-        public var retweets: Buffer.Buffer<Retweeters> = Buffer.Buffer<Retweeters>(0);
+        public var retweeters: Buffer.Buffer<Retweeters> = Buffer.Buffer<Retweeters>(0);
 
         public var isRetweet: Bool = initData.isRetweet;
         
@@ -67,7 +67,7 @@ module {
                 content = content;
                 parent = parent;
                 replies = replies.toArray();
-                retweets = retweets.toArray();
+                retweeters = retweeters.toArray();
                 retweet = retweet;
                 market = Option.map(market, func (m: Market.Market): Market.MarketStable {
                     m.freeze()
@@ -101,7 +101,7 @@ module {
         content: Text;
         parent: ?ParentData;
         replies: [Nat32];
-        retweets: [Retweeters];
+        retweeters: [Retweeters];
         retweet: ?Retweet;
         market: ?Market.MarketStable;
         image: ?Text;
@@ -126,7 +126,7 @@ module {
 
         p.market := Option.map(ps.market, func (m: Market.MarketStable): Market.Market { Market.unFreeze(m) });
         p.replies := Utils.bufferFromArray(ps.replies);
-        p.retweets := Utils.bufferFromArray(ps.retweets);
+        p.retweeters := Utils.bufferFromArray(ps.retweeters);
         p.likes := Utils.bufferFromArray(ps.likes);
         p.createdAt := ps.createdAt;
 
