@@ -260,49 +260,66 @@
       </div>
     {:else if principal !== "" && !isGetting}
       <div style="display: flex; align-items: center; flex-direction: column">
-        <div style="display:flex; align-items:center">
+        <h3>Edit Profile</h3>
+        <div style="display:flex; flex-direction:column; align-items:center">
           <div style="padding: 10px; margin: 10px">Handle:</div>
           <input
             bind:value={handle}
+            type="text"
             style="align-items: center; width:100%; height: 30px"
           />
         </div>
-        <div style="display:flex; align-items:center">
+        <div style="display:flex; flex-direction:column;align-items:center">
           <div style="padding: 10px; margin: 10px">Name:</div>
           <input
             bind:value={name}
             style="align-items: center; width:100%; height: 30px"
           />
         </div>
-        <div style="display:flex; align-items:center">
+        <div style="display:flex; flex-direction:column;align-items:center">
           <div style="padding: 10px; margin: 10px">Picture:</div>
           <input
             bind:value={picture}
             style="align-items: center; width:100%; height: 30px"
           />
+          <img
+            src={picture}
+            alt="avatar"
+            style="width: 200px; border-radius: 15px; padding: 5px"
+          />
         </div>
-        <div style="display:flex; align-items:center">
+        <div style="display:flex; flex-direction:column;align-items:center">
           <div style="padding: 10px; margin: 10px">Cover:</div>
           <input
             bind:value={cover}
             style="align-items: center; width:100%; height: 30px"
           />
-        </div>
-        <div style="display:flex; align-items:center">
-          <div style="padding: 10px; margin: 10px">Bio:</div>
-          <input
-            bind:value={bio}
-            style="align-items: center; width:100%; height: 30px"
+          <img
+            src={cover}
+            alt="cover"
+            style="width: 200px; border-radius: 15px; padding: 5px"
           />
         </div>
-        <div style="width: 100%;display:flex; justify-content:center">
+        <div
+          style="display:flex;flex-direction:column; align-items:center; width: 300px"
+        >
+          <div style="padding: 10px; margin: 10px">Bio:</div>
+          <textarea
+            rows="5"
+            bind:value={bio}
+            style="align-items: center; width:100%; height: 100px"
+          />
+        </div>
+        <div
+          style="width: 100%;display:flex; justify-content:center; padding: 20px"
+        >
           <button
             class="btn-grad"
             style="background:black"
             on:input={() => (errorResponse = "")}
             on:click={() => {
               createUserData()
-            }}>Create Profile</button
+            }}>Submit</button
           >
         </div>
       </div>
