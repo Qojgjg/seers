@@ -1546,7 +1546,14 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     private func getUser(userId: Text): ?U.User {
-        userMap.get(userId)
+        switch (handlesMap.get(userId)) {
+            case null {
+                return null;
+            };
+            case (?handle) {
+                return userMap.get(handle);
+            };
+        };
     };
 
     private func _createUser(
