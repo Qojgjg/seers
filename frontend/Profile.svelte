@@ -228,14 +228,14 @@
         </div>
       </div>
       <div
-        style="width: 100%; text-align:start;display:flex; flex-direction:row"
+        style="width: 100%; text-align:start;display:flex; flex-direction:row; border-bottom: 1px solid grey"
       >
         <div style="width: 100%; text-align:start; margin: 5px; padding: 5px">
           {user.bio}
         </div>
       </div>
 
-      <div
+      <!-- <div
         style="width: 100%; text-align: center; color: grey; justify-content:space-between; display:flex;margin:5px;padding:5px"
       >
         <div>City: {user.city}</div>
@@ -246,7 +246,7 @@
             >{user.website}</a
           >
         </div>
-      </div>
+      </div> -->
       <div style="margin-top: 40px; width: 100%">
         {#each user.posts as post, i}
           <DisplayPost
