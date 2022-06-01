@@ -287,234 +287,245 @@
   </div>
 {:else}
   <div
-    style={`display:flex; justify-content:start; text-align:start; width: 100%; padding: 0px 0px; flex-direction:row; align-items:center; border-bottom: ${
+    style={`display:flex; justify-content:start; text-align:start; width: 100%; padding: 0px 0px; flex-direction:column; align-items:center; border-bottom: ${
       isThread || doNotShowBorder ? 0 : 1
     }px solid grey`}
   >
-    <div
-      style="display:flex; flex-direction:column; padding: 0px; margin: 5px; height: 100%"
-    >
-      <a href={`/profile/${post.author.principal}`}>
-        <img
-          src={post.author.picture}
-          alt="avatar"
-          style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; padding: 15px 0px 0px 0px;"
-        />
-      </a>
-      {#if isThread}
-        <div style="display:flex; justify-content:center; flex-grow: 1">
-          <div style="width: 2px; height: 100%; background:rgb(51, 54, 57)">
-            &nbsp;
-          </div>
+    {#if post && post.isRetweet.length > 0}
+      <div
+        style="display:flex; color:grey; font-size: 0.8em; justify-content:start; width: 100%"
+      >
+        <div style="padding: 15px 0px 0px 40px">
+          <Fa icon={faRetweet} />
         </div>
-      {/if}
-    </div>
-    <div
-      style="flex-grow: 1; justify-content: start; text-align:start; padding: 15px 0px;"
-    >
-      <div style="display:flex; gap: 5px;">
-        <div>
-          <a href={`/profile/${post.author.principal}`}>{post.author.name}</a>
+        <div style="padding: 15px 0px 0px 5px">
+          by @{post.isRetweet[0].handle}
         </div>
-        <div style="color:grey">
-          <a href={`/profile/principal`} style="color:grey">
-            @{post.author.handle}
-          </a>
-        </div>
-        <div style="color:grey">
-          - {parseTwitterDate(parseInt(post.createdAt) / 1_000_000)}
-        </div>
-        {#if post && post.retweet.length > 0}
-          <div style="color:grey">
-            - retweeted by @{post.author.handle}
+      </div>
+    {/if}
+    <div style="display:flex; width: 100%">
+      <div
+        style="display:flex; flex-direction:column; padding: 0px; margin: 5px; height: 100%"
+      >
+        <a href={`/profile/${post.author.principal}`}>
+          <img
+            src={post.author.picture}
+            alt="avatar"
+            style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; padding: 15px 0px 0px 0px;"
+          />
+        </a>
+        {#if isThread}
+          <div style="display:flex; justify-content:center; flex-grow: 1">
+            <div style="width: 2px; height: 100%; background:rgb(51, 54, 57)">
+              &nbsp;
+            </div>
           </div>
         {/if}
       </div>
-      <a href={`/profile/post/${post.id}#main`} style="width: 100%">
-        <div style="width: 100%; text-align:start; padding: 15px 0px">
-          {#if post.retweet.length > 0}
-            {post.retweet[0].content}
-          {:else}
-            {post.content}
-          {/if}
+      <div
+        style="flex-grow: 1; justify-content: start; text-align:start; padding: 15px 0px;"
+      >
+        <div style="display:flex; gap: 5px;">
+          <div>
+            <a href={`/profile/${post.author.principal}`}>{post.author.name}</a>
+          </div>
+          <div style="color:grey">
+            <a href={`/profile/principal`} style="color:grey">
+              @{post.author.handle}
+            </a>
+          </div>
+          <div style="color:grey">
+            - {parseTwitterDate(parseInt(post.createdAt) / 1_000_000)}
+          </div>
         </div>
-      </a>
-      {#if post && post.market.length > 0}
-        <div>
-          {#each post.market[0].labels as label, i}
-            <div
-              style="width: 100%; display:flex; cursor:pointer; margin: 0; padding: 0;"
-            >
+        <a href={`/profile/post/${post.id}#main`} style="width: 100%">
+          <div style="width: 100%; text-align:start; padding: 15px 0px">
+            {#if post.retweet.length > 0}
+              {post.retweet[0].content}
+            {:else}
+              {post.content}
+            {/if}
+          </div>
+        </a>
+        {#if post && post.market.length > 0}
+          <div>
+            {#each post.market[0].labels as label, i}
               <div
-                style={`background: #39CCCC; width: 60px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
+                style="width: 100%; display:flex; cursor:pointer; margin: 0; padding: 0;"
               >
-                <button
-                  style="all:unset; width: 100%"
-                  on:click={() => {
-                    post.market[0].selected = i
-                  }}
-                >
-                  {label}
-                </button>
-              </div>
-              <div style="flex-grow: 1;">
                 <div
-                  style={`background: #39CCCC; width: ${
-                    post.market[0].probabilities[i] * 100.0
-                  }%; padding: 5px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 0px 5px 5px 0px; color:black`}
+                  style={`background: #39CCCC; width: 60px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
                 >
                   <button
                     style="all:unset; width: 100%"
                     on:click={() => {
                       post.market[0].selected = i
                     }}
-                  />
+                  >
+                    {label}
+                  </button>
+                </div>
+                <div style="flex-grow: 1;">
+                  <div
+                    style={`background: #39CCCC; width: ${
+                      post.market[0].probabilities[i] * 100.0
+                    }%; padding: 5px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 0px 5px 5px 0px; color:black`}
+                  >
+                    <button
+                      style="all:unset; width: 100%"
+                      on:click={() => {
+                        post.market[0].selected = i
+                      }}
+                    />
+                  </div>
+                </div>
+                <div
+                  style="width: 60px; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
+                >
+                  {post.market[0].probabilities[i].toFixed(2)} &Sigma;
                 </div>
               </div>
-              <div
-                style="width: 60px; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
-              >
-                {post.market[0].probabilities[i].toFixed(2)} &Sigma;
+            {/each}
+            <div
+              style="display:flex; text-align:end; justify-content:start; flex-grow: 1"
+            >
+              {#if processing}
+                <button
+                  class="btn-grad"
+                  style="background: black;width: 100px; margin: 15px 0px; color:white;overflow:hidden;"
+                  on:click={() => {
+                    if (principal === "") {
+                      signIn()
+                    } else {
+                      submitBuy(post.market[0].id, post.market[0].selected)
+                    }
+                  }}
+                >
+                  <img
+                    src={inf}
+                    alt="inf"
+                    style="width: 150px; height: 400%; margin: -100%;"
+                  />
+                </button>
+              {:else}
+                <button
+                  class="btn-grad"
+                  style="background: black; padding: 5px; margin: 15px 0px; color: white"
+                  on:click={() => {
+                    if (principal === "") {
+                      signIn()
+                    } else {
+                      submitBuy(post.market[0].id, post.market[0].selected)
+                    }
+                  }}>Bet</button
+                >
+              {/if}
+              <div style="text-align:end;color:red">
+                {errorResponse}
               </div>
             </div>
-          {/each}
-          <div
-            style="display:flex; text-align:end; justify-content:start; flex-grow: 1"
-          >
-            {#if processing}
+          </div>
+        {:else if post && post.image.length > 0}
+          <div>
+            <img
+              src={post.image[0]}
+              alt="main"
+              style="width: 95%; border-radius: 15px; object-fit:cover"
+            />
+          </div>
+        {/if}
+        <div
+          style="width: 280px; display:flex; padding: 5px 0px; color:grey; justify-content:space-between"
+        >
+          <a href={`/profile/post/${post.id}#main`} style="color:grey">
+            <div style="display:flex; gap: 15px;">
+              <div>
+                <button class="reply-bt"><Fa icon={faComment} /></button>
+              </div>
+              {#if post.replies.length > 0}<div>{post.replies.length}</div>{/if}
+            </div>
+          </a>
+
+          <div style="width: fit-content; display:flex; gap: 15px">
+            <div>
               <button
-                class="btn-grad"
-                style="background: black;width: 100px; margin: 15px 0px; color:white;overflow:hidden;"
+                class="retweet-bt"
                 on:click={() => {
                   if (principal === "") {
                     signIn()
                   } else {
-                    submitBuy(post.market[0].id, post.market[0].selected)
+                    submitRetweet()
+                  }
+                }}><Fa icon={faRetweet} /></button
+              >
+            </div>
+            {#if post.retweeters.length > 0}<div>
+                {post.retweeters.length}
+              </div>{/if}
+          </div>
+          <div style="width: 50px; display:flex; gap: 15px">
+            <div>
+              <button
+                on:click={() => {
+                  if (principal === "") {
+                    signIn()
+                  } else {
+                    const like = {
+                      author: {
+                        principal,
+                        handle: "dummy",
+                        name: "dummy",
+                        picture: "dummy",
+                      },
+                      createdAt: Date.now(),
+                    }
+                    const liked = post.likes.find(
+                      (like) => like.author.principal == principal,
+                    )
+
+                    console.log(liked)
+
+                    console.log(post.likes.length)
+                    if (liked) {
+                      post.likes = post.likes.filter(
+                        (like) => like.author.principal != principal,
+                      )
+                    } else {
+                      post.likes.push(like)
+                      post.likes = post.likes
+                    }
+
+                    console.log(post.likes.length)
+                    submitLike(post.id)
                   }
                 }}
-              >
-                <img
-                  src={inf}
-                  alt="inf"
-                  style="width: 150px; height: 400%; margin: -100%;"
-                />
-              </button>
-            {:else}
-              <button
-                class="btn-grad"
-                style="background: black; padding: 5px; margin: 15px 0px; color: white"
-                on:click={() => {
-                  if (principal === "") {
-                    signIn()
-                  } else {
-                    submitBuy(post.market[0].id, post.market[0].selected)
-                  }
-                }}>Bet</button
-              >
-            {/if}
-            <div style="text-align:end;color:red">
-              {errorResponse}
-            </div>
-          </div>
-        </div>
-      {:else if post && post.image.length > 0}
-        <div>
-          <img
-            src={post.image[0]}
-            alt="main"
-            style="width: 95%; border-radius: 15px; object-fit:cover"
-          />
-        </div>
-      {/if}
-      <div
-        style="width: 280px; display:flex; padding: 5px 0px; color:grey; justify-content:space-between"
-      >
-        <a href={`/profile/post/${post.id}#main`} style="color:grey">
-          <div style="display:flex; gap: 15px;">
-            <div><button class="reply-bt"><Fa icon={faComment} /></button></div>
-            {#if post.replies.length > 0}<div>{post.replies.length}</div>{/if}
-          </div>
-        </a>
-
-        <div style="width: fit-content; display:flex; gap: 15px">
-          <div>
-            <button
-              class="retweet-bt"
-              on:click={() => {
-                if (principal === "") {
-                  signIn()
-                } else {
-                  submitRetweet()
-                }
-              }}><Fa icon={faRetweet} /></button
-            >
-          </div>
-          {#if post.retweeters.length > 0}<div>
-              {post.retweeters.length}
-            </div>{/if}
-        </div>
-        <div style="width: 50px; display:flex; gap: 15px">
-          <div>
-            <button
-              on:click={() => {
-                if (principal === "") {
-                  signIn()
-                } else {
-                  const like = {
-                    author: {
-                      principal,
-                      handle: "dummy",
-                      name: "dummy",
-                      picture: "dummy",
-                    },
-                    createdAt: Date.now(),
-                  }
-                  const liked = post.likes.find(
+                style={`color:${
+                  post?.likes.find((like) => like.author.principal == principal)
+                    ? "#e81c4f"
+                    : "grey"
+                }`}
+                class="like-bt"
+                ><Fa
+                  icon={post?.likes.find(
                     (like) => like.author.principal == principal,
                   )
-
-                  console.log(liked)
-
-                  console.log(post.likes.length)
-                  if (liked) {
-                    post.likes = post.likes.filter(
-                      (like) => like.author.principal != principal,
-                    )
-                  } else {
-                    post.likes.push(like)
-                    post.likes = post.likes
-                  }
-
-                  console.log(post.likes.length)
-                  submitLike(post.id)
-                }
-              }}
-              style={`color:${
-                post?.likes.find((like) => like.author.principal == principal)
-                  ? "#e81c4f"
-                  : "grey"
-              }`}
-              class="like-bt"
-              ><Fa
-                icon={post?.likes.find(
-                  (like) => like.author.principal == principal,
-                )
-                  ? faSolidHeart
-                  : faHeart}
-              /></button
-            >
-          </div>
-          {#if post.likes.length > 0}
-            <div
-              style={`color:${
-                post?.likes.find((like) => like.author.principal == principal)
-                  ? "#e81c4f"
-                  : "grey"
-              }`}
-            >
-              {post.likes.length}
+                    ? faSolidHeart
+                    : faHeart}
+                /></button
+              >
             </div>
-          {/if}
+            {#if post.likes.length > 0}
+              <div
+                style={`color:${
+                  post?.likes.find((like) => like.author.principal == principal)
+                    ? "#e81c4f"
+                    : "grey"
+                }`}
+              >
+                {post.likes.length}
+              </div>
+            {/if}
+          </div>
         </div>
       </div>
     </div>
