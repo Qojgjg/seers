@@ -143,7 +143,8 @@
     }
 
     response = await $auth.actor.createUser(initData)
-    if (response["err"]) {
+    console.log(response)
+    if ("err" in response) {
       errorResponse =
         "Error: " +
         splitCamelCaseToString(Object.keys(response["err"]).toString())

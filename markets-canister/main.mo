@@ -75,6 +75,7 @@ shared({ caller = initializer }) actor class Market() = this {
     private stable var stableFeed: [Post.PostStable] = [];
     private stable var stablePosts: [(Nat32, Post.PostStable)] = [];
     private stable var stableImages: [(Nat32, Text)] = [];
+    private stable var stableHandles: [(Text, Text)] = [];
 
     private var feed: Buffer.Buffer<Post.Post> = Buffer.Buffer<Post.Post>(10);
     
@@ -168,6 +169,16 @@ shared({ caller = initializer }) actor class Market() = this {
         )
     };
     
+    private var handlesMap: Map.HashMap<Text, Text> = do {
+        Map.fromIter<Text, Text>(
+            stableHandles.vals(),
+            stableHandles.size(), 
+            Text.equal, 
+            Text.hash 
+        )
+    };
+    
+
     /* Upgrade */
 
     system func preupgrade() {
@@ -1552,6 +1563,7 @@ shared({ caller = initializer }) actor class Market() = this {
                     picture = user.picture;
                 };
 
+                handlesMap.put(user.id, user.handle);
                 userMap.put(user.handle, user);
                 userDataMap.put(user.id, userData);
 
@@ -1564,6 +1576,17 @@ shared({ caller = initializer }) actor class Market() = this {
                         oldUser.name := initData.name;
                         oldUser.picture := initData.picture;
                         oldUser.cover := initData.cover;
+                
+                        let userData: Utils.UserData = {
+                            principal = oldUser.id;
+                            name = oldUser.name;
+                            handle = oldUser.handle;
+                            picture = oldUser.picture;
+                        };
+
+                        handlesMap.put(oldUser.id, oldUser.handle);
+                        userMap.put(oldUser.handle, oldUser);
+                        userDataMap.put(oldUser.id, userData);
 
                         return #ok(oldUser);
                     };

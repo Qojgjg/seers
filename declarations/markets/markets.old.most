@@ -1,9 +1,6 @@
 // Version: 1.0.0
-type AssocList<K, V> = List<(K, V)>;
-type AssocList__1<K, V> = AssocList<K, V>;
 type Balance = {btc : Float; cycles : Float; icp : Float; seers : Float};
 type Bet = {comment : CommentStable; tx : UserTx};
-type Branch<K, V> = {left : Trie<K, V>; right : Trie<K, V>; size : Nat};
 type BrierScore = {createdAt : Time; score : Float};
 type CollateralType = {#cycles; #icp; #seers};
 type CommentStable =
@@ -26,13 +23,9 @@ type FeedItem =
 type Followee = {createdAt : Time; user : Text};
 type Follower = {createdAt : Time; user : Text};
 type Forecast = [Float];
-type Hash = Nat32;
 type HistPoint =
   {createdAt : Time; liquidity : Float; probabilities : [Float]};
-type Key<K> = {hash : Hash; key : K};
-type Leaf<K, V> = {keyvals : AssocList__1<Key<K>, V>; size : Nat};
 type Like = {author : UserData; createdAt : Time};
-type List<T> = ?(T, List<T>);
 type MarketCategory =
   {
     #any;
@@ -102,7 +95,6 @@ type Retweet =
     parent : ?ParentData
   };
 type Time = Int;
-type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
 type UserData =
   {handle : Text; name : Text; picture : Text; principal : Text};
 type UserMarket =
@@ -164,8 +156,6 @@ type UserTx =
   };
 actor {
   stable var anon : Text;
-  stable var handles :
-    {#branch : Branch<Text, Text>; #empty; #leaf : Leaf<Text, Text>};
   stable var nextMarketId : Nat32;
   stable var stableFeed : [PostStable];
   stable var stableImages : [(Nat32, Text)];

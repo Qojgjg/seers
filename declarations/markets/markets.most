@@ -158,6 +158,7 @@ actor {
   stable var anon : Text;
   stable var nextMarketId : Nat32;
   stable var stableFeed : [PostStable];
+  stable var stableHandles : [(Text, Text)];
   stable var stableImages : [(Nat32, Text)];
   stable var stableMarkets : [(Nat32, MarketStable)];
   stable var stablePosts : [(Nat32, PostStable)];
