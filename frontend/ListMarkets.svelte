@@ -72,7 +72,9 @@
         <a href="market/{market.id}">
           <div class="gallery">
             <div>
-              <img src={market.imageUrl} alt="random" />
+              {#if market.imageUrl.length > 10}
+                <img src={market.imageUrl} alt="random" />
+              {/if}
             </div>
             <div class="content">
               <h4 style="padding-top: 0;margin-top:0">
@@ -109,11 +111,13 @@
         <a href="market/{market.id}">
           <div class="gallery">
             <div>
-              <img
-                src={market.imageUrl}
-                alt="random"
-                style="filter: brightness(50%);"
-              />
+              {#if market.imageUrl.length > 10}
+                <img
+                  src={market.imageUrl}
+                  alt="random"
+                  style="filter: brightness(50%);"
+                />
+              {/if}
             </div>
             <div class="content-resolved">
               <h4 style="padding-top: 0;margin-top:0">
@@ -183,7 +187,7 @@
       0 0 3.5px 2.25px #0ff; */
 
     box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46);
-    background-color: rgb(25, 27, 31);
+    background-color: black;
     border: 1px solid rgb(90, 58, 81);
     border-radius: 16px;
     color: rgb(255, 255, 255);

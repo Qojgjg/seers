@@ -124,7 +124,7 @@
               style="width: 100%; display:flex; cursor:pointer; margin: 0; padding: 0;"
             >
               <div
-                style={`background: #39CCCC; width: 60px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
+                style={`background: #39CCCC; width: 100px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
               >
                 <button
                   style="all:unset; width: 100%"
@@ -354,7 +354,7 @@
                 style="width: 100%; display:flex; cursor:pointer; margin: 0; padding: 0;"
               >
                 <div
-                  style={`background: #39CCCC; width: 60px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
+                  style={`background: #39CCCC; width: 100px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
                 >
                   <button
                     style="all:unset; width: 100%"

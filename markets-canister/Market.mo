@@ -117,7 +117,7 @@ module {
         public var bettors: Buffer.Buffer<Text> = Buffer.Buffer<Text>(10);
         public var totalShares: Float = Float.sqrt(k);
         public var imageUrl: Text = initData.imageUrl;
-        public var state: MarketState = #pending;
+        public var state: MarketState = #open;
         public var volume: Float = 0.0;
         public var comments: Buffer.Buffer<Comment.Comment> = Buffer.Buffer<Comment.Comment>(10);
         public var histPrices: Buffer.Buffer<HistPoint> = do {

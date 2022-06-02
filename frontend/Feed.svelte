@@ -120,19 +120,22 @@
       collateralType: { seers: null },
       author: "",
     }
-    const initData = {
+    let initData = {
       id: 0,
       author: {
         principal,
-        name: "",
         picture: "",
         handle: "",
+        name: "",
       },
-      parent: 0,
       content: post,
-      postType: { market: 0 },
+      parent: [],
+      image: [image.value],
+      market: [],
+      retweet: [],
+      isRetweet: [],
     }
-    const resp = await $auth.actor.submitPost(initData, [marketInitData], [])
+    const resp = await $auth.actor.submitPost(initData, [marketInitData])
     processing = false
 
     if (resp["err"]) {
@@ -140,6 +143,7 @@
         "Error: " + splitCamelCaseToString(Object.keys(resp["err"]).toString())
     } else {
       console.log(resp)
+      getFeed()
     }
   }
 
