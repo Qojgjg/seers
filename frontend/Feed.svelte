@@ -81,10 +81,13 @@
         name: "",
       },
       content: post,
-      parent: 0,
-      postType: { image: 0 },
+      parent: [],
+      image: [image.value],
+      market: [],
+      retweet: [],
+      isRetweet: [],
     }
-    const r = await $auth.actor.submitPost(initData, [], [image.value])
+    const r = await $auth.actor.submitPost(initData, [])
     showImageForm = false
     console.log(r)
     processing = false
