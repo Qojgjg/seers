@@ -45,8 +45,8 @@
   const signIn = () => {
     if (client)
       client.login({
-        // identityProvider: "http://rwlgt-iiaaa-aaaaa-aaaaa-cai.localhost:8000/",
-        identityProvider: "https://identity.ic0.app/",
+        identityProvider: "http://rwlgt-iiaaa-aaaaa-aaaaa-cai.localhost:8000/",
+        // identityProvider: "https://identity.ic0.app/",
         onSuccess: handleAuth,
       })
   }

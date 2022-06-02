@@ -299,6 +299,7 @@ type Market =
    canisterFloat: () -> (ICP);
    createMarket: (MarketInitData) -> (Result_7);
    createUser: (UserInitData) -> (Result_3);
+   editUser: (UserInitData) -> (Result_3);
    getFeed: () -> (vec PostStable) query;
    getPost: (nat32) -> (Result_6) query;
    getThread: (nat32) -> (Result_5) query;

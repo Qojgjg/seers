@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte"
   import DisplayPost from "./DisplayPost.svelte"
+  import DisplayButton from "./DisplayButton.svelte"
 
   export let auth
   export let handle = ""
@@ -11,14 +12,14 @@
   let name = ""
   let age = 42
   let city = ""
-  let picture =
-    "https://conteudo.imguol.com.br/c/entretenimento/04/2022/02/25/batman-1645790799911_v2_1x1.jpg"
-  let cover =
-    "https://sm.ign.com/ign_pt/news/t/the-batman/the-batmans-rating-has-been-confirmed_bh3x.jpg"
+  let picture = ""
+  // "https://conteudo.imguol.com.br/c/entretenimento/04/2022/02/25/batman-1645790799911_v2_1x1.jpg"
+  let cover = ""
+  // "https://sm.ign.com/ign_pt/news/t/the-batman/the-batmans-rating-has-been-confirmed_bh3x.jpg"
   let twitter = ""
   let discord = ""
-  let bio =
-    "Social Network for forecasting. Prediction Markets and much more. Our goal is to predict the future 30% more accurately. Powered by  #InternetComputer"
+  let bio = ""
+  // "Social Network for forecasting. Prediction Markets and much more. Our goal is to predict the future 30% more accurately. Powered by  #InternetComputer"
   let website = ""
 
   let editMode = false
@@ -28,6 +29,7 @@
   let refreshLabel = "Refresh"
   let isGetting = false
   let posts = []
+  let processing = false
 
   const splitCamelCaseToString = (s) => {
     return s
@@ -49,55 +51,40 @@
 
   let getUserData = async () => {
     console.log(handle)
+    let resp = {}
     if (principal === "" && handle === "") {
       isGetting = true
       setTimeout(getUserData, 500)
     } else if (handle !== "") {
       isGetting = true
-      const resp = await $auth.actor.getUserWithPosts(handle)
-      console.log(resp)
-      if ("ok" in resp) {
-        const data = resp["ok"]
-        user = data[0]
-        posts = data[1]
-        if (user) {
-          user.markets = user.markets.sort(function (a, b) {
-            var keyA = Number(a.marketId),
-              keyB = Number(b.marketId)
-            if (keyA < keyB) return -1
-            if (keyA > keyB) return 1
-            return 0
-          })
-          user.ownMarkets = user.markets.filter((m) => m.author)
-          user.otherMarkets = user.markets.filter((m) => !m.author)
-          user.txs = user.txs.reverse()
-          user.posts = posts.reverse()
-          console.log(user)
-        }
-      }
-      isGetting = false
+      resp = await $auth.actor.getUserWithPosts(handle)
     } else if (principal !== "") {
       isGetting = true
-      const resp = await $auth.actor.getUserFromPrincipal(principal)
-      console.log(resp)
-      if ("ok" in resp) {
-        const data = resp["ok"]
-        user = data[0]
-        posts = data[1]
-        if (user) {
-          user.markets = user.markets.sort(function (a, b) {
-            var keyA = Number(a.marketId),
-              keyB = Number(b.marketId)
-            if (keyA < keyB) return -1
-            if (keyA > keyB) return 1
-            return 0
-          })
-          user.ownMarkets = user.markets.filter((m) => m.author)
-          user.otherMarkets = user.markets.filter((m) => !m.author)
-          user.txs = user.txs.reverse()
-          user.posts = posts.reverse()
-          console.log(user)
-        }
+      resp = await $auth.actor.getUserFromPrincipal(principal)
+    }
+    console.log(resp)
+    if ("ok" in resp) {
+      const data = resp["ok"]
+      user = data[0]
+      posts = data[1]
+      if (user) {
+        user.markets = user.markets.sort(function (a, b) {
+          var keyA = Number(a.marketId),
+            keyB = Number(b.marketId)
+          if (keyA < keyB) return -1
+          if (keyA > keyB) return 1
+          return 0
+        })
+        user.ownMarkets = user.markets.filter((m) => m.author)
+        user.otherMarkets = user.markets.filter((m) => !m.author)
+        user.txs = user.txs.reverse()
+        user.posts = posts.reverse()
+        picture = user.picture
+        cover = user.cover
+        name = user.name
+        handle = user.handle
+        bio = user.bio
+        console.log(user)
       }
       isGetting = false
     }
@@ -121,7 +108,11 @@
       website,
     }
 
-    response = await $auth.actor.createUser(initData)
+    if (editMode) {
+      response = await $auth.actor.editUser(initData)
+    } else {
+      response = await $auth.actor.createUser(initData)
+    }
     console.log(response)
     if ("err" in response) {
       errorResponse =
@@ -290,18 +281,19 @@
             style="align-items: center; width:100%; height: 100px"
           />
         </div>
-        <div
-          style="width: 100%;display:flex; justify-content:center; padding: 20px"
-        >
-          <button
-            class="btn-grad"
-            style="background:black"
-            on:input={() => (errorResponse = "")}
-            on:click={() => {
-              createUserData()
-            }}>Submit</button
-          >
-        </div>
+
+        <DisplayButton
+          {principal}
+          label="Submit"
+          {signIn}
+          execute={async () => {
+            processing = true
+            await createUserData()
+            processing = false
+          }}
+          {errorResponse}
+          {processing}
+        />
       </div>
     {:else if !isGetting}
       <div style="display: flex; align-items: center; flex-direction: column">

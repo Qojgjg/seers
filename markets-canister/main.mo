@@ -1508,10 +1508,8 @@ shared({ caller = initializer }) actor class Market() = this {
         return posts.toArray();
     };
 
-    // Create user.
-    public shared(msg) func createUser(
-        initData: U.UserInitData,
-    ): async Result.Result<U.UserStable, U.UserError> {
+    // Create new user.
+    public shared(msg) func createUser(initData: U.UserInitData): async Result.Result<U.UserStable, U.UserError> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -1521,6 +1519,26 @@ shared({ caller = initializer }) actor class Market() = this {
         };
         
         switch (_createUser(initData)) {
+            case (#err(e)) {
+                return #err(e);
+            };
+            case (#ok(user)) {
+                return #ok(user.freeze())
+            };
+        };
+    };
+
+    // Edit user.
+    public shared(msg) func editUser(initData: U.UserInitData): async Result.Result<U.UserStable, U.UserError> {
+        assert(not updating);
+
+        let caller = Principal.toText(msg.caller);
+
+        if (caller == anon or caller != initData.id) {
+            return #err(#callerIsAnon);
+        };
+        
+        switch (_editUser(initData)) {
             case (#err(e)) {
                 return #err(e);
             };
@@ -1590,9 +1608,57 @@ shared({ caller = initializer }) actor class Market() = this {
         };
     };
 
-    private func _createUser(
-        initData: U.UserInitData,
-    ): Result.Result<U.User, U.UserError> {
+    private func _editUser(initData: U.UserInitData): Result.Result<U.User, U.UserError> {
+        switch (handlesMap.get(initData.id)) {
+            case null {
+                // No data for this principal.
+                return #err(#userDoesNotExist);
+            };
+            case (?handle) {
+                switch (userMap.get(handle)) {
+                    case null {
+                        // Inconsistency.
+                        return #err(#userDoesNotExist);
+                    };
+                    case (?oldUser) {
+
+                        // Check new handle is ok.
+                        switch (userMap.get(initData.handle)) {
+                            case null {
+                                // Great, the handle does not exist, we can continue.
+                            };
+                            case (_) {
+                                if (initData.handle != handle) {
+                                    // Bad, the handle is taken and is not the same as before.
+                                    return #err(#userAlreadyExist);
+                                };
+                            };
+                        };
+
+                        oldUser.handle := initData.handle;
+                        oldUser.name := initData.name;
+                        oldUser.picture := initData.picture;
+                        oldUser.cover := initData.cover;
+                
+                        let userData: Utils.UserData = {
+                            principal = oldUser.id;
+                            name = oldUser.name;
+                            handle = oldUser.handle;
+                            picture = oldUser.picture;
+                        };
+
+                        handlesMap.put(oldUser.id, oldUser.handle);
+                        userMap.put(oldUser.handle, oldUser);
+                        userDataMap.put(oldUser.id, userData);
+
+                        return #ok(oldUser);
+                    };
+                };
+            };
+        };
+    };
+
+    private func _createUser(initData: U.UserInitData): Result.Result<U.User, U.UserError> {
         switch (handlesMap.get(initData.id)) {
             case (null) {
                 let user: U.User = U.User(initData);
@@ -1611,37 +1677,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 return #ok(user);
             };
             case (?userHandle) {
-                switch (userMap.get(initData.handle)) {
-                    case null {
-                        switch (userMap.get(userHandle)) {
-                            case null {
-                                return #err(#userDoesNotExist);
-                            };
-                            case (?oldUser) {
-                                oldUser.handle := initData.handle;
-                                oldUser.name := initData.name;
-                                oldUser.picture := initData.picture;
-                                oldUser.cover := initData.cover;
-                        
-                                let userData: Utils.UserData = {
-                                    principal = oldUser.id;
-                                    name = oldUser.name;
-                                    handle = oldUser.handle;
-                                    picture = oldUser.picture;
-                                };
-
-                                handlesMap.put(oldUser.id, oldUser.handle);
-                                userMap.put(oldUser.handle, oldUser);
-                                userDataMap.put(oldUser.id, userData);
-
-                                return #ok(oldUser);
-                            };
-                        };
-                    };
-                    case (_) {
-                        return #err(#userAlreadyExist);
-                    };
-                };
+                return #err(#userAlreadyExist);
             };
         };
     };

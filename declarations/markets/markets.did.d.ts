@@ -46,6 +46,7 @@ export interface Market {
   'canisterFloat' : ActorMethod<[], ICP>,
   'createMarket' : ActorMethod<[MarketInitData], Result_7>,
   'createUser' : ActorMethod<[UserInitData], Result_3>,
+  'editUser' : ActorMethod<[UserInitData], Result_3>,
   'getFeed' : ActorMethod<[], Array<PostStable>>,
   'getPost' : ActorMethod<[number], Result_6>,
   'getThread' : ActorMethod<[number], Result_5>,
