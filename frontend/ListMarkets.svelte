@@ -193,9 +193,9 @@
     color: rgb(255, 255, 255);
   }
 
-  div.gallery:hover {
+  /* div.gallery:hover {
     background: rgb(33, 36, 41) !important;
-  }
+  } */
 
   img {
     max-width: 150px;

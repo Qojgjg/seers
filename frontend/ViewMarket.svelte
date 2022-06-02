@@ -112,94 +112,90 @@
 <div
   style="display: flex; padding: 30px; align-items: center; justify-content: center; flex-direction:column; text-align: center"
 >
-  <div
-    style="display:flex;background: rgba(0, 0, 0, 0.3); width: 80%; max-width: 1000px;padding: 80px; border-style: none; border-width: 2px; border-radius: 10px"
-  >
-    <div style="">
-      <div
-        style="display:flex; flex-direction: row; justify-content:start; text-align:center"
-      >
+  <div class="rowUser">
+    <div
+      style="display:flex; flex-direction: row; justify-content:start; text-align:center"
+    >
+      {#if market?.imageUrl.legnth > 10}
         <img
           style="width: 150px; height: fit-content; border-radius: 5px; margin-right: 15px"
           src={market?.imageUrl}
           alt="market"
         />
-        <div style="">
-          <h3>{market?.title}</h3>
+      {/if}
+      <div style="">
+        <h3>{market?.title}</h3>
 
-          <div class="">
-            <div
-              style="display:flex; margin: 0; padding: 10px; width: 100%; line-height: 1.5em; gap: 10px; color:gray"
-            >
-              <div>
-                <div style="margin:0;padding:0;text-transform:capitalize">
-                  Status: {market ? Object.keys(market?.state).toString() : ""}
-                </div>
+        <div class="">
+          <div
+            style="display:flex; margin: 0; padding: 10px; width: 100%; line-height: 1.5em; gap: 10px; color:gray"
+          >
+            <div>
+              <div style="margin:0;padding:0;text-transform:capitalize">
+                Status: {market ? Object.keys(market?.state).toString() : ""}
               </div>
-              <div>
-                Starts: {new Date(
-                  parseInt(market?.startDate) / 1_000_000,
-                ).toDateString()}
-              </div>
-              <div>
-                Ends: {new Date(
-                  parseInt(market?.endDate) / 1_000_000,
-                ).toDateString()}
-              </div>
-              <div>Volume: {Number(market?.volume).toFixed(0)} &Sigma;</div>
-              <div>
-                Liquidity: {Number(market?.liquidity).toFixed(0)} &Sigma;
-              </div>
+            </div>
+            <div>
+              Starts: {new Date(
+                parseInt(market?.startDate) / 1_000_000,
+              ).toDateString()}
+            </div>
+            <div>
+              Ends: {new Date(
+                parseInt(market?.endDate) / 1_000_000,
+              ).toDateString()}
+            </div>
+            <div>Volume: {Number(market?.volume).toFixed(0)} &Sigma;</div>
+            <div>
+              Liquidity: {Number(market?.liquidity).toFixed(0)} &Sigma;
             </div>
           </div>
         </div>
       </div>
-      <div style="display:flex;margin-top: 50px">
-        <div style="width: 70%">
-          <div style="width: 600px">
-            <canvas id="myChart" />
-          </div>
+    </div>
+    <div style="display:flex;margin-top: 50px; width: 100%">
+      <div style="width: 100%">
+        <canvas id="myChart" />
 
-          <div style="line-height: 2; text-align:left; font-size: 1.1em">
-            <h3>Market Rules</h3>
-            <SvelteMarkdown source={market?.description} />
-          </div>
-        </div>
-
-        <div
-          style="width: 30%; display:flex; flex-direction:column; padding-left: 20px"
-        >
-          <div>
-            <Trade
-              {auth}
-              {readMarket}
-              {market}
-              {principal}
-              {selectedLabel}
-              {signIn}
-            />
-          </div>
-          <div>
-            <Forecast {auth} {readMarket} {market} {principal} {signIn} />
-          </div>
+        <div style="line-height: 2; text-align:left; font-size: 1.1em">
+          <h3>Market Rules</h3>
+          <SvelteMarkdown source={market?.description} />
         </div>
       </div>
+
+      <!-- <div
+        style="width: 30%; display:flex; flex-direction:column; padding-left: 20px"
+      >
+        <div>
+          <Trade
+            {auth}
+            {readMarket}
+            {market}
+            {principal}
+            {selectedLabel}
+            {signIn}
+          />
+        </div>
+        <div>
+          <Forecast {auth} {readMarket} {market} {principal} {signIn} />
+        </div>
+      </div> -->
     </div>
   </div>
-  <div
-    style="margin: 15px 0px;display:flex;background: rgba(0, 0, 0, 0.3); width: 80%; max-width: 1000px;padding: 40px 80px; border-style: none; border-width: 2px; border-radius: 10px"
-  >
-    <div style="width: 100%; display:flex">
-      <Comments
-        {auth}
-        {marketId}
-        {readMarket}
-        {comments}
-        {principal}
-        {signIn}
-      />
-    </div>
-  </div>
+  <!-- <div
+      style="margin: 15px 0px;display:flex;background: rgba(0, 0, 0, 0.3); width: 80%; max-width: 1000px;padding: 40px 80px; border-style: none; border-width: 2px; border-radius: 10px"
+    >
+      <div style="width: 100%; display:flex">
+        <Comments
+          {auth}
+          {marketId}
+          {readMarket}
+          {comments}
+          {principal}
+          {signIn}
+        />
+      </div>
+    </div> -->
 </div>
 
 <style global>
