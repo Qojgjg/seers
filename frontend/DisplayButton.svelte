@@ -4,13 +4,9 @@
   export let principal = ""
   export let signIn
   export let label = "Submit"
-  export let execute = () => {
-    return { ok: null }
-  }
-
-  let processing = false
-  let errorResponse = ""
-  let resp = {}
+  export let errorResponse = ""
+  export let execute = () => {}
+  export let processing = false
 </script>
 
 {#if principal === ""}
@@ -35,17 +31,8 @@
   </div>
 {:else}
   <div style="display:flex; text-align:end; justify-content:end; flex-grow: 1">
-    <button
-      class="btn-grad"
-      style="background: black"
-      on:click={async () => {
-        processing = true
-        resp = await execute()
-        processing = false
-        if ("err" in resp) {
-          errorResponse = resp["err"]
-        }
-      }}>{label}</button
+    <button class="btn-grad" style="background: black" on:click={execute}
+      >{label}</button
     >
     <div style="text-align:end;color:red">
       {errorResponse}

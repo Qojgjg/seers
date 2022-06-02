@@ -13,6 +13,7 @@
   import { faRetweet, faPlus, faVideo } from "@fortawesome/free-solid-svg-icons"
   import inf from "./assets/inf.gif"
   import DisplayPost from "./DisplayPost.svelte"
+  import DisplayButton from "./DisplayButton.svelte"
 
   export let auth
   export let principal
@@ -324,75 +325,24 @@
         >
           <Fa icon={faChartBar} scale={1.2} />
         </div>
-        <!-- <div
-          style="display:flex; text-align:center; align-items:center; width: 70px"
-          on:click={() => {
-            showBetForm = showBetForm ? false : true
+        <DisplayButton
+          {principal}
+          label="Post"
+          {signIn}
+          execute={async () => {
+            processing = true
+            if (showBetForm) {
+              await submitMarket()
+            } else if (showImageForm) {
+              await submitImage()
+            } else {
+              await submitPost()
+            }
+            processing = false
           }}
-        >
-          <Fa icon={faFilePdf} scale={1.2} />
-        </div>
-        <div
-          style="display:flex; text-align:center; align-items:center; width: 70px"
-          on:click={() => {
-            showBetForm = showBetForm ? false : true
-          }}
-        >
-          <Fa icon={faVideo} scale={1.2} />
-        </div> -->
-
-        {#if principal === ""}
-          <div
-            style="display:flex; text-align:end; justify-content:end; flex-grow: 1"
-          >
-            <button class="btn-grad" style="background: black" on:click={signIn}
-              >Post</button
-            >
-            <div style="text-align:end;color:red">
-              {errorResponse}
-            </div>
-          </div>
-        {:else if processing}
-          <div
-            style="display:flex; text-align:end; justify-content:end; flex-grow: 1"
-          >
-            <button
-              on:click={() => 0}
-              class="btn-grad"
-              style="width: 100px; overflow:hidden; background: black"
-            >
-              <img
-                src={inf}
-                alt="inf"
-                style="width: 150px; height: 400%; margin: -100%;"
-              />
-            </button>
-            <div style="text-align:end;color:red">
-              {errorResponse}
-            </div>
-          </div>
-        {:else}
-          <div
-            style="display:flex; text-align:end; justify-content:end; flex-grow: 1"
-          >
-            <button
-              class="btn-grad"
-              style="background: black"
-              on:click={() => {
-                if (showBetForm) {
-                  submitMarket()
-                } else if (showImageForm) {
-                  submitImage()
-                } else {
-                  submitPost()
-                }
-              }}>Post</button
-            >
-            <div style="text-align:end;color:red">
-              {errorResponse}
-            </div>
-          </div>
-        {/if}
+          {errorResponse}
+          {processing}
+        />
       </div>
     </div>
   </div>
