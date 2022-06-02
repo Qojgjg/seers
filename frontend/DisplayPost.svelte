@@ -338,7 +338,7 @@
             - {parseTwitterDate(parseInt(post.createdAt) / 1_000_000)}
           </div>
         </div>
-        <a href={`/profile/post/${post.id}#main`} style="width: 100%">
+        <a href={`/post/${post.id}#main`} style="width: 100%">
           <div style="width: 100%; text-align:start; padding: 15px 0px">
             {#if post.retweet.length > 0}
               {post.retweet[0].content}

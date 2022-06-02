@@ -86,8 +86,8 @@
         bio = user.bio
         console.log(user)
       }
-      isGetting = false
     }
+    isGetting = false
   }
 
   let createUserData = async () => {
@@ -231,7 +231,6 @@
       </div>
     {:else if principal !== "" && !isGetting}
       <div style="display: flex; align-items: center; flex-direction: column">
-        <h3>Edit Profile</h3>
         <div style="display:flex; flex-direction:column; align-items:center">
           <div style="padding: 10px; margin: 10px">Handle:</div>
           <input
