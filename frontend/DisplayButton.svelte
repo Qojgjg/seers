@@ -9,33 +9,33 @@
   export let processing = false
 </script>
 
-{#if principal === ""}
-  <div style="display:flex; text-align:end; justify-content:end; flex-grow: 1">
-    <button class="btn-grad" style="background: black" on:click={signIn}
-      >{label}</button
-    >
-  </div>
-{:else if processing}
-  <div style="display:flex; text-align:end; justify-content:end; flex-grow: 1">
-    <button
-      on:click={() => 0}
-      class="btn-grad"
-      style="width: 100px; overflow:hidden; background: black"
-    >
-      <img
-        src={inf}
-        alt="inf"
-        style="width: 150px; height: 400%; margin: -100%;"
-      />
-    </button>
-  </div>
-{:else}
-  <div style="display:flex; text-align:end; justify-content:end; flex-grow: 1">
-    <button class="btn-grad" style="background: black" on:click={execute}
-      >{label}</button
-    >
+<div style="display:flex; text-align:end; justify-content:end; flex-grow: 1">
+  <button
+    class="btn-grad"
+    style={`${
+      processing
+        ? "width: 100px; overflow:hidden; background: black"
+        : "background:black"
+    }`}
+    on:click={() => {
+      if (principal === "") signIn()
+      else if (!processing) execute()
+    }}
+  >
+    {#if !processing}
+      {label}
+    {/if}
+    <img
+      src={inf}
+      alt="inf"
+      style={`${
+        processing
+          ? "width: 150px; height: 400%; margin: -100%;"
+          : "display: none"
+      }`}
+    />
     <div style="text-align:end;color:red">
       {errorResponse}
     </div>
-  </div>
-{/if}
+  </button>
+</div>
