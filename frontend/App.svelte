@@ -45,8 +45,8 @@
   const signIn = () => {
     if (client)
       client.login({
-        identityProvider: "http://rwlgt-iiaaa-aaaaa-aaaaa-cai.localhost:8000/",
-        // identityProvider: "https://identity.ic0.app/",
+        // identityProvider: "http://rwlgt-iiaaa-aaaaa-aaaaa-cai.localhost:8000/",
+        identityProvider: "https://identity.ic0.app/",
         onSuccess: handleAuth,
       })
   }
@@ -103,11 +103,14 @@
     <Route path="ranking">
       <Ranking {auth} />
     </Route>
+    <Route path="markets">
+      <ListMarkets {auth} />
+    </Route>
     <Route path="feed" primary={false}>
       <Feed {auth} {principal} {signIn} />
     </Route>
-    <Route path="markets">
-      <ListMarkets {auth} />
+    <Route path="/" primary={false}>
+      <Feed {auth} {principal} {signIn} />
     </Route>
   </div>
   <footer
