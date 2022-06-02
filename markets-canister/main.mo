@@ -1438,34 +1438,27 @@ shared({ caller = initializer }) actor class Market() = this {
 
 
     // Get user with posts.
-    public query func getUserWithPosts(userId: Text): async Result.Result<(U.UserStable, [Post.PostStable]), U.UserError> {
-        switch (handlesMap.get(userId)) {
+    public query func getUserWithPosts(handle: Text): async Result.Result<(U.UserStable, [Post.PostStable]), U.UserError> {
+        switch (userMap.get(handle)) {
             case null {
                 return #err(#profileNotCreated);
             };
-            case (?handle) {
-                switch (userMap.get(handle)) {
-                    case null {
-                        return #err(#profileNotCreated);
-                    };
-                    case (?user) {
-                        var posts = Buffer.Buffer<Post.PostStable>(user.posts.size());
+            case (?user) {
+                var posts = Buffer.Buffer<Post.PostStable>(user.posts.size());
 
-                        for (postId in user.posts.vals()) {
-                            switch (postMap.get(postId)) {
-                                case null {
-                                    // Shouldn't happen, but it doesn't matter.
-                                };
-                                case (?post) {
-                                    var stablePost = post.freeze();
-                                    posts.add(stablePost);
-                                };
-                            };
+                for (postId in user.posts.vals()) {
+                    switch (postMap.get(postId)) {
+                        case null {
+                            // Shouldn't happen, but it doesn't matter.
                         };
-
-                        return #ok((user.freeze(), posts.toArray()));
+                        case (?post) {
+                            var stablePost = post.freeze();
+                            posts.add(stablePost);
+                        };
                     };
                 };
+
+                return #ok((user.freeze(), posts.toArray()));
             };
         };
     };

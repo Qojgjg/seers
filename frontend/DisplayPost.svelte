@@ -92,7 +92,7 @@
       style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 5px 0px; flex-direction:row; align-items:center; font-size: 1.2em; "
     >
       <div style="padding: 0px 0px; margin: 0px 5px; height: 100%;">
-        <a href={`/profile/${post?.author.principal}`}>
+        <a href={`/profile/${post?.author.handle}`}>
           <img
             src={post?.author.picture}
             alt="avatar"
@@ -101,14 +101,14 @@
         </a>
       </div>
       <div style="display:flex; flex-direction:column; height: 100%">
-        <a href={`/profile/${post?.author.principal}`}>{post?.author.name}</a>
-        <a href={`/profile/${post?.author.principal}`} style="color:grey">
+        <a href={`/profile/${post?.author.handle}`}>{post?.author.name}</a>
+        <a href={`/profile/${post?.author.handle}`} style="color:grey">
           @{post?.author.handle}
         </a>
       </div>
     </div>
     <div style="flex-grow: 1; justify-content: start; text-align:start">
-      <a href={`/profile/post/${post?.id}#main`} style="width: 100%">
+      <a href={`/post/${post?.id}#main`} style="width: 100%">
         <div
           style="width: 100%; text-align:start; padding: 0px 0px; border-bottom: 0px solid grey;"
         >
@@ -327,10 +327,10 @@
       >
         <div style="display:flex; gap: 5px;">
           <div>
-            <a href={`/profile/${post.author.principal}`}>{post.author.name}</a>
+            <a href={`/profile/${post.author.handle}`}>{post.author.name}</a>
           </div>
           <div style="color:grey">
-            <a href={`/profile/principal`} style="color:grey">
+            <a href={`/profile/${post.author.handle}`} style="color:grey">
               @{post.author.handle}
             </a>
           </div>
@@ -437,7 +437,7 @@
         <div
           style="width: 280px; display:flex; padding: 5px 0px; color:grey; justify-content:space-between"
         >
-          <a href={`/profile/post/${post.id}#main`} style="color:grey">
+          <a href={`/post/${post.id}#main`} style="color:grey">
             <div style="display:flex; gap: 15px;">
               <div>
                 <button class="reply-bt"><Fa icon={faComment} /></button>

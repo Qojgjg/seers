@@ -1,17 +1,13 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import Fa from "svelte-fa"
-  import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
-  import { faRetweet } from "@fortawesome/free-solid-svg-icons"
   import DisplayPost from "./DisplayPost.svelte"
 
   export let auth
-  export let principal
+  export let handle = "seers"
   export let signIn
+  export let principal
 
   let user = null
-  let id = principal
-  let handle = "seers"
   let name = "Seers"
   let age = 35
   let city = "Lisbon"
@@ -33,47 +29,6 @@
   let isGetting = false
   let posts = []
 
-  function parseTwitterDate(tdate) {
-    var system_date = new Date(tdate)
-    var user_date = new Date()
-
-    var diff = Math.floor((Number(user_date) - Number(system_date)) / 1000)
-    if (diff <= 1) {
-      return "just now"
-    }
-    if (diff < 20) {
-      return diff + " seconds ago"
-    }
-    if (diff < 40) {
-      return "half a minute ago"
-    }
-    if (diff < 60) {
-      return "less than a minute ago"
-    }
-    if (diff <= 90) {
-      return "one minute ago"
-    }
-    if (diff <= 3540) {
-      return Math.round(diff / 60) + " minutes ago"
-    }
-    if (diff <= 5400) {
-      return "1 hour ago"
-    }
-    if (diff <= 86400) {
-      return Math.round(diff / 3600) + " hours ago"
-    }
-    if (diff <= 129600) {
-      return "1 day ago"
-    }
-    if (diff < 604800) {
-      return Math.round(diff / 86400) + " days ago"
-    }
-    if (diff <= 777600) {
-      return "1 week ago"
-    }
-    return "on " + system_date
-  }
-
   const splitCamelCaseToString = (s) => {
     return s
       .split(/(?=[A-Z])/)
@@ -93,13 +48,13 @@
   }
 
   let getUserData = async () => {
-    console.log(principal)
-    if (principal === "") {
+    console.log(handle)
+    if (handle === "") {
       isGetting = true
       setTimeout(getUserData, 500)
     } else {
       isGetting = true
-      const resp = await $auth.actor.getUserWithPosts(principal)
+      const resp = await $auth.actor.getUserWithPosts(handle)
       console.log(resp)
       if ("ok" in resp) {
         const data = resp["ok"]

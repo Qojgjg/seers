@@ -91,10 +91,10 @@
     <Route path="profile" let:params>
       <Profile {auth} {principal} {signIn} />
     </Route>
-    <Route path="profile/:principal" let:params>
-      <Profile {auth} principal={params.principal} {signIn} />
+    <Route path="profile/:handle" let:params>
+      <Profile {auth} handle={params.handle} {principal} {signIn} />
     </Route>
-    <Route path="profile/post/:id" let:params primary={false}>
+    <Route path="post/:id" let:params primary={false}>
       <ViewPost {auth} id={params.id} {principal} {signIn} />
     </Route>
     <Route path="create">
