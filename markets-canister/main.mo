@@ -417,7 +417,7 @@ shared({ caller = initializer }) actor class Market() = this {
             return #err(#notLoggedIn);
         };
         
-        switch (userMap.get(caller)) {
+        switch (getUser(caller)) {
             case null {
                 return #err(#userDoesNotExist);
             };
@@ -614,7 +614,7 @@ shared({ caller = initializer }) actor class Market() = this {
             return #err(#notLoggedIn);
         };
         
-        switch (userMap.get(caller)) {
+        switch (getUser(caller)) {
             case null {
                 return #err(#userDoesNotExist);
             };
@@ -1544,7 +1544,7 @@ shared({ caller = initializer }) actor class Market() = this {
             return #err(#commentIsEmpty);
         };
 
-        let userOpt = userMap.get(userId);
+        let userOpt = getUser(userId);
 
         switch (userOpt) {
             case null {

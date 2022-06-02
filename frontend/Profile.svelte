@@ -8,18 +8,18 @@
   export let principal
 
   let user = null
-  let name = "Seers"
-  let age = 35
-  let city = "Lisbon"
+  let name = ""
+  let age = 42
+  let city = ""
   let picture =
     "https://conteudo.imguol.com.br/c/entretenimento/04/2022/02/25/batman-1645790799911_v2_1x1.jpg"
   let cover =
     "https://sm.ign.com/ign_pt/news/t/the-batman/the-batmans-rating-has-been-confirmed_bh3x.jpg"
-  let twitter = "@SeerMarkets"
-  let discord = "none"
+  let twitter = ""
+  let discord = ""
   let bio =
     "Social Network for forecasting. Prediction Markets and much more. Our goal is to predict the future 30% more accurately. Powered by  #InternetComputer"
-  let website = "seers.bet"
+  let website = ""
 
   let editMode = false
   let response = null
