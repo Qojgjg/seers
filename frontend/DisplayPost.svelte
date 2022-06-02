@@ -307,7 +307,7 @@
       <div
         style="display:flex; flex-direction:column; padding: 0px; margin: 5px; height: 100%"
       >
-        <a href={`/profile/${post.author.principal}`}>
+        <a href={`/profile/${post.author.handle}`}>
           <img
             src={post.author.picture}
             alt="avatar"

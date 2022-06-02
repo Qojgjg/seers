@@ -1463,6 +1463,40 @@ shared({ caller = initializer }) actor class Market() = this {
         };
     };
 
+    // Get user with posts from principal.
+    public query func getUserFromPrincipal(principal: Text): async Result.Result<(U.UserStable, [Post.PostStable]), U.UserError> {
+        switch (handlesMap.get(principal)) {
+            case null {
+                return #err(#profileNotCreated);
+            };
+            case (?handle) {
+                switch (userMap.get(handle)) {
+                    case null {
+                        return #err(#profileNotCreated);
+                    };
+                    case (?user) {
+                        var posts = Buffer.Buffer<Post.PostStable>(user.posts.size());
+
+                        for (postId in user.posts.vals()) {
+                            switch (postMap.get(postId)) {
+                                case null {
+                                    // Shouldn't happen, but it doesn't matter.
+                                };
+                                case (?post) {
+                                    var stablePost = post.freeze();
+                                    posts.add(stablePost);
+                                };
+                            };
+                        };
+
+                        return #ok((user.freeze(), posts.toArray()));
+                    };
+                };
+            };
+        };
+    };
+
+
     // Get feed.
     public query func getFeed(): async [Post.PostStable] {
         var posts = Buffer.Buffer<Post.PostStable>(feed.size());

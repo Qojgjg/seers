@@ -49,6 +49,7 @@ export interface Market {
   'getFeed' : ActorMethod<[], Array<PostStable>>,
   'getPost' : ActorMethod<[number], Result_6>,
   'getThread' : ActorMethod<[number], Result_5>,
+  'getUserFromPrincipal' : ActorMethod<[string], Result_4>,
   'getUserStable' : ActorMethod<[string], [] | [UserStable]>,
   'getUserWithPosts' : ActorMethod<[string], Result_4>,
   'readAllMarkets' : ActorMethod<

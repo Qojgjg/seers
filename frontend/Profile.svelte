@@ -3,7 +3,7 @@
   import DisplayPost from "./DisplayPost.svelte"
 
   export let auth
-  export let handle = "seers"
+  export let handle = ""
   export let signIn
   export let principal
 
@@ -49,12 +49,36 @@
 
   let getUserData = async () => {
     console.log(handle)
-    if (handle === "") {
+    if (principal === "" && handle === "") {
       isGetting = true
       setTimeout(getUserData, 500)
-    } else {
+    } else if (handle !== "") {
       isGetting = true
       const resp = await $auth.actor.getUserWithPosts(handle)
+      console.log(resp)
+      if ("ok" in resp) {
+        const data = resp["ok"]
+        user = data[0]
+        posts = data[1]
+        if (user) {
+          user.markets = user.markets.sort(function (a, b) {
+            var keyA = Number(a.marketId),
+              keyB = Number(b.marketId)
+            if (keyA < keyB) return -1
+            if (keyA > keyB) return 1
+            return 0
+          })
+          user.ownMarkets = user.markets.filter((m) => m.author)
+          user.otherMarkets = user.markets.filter((m) => !m.author)
+          user.txs = user.txs.reverse()
+          user.posts = posts.reverse()
+          console.log(user)
+        }
+      }
+      isGetting = false
+    } else if (principal !== "") {
+      isGetting = true
+      const resp = await $auth.actor.getUserFromPrincipal(principal)
       console.log(resp)
       if ("ok" in resp) {
         const data = resp["ok"]

@@ -302,6 +302,7 @@ type Market =
    getFeed: () -> (vec PostStable) query;
    getPost: (nat32) -> (Result_6) query;
    getThread: (nat32) -> (Result_5) query;
+   getUserFromPrincipal: (text) -> (Result_4) query;
    getUserStable: (text) -> (opt UserStable) query;
    getUserWithPosts: (text) -> (Result_4) query;
    readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
