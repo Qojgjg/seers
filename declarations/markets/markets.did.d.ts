@@ -227,6 +227,7 @@ export type UserError = { 'callerIsAnon' : null } |
   { 'optionsMissing' : null } |
   { 'descriptionMissing' : null } |
   { 'titleMissing' : null } |
+  { 'handleAlreadyTaken' : null } |
   { 'marketMissing' : null } |
   { 'startDateOld' : null } |
   { 'marketNotOpen' : null } |

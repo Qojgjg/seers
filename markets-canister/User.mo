@@ -44,6 +44,8 @@ module {
 
         #userDoesNotExist;
         #userAlreadyExist;
+
+        #handleAlreadyTaken;
     };
    
     public type Follower = {

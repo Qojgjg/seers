@@ -234,6 +234,7 @@ export const idlFactory = ({ IDL }) => {
     'optionsMissing' : IDL.Null,
     'descriptionMissing' : IDL.Null,
     'titleMissing' : IDL.Null,
+    'handleAlreadyTaken' : IDL.Null,
     'marketMissing' : IDL.Null,
     'startDateOld' : IDL.Null,
     'marketNotOpen' : IDL.Null,

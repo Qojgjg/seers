@@ -1665,20 +1665,27 @@ shared({ caller = initializer }) actor class Market() = this {
     private func _createUser(initData: U.UserInitData): Result.Result<U.User, U.UserError> {
         switch (handlesMap.get(initData.id)) {
             case (null) {
-                let user: U.User = U.User(initData);
+                switch (userMap.get(initData.handle)) {
+                    case null {
+                        let user: U.User = U.User(initData);
 
-                let userData: Utils.UserData = {
-                    principal = user.id;
-                    name = user.name;
-                    handle = user.handle;
-                    picture = user.picture;
+                        let userData: Utils.UserData = {
+                            principal = user.id;
+                            name = user.name;
+                            handle = user.handle;
+                            picture = user.picture;
+                        };
+
+                        handlesMap.put(user.id, user.handle);
+                        userMap.put(user.handle, user);
+                        userDataMap.put(user.id, userData);
+
+                        return #ok(user);
+                    };
+                    case (_) {
+                        return #err(#handleAlreadyTaken);
+                    };
                 };
-
-                handlesMap.put(user.id, user.handle);
-                userMap.put(user.handle, user);
-                userDataMap.put(user.id, userData);
-
-                return #ok(user);
             };
             case (?userHandle) {
                 return #err(#userAlreadyExist);

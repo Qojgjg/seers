@@ -76,6 +76,7 @@ type UserError =
    descriptionMissing;
    endDateOld;
    endDateOlderThanStartDate;
+   handleAlreadyTaken;
    imageMissing;
    marketMissing;
    marketNotOpen;
