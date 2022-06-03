@@ -150,6 +150,7 @@ export type MarketState = { 'any' : null } |
 export interface ParentData { 'id' : number, 'author' : UserData }
 export type PostError = { 'notLoggedIn' : null } |
   { 'parentDoesNotExist' : null } |
+  { 'postIsEmpty' : null } |
   { 'marketNotFound' : null } |
   { 'imageNotFound' : null } |
   { 'alreadyLiked' : null } |

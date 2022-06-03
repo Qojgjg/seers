@@ -485,6 +485,10 @@ shared({ caller = initializer }) actor class Market() = this {
         if (caller == anon) {
             return #err(#notLoggedIn);
         };
+
+        if (initData.content == "") {
+            return #err(#postIsEmpty);
+        };
         
         switch (getUser(caller)) {
             case null {

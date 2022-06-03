@@ -195,6 +195,7 @@ type PostError =
    notLoggedIn;
    parentDoesNotExist;
    postDoesNotExist;
+   postIsEmpty;
    userDoesNotExist;
  };
 type ParentData = 

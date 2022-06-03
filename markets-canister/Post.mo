@@ -18,6 +18,7 @@ module {
         #imageNotFound;
         #parentDoesNotExist;
         #alreadyRetweeted;
+        #postIsEmpty;
     };
 
     public type ParentData = {

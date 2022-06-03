@@ -248,6 +248,7 @@ export const idlFactory = ({ IDL }) => {
   const PostError = IDL.Variant({
     'notLoggedIn' : IDL.Null,
     'parentDoesNotExist' : IDL.Null,
+    'postIsEmpty' : IDL.Null,
     'marketNotFound' : IDL.Null,
     'imageNotFound' : IDL.Null,
     'alreadyLiked' : IDL.Null,
