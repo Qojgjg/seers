@@ -126,7 +126,9 @@
               style="width: 100%; display:flex; cursor:pointer; margin: 0; padding: 0;"
             >
               <div
-                style={`background: #39CCCC; width: 100px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
+                style={`background: ${
+                  post.market[0].selected == i ? "#FFDC00" : "#39CCCC"
+                }; width: 100px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
               >
                 <button
                   style="all:unset; width: 100%"
@@ -139,7 +141,9 @@
               </div>
               <div style="flex-grow: 1;">
                 <div
-                  style={`background: #39CCCC; width: ${
+                  style={`background: ${
+                    post.market[0].selected == i ? "#FFDC00" : "#39CCCC"
+                  }; width: ${
                     post.market[0].probabilities[i] * 100.0
                   }%; padding: 5px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 0px 5px 5px 0px; color:black`}
                 >
@@ -356,12 +360,15 @@
                 style="width: 100%; display:flex; cursor:pointer; margin: 0; padding: 0;"
               >
                 <div
-                  style={`background: #39CCCC; width: 100px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
+                  style={`background: ${
+                    post.market[0].selected == i ? "#FFDC00" : "#39CCCC"
+                  }; width: 100px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
                 >
                   <button
                     style="all:unset; width: 100%"
                     on:click={() => {
                       post.market[0].selected = i
+                      console.log("Selecting " + post.market[0].selected)
                     }}
                   >
                     {label}
@@ -369,7 +376,9 @@
                 </div>
                 <div style="flex-grow: 1;">
                   <div
-                    style={`background: #39CCCC; width: ${
+                    style={`background: ${
+                      post.market[0].selected == i ? "#FFDC00" : "#39CCCC"
+                    }; width: ${
                       post.market[0].probabilities[i] * 100.0
                     }%; padding: 5px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 0px 5px 5px 0px; color:black`}
                   >
@@ -377,8 +386,11 @@
                       style="all:unset; width: 100%"
                       on:click={() => {
                         post.market[0].selected = i
+                        console.log("Selecting " + post.market[0].selected)
                       }}
-                    />
+                    >
+                      &nbsp;
+                    </button>
                   </div>
                 </div>
                 <div
