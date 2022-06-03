@@ -115,6 +115,9 @@
         Principal: {user.id}
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
+        ICP deposit account: {user.depositAddrs.icp}
+      </div>
+      <div style="margin-bottom: 10px; width: 100%; text-align:center">
         Balance: {Number(user.balances.seers).toFixed(2)} seers
       </div>
       <div style="margin-bottom: 10px; width: 100%; text-align:center">

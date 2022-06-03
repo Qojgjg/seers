@@ -19,7 +19,7 @@ type UserStable =
    comments: vec CommentStable;
    cover: text;
    createdAt: Time;
-   depositAddrs: vec DepositAddr;
+   depositAddrs: DepositAddrs;
    discord: text;
    expBalances: Balance;
    feed: vec FeedItem;
@@ -356,8 +356,8 @@ type FeedItem =
    market: MarketStable;
    post: PostStable;
  };
-type DepositAddr = 
- variant {
+type DepositAddrs = 
+ record {
    btc: text;
    cycles: text;
    icp: text;

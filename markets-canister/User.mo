@@ -18,10 +18,6 @@ import Post "Post";
 import Comment "Comment";
 
 module {
-    public func userKey(x: Text) : Trie.Key<Text> {
-        return { hash = Text.hash(x); key = x };
-    };
-
     public type UserError = {
         #callerIsAnon;
         #profileNotCreated;
@@ -79,10 +75,10 @@ module {
         btc: Float;
     };
 
-    public type DepositAddr = {
-        #icp: Text;
-        #cycles: Text;
-        #btc: Text;
+    public type DepositAddrs = {
+        icp: Text;
+        cycles: Text;
+        btc: Text;
     };
 
     public type UserMarket = {
@@ -125,7 +121,11 @@ module {
             cycles = 0.0;
             btc = 0.0;
         };
-        public var depositAddrs: Buffer.Buffer<DepositAddr> = Buffer.Buffer<DepositAddr>(3);
+        public var depositAddrs: DepositAddrs = {
+            icp = "";
+            cycles = "";
+            btc = "";
+        };
         public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
         public var txs: Buffer.Buffer<Tx.UserTx> = Buffer.Buffer<Tx.UserTx>(5);
         public var forecasts: Buffer.Buffer<Forecast.Forecast> = Buffer.Buffer<Forecast.Forecast>(5);
@@ -161,7 +161,7 @@ module {
                 feed = feed.toArray();
                 balances = balances;
                 expBalances = expBalances;
-                depositAddrs = depositAddrs.toArray();  
+                depositAddrs = depositAddrs;  
                 markets = markets.toArray();
                 txs = txs.toArray();
                 comments = stableComments;
@@ -196,7 +196,7 @@ module {
         feed: [Feed.FeedItem];
         balances: Balance;
         expBalances: Balance;
-        depositAddrs: [DepositAddr];  
+        depositAddrs: DepositAddrs;  
         markets: [UserMarket];
         txs: [Tx.UserTx];
         comments: [Comment.CommentStable];
@@ -238,7 +238,7 @@ module {
         user.feed := Utils.bufferFromArray(u.feed);
         user.balances := u.balances;
         user.expBalances := u.expBalances;
-        user.depositAddrs := Utils.bufferFromArray(u.depositAddrs);
+        user.depositAddrs := u.depositAddrs;
         user.markets := Utils.bufferFromArray(u.markets);
         user.txs := Utils.bufferFromArray(u.txs);
         user.comments := Utils.bufferFromArray(comments);

@@ -6,6 +6,8 @@ import Nat8      "mo:base/Nat8";
 import Nat32     "mo:base/Nat32";
 import Principal "mo:base/Principal";
 import Text      "mo:base/Text";
+import Buffer      "mo:base/Buffer";
+import Iter      "mo:base/Iter";
 import Hex "mo:encoding/Hex";
 import CRC32     "./CRC32";
 import SHA224    "./SHA224";
@@ -16,11 +18,26 @@ module {
   // 32-byte array.
   public type Subaccount = Blob;
 
-  func beBytes(n: Nat32) : [Nat8] {
+  public func beBytes(n: Nat32) : [Nat8] {
     func byte(n: Nat32) : Nat8 {
       Nat8.fromNat(Nat32.toNat(n & 0xff))
     };
     [byte(n >> 24), byte(n >> 16), byte(n >> 8), byte(n)]
+  };
+
+  public func makeSubAccount(n: Nat32) : Subaccount {
+    let a = beBytes(n);
+    var b = Buffer.Buffer<Nat8>(32);
+    
+    for (i in Iter.range(1, 28)) {
+      b.add(0);
+    };
+
+    for (v in a.vals()) {
+      b.add(v);
+    };
+    
+    Blob.fromArrayMut(b.toVarArray())
   };
 
   public func defaultSubaccount() : Subaccount {

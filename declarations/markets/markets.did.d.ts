@@ -21,9 +21,11 @@ export interface CommentStable {
   'author' : UserData,
   'likes' : Array<Like>,
 }
-export type DepositAddr = { 'btc' : string } |
-  { 'icp' : string } |
-  { 'cycles' : string };
+export interface DepositAddrs {
+  'btc' : string,
+  'icp' : string,
+  'cycles' : string,
+}
 export type FeedItem = { 'bet' : Bet } |
   { 'post' : PostStable } |
   { 'comment' : CommentStable } |
@@ -294,7 +296,7 @@ export interface UserStable {
   'posts' : Array<number>,
   'followees' : Array<Followee>,
   'followers' : Array<Follower>,
-  'depositAddrs' : Array<DepositAddr>,
+  'depositAddrs' : DepositAddrs,
   'balances' : Balance,
 }
 export interface UserTx {

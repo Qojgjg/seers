@@ -12,7 +12,7 @@ type CommentStable =
     likes : [Like];
     modifiedAt : Time
   };
-type DepositAddr = {#btc : Text; #cycles : Text; #icp : Text};
+type DepositAddrs = {btc : Text; cycles : Text; icp : Text};
 type FeedItem =
   {
     #bet : Bet;
@@ -121,7 +121,7 @@ type UserStable =
     comments : [CommentStable];
     cover : Text;
     createdAt : Time;
-    depositAddrs : [DepositAddr];
+    depositAddrs : DepositAddrs;
     discord : Text;
     expBalances : Balance;
     feed : [FeedItem];

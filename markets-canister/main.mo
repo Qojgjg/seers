@@ -45,6 +45,12 @@ shared({ caller = initializer }) actor class Market() = this {
     private stable var anon: Text = "2vxsx-fae";
 
     // Returns the default account identifier of this canister.
+    func makeAccountIdentifier(subaccount: Account.Subaccount) : Account.AccountIdentifier {
+        Account.accountIdentifier(Principal.fromActor(this), subaccount)
+    };
+
+
+    // Returns the default account identifier of this canister.
     func myAccountId() : Account.AccountIdentifier {
         Account.accountIdentifier(Principal.fromActor(this), Account.defaultSubaccount())
     };
@@ -1721,7 +1727,17 @@ shared({ caller = initializer }) actor class Market() = this {
             case (null) {
                 switch (userMap.get(initData.handle)) {
                     case null {
-                        let user: U.User = U.User(initData);
+                        var user: U.User = U.User(initData);
+                        let userNum: Nat32 = Nat32.fromNat(0);
+                        let account: Text = Account.toText(makeAccountIdentifier(Account.makeSubAccount(userNum)));
+
+                        // Set deposit address.
+                        user.depositAddrs := {
+                            seers = "";
+                            icp = account;
+                            cycles = "";
+                            btc = "";
+                        };
 
                         let userData: Utils.UserData = {
                             principal = user.id;

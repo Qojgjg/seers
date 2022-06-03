@@ -190,7 +190,7 @@ export const idlFactory = ({ IDL }) => {
   });
   const Followee = IDL.Record({ 'createdAt' : Time, 'user' : IDL.Text });
   const Follower = IDL.Record({ 'createdAt' : Time, 'user' : IDL.Text });
-  const DepositAddr = IDL.Variant({
+  const DepositAddrs = IDL.Record({
     'btc' : IDL.Text,
     'icp' : IDL.Text,
     'cycles' : IDL.Text,
@@ -221,7 +221,7 @@ export const idlFactory = ({ IDL }) => {
     'posts' : IDL.Vec(IDL.Nat32),
     'followees' : IDL.Vec(Followee),
     'followers' : IDL.Vec(Follower),
-    'depositAddrs' : IDL.Vec(DepositAddr),
+    'depositAddrs' : DepositAddrs,
     'balances' : Balance,
   });
   const UserError = IDL.Variant({
