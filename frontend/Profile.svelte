@@ -8,6 +8,10 @@
   export let signIn
   export let principal
 
+  let anonImage =
+    "https://static.wikia.nocookie.net/codegeass/images/c/c0/Zero.jpg"
+  let anonCover =
+    "https://p0.pikist.com/photos/618/850/japan-landscape-spring-plant-blue-sky-cherry-blossoms-flowers-natural-arboretum.jpg"
   let user = null
   let name = ""
   let age = 42
@@ -164,7 +168,7 @@
     {#if user && !editMode}
       <div style="margin-bottom: 10px; width: 100%; text-align:center">
         <img
-          src={user.cover}
+          src={user.cover ? user.cover : anonCover}
           alt="cover"
           style="width: 100%; height: 300px;object-fit: cover;"
         />
@@ -174,7 +178,7 @@
       >
         <div style="text-align:start; width: 100px">
           <img
-            src={user.picture}
+            src={user.picture ? user.picture : anonImage}
             alt="avatar"
             style="width: 100px; height: 100px; border-radius:50%; object-fit:cover;"
           />

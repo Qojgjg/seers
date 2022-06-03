@@ -149,7 +149,7 @@
     </div>
 
     <div
-      style="width: 100%; margin: 15px 0px; padding: 15px 0px; border-bottom: 1px solid grey"
+      style="width: 100%; margin: 15px 0px; padding: 15px 0px; border-bottom: 0px solid grey"
     >
       <textarea
         bind:value={newComment}

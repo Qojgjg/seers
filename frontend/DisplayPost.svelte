@@ -18,6 +18,8 @@
 
   let errorResponse = ""
   let processing = false
+  let anonImage =
+    "https://static.wikia.nocookie.net/codegeass/images/c/c0/Zero.jpg"
 
   const splitCamelCaseToString = (s) => {
     return s
@@ -94,7 +96,7 @@
       <div style="padding: 0px 0px; margin: 0px 5px; height: 100%;">
         <a href={`/profile/${post?.author.handle}`}>
           <img
-            src={post?.author.picture}
+            src={post?.author.picture ? post?.author.picture : anonImage}
             alt="avatar"
             style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
           />
@@ -309,9 +311,9 @@
       >
         <a href={`/profile/${post.author.handle}`}>
           <img
-            src={post.author.picture}
+            src={post.author.picture ? post.author.picture : anonImage}
             alt="avatar"
-            style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; padding: 15px 0px 0px 0px;"
+            style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; padding: 0px 0px 0px 0px;margin: 10px 0px 0px 0px;"
           />
         </a>
         {#if isThread}
