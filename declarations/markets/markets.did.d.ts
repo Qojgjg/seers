@@ -43,7 +43,7 @@ export interface Market {
   'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_2>,
   'callerAccount' : ActorMethod<[], AccountIdentifier>,
   'canisterAccount' : ActorMethod<[], string>,
-  'canisterFloat' : ActorMethod<[], ICP>,
+  'canisterBalance' : ActorMethod<[], ICP>,
   'createMarket' : ActorMethod<[MarketInitData], Result_7>,
   'createUser' : ActorMethod<[UserInitData], Result_3>,
   'editUser' : ActorMethod<[UserInitData], Result_3>,
@@ -53,6 +53,8 @@ export interface Market {
   'getUserFromPrincipal' : ActorMethod<[string], Result_4>,
   'getUserStable' : ActorMethod<[string], [] | [UserStable]>,
   'getUserWithPosts' : ActorMethod<[string], Result_4>,
+  'otherAccount' : ActorMethod<[], string>,
+  'otherBalance' : ActorMethod<[], ICP>,
   'readAllMarkets' : ActorMethod<
     [MarketCategory, MarketState],
     Array<MarketStable>,
@@ -69,6 +71,8 @@ export interface Market {
   'submitLike' : ActorMethod<[number], Result>,
   'submitPost' : ActorMethod<[PostInitData, [] | [MarketInitData]], Result>,
   'submitRetweet' : ActorMethod<[number], Result>,
+  'transferToCanister' : ActorMethod<[], string>,
+  'transferToSubaccount' : ActorMethod<[], string>,
 }
 export type MarketCategory = { 'any' : null } |
   { 'entertainment' : null } |

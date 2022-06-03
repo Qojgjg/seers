@@ -76,6 +76,7 @@ type UserError =
    descriptionMissing;
    endDateOld;
    endDateOlderThanStartDate;
+   handleAlreadyTaken;
    imageMissing;
    marketMissing;
    marketNotOpen;
@@ -195,6 +196,7 @@ type PostError =
    notLoggedIn;
    parentDoesNotExist;
    postDoesNotExist;
+   postIsEmpty;
    userDoesNotExist;
  };
 type ParentData = 
@@ -364,7 +366,7 @@ service : {
   buyOutcome: (nat32, float64, nat, bool) -> (Result_2);
   callerAccount: () -> (AccountIdentifier);
   canisterAccount: () -> (text) query;
-  canisterFloat: () -> (ICP);
+  canisterBalance: () -> (ICP);
   createMarket: (MarketInitData) -> (Result_7);
   createUser: (UserInitData) -> (Result_3);
   editUser: (UserInitData) -> (Result_3);
@@ -374,6 +376,8 @@ service : {
   getUserFromPrincipal: (text) -> (Result_4) query;
   getUserStable: (text) -> (opt UserStable) query;
   getUserWithPosts: (text) -> (Result_4) query;
+  otherAccount: () -> (text) query;
+  otherBalance: () -> (ICP);
   readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
   readAllUsers: () -> (vec UserStable) query;
   readMarket: (nat32) -> (opt MarketStable) query;

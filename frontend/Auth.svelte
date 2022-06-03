@@ -57,6 +57,7 @@
   <Link to="feed" style={menuItemStyle}>Feed</Link>
   <Link to="markets" style={menuItemStyle}>Markets</Link>
   <Link to="ranking" style={menuItemStyle}>Ranking</Link>
+  <Link to="icp" style={menuItemStyle}>ICP</Link>
 
   {#if principal === ""}
     <!-- <a href="https://forms.gle/fYmc9iTc9P46upm47" style={menuItemStyle}>Bugs</a> -->

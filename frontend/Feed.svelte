@@ -1,17 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte"
   import Fa from "svelte-fa"
-  import { Link } from "svelte-navigator"
 
-  import {
-    faComment,
-    faHeart,
-    faChartBar,
-    faImage,
-    faFilePdf,
-  } from "@fortawesome/free-regular-svg-icons"
-  import { faRetweet, faPlus, faVideo } from "@fortawesome/free-solid-svg-icons"
-  import inf from "./assets/inf.gif"
+  import { faChartBar, faImage } from "@fortawesome/free-regular-svg-icons"
+  import { faPlus } from "@fortawesome/free-solid-svg-icons"
   import DisplayPost from "./DisplayPost.svelte"
   import DisplayButton from "./DisplayButton.svelte"
 

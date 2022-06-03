@@ -289,7 +289,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'callerAccount' : IDL.Func([], [AccountIdentifier], []),
     'canisterAccount' : IDL.Func([], [IDL.Text], ['query']),
-    'canisterFloat' : IDL.Func([], [ICP], []),
+    'canisterBalance' : IDL.Func([], [ICP], []),
     'createMarket' : IDL.Func([MarketInitData], [Result_7], []),
     'createUser' : IDL.Func([UserInitData], [Result_3], []),
     'editUser' : IDL.Func([UserInitData], [Result_3], []),
@@ -299,6 +299,8 @@ export const idlFactory = ({ IDL }) => {
     'getUserFromPrincipal' : IDL.Func([IDL.Text], [Result_4], ['query']),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
     'getUserWithPosts' : IDL.Func([IDL.Text], [Result_4], ['query']),
+    'otherAccount' : IDL.Func([], [IDL.Text], ['query']),
+    'otherBalance' : IDL.Func([], [ICP], []),
     'readAllMarkets' : IDL.Func(
         [MarketCategory, MarketState],
         [IDL.Vec(MarketStable)],
@@ -328,6 +330,8 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'submitRetweet' : IDL.Func([IDL.Nat32], [Result], []),
+    'transferToCanister' : IDL.Func([], [IDL.Text], []),
+    'transferToSubaccount' : IDL.Func([], [IDL.Text], []),
   });
   return Market;
 };

@@ -27,6 +27,10 @@ module {
     Blob.fromArrayMut(Array.init(32, 0 : Nat8))
   };
 
+  public func otherSubaccount() : Subaccount {
+    Blob.fromArrayMut(Array.init(32, 1 : Nat8))
+  };
+
   public func accountIdentifier(principal: Principal, subaccount: Subaccount) : AccountIdentifier {
     let hash = SHA224.Digest();
     hash.write([0x0A]);

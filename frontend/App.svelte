@@ -14,6 +14,7 @@
   import Feed from "./Feed.svelte"
   import Profile from "./Profile.svelte"
   import ViewPost from "./ViewPost.svelte"
+  import ICP from "./ICP.svelte"
 
   let principal = ""
 
@@ -108,6 +109,9 @@
     </Route>
     <Route path="feed" primary={false}>
       <Feed {auth} {principal} {signIn} />
+    </Route>
+    <Route path="icp" primary={false}>
+      <ICP {auth} {principal} {signIn} />
     </Route>
     <Route path="/" primary={false}>
       <Feed {auth} {principal} {signIn} />

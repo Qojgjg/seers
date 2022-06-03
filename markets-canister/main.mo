@@ -15,6 +15,8 @@ import Array "mo:base/Array";
 import Hash "mo:base/Hash";
 import Iter "mo:base/Iter";
 import Result "mo:base/Result";
+import Prim "mo:⛔";
+
 import M "Market";
 import U "User";
 import Utils "Utils";
@@ -47,8 +49,13 @@ shared({ caller = initializer }) actor class Market() = this {
         Account.accountIdentifier(Principal.fromActor(this), Account.defaultSubaccount())
     };
 
+    // Returns the default account identifier of this canister.
+    func otherAccountId() : Account.AccountIdentifier {
+        Account.accountIdentifier(Principal.fromActor(this), Account.otherSubaccount())
+    };
+
     // Returns current balance on the default account of this canister.
-    public func canisterFloat() : async Ledger.ICP {
+    public func canisterBalance() : async Ledger.ICP {
         await ledger.account_balance({ account = myAccountId() })
     };
 
@@ -58,6 +65,53 @@ shared({ caller = initializer }) actor class Market() = this {
     public query func canisterAccount() : async Text {
         Account.toText(myAccountId())
     };
+
+    // Returns canister's default account identifier as text.
+    public query func otherAccount() : async Text {
+        Account.toText(otherAccountId())
+    };
+
+    // Returns current balance on the default account of this canister.
+    public func otherBalance() : async Ledger.ICP {
+        await ledger.account_balance({ account = otherAccountId() })
+    };
+
+    public shared(msg) func transferToSubaccount(): async Text {
+        // assert(msg.caller == initializer);
+        let args = {
+            memo = Prim.time();
+            amount = { e8s = 90_000 : Nat64 }; // 0.001 ICP 
+            fee = { e8s = 10_000 : Nat64 };
+            from_subaccount = null;
+            to = otherAccountId();
+            created_at_time = null;
+        };
+        switch(await ledger.transfer(args)){
+            case(#Ok(idx)){ "transfer successfully on block : " # debug_show(idx) };
+            case(#Err(error)){ debug_show(error) };
+        }
+    };
+
+    public shared(msg) func transferToCanister(): async Text{
+        // assert(msg.caller == initializer);
+        Debug.print(debug_show(initializer));
+        Debug.print(debug_show(msg.caller));
+
+        let args = {
+            memo = Prim.time();
+            amount = { e8s = 80_000 : Nat64 }; // 0.001 ICP 
+            fee = { e8s = 10_000 : Nat64 };
+            from_subaccount = ?Account.otherSubaccount();
+            to = myAccountId();
+            created_at_time = null;
+        };
+        switch(await ledger.transfer(args)){
+            case(#Ok(idx)){ "transfer successfully on block : " # debug_show(idx) };
+            case(#Err(error)){ debug_show(error) };
+        }
+    };
+
+
 
     // Returns canister's default account identifier as a blob.
     public shared(msg) func callerAccount() : async Account.AccountIdentifier {
