@@ -1728,7 +1728,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 switch (userMap.get(initData.handle)) {
                     case null {
                         var user: U.User = U.User(initData);
-                        let userNum: Nat32 = Nat32.fromNat(0);
+                        let userNum: Nat32 = Nat32.fromNat(userMap.size() + 256); // Reserve some accounts.
                         let account: Text = Account.toText(makeAccountIdentifier(Account.makeSubAccount(userNum)));
 
                         // Set deposit address.
