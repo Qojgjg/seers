@@ -1,4 +1,5 @@
 export const idlFactory = ({ IDL }) => {
+  const ICP = IDL.Record({ 'e8s' : IDL.Nat64 });
   const Time = IDL.Int;
   const UserData = IDL.Record({
     'principal' : IDL.Text,
@@ -37,7 +38,6 @@ export const idlFactory = ({ IDL }) => {
   const Result_8 = IDL.Variant({ 'ok' : CommentStable, 'err' : MarketError });
   const Result_2 = IDL.Variant({ 'ok' : IDL.Float64, 'err' : MarketError });
   const AccountIdentifier = IDL.Vec(IDL.Nat8);
-  const ICP = IDL.Record({ 'e8s' : IDL.Nat64 });
   const CollateralType = IDL.Variant({
     'icp' : IDL.Null,
     'seers' : IDL.Null,
@@ -241,6 +241,7 @@ export const idlFactory = ({ IDL }) => {
     'commentIsEmpty' : IDL.Null,
     'userDoesNotExist' : IDL.Null,
     'endDateOld' : IDL.Null,
+    'cantGetBalance' : IDL.Null,
     'newtonFailed' : IDL.Null,
     'endDateOlderThanStartDate' : IDL.Null,
     'notEnoughLiquidity' : IDL.Float64,
@@ -281,6 +282,7 @@ export const idlFactory = ({ IDL }) => {
     'parent' : IDL.Opt(ParentData),
   });
   const Market = IDL.Service({
+    'accountBalance' : IDL.Func([IDL.Text], [IDL.Opt(ICP)], []),
     'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_8], []),
     'buyOutcome' : IDL.Func(
         [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
@@ -300,7 +302,6 @@ export const idlFactory = ({ IDL }) => {
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
     'getUserWithPosts' : IDL.Func([IDL.Text], [Result_4], ['query']),
     'otherAccount' : IDL.Func([], [IDL.Text], ['query']),
-    'otherBalance' : IDL.Func([], [ICP], []),
     'readAllMarkets' : IDL.Func(
         [MarketCategory, MarketState],
         [IDL.Vec(MarketStable)],

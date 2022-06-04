@@ -111,17 +111,24 @@
 <div style="justify-content: center; display: flex;width: 100%">
   <div class="rowUser">
     {#if user}
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Principal: {user.id}
+      <div style="border-bottom: 1px solid grey">
+        <div style="margin-bottom: 10px; width: 100%; text-align:center">
+          Principal: {user.id}
+        </div>
+        <div style="margin-bottom: 10px; width: 100%; text-align:center">
+          Balance: {Number(user.balances.seers).toFixed(2)} Seers
+        </div>
+        <div style="margin-bottom: 10px; width: 100%; text-align:center">
+          Expected Balance: {Number(user.expBalances.seers).toFixed(2)} Seers
+        </div>
       </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        ICP deposit account: {user.depositAddrs.icp}
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Balance: {Number(user.balances.seers).toFixed(2)} seers
-      </div>
-      <div style="margin-bottom: 10px; width: 100%; text-align:center">
-        Expected Balance: {Number(user.expBalances.seers).toFixed(2)} seers
+      <div style="border: 0px solid grey">
+        <div style="margin-bottom: 10px; width: 100%; text-align:center">
+          ICP deposit account: {user.depositAddrs.icp}
+        </div>
+        <div style="margin-bottom: 10px; width: 100%; text-align:center">
+          Balance: {Number(user.balances.icp / 100_000_000).toFixed(2)} ICP
+        </div>
       </div>
       <div
         style="margin-bottom: 10px; width: 100%; text-align:center; display: flex; justify-content: center"

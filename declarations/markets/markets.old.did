@@ -72,6 +72,7 @@ type UserInitData =
 type UserError = 
  variant {
    callerIsAnon;
+   cantGetBalance;
    commentIsEmpty;
    descriptionMissing;
    endDateOld;
@@ -362,6 +363,7 @@ type Balance =
  };
 type AccountIdentifier = blob;
 service : {
+  accountBalance: (text) -> (opt ICP);
   addCommentToMarket: (nat32, text) -> (Result_8);
   buyOutcome: (nat32, float64, nat, bool) -> (Result_2);
   callerAccount: () -> (AccountIdentifier);
@@ -377,7 +379,6 @@ service : {
   getUserStable: (text) -> (opt UserStable) query;
   getUserWithPosts: (text) -> (Result_4) query;
   otherAccount: () -> (text) query;
-  otherBalance: () -> (ICP);
   readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
   readAllUsers: () -> (vec UserStable) query;
   readMarket: (nat32) -> (opt MarketStable) query;

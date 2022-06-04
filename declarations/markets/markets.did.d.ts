@@ -41,6 +41,7 @@ export interface HistPoint {
 export interface ICP { 'e8s' : bigint }
 export interface Like { 'createdAt' : Time, 'author' : UserData }
 export interface Market {
+  'accountBalance' : ActorMethod<[string], [] | [ICP]>,
   'addCommentToMarket' : ActorMethod<[number, string], Result_8>,
   'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_2>,
   'callerAccount' : ActorMethod<[], AccountIdentifier>,
@@ -56,7 +57,6 @@ export interface Market {
   'getUserStable' : ActorMethod<[string], [] | [UserStable]>,
   'getUserWithPosts' : ActorMethod<[string], Result_4>,
   'otherAccount' : ActorMethod<[], string>,
-  'otherBalance' : ActorMethod<[], ICP>,
   'readAllMarkets' : ActorMethod<
     [MarketCategory, MarketState],
     Array<MarketStable>,
@@ -240,6 +240,7 @@ export type UserError = { 'callerIsAnon' : null } |
   { 'commentIsEmpty' : null } |
   { 'userDoesNotExist' : null } |
   { 'endDateOld' : null } |
+  { 'cantGetBalance' : null } |
   { 'newtonFailed' : null } |
   { 'endDateOlderThanStartDate' : null } |
   { 'notEnoughLiquidity' : number };

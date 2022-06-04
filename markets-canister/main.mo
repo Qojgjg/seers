@@ -2,6 +2,8 @@ import Map "mo:base/HashMap";
 import Text "mo:base/Text";
 import Nat "mo:base/Nat";
 import Nat32 "mo:base/Nat32";
+import Nat64 "mo:base/Nat64";
+import Int64 "mo:base/Int64";
 import Int "mo:base/Int";
 import Float "mo:base/Float";
 import List "mo:base/List";
@@ -78,8 +80,16 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Returns current balance on the default account of this canister.
-    public func otherBalance() : async Ledger.ICP {
-        await ledger.account_balance({ account = otherAccountId() })
+    public func accountBalance(account: Text) : async ?Ledger.ICP {
+        switch (Account.fromText(account)) {
+            case null {
+                return null;
+            };
+            case (?account) {
+                let balance = await ledger.account_balance({ account = account });
+                return ?balance;
+            };
+        }
     };
 
     public shared(msg) func transferToSubaccount(): async Text {
@@ -859,9 +869,7 @@ shared({ caller = initializer }) actor class Market() = this {
             return #err(#callerIsAnon);
         };
 
-        let userOpt = userMap.get(caller);
-
-        switch (userOpt) {
+        switch (getUser(caller)) {
             case (null) {
                 return #err(#profileNotCreated);
             };
@@ -872,6 +880,22 @@ shared({ caller = initializer }) actor class Market() = this {
                     cycles = user.balances.cycles;
                     btc = user.balances.btc;
                 };
+
+                // Query the ledger to update ICP balance.
+                switch (await accountBalance(user.depositAddrs.icp)) {
+                    case null {
+                        return #err(#cantGetBalance);
+                    };
+                    case (?balance) {
+                        user.balances := {
+                            seers = user.balances.seers;
+                            icp = Float.fromInt64(Int64.fromNat64(balance.e8s));
+                            cycles = user.balances.cycles;
+                            btc = user.balances.btc;
+                        };
+                    };
+                };
+
                 var markets = user.markets.toArray();
                 markets := Array.mapFilter(markets, 
                     func (ut: U.UserMarket): ?U.UserMarket {
@@ -1728,7 +1752,7 @@ shared({ caller = initializer }) actor class Market() = this {
                 switch (userMap.get(initData.handle)) {
                     case null {
                         var user: U.User = U.User(initData);
-                        let userNum: Nat32 = Nat32.fromNat(userMap.size() + 256); // Reserve some accounts.
+                        let userNum: Nat32 = Nat32.fromNat(userMap.size()); // Reserve some accounts.
                         let account: Text = Account.toText(makeAccountIdentifier(Account.makeSubAccount(userNum)));
 
                         // Set deposit address.

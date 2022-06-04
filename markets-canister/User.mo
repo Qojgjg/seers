@@ -42,6 +42,7 @@ module {
         #userAlreadyExist;
 
         #handleAlreadyTaken;
+        #cantGetBalance;
     };
    
     public type Follower = {

@@ -1,5 +1,6 @@
 import Ledger    "Ledger";
 
+import Result "mo:base/Result";
 import Array     "mo:base/Array";
 import Blob      "mo:base/Blob";
 import Nat8      "mo:base/Nat8";
@@ -9,6 +10,7 @@ import Text      "mo:base/Text";
 import Buffer      "mo:base/Buffer";
 import Iter      "mo:base/Iter";
 import Hex "mo:encoding/Hex";
+
 import CRC32     "./CRC32";
 import SHA224    "./SHA224";
 
@@ -63,6 +65,17 @@ module {
   // hash of the following 56 characters of hex.
   public func toText(accountId : AccountIdentifier) : Text {
       Hex.encode(Blob.toArray(accountId));
+  };
+
+  public func fromText(accountId: Text): ?AccountIdentifier {
+      switch (Hex.decode(accountId)) {
+        case (#err(_)) {
+          return null;
+        };
+        case (#ok(decoded)) {
+          return ?Blob.fromArray(decoded);
+        };
+      };
   };
 
   public func validateAccountIdentifier(accountIdentifier : AccountIdentifier) : Bool {
