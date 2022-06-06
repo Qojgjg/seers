@@ -108,7 +108,7 @@
       images: [],
       probabilities: probabilities,
       category: { any: null },
-      liquidity: liquidity,
+      liquidity: Number(liquidity),
       startDate: Date.parse(startDate) * 1_000_000,
       endDate: Date.parse(endDate) * 1_000_000,
       imageUrl: "",

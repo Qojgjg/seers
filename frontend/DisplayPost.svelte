@@ -69,7 +69,12 @@
   const submitBuy = async (marketId, selected, amount) => {
     processing = true
     selected = selected === undefined ? 0 : selected
-    const resp = await $auth.actor.buyOutcome(marketId, amount, selected, true)
+    const resp = await $auth.actor.buyOutcome(
+      marketId,
+      Number(amount),
+      selected,
+      true,
+    )
     if ("err" in resp) {
       errorResponse = Object.keys(resp["err"]).toString()
     }
@@ -174,7 +179,7 @@
                 style="width: 100px; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
               >
                 {post.market[0].probabilities[i].toFixed(2)}
-                {"seers" in post.market.collateralType ? "&Sigma;" : "ICP"}
+                {"seers" in post.market[0].collateralType ? "Σ" : "ICP"}
               </div>
             </div>
           {/each}
@@ -204,9 +209,16 @@
                   style="width: 150px; height: 400%; margin: -100%;"
                 />
               </button>
+              <input
+                style="color: rgb(255, 255, 255); background-color: black; font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; padding: 0px 5px; margin: 0px 15px; width: 50px"
+                bind:value={amount}
+              />
+              <div
+                style="display:flex; text-align:center; align-items:center; padding: 0px 5px"
+              >
+                {"seers" in post.market[0].collateralType ? "Σ" : "ICP"}
+              </div>
             {:else}
-              <input bind:value={amount} />
-
               <button
                 class="btn-grad"
                 style="background: black; padding: 5px; margin: 15px 0px; color: white"
@@ -220,8 +232,17 @@
                       amount,
                     )
                   }
-                }}>Bet</button
+                }}>Buy</button
               >
+              <input
+                style="color: rgb(255, 255, 255); background-color: black; font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; padding: 0px 5px; margin: 0px 15px; width: 50px"
+                bind:value={amount}
+              />
+              <div
+                style="display:flex; text-align:center; align-items:center; padding: 0px 5px"
+              >
+                {"seers" in post.market[0].collateralType ? "Σ" : "ICP"}
+              </div>
             {/if}
             <div style="text-align:center;color:red">
               {errorResponse}
@@ -428,7 +449,7 @@
                   style="width: 100px; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
                 >
                   {post.market[0].probabilities[i].toFixed(2)}
-                  {"seers" in post.market[0].collateralType ? "&Sigma;" : "ICP"}
+                  {"seers" in post.market[0].collateralType ? "Σ" : "ICP"}
                 </div>
               </div>
             {/each}
@@ -457,6 +478,15 @@
                     style="width: 150px; height: 400%; margin: -100%;"
                   />
                 </button>
+                <input
+                  style="color: rgb(255, 255, 255); background-color: black; font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; padding: 0px 5px; margin: 0px 15px; width: 50px"
+                  bind:value={amount}
+                />
+                <div
+                  style="display:flex; text-align:center; align-items:center; padding: 0px 5px"
+                >
+                  {"seers" in post.market[0].collateralType ? "Σ" : "ICP"}
+                </div>
               {:else}
                 <button
                   class="btn-grad"
@@ -471,7 +501,7 @@
                         amount,
                       )
                     }
-                  }}>Bet</button
+                  }}>Buy</button
                 >
                 <input
                   style="color: rgb(255, 255, 255); background-color: black; font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; padding: 0px 5px; margin: 0px 15px; width: 50px"
@@ -480,7 +510,7 @@
                 <div
                   style="display:flex; text-align:center; align-items:center; padding: 0px 5px"
                 >
-                  {"seers" in post.market[0].collateralType ? "&Sigma;" : "ICP"}
+                  {"seers" in post.market[0].collateralType ? "Σ" : "ICP"}
                 </div>
               {/if}
               <div style="text-align: center;color:red">
