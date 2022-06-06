@@ -652,7 +652,14 @@
         </div>
       </div>
       <div class="menu-button-elli">
-        <Fa icon={faEllipsis} />
+        <div class="dropdown">
+          <button class="dropbtn"><Fa icon={faEllipsis} /></button>
+          <div class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -661,10 +668,10 @@
 <style>
   .menu-button-elli {
     background-color: black;
-    width: 20px;
+    width: 10px;
     justify-content: start;
     text-align: start;
-    padding: 10px 0px;
+    padding: 0px 0px;
     cursor: pointer;
   }
 
@@ -694,5 +701,53 @@
   }
   .reply-bt:hover {
     color: #1da1f2;
+  }
+  /* Dropdown Button */
+  .dropbtn {
+    background-color: black;
+    color: grey;
+    padding: 0px;
+    font-size: 16px;
+    border: none;
+  }
+
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: black;
+    min-width: 160px;
+    margin-left: -120px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: black;
+  }
+
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  /* Change the background color of the dropdown button when the dropdown content is shown */
+  .dropdown:hover .dropbtn {
+    background-color: black;
   }
 </style>
