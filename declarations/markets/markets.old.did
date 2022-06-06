@@ -344,7 +344,7 @@ service : {
   canisterBalance: () -> (ICP);
   createMarket: (MarketInitData) -> (Result_6);
   createUser: (UserInitData) -> (Result_2);
-  deleteAllUsers: () -> ();
+  deleteAllUsers: () -> (bool);
   editUser: (UserInitData) -> (Result_2);
   getFeed: () -> (vec PostStable) query;
   getPost: (nat32) -> (Result_5) query;

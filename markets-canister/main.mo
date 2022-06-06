@@ -570,9 +570,9 @@ shared({ caller = initializer }) actor class Market() = this {
                         post.retweeters := newRetweeters;
                         var retweet = post.clone();
                         retweet.isRetweet := ?authorData;
-
-                        feed.add(retweet);
-
+                        
+                        // TODO: un-comment after we add followers.
+                        // feed.add(retweet);
                         return #ok();
                     };
                 };

@@ -170,7 +170,7 @@
         </div>
       </div>
       <div
-        style="width: 100%; text-align:start;display:flex; flex-direction:row; border-bottom: 1px solid grey"
+        style="width: 100%; text-align:start;display:flex; flex-direction:row; border-bottom: 0px solid grey"
       >
         <div style="width: 100%; text-align:start; margin: 5px; padding: 5px">
           {user.bio}
@@ -189,7 +189,7 @@
           >
         </div>
       </div> -->
-      <div style="margin-top: 40px; width: 100%">
+      <div style="margin-top: 10px; width: 100%; border-top: 1px solid grey">
         {#each user.posts as post, i}
           <DisplayPost
             {auth}
