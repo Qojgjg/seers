@@ -361,7 +361,22 @@
           <Fa icon={faRetweet} />
         </div>
         <div style="padding: 15px 0px 0px 5px">
-          by @{post.isRetweet[0].handle}
+          <a href={`/profile/${post.isRetweet[0].handle}`} style="color:grey">
+            by @{post.isRetweet[0].handle}
+          </a>
+        </div>
+      </div>
+    {:else if post && post.parent.length > 0}
+      <div
+        style="display:flex; color:grey; font-size: 0.8em; justify-content:start; width: 100%"
+      >
+        <div style="padding: 15px 0px 0px 40px">
+          <Fa icon={faComment} />
+        </div>
+        <div style="padding: 15px 0px 0px 5px; color:grey">
+          <a href={`/post/${post.parent[0].id}`} style="color:grey">
+            Replying to @{post.parent[0].author.handle}
+          </a>
         </div>
       </div>
     {/if}

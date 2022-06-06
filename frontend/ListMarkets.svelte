@@ -87,7 +87,8 @@
                   <div style="width: 100%; display: flex; font-size: 1.2em;">
                     <div style="width: 50%">{label}</div>
                     <div style="width: 50%">
-                      {Number(market.probabilities[i]).toFixed(2)} &Sigma;
+                      {Number(market.probabilities[i]).toFixed(2)}
+                      {"seers" in market.collateralType ? "Σ" : "ICP"}
                     </div>
                   </div>
                 {/each}
@@ -96,10 +97,12 @@
                 style="width: 100%; display: flex; flex-direction: row; font-size: 1em; padding-top: 5px"
               >
                 <div style="width: 50%; ">
-                  Volume: {printFloat(market.volume)} &Sigma;
+                  Volume: {printFloat(market.volume)}
+                  {"seers" in market.collateralType ? "Σ" : "ICP"}
                 </div>
                 <div style="width: 50%">
-                  Liquidity: {printFloat(market.liquidity)} &Sigma;
+                  Liquidity: {printFloat(market.liquidity)}
+                  {"seers" in market.collateralType ? "Σ" : "ICP"}
                 </div>
               </div>
             </div>
@@ -136,7 +139,8 @@
                   <div style="width: 100%; display: flex; font-size: 1.2em;">
                     <div style="width: 50%">{label}</div>
                     <div style="width: 50%">
-                      {Number(market.probabilities[i]).toFixed(2)} &Sigma;
+                      {Number(market.probabilities[i]).toFixed(2)}
+                      {"seers" in market.collateralType ? "Σ" : "ICP"}
                     </div>
                   </div>
                 {/each}
@@ -145,10 +149,12 @@
                 style="width: 100%; display: flex; flex-direction: row; font-size: 1em; padding-top: 5px"
               >
                 <div style="width: 50%; ">
-                  Volume: {printFloat(market.volume)} &Sigma;
+                  Volume: {printFloat(market.volume)}
+                  {"seers" in market.collateralType ? "Σ" : "ICP"}
                 </div>
                 <div style="width: 50%">
-                  Liquidity: {printFloat(market.liquidity)} &Sigma;
+                  Liquidity: {printFloat(market.liquidity)}
+                  {"seers" in market.collateralType ? "Σ" : "ICP"}
                 </div>
               </div>
             </div>
