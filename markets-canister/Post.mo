@@ -49,6 +49,7 @@ module {
         public var isRetweet: ?Utils.UserData = initData.isRetweet;
         
         public var createdAt: Time.Time = Time.now();
+        public var deleted: Bool = false;
         
         public func freeze(): PostStable {
             let ps: PostStable = {
@@ -66,6 +67,7 @@ module {
                 likes = likes.toArray();
                 isRetweet = isRetweet;
                 createdAt = createdAt;
+                deleted = deleted;
             };
             
             return ps;
@@ -89,6 +91,7 @@ module {
             p.retweeters := retweeters;
             p.likes := likes;
             p.createdAt := createdAt;
+            p.deleted := deleted;
 
             return p;
         };
@@ -115,6 +118,7 @@ module {
         likes: [Like.Like];
         isRetweet: ?Utils.UserData;
         createdAt: Time.Time;
+        deleted: Bool;
     };
 
     public func unFreeze(ps: PostStable): Post {
@@ -136,6 +140,7 @@ module {
         p.retweeters := Utils.bufferFromArray(ps.retweeters);
         p.likes := Utils.bufferFromArray(ps.likes);
         p.createdAt := ps.createdAt;
+        p.deleted := ps.deleted;
 
         return p;
     };

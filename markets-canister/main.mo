@@ -580,6 +580,39 @@ shared({ caller = initializer }) actor class Market() = this {
         };
     };
 
+    // Delete a post.
+    public shared(msg) func submitDelete(postId: Nat32): async Result.Result<(), Error> {
+        assert(not updating);
+
+        let caller = Principal.toText(msg.caller);
+        
+        if (caller == anon) {
+            return #err(#notLoggedIn);
+        };
+
+        switch (getUser(caller)) {
+            case null {
+                return #err(#userDoesNotExist);
+            };
+            case (?author) {
+                switch (postMap.get(postId)) {
+                    case null {
+                        return #err(#postDoesNotExist);
+                    };
+                    case (?post) {
+                        post.content := "<Post was deleted>";
+                        post.retweet := null;
+                        post.market := null;
+                        post.image := null;
+                        post.deleted := true;
+
+                        return #ok();
+                    };
+                };
+            };
+        };
+    }; 
+
     // Submit a post of any type.
     public shared(msg) func submitPost(initData: Post.PostInitData, marketInitData: ?M.MarketInitData): async Result.Result<(), Error> {
         assert(not updating);
@@ -1618,8 +1651,10 @@ shared({ caller = initializer }) actor class Market() = this {
                             // Shouldn't happen, but it doesn't matter.
                         };
                         case (?post) {
-                            var stablePost = post.freeze();
-                            posts.add(stablePost);
+                            if (not post.deleted) {
+                                var stablePost = post.freeze();
+                                posts.add(stablePost);
+                            };
                         };
                     };
                 };
@@ -1649,8 +1684,10 @@ shared({ caller = initializer }) actor class Market() = this {
                                     // Shouldn't happen, but it doesn't matter.
                                 };
                                 case (?post) {
-                                    var stablePost = post.freeze();
-                                    posts.add(stablePost);
+                                    if (not post.deleted) {
+                                        var stablePost = post.freeze();
+                                        posts.add(stablePost);
+                                    };
                                 };
                             };
                         };

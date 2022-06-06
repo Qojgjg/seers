@@ -69,6 +69,15 @@
     }
   }
 
+  const submitDelete = async (postId) => {
+    const resp = await $auth.actor.submitDelete(Number(postId))
+    if ("err" in resp) {
+      errorResponse = Object.keys(resp["err"]).toString()
+    } else {
+      getPost()
+    }
+  }
+
   const submitBuy = async (marketId, selected, amount) => {
     processing = true
     selected = selected === undefined ? 0 : selected
@@ -654,11 +663,21 @@
       <div class="menu-button-elli">
         <div class="dropdown">
           <button class="dropbtn"><Fa icon={faEllipsis} /></button>
-          <div class="dropdown-content">
-            <a href="#">Link 1</a>
-            <a href="#">Link 2</a>
-            <a href="#">Link 3</a>
-          </div>
+          {#if post?.author.principal == principal}
+            <div class="dropdown-content">
+              <a href="#">Edit</a>
+              <button
+                on:click={submitDelete(post.id)}
+                style="unset:all; background:black;color:white; padding: 12px 16px; font-size:16px"
+                >Delete</button
+              >
+            </div>
+          {:else}
+            <div class="dropdown-content">
+              <a href="#">Follow/Unfollow</a>
+              <button on:click={submitDelete(post.id)}>Block/Unblock</button>
+            </div>
+          {/if}
         </div>
       </div>
     </div>

@@ -169,6 +169,7 @@ export const idlFactory = ({ IDL }) => {
     'id' : IDL.Nat32,
     'retweet' : IDL.Opt(Retweet),
     'isRetweet' : IDL.Opt(UserData),
+    'deleted' : IDL.Bool,
     'content' : IDL.Text,
     'createdAt' : Time,
     'author' : UserData,
@@ -303,6 +304,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'setMarketState' : IDL.Func([IDL.Nat32, MarketState], [IDL.Bool], []),
     'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),
+    'submitDelete' : IDL.Func([IDL.Nat32], [Result], []),
     'submitForecast' : IDL.Func([IDL.Nat32, Forecast], [Result], []),
     'submitLike' : IDL.Func([IDL.Nat32], [Result], []),
     'submitPost' : IDL.Func(

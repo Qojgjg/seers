@@ -76,6 +76,7 @@ type PostStable =
     author : UserData;
     content : Text;
     createdAt : Time;
+    deleted : Bool;
     id : Nat32;
     image : ?Text;
     isRetweet : ?UserData;
