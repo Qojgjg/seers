@@ -44,15 +44,6 @@
       .join(" ")
   }
 
-  const getMarketLabel = (id, idx) => {
-    let market = user.markets.find((m) => m.marketId == id)
-    if (market) {
-      return market.labels[idx]
-    } else {
-      return "Null"
-    }
-  }
-
   let getUserData = async () => {
     console.log(handle)
     let resp = {}
@@ -129,31 +120,6 @@
     console.log(user)
   }
 
-  let refreshUser = async () => {
-    response = await $auth.actor.refreshUser()
-    if (response["err"]) {
-      errorRefresh =
-        "Error: " +
-        splitCamelCaseToString(Object.keys(response["err"]).toString())
-    } else {
-      errorRefresh = ""
-      user = response["ok"]
-      if (user) {
-        user.markets = user.markets.sort(function (a, b) {
-          var keyA = Number(a.marketId),
-            keyB = Number(b.marketId)
-          if (keyA < keyB) return -1
-          if (keyA > keyB) return 1
-          return 0
-        })
-        user.ownMarkets = user.markets.filter((m) => m.author)
-        user.otherMarkets = user.markets.filter((m) => !m.author)
-        user.txs = user.txs.reverse()
-        console.log(user)
-      }
-    }
-    refreshLabel = "Refresh"
-  }
   onMount(getUserData)
 </script>
 

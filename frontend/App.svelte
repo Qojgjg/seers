@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Router, Route, useNavigate } from "svelte-navigator"
+  import { Router, Route } from "svelte-navigator"
   import { AuthClient } from "@dfinity/auth-client"
 
   import { onMount } from "svelte"
@@ -14,7 +14,6 @@
   import Feed from "./Feed.svelte"
   import Profile from "./Profile.svelte"
   import ViewPost from "./ViewPost.svelte"
-  import ICP from "./ICP.svelte"
 
   let principal = ""
 
@@ -82,7 +81,7 @@
 
 <Router>
   <div style="width: 100%; min-height: 80vh">
-    <Auth {principal} {signIn} {signOut} />
+    <Auth {auth} {principal} {signIn} {signOut} />
     <Route path="market/:id" let:params>
       <ViewMarket {auth} {principal} {signIn} id={params.id} />
     </Route>

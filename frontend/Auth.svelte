@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Link } from "svelte-navigator"
+  import { Link, useNavigate } from "svelte-navigator"
   import Fa from "svelte-fa"
   import { faBars } from "@fortawesome/free-solid-svg-icons"
   import logo from "./assets/favicon.png"
@@ -8,6 +8,9 @@
   export let principal
   export let signOut
   export let signIn
+  export let auth
+
+  const navigate = useNavigate()
 
   let innerWidth = window.innerWidth
   let navStyle = "display: flex; flex-direction: row;"
@@ -15,7 +18,6 @@
     ";text-decoration: none; background-color: transparent; font-size: 18px; padding: 5px; \
     height: 37px;color: white; margin-top: 15px; border: 0;"
   let menuItemStyle = ""
-  let logoStyle = ""
   let menuOpen = false
 
   $: if (innerWidth < 600) {
@@ -39,6 +41,21 @@
         common
     }
   }
+
+  const redirectToCreateProfile = async () => {
+    console.log("in redirect to profile")
+    if (principal !== "") {
+      const resp = await $auth.actor.getUserFromPrincipal(principal)
+      console.log(resp)
+      if ("err" in resp) {
+        navigate("/profile")
+      }
+    } else {
+      setTimeout(redirectToCreateProfile, 500)
+    }
+  }
+
+  onMount(redirectToCreateProfile)
 </script>
 
 <svelte:window bind:innerWidth />
