@@ -248,7 +248,7 @@
         >
           <div style="padding: 10px; margin: 10px">Bio:</div>
           <textarea
-            placeholder="Social Network for Crypto Hackers"
+            placeholder="Social Network for Crypto Natives"
             rows="5"
             bind:value={bio}
             style="align-items: center; width:100%; height: 100px"

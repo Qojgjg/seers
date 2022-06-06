@@ -45,8 +45,8 @@
   const signIn = () => {
     if (client)
       client.login({
-        // identityProvider: "http://rkp4c-7iaaa-aaaaa-aaaca-cai.localhost:8000/",
-        identityProvider: "https://identity.ic0.app/",
+        identityProvider: "http://rkp4c-7iaaa-aaaaa-aaaca-cai.localhost:8000/",
+        // identityProvider: "https://identity.ic0.app/",
         onSuccess: handleAuth,
       })
   }

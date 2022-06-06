@@ -4,6 +4,7 @@
   import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
   import {
     faRetweet,
+    faEllipsis,
     faHeart as faSolidHeart,
   } from "@fortawesome/free-solid-svg-icons"
   import inf from "./assets/inf.gif"
@@ -130,6 +131,11 @@
         <a href={`/profile/${post?.author.handle}`} style="color:grey">
           @{post?.author.handle}
         </a>
+      </div>
+      <div style="width: 100%; display:flex; justify-content:end">
+        <div class="menu-button-elli">
+          <Fa icon={faEllipsis} />
+        </div>
       </div>
     </div>
     <div style="flex-grow: 1; justify-content: start; text-align:start">
@@ -503,7 +509,7 @@
                   />
                 </button>
                 <input
-                  style="color: rgb(255, 255, 255); background-color: black; font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; padding: 0px 5px; margin: 0px 15px; width: 50px"
+                  style="color: rgb(255, 255, 255); background-color: black; font-size: 1em; font-family: 'Roboto Mono', monospace; border: 0px; padding: 0px 5px; margin: 0px 15px; width: 50px"
                   bind:value={amount}
                 />
                 <div
@@ -528,7 +534,7 @@
                   }}>Buy</button
                 >
                 <input
-                  style="color: rgb(255, 255, 255); background-color: black; font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; padding: 0px 5px; margin: 0px 15px; width: 50px"
+                  style="color: rgb(255, 255, 255); background-color: black; font-size: 1em; font-family: 'Roboto Mono', monospace; border: 0px; padding: 0px 5px; margin: 0px 15px; width: 50px"
                   bind:value={amount}
                 />
                 <div
@@ -645,11 +651,27 @@
           </div>
         </div>
       </div>
+      <div class="menu-button-elli">
+        <Fa icon={faEllipsis} />
+      </div>
     </div>
   </div>
 {/if}
 
 <style>
+  .menu-button-elli {
+    background-color: black;
+    width: 20px;
+    justify-content: start;
+    text-align: start;
+    padding: 10px 0px;
+    cursor: pointer;
+  }
+
+  .menu-button-elli:hover {
+    color: #1da1f2;
+  }
+
   .like-bt {
     all: unset;
     cursor: pointer;
