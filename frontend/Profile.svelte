@@ -8,17 +8,18 @@
   export let signIn
   export let principal
 
-  let anonImage =
+  const anonImage =
     "https://static.wikia.nocookie.net/codegeass/images/c/c0/Zero.jpg"
-  let anonCover =
+  const anonCover =
     "https://p0.pikist.com/photos/618/850/japan-landscape-spring-plant-blue-sky-cherry-blossoms-flowers-natural-arboretum.jpg"
+
   let user = null
   let name = ""
   let age = 42
   let city = ""
-  let picture = ""
+  let picture = anonImage
   // "https://conteudo.imguol.com.br/c/entretenimento/04/2022/02/25/batman-1645790799911_v2_1x1.jpg"
-  let cover = ""
+  let cover = anonCover
   // "https://sm.ign.com/ign_pt/news/t/the-batman/the-batmans-rating-has-been-confirmed_bh3x.jpg"
   let twitter = ""
   let discord = ""
@@ -205,6 +206,7 @@
           <div style="padding: 10px; margin: 10px">Handle:</div>
           <input
             bind:value={handle}
+            placeholder="seers"
             type="text"
             style="align-items: center; width:100%; height: 30px"
           />
@@ -212,6 +214,7 @@
         <div style="display:flex; flex-direction:column;align-items:center">
           <div style="padding: 10px; margin: 10px">Name:</div>
           <input
+            placeholder="Seers Markets"
             bind:value={name}
             style="align-items: center; width:100%; height: 30px"
           />
@@ -245,6 +248,7 @@
         >
           <div style="padding: 10px; margin: 10px">Bio:</div>
           <textarea
+            placeholder="Social Network for Crypto Hackers"
             rows="5"
             bind:value={bio}
             style="align-items: center; width:100%; height: 100px"
