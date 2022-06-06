@@ -383,7 +383,9 @@
           {processing}
         />
       </div>
-      {errorResponse}
+      <div style="color:red">
+        {errorResponse}
+      </div>
     </div>
   </div>
   <div

@@ -15,6 +15,7 @@
   export let isThread = false
   export let doNotShowBorder = false
   export let isMain = false
+  export let doNotShowParent = false
 
   let amount = 0.5
   let errorResponse = ""
@@ -366,7 +367,7 @@
           </a>
         </div>
       </div>
-    {:else if post && post.parent.length > 0}
+    {:else if post && !doNotShowParent && post.parent.length > 0}
       <div
         style="display:flex; color:grey; font-size: 0.8em; justify-content:start; width: 100%"
       >

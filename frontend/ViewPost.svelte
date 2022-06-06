@@ -3,6 +3,7 @@
   import inf from "./assets/inf.gif"
 
   import DisplayPost from "./DisplayPost.svelte"
+  import DisplayButton from "./DisplayButton.svelte"
 
   export let auth
   export let principal
@@ -67,7 +68,14 @@
 >
   <div class="rowUser">
     {#each ancestors as post, i}
-      <DisplayPost {auth} {principal} {signIn} {post} isThread={true} />
+      <DisplayPost
+        {auth}
+        {principal}
+        {signIn}
+        {post}
+        isThread={true}
+        doNotShowParent={true}
+      />
     {/each}
     <div
       id="main"
@@ -77,46 +85,30 @@
     </div>
 
     <div
-      style="width: 100%; margin: 15px 0px; padding: 15px 0px; border-bottom: 0px solid grey"
+      style={`width: 100%; margin: 15px 0px; padding: 15px 0px; border-bottom: ${
+        replies.length > 0 ? 1 : 0
+      }px solid grey`}
     >
       <textarea
         bind:value={newComment}
         rows="3"
-        style="width: 100%; font-size: 1.3em; background: black;color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px"
+        style={`width: 100%; font-size: 1.3em; background: black;color:white;border: 0px solid rgb(90, 58, 81); padding: 5px; border-radius: 15px`}
         placeholder="Write your reply."
       />
-      {#if principal == ""}
-        <div style="display:flex; text-align:end; justify-content:end;">
-          <button class="btn-grad" on:click={signIn}>Reply</button>
-          <div style="text-align:end;color:red">
-            {errorResponse}
-          </div>
-        </div>
-      {:else if processing}
-        <div style="display:flex; text-align:end; justify-content:end;">
-          <button
-            class="btn-grad"
-            on:click={() => 0}
-            style="width: 100px; overflow:hidden"
-          >
-            <img
-              src={inf}
-              alt="inf"
-              style="width: 150px; height: 400%; margin: -100%;"
-            />
-          </button>
-          <div style="text-align:end;color:red">
-            {errorResponse}
-          </div>
-        </div>
-      {:else}
-        <div style="display:flex; text-align:end; justify-content:end;">
-          <button class="btn-grad" on:click={submitReply}>Reply</button>
-          <div style="text-align:end;color:red">
-            {errorResponse}
-          </div>
-        </div>
-      {/if}
+      <DisplayButton
+        {principal}
+        label="Post"
+        {signIn}
+        execute={async () => {
+          processing = true
+          await submitReply()
+          processing = false
+        }}
+        {processing}
+      />
+      <div color="red">
+        {errorResponse}
+      </div>
     </div>
 
     {#each replies as post, i}
@@ -127,6 +119,7 @@
         {post}
         isThread={false}
         doNotShowBorder={i < replies.length - 1 ? false : true}
+        doNotShowParent={true}
       />
     {/each}
   </div>
