@@ -134,6 +134,7 @@
     const resp = await $auth.actor.submitPost(initData, [marketInitData])
     processing = false
     showBetForm = false
+    post = ""
     if (resp["err"]) {
       errorResponse =
         "Error: " + splitCamelCaseToString(Object.keys(resp["err"]).toString())
@@ -379,10 +380,10 @@
             }
             processing = false
           }}
-          {errorResponse}
           {processing}
         />
       </div>
+      {errorResponse}
     </div>
   </div>
   <div

@@ -264,9 +264,11 @@
             await createUserData()
             processing = false
           }}
-          {errorResponse}
           {processing}
         />
+        <div style="color:red">
+          {errorResponse}
+        </div>
       </div>
     {:else if !isGetting}
       <div style="display: flex; align-items: center; flex-direction: column">

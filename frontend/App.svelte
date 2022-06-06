@@ -9,7 +9,7 @@
   import Auth from "./Auth.svelte"
   import ViewMarket from "./ViewMarket.svelte"
   import Wallet from "./Wallet.svelte"
-  import CreateMarket from "./CreateMarket.svelte"
+  // import CreateMarket from "./CreateMarket.svelte"
   import Ranking from "./Ranking.svelte"
   import Feed from "./Feed.svelte"
   import Profile from "./Profile.svelte"
@@ -97,9 +97,9 @@
     <Route path="post/:id" let:params primary={false}>
       <ViewPost {auth} id={params.id} {principal} {signIn} />
     </Route>
-    <Route path="create">
+    <!-- <Route path="create">
       <CreateMarket {auth} {principal} {signIn} />
-    </Route>
+    </Route> -->
     <Route path="ranking">
       <Ranking {auth} />
     </Route>

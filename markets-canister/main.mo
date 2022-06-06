@@ -27,14 +27,6 @@ import Post "Post";
 import Comment "Comment";
 import Like "Like";
 import Forecast "Forecast";
-
-// import Array "mo:base/Array";
-// import Binary "mo:encoding/Binary";
-// import Blob "mo:base/Blob";
-// import CRC32 "mo:hash/CRC32";
-// import Float "mo:base/Float";
-// import Nat64 "mo:base/Nat64";
-// import Principal "mo:base/Principal";
 import Account "Account";
 
 import Ledger "Ledger";
@@ -371,6 +363,13 @@ shared({ caller = initializer }) actor class Market() = this {
         assert(msg.caller == initializer); // Root call.
         
         userMap := Map.fromIter<Text, U.User>(
+            ([]).vals(),
+            0, 
+            Text.equal, 
+            Text.hash
+        );
+
+        handlesMap := Map.fromIter<Text, Text>(
             ([]).vals(),
             0, 
             Text.equal, 

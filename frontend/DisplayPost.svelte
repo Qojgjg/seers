@@ -16,7 +16,7 @@
   export let doNotShowBorder = false
   export let isMain = false
 
-  let amount = 0.1
+  let amount = 0.5
   let errorResponse = ""
   let processing = false
   let anonImage =
@@ -330,7 +330,7 @@
               style={`color:${
                 post?.likes.find((like) => like.author.principal == principal)
                   ? "#e81c4f"
-                  : "grey"
+                  : ""
               }`}
               class="like-bt"
             >
@@ -618,7 +618,7 @@
                 style={`color:${
                   post?.likes.find((like) => like.author.principal == principal)
                     ? "#e81c4f"
-                    : "grey"
+                    : ""
                 }`}
                 class="like-bt"
                 ><Fa
@@ -635,7 +635,7 @@
                 style={`color:${
                   post?.likes.find((like) => like.author.principal == principal)
                     ? "#e81c4f"
-                    : "grey"
+                    : ""
                 }`}
               >
                 {post.likes.length}

@@ -4,7 +4,6 @@
   export let principal = ""
   export let signIn
   export let label = "Submit"
-  export let errorResponse = ""
   export let execute = () => {}
   export let processing = false
 </script>
@@ -34,8 +33,5 @@
           : "display: none"
       }`}
     />
-    <div style="text-align:end;color:red">
-      {errorResponse}
-    </div>
   </button>
 </div>

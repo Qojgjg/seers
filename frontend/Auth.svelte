@@ -83,7 +83,7 @@
   {#if principal !== ""}
     <Link to="profile" style={menuItemStyle}>Profile</Link>
     <Link to="wallet" style={menuItemStyle}>Wallet</Link>
-    <Link to="create" style={menuItemStyle}>Create</Link>
+    <!-- <Link to="create" style={menuItemStyle}>Create</Link> -->
     <!-- <a href="https://forms.gle/fYmc9iTc9P46upm47" style={menuItemStyle}>Bugs</a> -->
 
     <button on:click={signOut} style={menuItemStyle}>Logout</button>
