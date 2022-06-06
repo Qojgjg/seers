@@ -39,6 +39,7 @@ export const idlFactory = ({ IDL }) => {
   const Result_2 = IDL.Variant({ 'ok' : IDL.Float64, 'err' : MarketError });
   const AccountIdentifier = IDL.Vec(IDL.Nat8);
   const CollateralType = IDL.Variant({
+    'btc' : IDL.Null,
     'icp' : IDL.Null,
     'seers' : IDL.Null,
     'cycles' : IDL.Null,
@@ -210,6 +211,7 @@ export const idlFactory = ({ IDL }) => {
     'name' : IDL.Text,
     'createdAt' : Time,
     'cover' : IDL.Text,
+    'locked' : Balance,
     'markets' : IDL.Vec(UserMarket),
     'website' : IDL.Text,
     'likes' : IDL.Vec(IDL.Nat32),

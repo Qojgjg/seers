@@ -81,6 +81,7 @@
     }
     const r = await $auth.actor.submitPost(initData, [])
     showImageForm = false
+    showBetForm = false
     console.log(r)
     processing = false
     post = ""
@@ -104,13 +105,13 @@
       labels,
       images: [],
       probabilities: probabilities,
-      category: { crypto: null },
-      liquidity: 1000,
+      category: { any: null },
+      liquidity: 10,
       startDate: Date.parse(startDate) * 1_000_000,
       endDate: Date.parse(endDate) * 1_000_000,
-      imageUrl: "nothing",
-      collateralType: { seers: null },
-      author: "",
+      imageUrl: "",
+      collateralType: { icp: null },
+      author: principal,
     }
     let initData = {
       id: 0,
@@ -122,7 +123,7 @@
       },
       content: post,
       parent: [],
-      image: [image.value],
+      image: [],
       market: [],
       retweet: [],
       isRetweet: [],

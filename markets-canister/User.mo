@@ -116,6 +116,12 @@ module {
             cycles = 0.0;
             btc = 0.0;
         };
+        public var locked: Balance = {
+            seers = 0.0;
+            icp = 0.0;
+            cycles = 0.0;
+            btc = 0.0;
+        };
         public var expBalances: Balance = {
             seers = 1_000_000.0;
             icp = 0.0;
@@ -126,6 +132,7 @@ module {
             icp = "";
             cycles = "";
             btc = "";
+            seers = "";
         };
         public var markets: Buffer.Buffer<UserMarket> = Buffer.Buffer<UserMarket>(5);
         public var txs: Buffer.Buffer<Tx.UserTx> = Buffer.Buffer<Tx.UserTx>(5);
@@ -161,6 +168,7 @@ module {
                 bio = bio;
                 feed = feed.toArray();
                 balances = balances;
+                locked = locked;
                 expBalances = expBalances;
                 depositAddrs = depositAddrs;  
                 markets = markets.toArray();
@@ -196,6 +204,7 @@ module {
         website: Text;
         feed: [Feed.FeedItem];
         balances: Balance;
+        locked: Balance;
         expBalances: Balance;
         depositAddrs: DepositAddrs;  
         markets: [UserMarket];
@@ -238,6 +247,7 @@ module {
         
         user.feed := Utils.bufferFromArray(u.feed);
         user.balances := u.balances;
+        user.locked := u.locked;
         user.expBalances := u.expBalances;
         user.depositAddrs := u.depositAddrs;
         user.markets := Utils.bufferFromArray(u.markets);

@@ -808,41 +808,6 @@ shared({ caller = initializer }) actor class Market() = this {
         };
     };
 
-    // // Read user.
-    // public query func readUser(userId: Text): async ?U.UserStable {
-    //     let result = userMap.get(userId);
-    //     return Option.map(result, func (u: U.User): { return u.freeze(); });        
-    // };
-
-    // Read all bets of some market.
-    // public query func readBetsOfMarket(marketId: Nat32): async [(Text, Text, [Tx.UserTx])] {
-    //     let result = marketMap.get(marketId);
-    //     switch (result) {
-    //         case (null) {
-    //             return [];
-    //         };
-    //         case (?market) {
-    //             return Array.mapFilter<(Text, U.User), (Text, Text, [Tx.UserTx])>(
-    //                 Iter.toArray(userMap.entries()), 
-    //                 func (u: (Text, User)): ?(Text, Text, [Tx.UserTx]) {
-    //                     let txs = Array.mapFilter(u.1.txs, func (tx: M.UserTx): ?M.UserTx {
-    //                         if (tx.marketId == market.id) {
-    //                             return ?tx;
-    //                         };
-    //                         return null;
-    //                     });
-    //                     if (txs.size() > 0) {
-    //                         return ?(u.1.id, u.1.handle, txs);
-    //                     } else {
-    //                         return null;
-    //                     };
-    //                 }
-    //             );
-    //         };
-    //     };     
-    // };
-
-
     // Read all markets.
     public query func readAllMarkets(
         category: M.MarketCategory,
@@ -1346,11 +1311,6 @@ shared({ caller = initializer }) actor class Market() = this {
             };
         };
 
-        if (user.balances.seers < value) {
-            return #err(#notEnoughBalance);
-        };
-
-
         if (value < 1.0) {
             return #err(#minimalAmountIsOne);
         };
@@ -1362,7 +1322,35 @@ shared({ caller = initializer }) actor class Market() = this {
                 return #err(#marketMissing);
             };
             case (?market) {
+                // Check enough balance.
+                switch (market.collateralType) {
+                    case (#icp) {
+                        if (user.balances.icp - user.locked.icp < value) {
+                            return #err(#notEnoughBalance);
+                        };
+                    };
+                    case (#seers) {
+                        if (user.balances.seers - user.locked.seers < value) {
+                            return #err(#notEnoughBalance);
+                        };
+                    };
+                    case (#cycles) {
+                        if (user.balances.cycles - user.locked.cycles < value) {
+                            return #err(#notEnoughBalance);
+                        };
+                    };
+                    case (#btc) {
+                        if (user.balances.btc - user.locked.btc < value) {
+                            return #err(#notEnoughBalance);
+                        };
+                    };
+                };
+
                 if (market.state != #open) { 
+                    return #err(#marketNotOpen);
+                };
+
+                if (market.startDate > Time.now()) { 
                     return #err(#marketNotOpen);
                 };
 
@@ -1443,7 +1431,7 @@ shared({ caller = initializer }) actor class Market() = this {
                             author = (market.author == caller);
                             balances = Array.freeze(balances);
                             brierScores = [];
-                            collateralType = #seers;
+                            collateralType = market.collateralType;
                             createdAt = Time.now();
                             modifiedAt = Time.now();
                             redeemed = false;
@@ -1492,13 +1480,43 @@ shared({ caller = initializer }) actor class Market() = this {
                     };
                 };
                 user.markets := Utils.bufferFromArray(markets);
-                let newBalances: U.Balance = {
-                    seers = user.balances.seers - value;
-                    icp = user.balances.icp;
-                    cycles = user.balances.cycles;
-                    btc = user.balances.btc;
+                let newLocked: U.Balance = switch (market.collateralType) {
+                    case (#seers) {
+                        {
+                            seers = user.locked.seers + value;
+                            icp = user.locked.icp;
+                            cycles = user.locked.cycles;
+                            btc = user.locked.btc;
+                        }
+                    };
+                    case (#icp) {
+                        {
+                            seers = user.locked.seers;
+                            icp = user.locked.icp + value;
+                            cycles = user.locked.cycles;
+                            btc = user.locked.btc;
+                        }
+                    };
+                    case (#cycles) {
+                        {
+                            seers = user.locked.seers;
+                            icp = user.locked.icp;
+                            cycles = user.locked.cycles + value;
+                            btc = user.locked.btc;
+                        }
+                    };
+                    case (#btc) {
+                        {
+                            seers = user.locked.seers;
+                            icp = user.locked.icp;
+                            cycles = user.locked.cycles;
+                            btc = user.locked.btc + value;
+                        }
+                    };
                 };
-                user.balances := newBalances;
+                
+                
+                user.locked := newLocked;
                 let newTx: Tx.UserTx = {
                     id = Nat32.fromNat(user.txs.size());
                     marketId = market.id;

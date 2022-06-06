@@ -10,7 +10,8 @@ export interface Balance {
 }
 export interface Bet { 'tx' : UserTx, 'comment' : CommentStable }
 export interface BrierScore { 'createdAt' : Time, 'score' : number }
-export type CollateralType = { 'icp' : null } |
+export type CollateralType = { 'btc' : null } |
+  { 'icp' : null } |
   { 'seers' : null } |
   { 'cycles' : null };
 export interface CommentStable {
@@ -286,6 +287,7 @@ export interface UserStable {
   'name' : string,
   'createdAt' : Time,
   'cover' : string,
+  'locked' : Balance,
   'markets' : Array<UserMarket>,
   'website' : string,
   'likes' : Array<number>,

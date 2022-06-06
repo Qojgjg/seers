@@ -3,5 +3,6 @@ module {
         #seers;
         #icp;
         #cycles;
+        #btc;
     };
 }

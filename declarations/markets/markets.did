@@ -29,6 +29,7 @@ type UserStable =
    id: text;
    lastSeenAt: Time;
    likes: vec nat32;
+   locked: Balance;
    markets: vec UserMarket;
    modifiedAt: Time;
    name: text;
@@ -374,6 +375,7 @@ type CommentStable =
  };
 type CollateralType = 
  variant {
+   btc;
    cycles;
    icp;
    seers;
