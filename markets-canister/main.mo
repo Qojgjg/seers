@@ -843,7 +843,6 @@ shared({ caller = initializer }) actor class Market() = this {
         return Array.mapFilter<(Nat32, M.Market), M.MarketStable>(
             Iter.toArray(marketMap.entries()),
             func (e: (Nat32, M.Market)): ?M.MarketStable {
-                Debug.print(debug_show(state, category));
                 if ((category == #any or e.1.category == category)
                     and (state == #any or e.1.state == state)) {
                         return ?e.1.freeze();

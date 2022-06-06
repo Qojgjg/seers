@@ -1,9 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import Fa from "svelte-fa"
-  import { Link } from "svelte-navigator"
-  import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons"
-  import { faRetweet } from "@fortawesome/free-solid-svg-icons"
   import inf from "./assets/inf.gif"
 
   import DisplayPost from "./DisplayPost.svelte"
@@ -51,75 +47,7 @@
     getPost()
   }
 
-  const submitLike = async (postId) => {
-    const resp = await $auth.actor.submitLike(Number(postId))
-    getPost()
-  }
-
-  const submitRetweet = async (postId) => {
-    const initData = {
-      id: Number(id),
-      content: "",
-      author: post.author,
-      parent: 0,
-      postType: { retweet: Number(postId) },
-    }
-    const resp = await $auth.actor.submitPost(initData, [], [])
-    console.log(resp)
-  }
-
-  function parseTwitterDate(tdate) {
-    var system_date = new Date(tdate)
-    var user_date = new Date()
-
-    var diff = Math.floor((Number(user_date) - Number(system_date)) / 1000)
-    if (diff <= 1) {
-      return "just now"
-    }
-    if (diff < 20) {
-      return diff + " seconds ago"
-    }
-    if (diff < 40) {
-      return "half a minute ago"
-    }
-    if (diff < 60) {
-      return "less than a minute ago"
-    }
-    if (diff <= 90) {
-      return "one minute ago"
-    }
-    if (diff <= 3540) {
-      return Math.round(diff / 60) + " minutes ago"
-    }
-    if (diff <= 5400) {
-      return "1 hour ago"
-    }
-    if (diff <= 86400) {
-      return Math.round(diff / 3600) + " hours ago"
-    }
-    if (diff <= 129600) {
-      return "1 day ago"
-    }
-    if (diff < 604800) {
-      return Math.round(diff / 86400) + " days ago"
-    }
-    if (diff <= 777600) {
-      return "1 week ago"
-    }
-    return "on " + system_date
-  }
-
-  const splitCamelCaseToString = (s) => {
-    return s
-      .split(/(?=[A-Z])/)
-      .map((p) => {
-        return p[0].toUpperCase() + p.slice(1)
-      })
-      .join(" ")
-  }
-
   const getPost = async () => {
-    console.log("getting post")
     post = await $auth.actor.getThread(Number(id))
     if ("ok" in post) {
       console.log(post)

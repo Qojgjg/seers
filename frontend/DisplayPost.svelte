@@ -22,15 +22,6 @@
   let anonImage =
     "https://static.wikia.nocookie.net/codegeass/images/c/c0/Zero.jpg"
 
-  const splitCamelCaseToString = (s) => {
-    return s
-      .split(/(?=[A-Z])/)
-      .map((p) => {
-        return p[0].toUpperCase() + p.slice(1)
-      })
-      .join(" ")
-  }
-
   function parseTwitterDate(tdate) {
     var system_date = new Date(tdate)
     var user_date = new Date()
@@ -66,6 +57,16 @@
     return "on " + system_date
   }
 
+  const getPost = async () => {
+    post = await $auth.actor.getThread(Number(post.id))
+    if ("ok" in post) {
+      console.log(post)
+      post = post["ok"].main
+    } else {
+      console.log(post["err"])
+    }
+  }
+
   const submitBuy = async (marketId, selected, amount) => {
     processing = true
     selected = selected === undefined ? 0 : selected
@@ -77,6 +78,9 @@
     )
     if ("err" in resp) {
       errorResponse = Object.keys(resp["err"]).toString()
+    } else {
+      getPost()
+      amount = 0.1
     }
     processing = false
     console.log(resp)
@@ -86,6 +90,8 @@
     const resp = await $auth.actor.submitLike(Number(postId))
     if ("err" in resp) {
       errorResponse = resp["err"]
+    } else {
+      getPost()
     }
     console.log(resp)
   }
@@ -94,6 +100,8 @@
     const resp = await $auth.actor.submitRetweet(Number(post.id))
     if ("err" in resp) {
       errorResponse = resp["err"]
+    } else {
+      getPost()
     }
     console.log(resp)
   }
