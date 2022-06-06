@@ -268,9 +268,9 @@ type MarketError =
    endDateOld;
    endDateOlderThanStartDate;
    imageMissing;
+   lowerThanMinAmount;
    marketMissing;
    marketNotOpen;
-   minimalAmountIsOne;
    newtonFailed;
    notEnoughBalance;
    notEnoughLiquidity: float64;

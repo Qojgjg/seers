@@ -1081,10 +1081,9 @@ shared({ caller = initializer }) actor class Market() = this {
             return #err(#callerIsAnon);
         };
 
-        if (value < 1.0) {
-            return #err(#minimalAmountIsOne);
+        if (value < 0.1) {
+            return #err(#lowerThanMinAmount);
         };
-
 
         let marketOpt = marketMap.get(marketId);
         
@@ -1235,14 +1234,42 @@ shared({ caller = initializer }) actor class Market() = this {
                                 };
                                 user.txs.add(newTx);
 
-                                let newBalances: U.Balance = {
-                                    seers = user.balances.seers + liquidityOut;
-                                    icp = user.balances.icp;
-                                    cycles = user.balances.cycles;
-                                    btc = user.balances.btc;
+                                let newLocked: U.Balance = switch (market.collateralType) {
+                                    case (#seers) {
+                                        {
+                                            seers = user.balances.seers - liquidityOut;
+                                            icp = user.balances.icp;
+                                            cycles = user.balances.cycles;
+                                            btc = user.balances.btc;
+                                        }
+                                    };
+                                    case (#icp) {
+                                        {
+                                            seers = user.balances.seers;
+                                            icp = user.balances.icp - liquidityOut;
+                                            cycles = user.balances.cycles;
+                                            btc = user.balances.btc;
+                                        }
+                                    };
+                                    case (#cycles) {
+                                        {
+                                            seers = user.balances.seers;
+                                            icp = user.balances.icp;
+                                            cycles = user.balances.cycles - liquidityOut;
+                                            btc = user.balances.btc;
+                                        }
+                                    };
+                                    case (#btc) {
+                                        {
+                                            seers = user.balances.seers;
+                                            icp = user.balances.icp;
+                                            cycles = user.balances.cycles;
+                                            btc = user.balances.btc - liquidityOut;
+                                        }
+                                    };
                                 };
-
-                                user.balances := newBalances;
+                                
+                                user.locked := newLocked;
 
                                 return #ok(liquidityOut);
                             };
@@ -1311,8 +1338,8 @@ shared({ caller = initializer }) actor class Market() = this {
             };
         };
 
-        if (value < 1.0) {
-            return #err(#minimalAmountIsOne);
+        if (value < 0.1) {
+            return #err(#lowerThanMinAmount);
         };
 
         let marketOpt = marketMap.get(marketId);

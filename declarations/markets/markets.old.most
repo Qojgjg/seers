@@ -131,6 +131,7 @@ type UserStable =
     id : Text;
     lastSeenAt : Time;
     likes : [Nat32];
+    locked : Balance;
     markets : [UserMarket];
     modifiedAt : Time;
     name : Text;

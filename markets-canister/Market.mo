@@ -27,7 +27,8 @@ module {
         #marketMissing;
         #marketNotOpen;
         #newtonFailed;
-        #minimalAmountIsOne;
+
+        #lowerThanMinAmount;
 
         #commentIsEmpty;
 

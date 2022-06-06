@@ -18,7 +18,6 @@ export const idlFactory = ({ IDL }) => {
   });
   const MarketError = IDL.Variant({
     'callerIsAnon' : IDL.Null,
-    'minimalAmountIsOne' : IDL.Null,
     'userAlreadyExist' : IDL.Null,
     'imageMissing' : IDL.Null,
     'profileNotCreated' : IDL.Null,
@@ -26,6 +25,7 @@ export const idlFactory = ({ IDL }) => {
     'optionsMissing' : IDL.Null,
     'descriptionMissing' : IDL.Null,
     'titleMissing' : IDL.Null,
+    'lowerThanMinAmount' : IDL.Null,
     'marketMissing' : IDL.Null,
     'startDateOld' : IDL.Null,
     'marketNotOpen' : IDL.Null,

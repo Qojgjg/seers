@@ -89,7 +89,6 @@ export type MarketCategory = { 'any' : null } |
   { 'science' : null } |
   { 'politics' : null };
 export type MarketError = { 'callerIsAnon' : null } |
-  { 'minimalAmountIsOne' : null } |
   { 'userAlreadyExist' : null } |
   { 'imageMissing' : null } |
   { 'profileNotCreated' : null } |
@@ -97,6 +96,7 @@ export type MarketError = { 'callerIsAnon' : null } |
   { 'optionsMissing' : null } |
   { 'descriptionMissing' : null } |
   { 'titleMissing' : null } |
+  { 'lowerThanMinAmount' : null } |
   { 'marketMissing' : null } |
   { 'startDateOld' : null } |
   { 'marketNotOpen' : null } |
