@@ -420,10 +420,6 @@ shared({ caller = initializer }) actor class Market() = this {
             return #err(#optionsMissing);
         };
 
-        if (marketInitData.imageUrl == "") {
-            return #err(#imageMissing);
-        };
-
         if (marketInitData.endDate < Time.now()) {
             return #err(#endDateOld);
         };
