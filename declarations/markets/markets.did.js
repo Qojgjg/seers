@@ -273,6 +273,7 @@ export const idlFactory = ({ IDL }) => {
     'canisterBalance' : IDL.Func([], [ICP], []),
     'createMarket' : IDL.Func([MarketInitData], [Result_6], []),
     'createUser' : IDL.Func([UserInitData], [Result_2], []),
+    'deleteAllUsers' : IDL.Func([], [IDL.Bool], []),
     'editUser' : IDL.Func([UserInitData], [Result_2], []),
     'getFeed' : IDL.Func([], [IDL.Vec(PostStable)], ['query']),
     'getPost' : IDL.Func([IDL.Nat32], [Result_5], ['query']),

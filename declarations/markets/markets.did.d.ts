@@ -78,6 +78,7 @@ export interface Market {
   'canisterBalance' : ActorMethod<[], ICP>,
   'createMarket' : ActorMethod<[MarketInitData], Result_6>,
   'createUser' : ActorMethod<[UserInitData], Result_2>,
+  'deleteAllUsers' : ActorMethod<[], boolean>,
   'editUser' : ActorMethod<[UserInitData], Result_2>,
   'getFeed' : ActorMethod<[], Array<PostStable>>,
   'getPost' : ActorMethod<[number], Result_5>,

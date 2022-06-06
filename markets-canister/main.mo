@@ -188,6 +188,7 @@ shared({ caller = initializer }) actor class Market() = this {
             Text.hash
         )
     };
+
     private var marketMap: Map.HashMap<Nat32, M.Market> = do {
         let marketIter = Iter.map<(Nat32, M.MarketStable), (Nat32, M.Market)>(
             stableMarkets.vals(), 
@@ -366,11 +367,18 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Delete all users.
-    // public shared(msg) func deleteAllUsers(): async () {
-    //     assert(msg.caller == initializer); // Root call.
-       
-    //     users := HashMap.empty();
-    // };
+    public shared(msg) func deleteAllUsers(): async Bool {
+        assert(msg.caller == initializer); // Root call.
+        
+        userMap := Map.fromIter<Text, U.User>(
+            ([]).vals(),
+            0, 
+            Text.equal, 
+            Text.hash
+        );
+
+        return true;
+    };
 
     // Approve a market.
     public shared(msg) func setMarketState(marketId: Nat32, state: M.MarketState): async Bool {
