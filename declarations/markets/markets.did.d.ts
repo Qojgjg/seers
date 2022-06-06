@@ -27,6 +27,34 @@ export interface DepositAddrs {
   'icp' : string,
   'cycles' : string,
 }
+export type Error = { 'callerIsAnon' : null } |
+  { 'userAlreadyExist' : null } |
+  { 'notLoggedIn' : null } |
+  { 'imageMissing' : null } |
+  { 'profileNotCreated' : null } |
+  { 'parentDoesNotExist' : null } |
+  { 'notEnoughBalance' : null } |
+  { 'postIsEmpty' : null } |
+  { 'optionsMissing' : null } |
+  { 'descriptionMissing' : null } |
+  { 'marketNotFound' : null } |
+  { 'titleMissing' : null } |
+  { 'handleAlreadyTaken' : null } |
+  { 'imageNotFound' : null } |
+  { 'alreadyLiked' : null } |
+  { 'lowerThanMinAmount' : null } |
+  { 'marketMissing' : null } |
+  { 'startDateOld' : null } |
+  { 'marketNotOpen' : null } |
+  { 'postDoesNotExist' : null } |
+  { 'alreadyRetweeted' : null } |
+  { 'commentIsEmpty' : null } |
+  { 'userDoesNotExist' : null } |
+  { 'endDateOld' : null } |
+  { 'cantGetBalance' : null } |
+  { 'newtonFailed' : null } |
+  { 'endDateOlderThanStartDate' : null } |
+  { 'notEnoughLiquidity' : null };
 export type FeedItem = { 'bet' : Bet } |
   { 'post' : PostStable } |
   { 'comment' : CommentStable } |
@@ -43,20 +71,20 @@ export interface ICP { 'e8s' : bigint }
 export interface Like { 'createdAt' : Time, 'author' : UserData }
 export interface Market {
   'accountBalance' : ActorMethod<[string], [] | [ICP]>,
-  'addCommentToMarket' : ActorMethod<[number, string], Result_8>,
-  'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_2>,
+  'addCommentToMarket' : ActorMethod<[number, string], Result_7>,
+  'buyOutcome' : ActorMethod<[number, number, bigint, boolean], Result_1>,
   'callerAccount' : ActorMethod<[], AccountIdentifier>,
   'canisterAccount' : ActorMethod<[], string>,
   'canisterBalance' : ActorMethod<[], ICP>,
-  'createMarket' : ActorMethod<[MarketInitData], Result_7>,
-  'createUser' : ActorMethod<[UserInitData], Result_3>,
-  'editUser' : ActorMethod<[UserInitData], Result_3>,
+  'createMarket' : ActorMethod<[MarketInitData], Result_6>,
+  'createUser' : ActorMethod<[UserInitData], Result_2>,
+  'editUser' : ActorMethod<[UserInitData], Result_2>,
   'getFeed' : ActorMethod<[], Array<PostStable>>,
-  'getPost' : ActorMethod<[number], Result_6>,
-  'getThread' : ActorMethod<[number], Result_5>,
-  'getUserFromPrincipal' : ActorMethod<[string], Result_4>,
+  'getPost' : ActorMethod<[number], Result_5>,
+  'getThread' : ActorMethod<[number], Result_4>,
+  'getUserFromPrincipal' : ActorMethod<[string], Result_3>,
   'getUserStable' : ActorMethod<[string], [] | [UserStable]>,
-  'getUserWithPosts' : ActorMethod<[string], Result_4>,
+  'getUserWithPosts' : ActorMethod<[string], Result_3>,
   'otherAccount' : ActorMethod<[], string>,
   'readAllMarkets' : ActorMethod<
     [MarketCategory, MarketState],
@@ -65,12 +93,12 @@ export interface Market {
   'readAllUsers' : ActorMethod<[], Array<UserStable>>,
   'readMarket' : ActorMethod<[number], [] | [MarketStable]>,
   'readUserData' : ActorMethod<[Array<string>], Array<UserData>>,
-  'refreshUser' : ActorMethod<[], Result_3>,
+  'refreshUser' : ActorMethod<[], Result_2>,
   'resolveMarket' : ActorMethod<[number, bigint], boolean>,
-  'sellOutcome' : ActorMethod<[number, number, bigint, boolean], Result_2>,
+  'sellOutcome' : ActorMethod<[number, number, bigint, boolean], Result_1>,
   'setMarketState' : ActorMethod<[number, MarketState], boolean>,
   'setUpdating' : ActorMethod<[boolean], undefined>,
-  'submitForecast' : ActorMethod<[number, Forecast], Result_1>,
+  'submitForecast' : ActorMethod<[number, Forecast], Result>,
   'submitLike' : ActorMethod<[number], Result>,
   'submitPost' : ActorMethod<[PostInitData, [] | [MarketInitData]], Result>,
   'submitRetweet' : ActorMethod<[number], Result>,
@@ -88,23 +116,6 @@ export type MarketCategory = { 'any' : null } |
   { 'dfinity' : null } |
   { 'science' : null } |
   { 'politics' : null };
-export type MarketError = { 'callerIsAnon' : null } |
-  { 'userAlreadyExist' : null } |
-  { 'imageMissing' : null } |
-  { 'profileNotCreated' : null } |
-  { 'notEnoughBalance' : null } |
-  { 'optionsMissing' : null } |
-  { 'descriptionMissing' : null } |
-  { 'titleMissing' : null } |
-  { 'lowerThanMinAmount' : null } |
-  { 'marketMissing' : null } |
-  { 'startDateOld' : null } |
-  { 'marketNotOpen' : null } |
-  { 'commentIsEmpty' : null } |
-  { 'endDateOld' : null } |
-  { 'newtonFailed' : null } |
-  { 'endDateOlderThanStartDate' : null } |
-  { 'notEnoughLiquidity' : number };
 export interface MarketInitData {
   'id' : number,
   'title' : string,
@@ -155,15 +166,6 @@ export type MarketState = { 'any' : null } |
   { 'open' : null } |
   { 'approved' : null };
 export interface ParentData { 'id' : number, 'author' : UserData }
-export type PostError = { 'notLoggedIn' : null } |
-  { 'parentDoesNotExist' : null } |
-  { 'postIsEmpty' : null } |
-  { 'marketNotFound' : null } |
-  { 'imageNotFound' : null } |
-  { 'alreadyLiked' : null } |
-  { 'postDoesNotExist' : null } |
-  { 'alreadyRetweeted' : null } |
-  { 'userDoesNotExist' : null };
 export interface PostInitData {
   'id' : number,
   'retweet' : [] | [Retweet],
@@ -189,23 +191,21 @@ export interface PostStable {
   'retweeters' : Array<UserData>,
 }
 export type Result = { 'ok' : null } |
-  { 'err' : PostError };
-export type Result_1 = { 'ok' : null } |
-  { 'err' : MarketError };
-export type Result_2 = { 'ok' : number } |
-  { 'err' : MarketError };
-export type Result_3 = { 'ok' : UserStable } |
-  { 'err' : UserError };
-export type Result_4 = { 'ok' : [UserStable, Array<PostStable>] } |
-  { 'err' : UserError };
-export type Result_5 = { 'ok' : ThreadStable } |
-  { 'err' : PostError };
-export type Result_6 = { 'ok' : PostStable } |
-  { 'err' : PostError };
-export type Result_7 = { 'ok' : MarketStable } |
-  { 'err' : MarketError };
-export type Result_8 = { 'ok' : CommentStable } |
-  { 'err' : MarketError };
+  { 'err' : Error };
+export type Result_1 = { 'ok' : number } |
+  { 'err' : Error };
+export type Result_2 = { 'ok' : UserStable } |
+  { 'err' : Error };
+export type Result_3 = { 'ok' : [UserStable, Array<PostStable>] } |
+  { 'err' : Error };
+export type Result_4 = { 'ok' : ThreadStable } |
+  { 'err' : Error };
+export type Result_5 = { 'ok' : PostStable } |
+  { 'err' : Error };
+export type Result_6 = { 'ok' : MarketStable } |
+  { 'err' : Error };
+export type Result_7 = { 'ok' : CommentStable } |
+  { 'err' : Error };
 export interface Retweet {
   'id' : number,
   'content' : string,
@@ -225,26 +225,6 @@ export interface UserData {
   'picture' : string,
   'handle' : string,
 }
-export type UserError = { 'callerIsAnon' : null } |
-  { 'minimalAmountIsOne' : null } |
-  { 'userAlreadyExist' : null } |
-  { 'imageMissing' : null } |
-  { 'profileNotCreated' : null } |
-  { 'notEnoughBalance' : null } |
-  { 'optionsMissing' : null } |
-  { 'descriptionMissing' : null } |
-  { 'titleMissing' : null } |
-  { 'handleAlreadyTaken' : null } |
-  { 'marketMissing' : null } |
-  { 'startDateOld' : null } |
-  { 'marketNotOpen' : null } |
-  { 'commentIsEmpty' : null } |
-  { 'userDoesNotExist' : null } |
-  { 'endDateOld' : null } |
-  { 'cantGetBalance' : null } |
-  { 'newtonFailed' : null } |
-  { 'endDateOlderThanStartDate' : null } |
-  { 'notEnoughLiquidity' : number };
 export interface UserInitData {
   'id' : string,
   'age' : bigint,

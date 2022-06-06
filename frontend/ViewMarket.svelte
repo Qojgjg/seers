@@ -223,7 +223,6 @@
     background-color: black;
     color: rgb(255, 255, 255);
     height: 30px;
-    margin-top: 10px;
     font-size: 1.2em;
     text-align: center;
     width: 200px;

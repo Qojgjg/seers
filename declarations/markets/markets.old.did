@@ -341,6 +341,7 @@ type CommentStable =
  };
 type CollateralType = 
  variant {
+   btc;
    cycles;
    icp;
    seers;

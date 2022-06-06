@@ -11,6 +11,8 @@
   export let principal
   export let signIn
 
+  let collateralSelected = "ICP"
+  let liquidity = 10.0
   let post = ""
   let errorResponse = ""
   let feed = []
@@ -106,11 +108,12 @@
       images: [],
       probabilities: probabilities,
       category: { any: null },
-      liquidity: 10,
+      liquidity: liquidity,
       startDate: Date.parse(startDate) * 1_000_000,
       endDate: Date.parse(endDate) * 1_000_000,
       imageUrl: "",
-      collateralType: { icp: null },
+      collateralType:
+        collateralSelected == "ICP" ? { icp: null } : { seers: null },
       author: principal,
     }
     let initData = {
@@ -275,6 +278,42 @@
                   max="2050-01-01"
                   style="background: black; color:grey; border: 0px; font-size: 1.5em"
                 />
+              </div>
+            </div>
+          </div>
+          <div
+            style="display:flex; width: 100%; height: 70px; border-top: 1px solid rgb(47, 51, 54); align-items:flex-end;"
+          >
+            <div
+              style="display:flex; width: 100%; height: 100%; padding: 0px 10px; text-align:center; justify-content:start; align-items:center"
+            >
+              <div style="color:grey; padding: 0px 5px;font-size: 1.1em;">
+                Liquidity:
+              </div>
+              <div
+                style="width: 80px; text-align:center; display:flex; justify-content:center"
+              >
+                <input
+                  type="text"
+                  id="start"
+                  bind:value={liquidity}
+                  min="0.1"
+                  max="5.0"
+                  style="background: black; color:grey; border: 0px;font-size: 1.2em; width: 100%; text-align:center"
+                />
+              </div>
+              <div
+                style="display:flex; align-items:center; justify-content:center; text-align:center"
+              >
+                <select
+                  bind:value={collateralSelected}
+                  style="display:flex; background: black; color:grey; border: 0px; font-size: 1.1em"
+                >
+                  <option value="ICP">ICP</option>
+                  <option value="Seers">Seers</option>
+                  <!-- <option value="Cycles"></option>
+                <option value="BTC"></option> -->
+                </select>
               </div>
             </div>
           </div>

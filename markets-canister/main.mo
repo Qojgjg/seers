@@ -247,7 +247,38 @@ shared({ caller = initializer }) actor class Market() = this {
             Text.hash 
         )
     };
-    
+
+    public type Error = {
+        #callerIsAnon;
+        #profileNotCreated;
+        #notEnoughLiquidity;
+        #titleMissing;
+        #descriptionMissing;
+        #optionsMissing;
+        #imageMissing;
+        #startDateOld;
+        #endDateOld;
+        #endDateOlderThanStartDate;
+        #notEnoughBalance;
+        #marketMissing;
+        #marketNotOpen;
+        #newtonFailed;
+        #lowerThanMinAmount;
+        #commentIsEmpty;
+        #userAlreadyExist;
+        #userDoesNotExist;
+        #handleAlreadyTaken;
+        #cantGetBalance;
+
+        #notLoggedIn;
+        #postDoesNotExist;
+        #alreadyLiked;
+        #marketNotFound;
+        #imageNotFound;
+        #parentDoesNotExist;
+        #alreadyRetweeted;
+        #postIsEmpty;
+    };
 
     /* Upgrade */
 
@@ -372,9 +403,9 @@ shared({ caller = initializer }) actor class Market() = this {
         return false;
     };
 
-    private func checkMarketInitData(marketInitData: M.MarketInitData): Result.Result<(), M.MarketError> {
-        if (marketInitData.liquidity < 100) {
-            return #err(#notEnoughLiquidity(100));
+    private func checkMarketInitData(marketInitData: M.MarketInitData): Result.Result<(), Error> {
+        if (marketInitData.liquidity < 10) {
+            return #err(#notEnoughLiquidity);
         };
 
         if (marketInitData.title == "") {
@@ -401,7 +432,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
 
-    private func _createMarket(author: Text, marketInitData: M.MarketInitData): Result.Result<M.MarketStable, M.MarketError> {
+    private func _createMarket(author: Text, marketInitData: M.MarketInitData): Result.Result<M.MarketStable, Error> {
         
         switch (checkMarketInitData(marketInitData)) {
             case (#err(e)) {
@@ -466,7 +497,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Create a new AMM market.
-    public shared(msg) func createMarket(marketInitData: M.MarketInitData): async Result.Result<M.MarketStable, M.MarketError> {
+    public shared(msg) func createMarket(marketInitData: M.MarketInitData): async Result.Result<M.MarketStable, Error> {
         assert(not updating);
         let author = Principal.toText(msg.caller);        
         
@@ -478,7 +509,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Submit a retweet.
-    public shared(msg) func submitRetweet(postId: Nat32): async Result.Result<(), Post.PostError> {
+    public shared(msg) func submitRetweet(postId: Nat32): async Result.Result<(), Error> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -547,7 +578,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Submit a post of any type.
-    public shared(msg) func submitPost(initData: Post.PostInitData, marketInitData: ?M.MarketInitData): async Result.Result<(), Post.PostError> {
+    public shared(msg) func submitPost(initData: Post.PostInitData, marketInitData: ?M.MarketInitData): async Result.Result<(), Error> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -654,8 +685,8 @@ shared({ caller = initializer }) actor class Market() = this {
                     };
                     case (?marketInitData) {
                         switch (_createMarket(caller, marketInitData)) {
-                            case (#err(_)) {
-                                return #err(#marketNotFound);
+                            case (#err(e)) {
+                                return #err(e);
                             };
                             case (#ok(marketStable)) {
                                 post.market := marketMap.get(marketStable.id);
@@ -679,7 +710,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Submit a like.
-    public shared(msg) func submitLike(postId: Nat32): async Result.Result<(), Post.PostError> {
+    public shared(msg) func submitLike(postId: Nat32): async Result.Result<(), Error> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -742,7 +773,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Read a post.
-    public query func getPost(postId: Nat32): async Result.Result<Post.PostStable, Post.PostError> {
+    public query func getPost(postId: Nat32): async Result.Result<Post.PostStable, Error> {
         switch (postMap.get(postId)) {
             case null {
                 return #err(#userDoesNotExist);
@@ -754,7 +785,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Read the thread.
-    public query func getThread(postId: Nat32): async Result.Result<Post.ThreadStable, Post.PostError> {
+    public query func getThread(postId: Nat32): async Result.Result<Post.ThreadStable, Error> {
         switch (postMap.get(postId)) {
             case null {
                 return #err(#postDoesNotExist);
@@ -826,7 +857,7 @@ shared({ caller = initializer }) actor class Market() = this {
         );
     };
 
-    public shared(msg) func refreshUser(): async Result.Result<U.UserStable, U.UserError> {
+    public shared(msg) func refreshUser(): async Result.Result<U.UserStable, Error> {
         assert(not updating);
         let caller = Principal.toText(msg.caller);
         
@@ -1073,7 +1104,7 @@ shared({ caller = initializer }) actor class Market() = this {
         value: Float,
         selected: Nat,
         save: Bool
-    ): async Result.Result<Float, M.MarketError> {
+    ): async Result.Result<Float, Error> {
         assert(not updating);
         let caller = Principal.toText(msg.caller);
         
@@ -1283,7 +1314,7 @@ shared({ caller = initializer }) actor class Market() = this {
     public shared(msg) func submitForecast(
         marketId: Nat32,
         forecast: Forecast.Forecast
-    ): async Result.Result<(), M.MarketError> {
+    ): async Result.Result<(), Error> {
         
         assert(not updating);
         let caller = Principal.toText(msg.caller);
@@ -1320,7 +1351,7 @@ shared({ caller = initializer }) actor class Market() = this {
             value: Float,
             selected: Nat,
             save: Bool
-        ): async Result.Result<Float, M.MarketError> {
+        ): async Result.Result<Float, Error> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -1571,7 +1602,7 @@ shared({ caller = initializer }) actor class Market() = this {
 
 
     // Get user with posts.
-    public query func getUserWithPosts(handle: Text): async Result.Result<(U.UserStable, [Post.PostStable]), U.UserError> {
+    public query func getUserWithPosts(handle: Text): async Result.Result<(U.UserStable, [Post.PostStable]), Error> {
         switch (userMap.get(handle)) {
             case null {
                 return #err(#profileNotCreated);
@@ -1597,7 +1628,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Get user with posts from principal.
-    public query func getUserFromPrincipal(principal: Text): async Result.Result<(U.UserStable, [Post.PostStable]), U.UserError> {
+    public query func getUserFromPrincipal(principal: Text): async Result.Result<(U.UserStable, [Post.PostStable]), Error> {
         switch (handlesMap.get(principal)) {
             case null {
                 return #err(#profileNotCreated);
@@ -1642,7 +1673,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Create new user.
-    public shared(msg) func createUser(initData: U.UserInitData): async Result.Result<U.UserStable, U.UserError> {
+    public shared(msg) func createUser(initData: U.UserInitData): async Result.Result<U.UserStable, Error> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -1662,7 +1693,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
 
     // Edit user.
-    public shared(msg) func editUser(initData: U.UserInitData): async Result.Result<U.UserStable, U.UserError> {
+    public shared(msg) func editUser(initData: U.UserInitData): async Result.Result<U.UserStable, Error> {
         assert(not updating);
 
         let caller = Principal.toText(msg.caller);
@@ -1682,7 +1713,7 @@ shared({ caller = initializer }) actor class Market() = this {
     };
     
     // Add a comment to a market.
-    public shared(msg) func addCommentToMarket(marketId: Nat32, content: Text): async Result.Result<Comment.CommentStable, M.MarketError> {
+    public shared(msg) func addCommentToMarket(marketId: Nat32, content: Text): async Result.Result<Comment.CommentStable, Error> {
         assert(not updating);
         
         let userId = Principal.toText(msg.caller);
@@ -1741,7 +1772,7 @@ shared({ caller = initializer }) actor class Market() = this {
         };
     };
 
-    private func _editUser(initData: U.UserInitData): Result.Result<U.User, U.UserError> {
+    private func _editUser(initData: U.UserInitData): Result.Result<U.User, Error> {
         switch (handlesMap.get(initData.id)) {
             case null {
                 // No data for this principal.
@@ -1791,7 +1822,7 @@ shared({ caller = initializer }) actor class Market() = this {
         };
     };
 
-    private func _createUser(initData: U.UserInitData): Result.Result<U.User, U.UserError> {
+    private func _createUser(initData: U.UserInitData): Result.Result<U.User, Error> {
         switch (handlesMap.get(initData.id)) {
             case (null) {
                 switch (userMap.get(initData.handle)) {

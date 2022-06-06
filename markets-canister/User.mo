@@ -18,33 +18,6 @@ import Post "Post";
 import Comment "Comment";
 
 module {
-    public type UserError = {
-        #callerIsAnon;
-        #profileNotCreated;
-        #notEnoughLiquidity: Float;
-        #titleMissing;
-        #descriptionMissing;
-        #optionsMissing;
-        #imageMissing;
-        #startDateOld;
-        #endDateOld;
-        #endDateOlderThanStartDate;
-
-        #notEnoughBalance;
-        #marketMissing;
-        #marketNotOpen;
-        #newtonFailed;
-        #minimalAmountIsOne;
-
-        #commentIsEmpty;
-
-        #userDoesNotExist;
-        #userAlreadyExist;
-
-        #handleAlreadyTaken;
-        #cantGetBalance;
-    };
-   
     public type Follower = {
         user: Text;
         createdAt: Time.Time;

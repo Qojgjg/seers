@@ -9,17 +9,6 @@ import Market "Market";
 
 
 module {
-    public type PostError = {
-        #notLoggedIn;
-        #postDoesNotExist;
-        #userDoesNotExist;
-        #alreadyLiked;
-        #marketNotFound;
-        #imageNotFound;
-        #parentDoesNotExist;
-        #alreadyRetweeted;
-        #postIsEmpty;
-    };
 
     public type ParentData = {
         id: Nat32;

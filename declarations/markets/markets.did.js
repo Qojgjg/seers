@@ -16,27 +16,38 @@ export const idlFactory = ({ IDL }) => {
     'author' : UserData,
     'likes' : IDL.Vec(Like),
   });
-  const MarketError = IDL.Variant({
+  const Error = IDL.Variant({
     'callerIsAnon' : IDL.Null,
     'userAlreadyExist' : IDL.Null,
+    'notLoggedIn' : IDL.Null,
     'imageMissing' : IDL.Null,
     'profileNotCreated' : IDL.Null,
+    'parentDoesNotExist' : IDL.Null,
     'notEnoughBalance' : IDL.Null,
+    'postIsEmpty' : IDL.Null,
     'optionsMissing' : IDL.Null,
     'descriptionMissing' : IDL.Null,
+    'marketNotFound' : IDL.Null,
     'titleMissing' : IDL.Null,
+    'handleAlreadyTaken' : IDL.Null,
+    'imageNotFound' : IDL.Null,
+    'alreadyLiked' : IDL.Null,
     'lowerThanMinAmount' : IDL.Null,
     'marketMissing' : IDL.Null,
     'startDateOld' : IDL.Null,
     'marketNotOpen' : IDL.Null,
+    'postDoesNotExist' : IDL.Null,
+    'alreadyRetweeted' : IDL.Null,
     'commentIsEmpty' : IDL.Null,
+    'userDoesNotExist' : IDL.Null,
     'endDateOld' : IDL.Null,
+    'cantGetBalance' : IDL.Null,
     'newtonFailed' : IDL.Null,
     'endDateOlderThanStartDate' : IDL.Null,
-    'notEnoughLiquidity' : IDL.Float64,
+    'notEnoughLiquidity' : IDL.Null,
   });
-  const Result_8 = IDL.Variant({ 'ok' : CommentStable, 'err' : MarketError });
-  const Result_2 = IDL.Variant({ 'ok' : IDL.Float64, 'err' : MarketError });
+  const Result_7 = IDL.Variant({ 'ok' : CommentStable, 'err' : Error });
+  const Result_1 = IDL.Variant({ 'ok' : IDL.Float64, 'err' : Error });
   const AccountIdentifier = IDL.Vec(IDL.Nat8);
   const CollateralType = IDL.Variant({
     'btc' : IDL.Null,
@@ -114,7 +125,7 @@ export const idlFactory = ({ IDL }) => {
     'startDate' : Time,
     'images' : IDL.Vec(IDL.Text),
   });
-  const Result_7 = IDL.Variant({ 'ok' : MarketStable, 'err' : MarketError });
+  const Result_6 = IDL.Variant({ 'ok' : MarketStable, 'err' : Error });
   const UserInitData = IDL.Record({
     'id' : IDL.Text,
     'age' : IDL.Nat,
@@ -226,53 +237,19 @@ export const idlFactory = ({ IDL }) => {
     'depositAddrs' : DepositAddrs,
     'balances' : Balance,
   });
-  const UserError = IDL.Variant({
-    'callerIsAnon' : IDL.Null,
-    'minimalAmountIsOne' : IDL.Null,
-    'userAlreadyExist' : IDL.Null,
-    'imageMissing' : IDL.Null,
-    'profileNotCreated' : IDL.Null,
-    'notEnoughBalance' : IDL.Null,
-    'optionsMissing' : IDL.Null,
-    'descriptionMissing' : IDL.Null,
-    'titleMissing' : IDL.Null,
-    'handleAlreadyTaken' : IDL.Null,
-    'marketMissing' : IDL.Null,
-    'startDateOld' : IDL.Null,
-    'marketNotOpen' : IDL.Null,
-    'commentIsEmpty' : IDL.Null,
-    'userDoesNotExist' : IDL.Null,
-    'endDateOld' : IDL.Null,
-    'cantGetBalance' : IDL.Null,
-    'newtonFailed' : IDL.Null,
-    'endDateOlderThanStartDate' : IDL.Null,
-    'notEnoughLiquidity' : IDL.Float64,
-  });
-  const Result_3 = IDL.Variant({ 'ok' : UserStable, 'err' : UserError });
-  const PostError = IDL.Variant({
-    'notLoggedIn' : IDL.Null,
-    'parentDoesNotExist' : IDL.Null,
-    'postIsEmpty' : IDL.Null,
-    'marketNotFound' : IDL.Null,
-    'imageNotFound' : IDL.Null,
-    'alreadyLiked' : IDL.Null,
-    'postDoesNotExist' : IDL.Null,
-    'alreadyRetweeted' : IDL.Null,
-    'userDoesNotExist' : IDL.Null,
-  });
-  const Result_6 = IDL.Variant({ 'ok' : PostStable, 'err' : PostError });
+  const Result_2 = IDL.Variant({ 'ok' : UserStable, 'err' : Error });
+  const Result_5 = IDL.Variant({ 'ok' : PostStable, 'err' : Error });
   const ThreadStable = IDL.Record({
     'main' : PostStable,
     'ancestors' : IDL.Vec(PostStable),
     'replies' : IDL.Vec(PostStable),
   });
-  const Result_5 = IDL.Variant({ 'ok' : ThreadStable, 'err' : PostError });
-  const Result_4 = IDL.Variant({
+  const Result_4 = IDL.Variant({ 'ok' : ThreadStable, 'err' : Error });
+  const Result_3 = IDL.Variant({
     'ok' : IDL.Tuple(UserStable, IDL.Vec(PostStable)),
-    'err' : UserError,
+    'err' : Error,
   });
-  const Result_1 = IDL.Variant({ 'ok' : IDL.Null, 'err' : MarketError });
-  const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : PostError });
+  const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
   const PostInitData = IDL.Record({
     'id' : IDL.Nat32,
     'retweet' : IDL.Opt(Retweet),
@@ -285,24 +262,24 @@ export const idlFactory = ({ IDL }) => {
   });
   const Market = IDL.Service({
     'accountBalance' : IDL.Func([IDL.Text], [IDL.Opt(ICP)], []),
-    'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_8], []),
+    'addCommentToMarket' : IDL.Func([IDL.Nat32, IDL.Text], [Result_7], []),
     'buyOutcome' : IDL.Func(
         [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
-        [Result_2],
+        [Result_1],
         [],
       ),
     'callerAccount' : IDL.Func([], [AccountIdentifier], []),
     'canisterAccount' : IDL.Func([], [IDL.Text], ['query']),
     'canisterBalance' : IDL.Func([], [ICP], []),
-    'createMarket' : IDL.Func([MarketInitData], [Result_7], []),
-    'createUser' : IDL.Func([UserInitData], [Result_3], []),
-    'editUser' : IDL.Func([UserInitData], [Result_3], []),
+    'createMarket' : IDL.Func([MarketInitData], [Result_6], []),
+    'createUser' : IDL.Func([UserInitData], [Result_2], []),
+    'editUser' : IDL.Func([UserInitData], [Result_2], []),
     'getFeed' : IDL.Func([], [IDL.Vec(PostStable)], ['query']),
-    'getPost' : IDL.Func([IDL.Nat32], [Result_6], ['query']),
-    'getThread' : IDL.Func([IDL.Nat32], [Result_5], ['query']),
-    'getUserFromPrincipal' : IDL.Func([IDL.Text], [Result_4], ['query']),
+    'getPost' : IDL.Func([IDL.Nat32], [Result_5], ['query']),
+    'getThread' : IDL.Func([IDL.Nat32], [Result_4], ['query']),
+    'getUserFromPrincipal' : IDL.Func([IDL.Text], [Result_3], ['query']),
     'getUserStable' : IDL.Func([IDL.Text], [IDL.Opt(UserStable)], ['query']),
-    'getUserWithPosts' : IDL.Func([IDL.Text], [Result_4], ['query']),
+    'getUserWithPosts' : IDL.Func([IDL.Text], [Result_3], ['query']),
     'otherAccount' : IDL.Func([], [IDL.Text], ['query']),
     'readAllMarkets' : IDL.Func(
         [MarketCategory, MarketState],
@@ -316,16 +293,16 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(UserData)],
         ['query'],
       ),
-    'refreshUser' : IDL.Func([], [Result_3], []),
+    'refreshUser' : IDL.Func([], [Result_2], []),
     'resolveMarket' : IDL.Func([IDL.Nat32, IDL.Nat], [IDL.Bool], []),
     'sellOutcome' : IDL.Func(
         [IDL.Nat32, IDL.Float64, IDL.Nat, IDL.Bool],
-        [Result_2],
+        [Result_1],
         [],
       ),
     'setMarketState' : IDL.Func([IDL.Nat32, MarketState], [IDL.Bool], []),
     'setUpdating' : IDL.Func([IDL.Bool], [], ['oneway']),
-    'submitForecast' : IDL.Func([IDL.Nat32, Forecast], [Result_1], []),
+    'submitForecast' : IDL.Func([IDL.Nat32, Forecast], [Result], []),
     'submitLike' : IDL.Func([IDL.Nat32], [Result], []),
     'submitPost' : IDL.Func(
         [PostInitData, IDL.Opt(MarketInitData)],

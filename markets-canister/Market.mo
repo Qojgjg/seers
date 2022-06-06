@@ -11,30 +11,6 @@ import Tokens "Tokens";
 import Comment "Comment";
 
 module {
-    public type MarketError = {
-        #callerIsAnon;
-        #profileNotCreated;
-        #notEnoughLiquidity: Float;
-        #titleMissing;
-        #descriptionMissing;
-        #optionsMissing;
-        #imageMissing;
-        #startDateOld;
-        #endDateOld;
-        #endDateOlderThanStartDate;
-
-        #notEnoughBalance;
-        #marketMissing;
-        #marketNotOpen;
-        #newtonFailed;
-
-        #lowerThanMinAmount;
-
-        #commentIsEmpty;
-
-        #userAlreadyExist;
-    };
-
     public type MarketState = {
         #any;
         #pending;

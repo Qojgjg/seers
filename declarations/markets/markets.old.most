@@ -2,7 +2,7 @@
 type Balance = {btc : Float; cycles : Float; icp : Float; seers : Float};
 type Bet = {comment : CommentStable; tx : UserTx};
 type BrierScore = {createdAt : Time; score : Float};
-type CollateralType = {#cycles; #icp; #seers};
+type CollateralType = {#btc; #cycles; #icp; #seers};
 type CommentStable =
   {
     author : UserData;
