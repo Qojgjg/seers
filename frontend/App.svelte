@@ -110,9 +110,6 @@
     <Route path="feed" primary={false}>
       <Feed {auth} {principal} {signIn} />
     </Route>
-    <Route path="icp" primary={false}>
-      <ICP {auth} {principal} {signIn} />
-    </Route>
     <Route path="/" primary={false}>
       <Feed {auth} {principal} {signIn} />
     </Route>
