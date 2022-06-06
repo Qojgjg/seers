@@ -16,6 +16,7 @@
   export let doNotShowBorder = false
   export let isMain = false
 
+  let amount = 0.1
   let errorResponse = ""
   let processing = false
   let anonImage =
@@ -65,22 +66,30 @@
     return "on " + system_date
   }
 
-  const submitBuy = async (marketId, selected) => {
+  const submitBuy = async (marketId, selected, amount) => {
     processing = true
     selected = selected === undefined ? 0 : selected
-    const resp = await $auth.actor.buyOutcome(marketId, 100, selected, true)
+    const resp = await $auth.actor.buyOutcome(marketId, amount, selected, true)
+    if ("err" in resp) {
+      errorResponse = Object.keys(resp["err"]).toString()
+    }
     processing = false
     console.log(resp)
   }
 
   const submitLike = async (postId) => {
     const resp = await $auth.actor.submitLike(Number(postId))
+    if ("err" in resp) {
+      errorResponse = resp["err"]
+    }
     console.log(resp)
-    // getPost()
   }
 
   const submitRetweet = async () => {
     const resp = await $auth.actor.submitRetweet(Number(post.id))
+    if ("err" in resp) {
+      errorResponse = resp["err"]
+    }
     console.log(resp)
   }
 </script>
@@ -162,9 +171,10 @@
                 </div>
               </div>
               <div
-                style="width: 60px; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
+                style="width: 100px; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
               >
-                {post.market[0].probabilities[i].toFixed(2)} &Sigma;
+                {post.market[0].probabilities[i].toFixed(2)}
+                {"seers" in post.market.collateralType ? "&Sigma;" : "ICP"}
               </div>
             </div>
           {/each}
@@ -172,6 +182,7 @@
             style="display:flex; text-align:end; justify-content:start; flex-grow: 1"
           >
             {#if processing}
+              <input bind:value={amount} />
               <button
                 class="btn-grad"
                 style="background: black;width: 100px; margin: 15px 0px; color:white;overflow:hidden;"
@@ -179,7 +190,11 @@
                   if (principal === "") {
                     signIn()
                   } else {
-                    submitBuy(post.market[0].id, post.market[0].selected)
+                    submitBuy(
+                      post.market[0].id,
+                      post.market[0].selected,
+                      amount,
+                    )
                   }
                 }}
               >
@@ -190,6 +205,8 @@
                 />
               </button>
             {:else}
+              <input bind:value={amount} />
+
               <button
                 class="btn-grad"
                 style="background: black; padding: 5px; margin: 15px 0px; color: white"
@@ -197,12 +214,16 @@
                   if (principal === "") {
                     signIn()
                   } else {
-                    submitBuy(post.market[0].id, post.market[0].selected)
+                    submitBuy(
+                      post.market[0].id,
+                      post.market[0].selected,
+                      amount,
+                    )
                   }
                 }}>Bet</button
               >
             {/if}
-            <div style="text-align:end;color:red">
+            <div style="text-align:center;color:red">
               {errorResponse}
             </div>
           </div>
@@ -404,9 +425,10 @@
                   </div>
                 </div>
                 <div
-                  style="width: 60px; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
+                  style="width: 100px; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
                 >
-                  {post.market[0].probabilities[i].toFixed(2)} &Sigma;
+                  {post.market[0].probabilities[i].toFixed(2)}
+                  {"seers" in post.market[0].collateralType ? "&Sigma;" : "ICP"}
                 </div>
               </div>
             {/each}
@@ -421,7 +443,11 @@
                     if (principal === "") {
                       signIn()
                     } else {
-                      submitBuy(post.market[0].id, post.market[0].selected)
+                      submitBuy(
+                        post.market[0].id,
+                        post.market[0].selected,
+                        amount,
+                      )
                     }
                   }}
                 >
@@ -434,17 +460,30 @@
               {:else}
                 <button
                   class="btn-grad"
-                  style="background: black; padding: 5px; margin: 15px 0px; color: white"
+                  style="background: black; padding: 0px 15px; margin: 15px 0px; color: white"
                   on:click={() => {
                     if (principal === "") {
                       signIn()
                     } else {
-                      submitBuy(post.market[0].id, post.market[0].selected)
+                      submitBuy(
+                        post.market[0].id,
+                        post.market[0].selected,
+                        amount,
+                      )
                     }
                   }}>Bet</button
                 >
+                <input
+                  style="color: rgb(255, 255, 255); background-color: black; font-size: 1.2em; font-family: 'Roboto Mono', monospace; border: 0px; padding: 0px 5px; margin: 0px 15px; width: 50px"
+                  bind:value={amount}
+                />
+                <div
+                  style="display:flex; text-align:center; align-items:center; padding: 0px 5px"
+                >
+                  {"seers" in post.market[0].collateralType ? "&Sigma;" : "ICP"}
+                </div>
               {/if}
-              <div style="text-align:end;color:red">
+              <div style="text-align: center;color:red">
                 {errorResponse}
               </div>
             </div>
