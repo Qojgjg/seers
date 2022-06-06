@@ -362,7 +362,6 @@ service : {
   sellOutcome: (nat32, float64, nat, bool) -> (Result_1);
   setMarketState: (nat32, MarketState) -> (bool);
   setUpdating: (bool) -> () oneway;
-  submitDelete: (nat32) -> (Result);
   submitForecast: (nat32, Forecast) -> (Result);
   submitLike: (nat32) -> (Result);
   submitPost: (PostInitData, opt MarketInitData) -> (Result);

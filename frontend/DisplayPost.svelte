@@ -668,7 +668,7 @@
               <a href="#">Edit</a>
               <button
                 on:click={submitDelete(post.id)}
-                style="unset:all; background:black;color:white; padding: 12px 16px; font-size:16px"
+                style="unset:all; background:black;color:white; padding: 12px 16px; font-size:16px; cursor:pointer"
                 >Delete</button
               >
             </div>
