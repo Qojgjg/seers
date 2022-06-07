@@ -143,7 +143,24 @@
       </div>
       <div style="width: 100%; display:flex; justify-content:end">
         <div class="menu-button-elli">
-          <Fa icon={faEllipsis} />
+          <div class="dropdown">
+            <button class="dropbtn"><Fa icon={faEllipsis} /></button>
+            {#if post?.author.principal == principal}
+              <div class="dropdown-content">
+                <a href={`/post/${post.id}/edit`}>Edit</a>
+                <button
+                  on:click={submitDelete(post.id)}
+                  style="unset:all; background:black;color:white; padding: 12px 16px; font-size:16px; cursor:pointer"
+                  >Delete</button
+                >
+              </div>
+            {:else}
+              <div class="dropdown-content">
+                <a href="#">Follow/Unfollow</a>
+                <a href="#">Block/Unblock</a>
+              </div>
+            {/if}
+          </div>
         </div>
       </div>
     </div>
@@ -577,7 +594,6 @@
               {#if post.replies.length > 0}<div>{post.replies.length}</div>{/if}
             </div>
           </a>
-
           <div style="width: fit-content; display:flex; gap: 15px">
             <div>
               <button
@@ -665,7 +681,7 @@
           <button class="dropbtn"><Fa icon={faEllipsis} /></button>
           {#if post?.author.principal == principal}
             <div class="dropdown-content">
-              <a href="#">Edit</a>
+              <a href={`/post/${post.id}/edit`}>Edit</a>
               <button
                 on:click={submitDelete(post.id)}
                 style="unset:all; background:black;color:white; padding: 12px 16px; font-size:16px; cursor:pointer"
@@ -675,7 +691,7 @@
           {:else}
             <div class="dropdown-content">
               <a href="#">Follow/Unfollow</a>
-              <button on:click={submitDelete(post.id)}>Block/Unblock</button>
+              <a href="#">Block/Unblock</a>
             </div>
           {/if}
         </div>
@@ -742,6 +758,7 @@
     position: absolute;
     background-color: black;
     min-width: 160px;
+    margin-top: -40px;
     margin-left: -120px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;

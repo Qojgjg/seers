@@ -246,6 +246,7 @@ type Market =
    createMarket: (MarketInitData) -> (Result_6);
    createUser: (UserInitData) -> (Result_2);
    deleteAllUsers: () -> (bool);
+   editPost: (PostInitData, opt MarketInitData) -> (Result);
    editUser: (UserInitData) -> (Result_2);
    getFeed: () -> (vec PostStable) query;
    getPost: (nat32) -> (Result_5) query;
@@ -322,6 +323,7 @@ type Error =
    notEnoughBalance;
    notEnoughLiquidity;
    notLoggedIn;
+   onlyAuthorCanEdit;
    optionsMissing;
    parentDoesNotExist;
    postDoesNotExist;

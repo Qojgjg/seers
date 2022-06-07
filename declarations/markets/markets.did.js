@@ -36,6 +36,7 @@ export const idlFactory = ({ IDL }) => {
     'marketMissing' : IDL.Null,
     'startDateOld' : IDL.Null,
     'marketNotOpen' : IDL.Null,
+    'onlyAuthorCanEdit' : IDL.Null,
     'postDoesNotExist' : IDL.Null,
     'alreadyRetweeted' : IDL.Null,
     'commentIsEmpty' : IDL.Null,
@@ -239,6 +240,17 @@ export const idlFactory = ({ IDL }) => {
     'balances' : Balance,
   });
   const Result_2 = IDL.Variant({ 'ok' : UserStable, 'err' : Error });
+  const PostInitData = IDL.Record({
+    'id' : IDL.Nat32,
+    'retweet' : IDL.Opt(Retweet),
+    'isRetweet' : IDL.Opt(UserData),
+    'content' : IDL.Text,
+    'author' : UserData,
+    'market' : IDL.Opt(MarketInitData),
+    'image' : IDL.Opt(IDL.Text),
+    'parent' : IDL.Opt(ParentData),
+  });
+  const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
   const Result_5 = IDL.Variant({ 'ok' : PostStable, 'err' : Error });
   const ThreadStable = IDL.Record({
     'main' : PostStable,
@@ -249,17 +261,6 @@ export const idlFactory = ({ IDL }) => {
   const Result_3 = IDL.Variant({
     'ok' : IDL.Tuple(UserStable, IDL.Vec(PostStable)),
     'err' : Error,
-  });
-  const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
-  const PostInitData = IDL.Record({
-    'id' : IDL.Nat32,
-    'retweet' : IDL.Opt(Retweet),
-    'isRetweet' : IDL.Opt(UserData),
-    'content' : IDL.Text,
-    'author' : UserData,
-    'market' : IDL.Opt(MarketInitData),
-    'image' : IDL.Opt(IDL.Text),
-    'parent' : IDL.Opt(ParentData),
   });
   const Market = IDL.Service({
     'accountBalance' : IDL.Func([IDL.Text], [IDL.Opt(ICP)], []),
@@ -275,6 +276,11 @@ export const idlFactory = ({ IDL }) => {
     'createMarket' : IDL.Func([MarketInitData], [Result_6], []),
     'createUser' : IDL.Func([UserInitData], [Result_2], []),
     'deleteAllUsers' : IDL.Func([], [IDL.Bool], []),
+    'editPost' : IDL.Func(
+        [PostInitData, IDL.Opt(MarketInitData)],
+        [Result],
+        [],
+      ),
     'editUser' : IDL.Func([UserInitData], [Result_2], []),
     'getFeed' : IDL.Func([], [IDL.Vec(PostStable)], ['query']),
     'getPost' : IDL.Func([IDL.Nat32], [Result_5], ['query']),

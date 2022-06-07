@@ -46,6 +46,7 @@ export type Error = { 'callerIsAnon' : null } |
   { 'marketMissing' : null } |
   { 'startDateOld' : null } |
   { 'marketNotOpen' : null } |
+  { 'onlyAuthorCanEdit' : null } |
   { 'postDoesNotExist' : null } |
   { 'alreadyRetweeted' : null } |
   { 'commentIsEmpty' : null } |
@@ -79,6 +80,7 @@ export interface Market {
   'createMarket' : ActorMethod<[MarketInitData], Result_6>,
   'createUser' : ActorMethod<[UserInitData], Result_2>,
   'deleteAllUsers' : ActorMethod<[], boolean>,
+  'editPost' : ActorMethod<[PostInitData, [] | [MarketInitData]], Result>,
   'editUser' : ActorMethod<[UserInitData], Result_2>,
   'getFeed' : ActorMethod<[], Array<PostStable>>,
   'getPost' : ActorMethod<[number], Result_5>,

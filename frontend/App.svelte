@@ -14,6 +14,7 @@
   import Feed from "./Feed.svelte"
   import Profile from "./Profile.svelte"
   import ViewPost from "./ViewPost.svelte"
+  import EditPost from "./EditPost.svelte"
 
   let principal = ""
 
@@ -45,8 +46,8 @@
   const signIn = () => {
     if (client)
       client.login({
-        // identityProvider: "http://rkp4c-7iaaa-aaaaa-aaaca-cai.localhost:8000/",
-        identityProvider: "https://identity.ic0.app/",
+        identityProvider: "http://rkp4c-7iaaa-aaaaa-aaaca-cai.localhost:8000/",
+        // identityProvider: "https://identity.ic0.app/",
         onSuccess: handleAuth,
       })
   }
@@ -97,6 +98,10 @@
     <Route path="post/:id" let:params primary={false}>
       <ViewPost {auth} id={params.id} {principal} {signIn} />
     </Route>
+    <Route path="post/:id/edit" let:params primary={false}>
+      <EditPost {auth} id={params.id} {principal} {signIn} />
+    </Route>
+
     <!-- <Route path="create">
       <CreateMarket {auth} {principal} {signIn} />
     </Route> -->

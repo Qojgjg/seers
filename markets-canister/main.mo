@@ -271,6 +271,8 @@ shared({ caller = initializer }) actor class Market() = this {
         #parentDoesNotExist;
         #alreadyRetweeted;
         #postIsEmpty;
+
+        #onlyAuthorCanEdit;
     };
 
     /* Upgrade */
@@ -612,6 +614,43 @@ shared({ caller = initializer }) actor class Market() = this {
             };
         };
     }; 
+
+    // Edit a post of any type.
+    public shared(msg) func editPost(initData: Post.PostInitData, marketInitData: ?M.MarketInitData): async Result.Result<(), Error> {
+        assert(not updating);
+
+        let caller = Principal.toText(msg.caller);
+        
+        if (caller == anon) {
+            return #err(#notLoggedIn);
+        };
+
+        if (initData.content == "") {
+            return #err(#postIsEmpty);
+        };
+        
+        switch (getUser(caller)) {
+            case null {
+                return #err(#userDoesNotExist);
+            };
+            case (?author) {
+                switch (postMap.get(initData.id)) {
+                    case null {
+                        return #err(#postDoesNotExist);
+                    };
+                    case (?post) {
+                        if (post.author.principal != caller) {
+                            return #err(#onlyAuthorCanEdit);
+                        };
+
+                        post.content :=  initData.content;
+
+                        return #ok();
+                    };
+                };
+            };
+        };
+    };
 
     // Submit a post of any type.
     public shared(msg) func submitPost(initData: Post.PostInitData, marketInitData: ?M.MarketInitData): async Result.Result<(), Error> {
