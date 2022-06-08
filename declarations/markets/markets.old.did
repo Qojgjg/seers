@@ -1,0 +1,375 @@
+type UserTx = 
+ record {
+   createdAt: Time;
+   dest: opt nat;
+   fee: float64;
+   id: nat32;
+   marketId: nat32;
+   price: float64;
+   recv: float64;
+   sent: float64;
+   src: opt nat;
+ };
+type UserStable = 
+ record {
+   age: nat;
+   balances: Balance;
+   bio: text;
+   city: text;
+   comments: vec CommentStable;
+   cover: text;
+   createdAt: Time;
+   depositAddrs: DepositAddrs;
+   discord: text;
+   expBalances: Balance;
+   feed: vec FeedItem;
+   followees: vec Followee;
+   followers: vec Follower;
+   handle: text;
+   id: text;
+   lastSeenAt: Time;
+   likes: vec nat32;
+   locked: Balance;
+   markets: vec UserMarket;
+   modifiedAt: Time;
+   name: text;
+   picture: text;
+   posts: vec nat32;
+   replies: vec nat32;
+   retweets: vec nat32;
+   twitter: text;
+   txs: vec UserTx;
+   website: text;
+ };
+type UserMarket = 
+ record {
+   author: bool;
+   balances: vec float64;
+   brierScores: vec BrierScore;
+   collateralType: CollateralType;
+   createdAt: Time;
+   labels: vec text;
+   marketId: nat32;
+   modifiedAt: Time;
+   redeemed: bool;
+   shares: float64;
+   spent: float64;
+   title: text;
+ };
+type UserInitData = 
+ record {
+   age: nat;
+   bio: text;
+   city: text;
+   cover: text;
+   discord: text;
+   handle: text;
+   id: text;
+   name: text;
+   picture: text;
+   twitter: text;
+   website: text;
+ };
+type UserData = 
+ record {
+   handle: text;
+   name: text;
+   picture: text;
+   "principal": text;
+ };
+type Time = int;
+type ThreadStable = 
+ record {
+   ancestors: vec PostStable;
+   main: PostStable;
+   replies: vec PostStable;
+ };
+type Retweet = 
+ record {
+   author: UserData;
+   content: text;
+   createdAt: Time;
+   id: nat32;
+   parent: opt ParentData;
+ };
+type Result_7 = 
+ variant {
+   err: Error;
+   ok: CommentStable;
+ };
+type Result_6 = 
+ variant {
+   err: Error;
+   ok: MarketStable;
+ };
+type Result_5 = 
+ variant {
+   err: Error;
+   ok: PostStable;
+ };
+type Result_4 = 
+ variant {
+   err: Error;
+   ok: ThreadStable;
+ };
+type Result_3 = 
+ variant {
+   err: Error;
+   ok: record {
+         UserStable;
+         vec PostStable;
+       };
+ };
+type Result_2 = 
+ variant {
+   err: Error;
+   ok: UserStable;
+ };
+type Result_1 = 
+ variant {
+   err: Error;
+   ok: float64;
+ };
+type Result = 
+ variant {
+   err: Error;
+   ok;
+ };
+type PostStable = 
+ record {
+   author: UserData;
+   content: text;
+   createdAt: Time;
+   deleted: bool;
+   id: nat32;
+   image: opt text;
+   isRetweet: opt UserData;
+   likes: vec Like;
+   market: opt MarketStable;
+   parent: opt ParentData;
+   replies: vec nat32;
+   retweet: opt Retweet;
+   retweeters: vec UserData;
+ };
+type PostInitData = 
+ record {
+   author: UserData;
+   content: text;
+   id: nat32;
+   image: opt text;
+   isRetweet: opt UserData;
+   market: opt MarketInitData;
+   parent: opt ParentData;
+   retweet: opt Retweet;
+ };
+type ParentData = 
+ record {
+   author: UserData;
+   id: nat32;
+ };
+type MarketState = 
+ variant {
+   any;
+   approved;
+   closed;
+   invalid;
+   open;
+   pending;
+   resolved: nat;
+ };
+type MarketStable = 
+ record {
+   author: text;
+   bettors: vec text;
+   category: MarketCategory;
+   collateralType: CollateralType;
+   comments: vec CommentStable;
+   createdAt: Time;
+   description: text;
+   endDate: Time;
+   forecasts: vec Forecast;
+   histPrices: vec HistPoint;
+   id: nat32;
+   imageUrl: text;
+   images: vec text;
+   k: float64;
+   labels: vec text;
+   liquidity: float64;
+   modifiedAt: Time;
+   probabilities: vec float64;
+   providers: vec text;
+   reserves: vec float64;
+   startDate: Time;
+   state: MarketState;
+   title: text;
+   totalShares: float64;
+   volume: float64;
+ };
+type MarketInitData = 
+ record {
+   author: text;
+   category: MarketCategory;
+   collateralType: CollateralType;
+   description: text;
+   endDate: Time;
+   id: nat32;
+   imageUrl: text;
+   images: vec text;
+   labels: vec text;
+   liquidity: float64;
+   probabilities: vec float64;
+   startDate: Time;
+   title: text;
+ };
+type MarketCategory = 
+ variant {
+   any;
+   business;
+   crypto;
+   dfinity;
+   entertainment;
+   financial;
+   politics;
+   science;
+   seers;
+   self;
+   sports;
+ };
+type Like = 
+ record {
+   author: UserData;
+   createdAt: Time;
+ };
+type ICP = record {e8s: nat64;};
+type HistPoint = 
+ record {
+   createdAt: Time;
+   liquidity: float64;
+   probabilities: vec float64;
+ };
+type Forecast = vec float64;
+type Follower = 
+ record {
+   createdAt: Time;
+   user: text;
+ };
+type Followee = 
+ record {
+   createdAt: Time;
+   user: text;
+ };
+type FeedItem = 
+ variant {
+   bet: Bet;
+   comment: CommentStable;
+   market: MarketStable;
+   post: PostStable;
+ };
+type Error = 
+ variant {
+   alreadyLiked;
+   alreadyRetweeted;
+   callerIsAnon;
+   cantGetBalance;
+   commentIsEmpty;
+   descriptionMissing;
+   endDateOld;
+   endDateOlderThanStartDate;
+   handleAlreadyTaken;
+   imageMissing;
+   imageNotFound;
+   lowerThanMinAmount;
+   marketMissing;
+   marketNotFound;
+   marketNotOpen;
+   newtonFailed;
+   notEnoughBalance;
+   notEnoughLiquidity;
+   notLoggedIn;
+   onlyAuthorCanEdit;
+   optionsMissing;
+   parentDoesNotExist;
+   postDoesNotExist;
+   postIsEmpty;
+   profileNotCreated;
+   startDateOld;
+   titleMissing;
+   userAlreadyExist;
+   userDoesNotExist;
+ };
+type DepositAddrs = 
+ record {
+   btc: text;
+   cycles: text;
+   icp: text;
+ };
+type CommentStable = 
+ record {
+   author: UserData;
+   content: text;
+   createdAt: Time;
+   id: nat32;
+   likes: vec Like;
+   modifiedAt: Time;
+ };
+type CollateralType = 
+ variant {
+   btc;
+   cycles;
+   icp;
+   seers;
+ };
+type BrierScore = 
+ record {
+   createdAt: Time;
+   score: float64;
+ };
+type Bet = 
+ record {
+   comment: CommentStable;
+   tx: UserTx;
+ };
+type Balance = 
+ record {
+   btc: float64;
+   cycles: float64;
+   icp: float64;
+   seers: float64;
+ };
+type AccountIdentifier = blob;
+service : {
+  accountBalance: (text) -> (opt ICP);
+  addCommentToMarket: (nat32, text) -> (Result_7);
+  buyOutcome: (nat32, float64, nat, bool) -> (Result_1);
+  callerAccount: () -> (AccountIdentifier);
+  canisterAccount: () -> (text) query;
+  canisterBalance: () -> (ICP);
+  createMarket: (MarketInitData) -> (Result_6);
+  createUser: (UserInitData) -> (Result_2);
+  deleteAllUsers: () -> (bool);
+  editPost: (PostInitData, opt MarketInitData) -> (Result);
+  editUser: (UserInitData) -> (Result_2);
+  getFeed: () -> (vec PostStable) query;
+  getPost: (nat32) -> (Result_5) query;
+  getThread: (nat32) -> (Result_4) query;
+  getUserFromPrincipal: (text) -> (Result_3) query;
+  getUserStable: (text) -> (opt UserStable) query;
+  getUserWithPosts: (text) -> (Result_3) query;
+  otherAccount: () -> (text) query;
+  readAllMarkets: (MarketCategory, MarketState) -> (vec MarketStable) query;
+  readAllUsers: () -> (vec UserStable) query;
+  readMarket: (nat32) -> (opt MarketStable) query;
+  readUserData: (vec text) -> (vec UserData) query;
+  refreshUser: () -> (Result_2);
+  resolveMarket: (nat32, nat) -> (bool);
+  sellOutcome: (nat32, float64, nat, bool) -> (Result_1);
+  setMarketState: (nat32, MarketState) -> (bool);
+  setUpdating: (bool) -> () oneway;
+  submitDelete: (nat32) -> (Result);
+  submitForecast: (nat32, Forecast) -> (Result);
+  submitLike: (nat32) -> (Result);
+  submitPost: (PostInitData, opt MarketInitData) -> (Result);
+  submitRetweet: (nat32) -> (Result);
+  transferToCanister: () -> (text);
+  transferToSubaccount: () -> (text);
+}

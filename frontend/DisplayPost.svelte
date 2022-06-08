@@ -136,9 +136,11 @@
         </a>
       </div>
       <div style="display:flex; flex-direction:column; height: 100%">
-        <a href={`/profile/${post?.author.handle}`}>{post?.author.name}</a>
+        <a href={`/profile/${post?.author.handle}`}
+          >{post?.author.name ? post.author.name : ""}</a
+        >
         <a href={`/profile/${post?.author.handle}`} style="color:grey">
-          @{post?.author.handle}
+          @{post?.author.handle ? post.author.handle : ""}
         </a>
       </div>
       <div style="width: 100%; display:flex; justify-content:end">
@@ -170,7 +172,7 @@
           style="width: 100%; text-align:start; padding: 0px 0px; border-bottom: 0px solid grey;"
         >
           <div style="padding: 10px 0px; font-size: 1.2em">
-            {post?.content}
+            {post?.content ? post.content : ""}
           </div>
         </div>
       </a>
@@ -386,7 +388,7 @@
       isThread || doNotShowBorder ? 0 : 1
     }px solid grey`}
   >
-    <!-- {#if post && post.isRetweet.length > 0}
+    {#if post && post.isRetweet.length > 0}
       <div
         style="display:flex; color:grey; font-size: 0.8em; justify-content:start; width: 100%"
       >
@@ -412,7 +414,7 @@
           </a>
         </div>
       </div>
-    {/if} -->
+    {/if}
     <div style="display:flex; width: 100%; padding: 10px; margin: 5px">
       <div
         style="display:flex; flex-direction:column; padding: 0px; margin: 5px; height: 100%"
