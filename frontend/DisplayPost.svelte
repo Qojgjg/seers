@@ -413,7 +413,7 @@
         </div>
       </div>
     {/if}
-    <div style="display:flex; width: 100%">
+    <div style="display:flex; width: 80%">
       <div
         style="display:flex; flex-direction:column; padding: 0px; margin: 5px; height: 100%"
       >
@@ -703,7 +703,7 @@
 <style>
   .menu-button-elli {
     background-color: black;
-    width: 10px;
+    width: 50px;
     justify-content: start;
     text-align: start;
     padding: 0px 0px;
@@ -739,8 +739,12 @@
   }
   /* Dropdown Button */
   .dropbtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: black;
     color: grey;
+    margin: 0px;
     padding: 0px;
     font-size: 16px;
     border: none;

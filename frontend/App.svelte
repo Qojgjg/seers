@@ -16,6 +16,7 @@
   import ViewPost from "./ViewPost.svelte"
   import EditPost from "./EditPost.svelte"
 
+  let innerWidth = window.innerWidth
   let principal = ""
 
   /** @type {AuthClient} */
@@ -46,7 +47,7 @@
   const signIn = () => {
     if (client)
       client.login({
-        identityProvider: "http://rkp4c-7iaaa-aaaaa-aaaca-cai.localhost:8000/",
+        identityProvider: "http://rwlgt-iiaaa-aaaaa-aaaaa-cai.localhost:8000/",
         // identityProvider: "https://identity.ic0.app/",
         onSuccess: handleAuth,
       })
@@ -70,6 +71,8 @@
 
   onMount(initAuth)
 </script>
+
+<svelte:window bind:innerWidth />
 
 <svelte:head>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -133,6 +136,21 @@
 </Router>
 
 <style global>
+  .rowUser {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px;
+    padding: 20px;
+    justify-content: start;
+    min-width: 200px;
+    max-width: 600px;
+    width: 90%;
+    border: 1px solid rgb(90, 58, 81);
+    border-radius: 16px;
+    justify-content: center;
+    color: rgb(255, 255, 255);
+  }
+
   .grey {
     color: rgb(167, 165, 165);
   }

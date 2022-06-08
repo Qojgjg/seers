@@ -288,26 +288,6 @@
 </div>
 
 <style global>
-  .rowUser {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 1em;
-    justify-content: start;
-    min-width: 200px;
-    max-width: 600px;
-    width: 80%;
-    /* background-color: black; */
-    /* background-color: rgb(25, 27, 31);
-    border: 1px solid rgb(90, 58, 81);
-    box-shadow: 2px 2px 20px 0.5px rgb(54, 27, 46); */
-    border: 1px solid rgb(90, 58, 81);
-
-    /* border: 2px solid rgb(25, 27, 31); */
-    border-radius: 16px;
-    justify-content: center;
-    color: rgb(255, 255, 255);
-  }
-
   .btn-grad {
     background-image: linear-gradient(
       to right,
