@@ -388,19 +388,19 @@
       </div>
     </div>
   </div>
-  <div
+  <!-- <div
     style="width: 100%; display:flex; justify-content:center; flex-direction:column; align-items:center; gap: 10px"
-  >
-    <div class="rowUser">
-      {#each feed as post, i}
-        <DisplayPost
-          {auth}
-          {principal}
-          {signIn}
-          {post}
-          doNotShowBorder={i < feed.length - 1 ? false : true}
-        />
-      {/each}
-    </div>
+  > -->
+  <div class="rowUser">
+    {#each feed as post, i}
+      <DisplayPost
+        {auth}
+        {principal}
+        {signIn}
+        {post}
+        doNotShowBorder={i < feed.length - 1 ? false : true}
+      />
+    {/each}
   </div>
+  <!-- </div> -->
 </div>

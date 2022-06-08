@@ -386,7 +386,7 @@
       isThread || doNotShowBorder ? 0 : 1
     }px solid grey`}
   >
-    {#if post && post.isRetweet.length > 0}
+    <!-- {#if post && post.isRetweet.length > 0}
       <div
         style="display:flex; color:grey; font-size: 0.8em; justify-content:start; width: 100%"
       >
@@ -412,8 +412,8 @@
           </a>
         </div>
       </div>
-    {/if}
-    <div style="display:flex; width: 80%">
+    {/if} -->
+    <div style="display:flex; width: 100%; padding: 10px; margin: 5px">
       <div
         style="display:flex; flex-direction:column; padding: 0px; margin: 5px; height: 100%"
       >
@@ -448,7 +448,7 @@
             - {parseTwitterDate(parseInt(post.createdAt) / 1_000_000)}
           </div>
         </div>
-        <a href={`/post/${post.id}#main`} style="width: 100%">
+        <a href={`/post/${post.id}#main`} style="width: 50px">
           <div style="width: 100%; text-align:start; padding: 15px 0px">
             {#if post.retweet.length > 0}
               {post.retweet[0].content}
@@ -584,7 +584,7 @@
           </div>
         {/if}
         <div
-          style="width: 280px; display:flex; padding: 5px 0px; color:grey; justify-content:space-between"
+          style="width: 200px; display:flex; padding: 5px 0px; color:grey; justify-content:space-between"
         >
           <a href={`/post/${post.id}#main`} style="color:grey">
             <div style="display:flex; gap: 15px;">
@@ -703,7 +703,8 @@
 <style>
   .menu-button-elli {
     background-color: black;
-    width: 50px;
+    display: flex;
+    width: 20px;
     justify-content: start;
     text-align: start;
     padding: 0px 0px;
