@@ -152,7 +152,10 @@
 
   @media screen and (max-width: 600px) {
     .rowUser {
-      border: 0px 1px solid rgb(90, 58, 81);
+      border-left: 0px;
+      border-right: 0px;
+      border-top: 1px solid rgb(90, 58, 81);
+      border-bottom: 1px solid rgb(90, 58, 81);
       border-radius: 0px;
     }
   }

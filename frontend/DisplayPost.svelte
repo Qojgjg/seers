@@ -192,7 +192,7 @@
                     : "#39CCCC"
                 }; width: ${
                   post.market[0].probabilities[i] * 100.0
-                }%; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 5px 5px 5px; color:black;`}
+                }%; padding: 5px 5px 5px 5px; margin: 2px 2px; border: 0px solid black; border-radius: 5px 5px 5px 5px; color:black;`}
               >
                 <div
                   style={`background: ${
@@ -676,8 +676,8 @@
             </div>
           {:else}
             <div class="dropdown-content">
-              <a href="#">Follow/Unfollow</a>
-              <a href="#">Block/Unblock</a>
+              <a href="#">Follow</a>
+              <a href="#">Block</a>
             </div>
           {/if}
         </div>
