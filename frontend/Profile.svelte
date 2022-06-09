@@ -124,7 +124,7 @@
   onMount(getUserData)
 </script>
 
-{#if !user}
+{#if !user && !isGetting}
   <div class="header">
     <h3>Create Profile</h3>
   </div>
@@ -156,18 +156,20 @@
           <div>{user.name}</div>
           <div style="color:gray">@{user.handle}</div>
         </div>
-        <div
-          style="margin-bottom: 10px; width: 100px; text-align:end; display: flex; justify-content:end"
-        >
-          <button
-            class="btn-grad"
-            style="background: black;"
-            on:click={() => (editMode = true)}>Edit Profile</button
+        {#if user && principal == user.id}
+          <div
+            style="margin-bottom: 10px; width: 100px; text-align:end; display: flex; justify-content:end"
           >
-          <div style="text-align:center;color:red">
-            {errorRefresh}
+            <button
+              class="btn-grad"
+              style="background: black;"
+              on:click={() => (editMode = true)}>Edit Profile</button
+            >
+            <div style="text-align:center;color:red">
+              {errorRefresh}
+            </div>
           </div>
-        </div>
+        {/if}
       </div>
       <div
         style="width: 100%; text-align:start;display:flex; flex-direction:row; border-bottom: 0px solid grey"
@@ -200,7 +202,7 @@
           />
         {/each}
       </div>
-    {:else if principal !== "" && !isGetting}
+    {:else if principal !== "" && !user && !isGetting}
       <div style="display: flex; align-items: center; flex-direction: column">
         <div style="display:flex; flex-direction:column; align-items:center">
           <div style="padding: 10px; margin: 10px">Handle:</div>

@@ -126,7 +126,7 @@
     <div
       style="display:flex; justify-content:start; text-align:start; width: 100%; padding: 5px 0px; flex-direction:row; align-items:center; font-size: 1.2em; "
     >
-      <div style="padding: 0px 0px; margin: 0px 5px; height: 100%;">
+      <div style="padding: 0px 0px; margin: 5px 5px; height: 100%;">
         <a href={`/profile/${post?.author.handle}`}>
           <img
             src={post?.author.picture ? post?.author.picture : anonImage}
@@ -409,7 +409,7 @@
         </div>
       </div>
     {/if}
-    <div style="display:flex; width: 100%; padding: 10px; margin: 5px">
+    <div style="display:flex; width: 100%;">
       <div
         style="display:flex; flex-direction:column; padding: 0px; margin: 5px; height: 100%"
       >
