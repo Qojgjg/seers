@@ -49,7 +49,9 @@
         <div class="row">
           <div style="width: 20%;margin: 3px">{i}</div>
           <div style="width: 60%;margin: 3px">
-            {user.handle ? user.handle : user.id.slice(0, 11)}
+            <a href="/profile/{user.handle}">
+              {user.handle ? user.handle : user.id.slice(0, 11)}
+            </a>
           </div>
           <!-- <div>{user.markets.length}</div> -->
           <div style="width: 20%;margin: 3px">
