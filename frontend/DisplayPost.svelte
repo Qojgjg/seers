@@ -135,7 +135,9 @@
           />
         </a>
       </div>
-      <div style="display:flex; flex-direction:column; height: 100%">
+      <div
+        style="display:flex; flex-direction:column; height: 100%; flex-grow: 1"
+      >
         <a href={`/profile/${post?.author.handle}`}
           >{post?.author.name ? post.author.name : ""}</a
         >
@@ -143,27 +145,27 @@
           @{post?.author.handle ? post.author.handle : ""}
         </a>
       </div>
-      <div style="width: 100%; display:flex; justify-content:end">
-        <div class="menu-button-elli">
-          <div class="dropdown">
-            <button class="dropbtn"><Fa icon={faEllipsis} /></button>
-            {#if post?.author.principal == principal}
-              <div class="dropdown-content">
-                <a href={`/post/${post.id}/edit`}>Edit</a>
-                <button
-                  on:click={submitDelete(post.id)}
-                  style="unset:all; background:black;color:white; padding: 12px 16px; font-size:16px; cursor:pointer"
-                  >Delete</button
-                >
-              </div>
-            {:else}
-              <div class="dropdown-content">
-                <a href="#">Follow/Unfollow</a>
-                <a href="#">Block/Unblock</a>
-              </div>
-            {/if}
-          </div>
+      <!-- <div style="width: 100%; display:flex; justify-content:end"> -->
+      <div class="menu-button-elli">
+        <div class="dropdown">
+          <button class="dropbtn"><Fa icon={faEllipsis} /></button>
+          {#if post?.author.principal == principal}
+            <div class="dropdown-content">
+              <a href={`/post/${post.id}/edit`}>Edit</a>
+              <button
+                on:click={submitDelete(post.id)}
+                style="unset:all; background:black;color:white; padding: 12px 16px; font-size:16px; cursor:pointer"
+                >Delete</button
+              >
+            </div>
+          {:else}
+            <div class="dropdown-content">
+              <a href="#">Follow/Unfollow</a>
+              <a href="#">Block/Unblock</a>
+            </div>
+          {/if}
         </div>
+        <!-- </div> -->
       </div>
     </div>
     <div style="flex-grow: 1; justify-content: start; text-align:start">
