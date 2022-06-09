@@ -151,6 +151,13 @@
     color: rgb(255, 255, 255);
   }
 
+  @media screen and (max-width: 600px) {
+    .rowUser {
+      border: 0px 1px solid rgb(90, 58, 81);
+      border-radius: 0px;
+    }
+  }
+
   .grey {
     color: rgb(167, 165, 165);
   }
