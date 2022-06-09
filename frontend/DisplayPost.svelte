@@ -417,7 +417,7 @@
         </div>
       </div>
     {/if}
-    <div style="display:flex; padding: 10px; margin: 5px">
+    <div style="display:flex; width: 100%; padding: 10px; margin: 5px">
       <div
         style="display:flex; flex-direction:column; padding: 0px; margin: 5px; height: 100%"
       >
