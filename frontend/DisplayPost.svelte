@@ -190,38 +190,30 @@
                   (post.market[0].selected === undefined && i == 0)
                     ? "#FFDC00"
                     : "#39CCCC"
-                }; width: 100px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
+                }; width: ${
+                  post.market[0].probabilities[i] * 100.0
+                }%; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 5px 5px 5px; color:black;`}
               >
-                <button
-                  style="all:unset; width: 100%"
-                  on:click={() => {
-                    post.market[0].selected = i
-                  }}
-                >
-                  {label}
-                </button>
-              </div>
-              <div style="flex-grow: 1;">
                 <div
                   style={`background: ${
                     post.market[0].selected == i ||
                     (post.market[0].selected === undefined && i == 0)
                       ? "#FFDC00"
                       : "#39CCCC"
-                  }; width: ${
-                    post.market[0].probabilities[i] * 100.0
-                  }%; padding: 5px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 0px 5px 5px 0px; color:black`}
+                  }; width: 100px; border: 0px solid black; color:black; text-align:right`}
                 >
                   <button
                     style="all:unset; width: 100%"
                     on:click={() => {
                       post.market[0].selected = i
                     }}
-                  />
+                  >
+                    {label}
+                  </button>
                 </div>
               </div>
               <div
-                style="width: 100px; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
+                style="flex-grow: 1; justify-content:flex-end; text-align:end; padding: 5px"
               >
                 {post.market[0].probabilities[i].toFixed(2)}
                 {"seers" in post.market[0].collateralType ? "Σ" : "ICP"}
@@ -473,27 +465,17 @@
                     (post.market[0].selected === undefined && i == 0)
                       ? "#FFDC00"
                       : "#39CCCC"
-                  }; width: 100px; padding: 5px 0px 0px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 5px 0px 0px 5px; color:black; text-align:right`}
+                  }; width: ${
+                    post.market[0].probabilities[i] * 100.0
+                  }%; padding: 5px 5px 5px 5px; margin: 2px 2px; border: 0px solid black; border-radius: 5px 5px 5px 5px; color:black;`}
                 >
-                  <button
-                    style="all:unset; width: 100%"
-                    on:click={() => {
-                      post.market[0].selected = i
-                    }}
-                  >
-                    {label}
-                  </button>
-                </div>
-                <div style="flex-grow: 1;">
                   <div
                     style={`background: ${
                       post.market[0].selected == i ||
                       (post.market[0].selected === undefined && i == 0)
                         ? "#FFDC00"
                         : "#39CCCC"
-                    }; width: ${
-                      post.market[0].probabilities[i] * 100.0
-                    }%; padding: 5px 0px; margin: 2px 0px; border: 0px solid black; border-radius: 0px 5px 5px 0px; color:black`}
+                    }; width: 100px; border: 0px solid black;  color:black; text-align:right`}
                   >
                     <button
                       style="all:unset; width: 100%"
@@ -501,12 +483,12 @@
                         post.market[0].selected = i
                       }}
                     >
-                      &nbsp;
+                      {label}
                     </button>
                   </div>
                 </div>
                 <div
-                  style="width: 100px; justify-content:flex-end; text-align:end; margin-right: 30px; padding: 5px"
+                  style="flex-grow: 1; justify-content:flex-end; text-align:end;padding: 5px"
                 >
                   {post.market[0].probabilities[i].toFixed(2)}
                   {"seers" in post.market[0].collateralType ? "Σ" : "ICP"}
