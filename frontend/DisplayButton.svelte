@@ -8,13 +8,13 @@
   export let processing = false
 </script>
 
-<div style="display:flex; text-align:end; justify-content:end; flex-grow: 1">
+<div style="display:flex; text-align:end; justify-content:end; width: 100%">
   <button
     class="btn-grad"
     style={`${
       processing
         ? "width: 100px; overflow:hidden; background: black"
-        : "background:black"
+        : "width: 100px; background:black"
     }`}
     on:click={() => {
       if (principal === "") signIn()

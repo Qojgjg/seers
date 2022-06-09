@@ -139,7 +139,6 @@
   .rowUser {
     display: flex;
     flex-wrap: wrap;
-    margin: 20px;
     padding: 20px;
     justify-content: start;
     min-width: 200px;

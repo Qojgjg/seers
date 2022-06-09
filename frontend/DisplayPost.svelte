@@ -160,8 +160,8 @@
             </div>
           {:else}
             <div class="dropdown-content">
-              <a href="#">Follow/Unfollow</a>
-              <a href="#">Block/Unblock</a>
+              <a href="#">Follow</a>
+              <a href="#">Block</a>
             </div>
           {/if}
         </div>
